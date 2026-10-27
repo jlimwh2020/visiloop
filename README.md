@@ -55,5 +55,16 @@ python bench/run_agent_bench.py            # score the agent on all cases
 python bench/run_agent_bench.py one_way    # or selected cases
 ```
 
+## Closed loop: diagnose, fix, prove
+Each fault's fix plug-in calculates its settings from the measurements (for example, the number of
+load-balanced tool ports from the measured 1 ms peak). A simulated broker applies the fixes in order and
+every resulting tool port is re-checked. A fault counts as fixed only if no check finds it afterwards.
+Decryption advice cannot be verified offline and is reported as advice.
+```
+python -m visikit.loop bench/cases/one_way.pcap --ingress bench/cases/clean.pcap --tool IDS
+python bench/run_loop_bench.py            # free: detectors + fixes + simulator
+python bench/run_loop_bench.py --agent    # add Muse Spark explanations (uses API credits)
+```
+
 ## Responsible use
 VisiLoop is a defensive tool for owners of a network to make sure their own monitoring receives complete traffic. It never pushes changes to equipment; every fix needs engineer approval. Test data is synthetic or from public datasets.

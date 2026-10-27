@@ -22,7 +22,7 @@ BASE_URL = "https://api.meta.ai/v1"
 PRICE_IN, PRICE_OUT = 1.25 / 1e6, 4.25 / 1e6       # US$ per token (muse-spark)
 MAX_TURNS = 6
 
-FIX_ACTIONS = ["dedup", "aggregate", "load_balance", "filter", "slice", "vlan", "decrypt_advice", "none"]
+FIX_ACTIONS = ["dedup", "aggregate", "replace_span_with_tap", "load_balance", "filter", "slice", "vlan", "decrypt_advice", "none"]
 
 SYSTEM = (
     "You are VisiLoop, a network visibility assistant used by the network owner's own "

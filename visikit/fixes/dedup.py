@@ -1,6 +1,8 @@
-"""Deduplication on the packet broker."""
+"""Deduplication on the packet broker (removes copies from overlapping TAP/SPAN inputs)."""
+import os
+
 from visikit.core.registry import fix
-from visikit.core.schema import FeedContext, Fix
+from visikit.core.schema import Fix
 from visikit.core.tools import run
 
 WINDOW = 500
@@ -9,15 +11,18 @@ WINDOW = 500
 @fix
 class Dedup:
     fault = "duplicates"
+    action = "dedup"
+    stage = 20
 
-    def simulate(self, ctx: FeedContext, out_pcap: str) -> str:
-        """Apply the fix to the capture, as the broker would."""
-        run("editcap", ["-D", str(WINDOW), ctx.pcap, out_pcap])
-        return out_pcap
+    def config(self, ctx, finding):
+        return Fix(self.fault, self.action,
+                   params={"window_packets": WINDOW, "measured_duplicate_rate": finding.metric},
+                   broker_config={"tool_port": ctx.feed, "dedup": {"enabled": True, "window_packets": WINDOW}})
 
-    def config(self, ctx: FeedContext) -> Fix:
-        return Fix(
-            fault=self.fault, action="dedup",
-            params={"window_packets": WINDOW},
-            broker_config={"tool_port": ctx.feed, "dedup": {"enabled": True, "window_packets": WINDOW}},
-        )
+    def simulate(self, pcaps, ctx, fix, workdir):
+        out = []
+        for i, p in enumerate(pcaps):
+            dst = os.path.join(workdir, f"dedup_{i}.pcap")
+            run("editcap", ["-D", str(WINDOW), p, dst])
+            out.append(dst)
+        return out

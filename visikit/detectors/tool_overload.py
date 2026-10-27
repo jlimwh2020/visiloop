@@ -13,19 +13,29 @@ INTERVAL = 0.001      # seconds
 THRESHOLD = 0.8       # peak above 80% of the port speed is a fault
 
 
+def measure_bins(pcap: str):
+    """Bytes per 1 ms interval, and the first frame number in each interval."""
+    bins, first = defaultdict(int), {}
+    for frame, t, length in fields(pcap, ["frame.number", "frame.time_relative", "frame.len"]):
+        b = int(float(t) / INTERVAL)
+        bins[b] += int(length)
+        first.setdefault(b, int(frame))
+    return bins, first
+
+
+def peak_gbps(pcap: str) -> float:
+    bins, _ = measure_bins(pcap)
+    return max(bins.values()) * 8 / INTERVAL / 1e9 if bins else 0.0
+
+
 @detector
 class ToolOverload:
     fault = "tool_overload"
 
     def run(self, ctx: FeedContext) -> list[Finding]:
-        rows = fields(ctx.pcap, ["frame.number", "frame.time_relative", "frame.len"])
-        if not rows:
+        bins, first = measure_bins(ctx.pcap)
+        if not bins:
             return []
-        bins, first = defaultdict(int), {}
-        for frame, t, length in rows:
-            b = int(float(t) / INTERVAL)
-            bins[b] += int(length)
-            first.setdefault(b, int(frame))
         peak_bin, peak_bytes = max(bins.items(), key=lambda kv: kv[1])
         peak_gbps = peak_bytes * 8 / INTERVAL / 1e9
         load = peak_gbps / ctx.profile.max_rate_gbps

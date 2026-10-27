@@ -19,6 +19,7 @@ class FeedContext:
     feed: str                       # e.g. "ids-1"
     pcap: str                       # path to a capture taken from the tool's input
     profile: ToolProfile
+    ingress: str | None = None      # lossless capture of what the broker receives from its TAPs (optional)
 
 
 @dataclass

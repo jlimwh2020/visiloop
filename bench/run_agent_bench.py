@@ -23,7 +23,7 @@ CASES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cases")
 GOOD_FIXES = {
     "duplicates": {"dedup"},
     "one_way": {"aggregate"},
-    "packet_drops": {"load_balance", "filter", "slice"},
+    "packet_drops": {"replace_span_with_tap", "load_balance", "filter", "slice"},
     "tool_overload": {"load_balance", "filter", "slice"},
     "encrypted_share": {"decrypt_advice", "filter"},
     "missing_vlan": {"vlan"},

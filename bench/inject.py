@@ -73,30 +73,36 @@ def main():
 
     manifest = {"profile": "IDS", "required_vlans": [10, 20], "cases": []}
 
-    def add(name, faults, path):
-        manifest["cases"].append({"name": name, "file": os.path.basename(path), "faults": faults})
+    def add(name, faults, path, ingress=None):
+        manifest["cases"].append({"name": name, "file": os.path.basename(path), "faults": faults,
+                                  "ingress": os.path.basename(ingress or path)})
         print(f"  {name:<16} -> {os.path.basename(path)}  expected: {faults or ['none']}")
 
     add("clean", [], clean)
-    add("duplicates", ["duplicates"], _save("duplicates", inject_duplicates(base(), rng)))
-    add("one_way", ["one_way"], _save("one_way", inject_one_way(base(), rng)))
-    add("packet_drops", ["packet_drops"], _save("packet_drops", inject_drops(base(), rng)))
+    # Ingress = what the broker receives losslessly from its TAPs. The tool feed is what
+    # a misconfigured broker or SPAN delivers from it.
+    add("duplicates", ["duplicates"], _save("duplicates", inject_duplicates(base(), rng)))   # overlap is in ingress
+    add("one_way", ["one_way"], _save("one_way", inject_one_way(base(), rng)), ingress=clean)
+    add("packet_drops", ["packet_drops"], _save("packet_drops", inject_drops(base(), rng)), ingress=clean)
     add("tool_overload", ["tool_overload"], _save("tool_overload", inject_overload(base())))
     enc = os.path.join(CASES, "encrypted_share.pcap")
     generate(enc, tls_share=0.85, seed=2)
     add("encrypted_share", ["encrypted_share"], enc)
     nov = os.path.join(CASES, "missing_vlan.pcap")
     generate(nov, vlans=False, seed=3)
-    add("missing_vlan", ["missing_vlan"], nov)
+    tagged = os.path.join(CASES, "missing_vlan_ingress.pcap")
+    generate(tagged, vlans=True, seed=3)          # same traffic, tags intact at broker ingress
+    add("missing_vlan", ["missing_vlan"], nov, ingress=tagged)
 
     # Harder cases: mild faults below threshold must NOT alarm; combined faults must all be found
     add("mild_duplicates", [], _save("mild_duplicates", inject_duplicates(base(), rng, share=0.02)))
-    add("mild_one_way", [], _save("mild_one_way", inject_one_way(base(), rng, share=0.05)))
-    add("mild_drops", [], _save("mild_drops", inject_drops(base(), rng, share=0.002)))
-    combo = inject_one_way(inject_duplicates(base(), rng), rng)
-    add("combined", ["duplicates", "one_way"], _save("combined", combo))
+    add("mild_one_way", [], _save("mild_one_way", inject_one_way(base(), rng, share=0.05)), ingress=clean)
+    add("mild_drops", [], _save("mild_drops", inject_drops(base(), rng, share=0.002)), ingress=clean)
+    dup_ingress = _save("combined_ingress", inject_duplicates(base(), rng))
+    combo = inject_one_way(rdpcap(dup_ingress), rng)
+    add("combined", ["duplicates", "one_way"], _save("combined", combo), ingress=dup_ingress)
     combo2 = inject_drops(rdpcap(enc), rng)
-    add("combined_2", ["encrypted_share", "packet_drops"], _save("combined_2", combo2))
+    add("combined_2", ["encrypted_share", "packet_drops"], _save("combined_2", combo2), ingress=enc)
 
     with open(os.path.join(CASES, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)
