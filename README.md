@@ -45,5 +45,15 @@ python bench/inject.py
 python bench/run_bench.py
 ```
 
+## Diagnosis agent (Muse Spark)
+The agent gets every detector as a tool, runs the checks, and returns a structured diagnosis
+(root cause, impact on the tool, recommended broker fix, evidence frames). A grounding guard
+drops any finding that no check returned. Needs `MODEL_API_KEY` set.
+```
+python -m visikit.agent.diagnose bench/cases/one_way.pcap --tool IDS
+python bench/run_agent_bench.py            # score the agent on all cases
+python bench/run_agent_bench.py one_way    # or selected cases
+```
+
 ## Responsible use
 VisiLoop is a defensive tool for owners of a network to make sure their own monitoring receives complete traffic. It never pushes changes to equipment; every fix needs engineer approval. Test data is synthetic or from public datasets.
