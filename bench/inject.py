@@ -104,6 +104,14 @@ def main():
     combo2 = inject_drops(rdpcap(enc), rng)
     add("combined_2", ["encrypted_share", "packet_drops"], _save("combined_2", combo2), ingress=enc)
 
+    # Breach story: the test signature is in the server response, which the RX-only SPAN never delivers
+    breach_in = os.path.join(CASES, "breach_ingress.pcap")
+    generate(breach_in, breach=True, seed=7)
+    breach_feed = [p for p in inject_one_way(rdpcap(breach_in), rng)
+                   if not (p.haslayer(TCP) and p[TCP].sport == 80 and p[TCP].dport == 45555)]
+    add("breach", ["one_way"], _save("breach", breach_feed), ingress=breach_in)
+    manifest["cases"][-1]["ids_alerts_expected"] = {"before": 0, "after": 1}
+
     with open(os.path.join(CASES, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)
     print(f"Wrote {len(manifest['cases'])} cases and manifest.json to {CASES}")

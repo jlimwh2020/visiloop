@@ -74,6 +74,7 @@ def remediate(ctx, findings, workdir):
         "fixes": fix_reports,
         "after": {port: [f.to_dict() for f in fs] for port, fs in after.items()},
         "tool_ports_after": len(pcaps),
+        "after_pcaps": pcaps,
         "bytes_before": bytes_before,
         "bytes_after": bytes_after,
         "new_faults": new_faults,

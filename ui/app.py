@@ -17,6 +17,7 @@ from visikit.core.registry import load_plugins                    # noqa: E402
 from visikit.core.schema import FeedContext                       # noqa: E402
 from visikit.loop import run_loop                                 # noqa: E402
 from visikit.profiles import load_profile                         # noqa: E402
+from visikit.proof import ids                                     # noqa: E402
 from visikit.vision import diagram as dg                          # noqa: E402
 
 CASES = os.path.join(ROOT, "bench", "cases")
@@ -45,6 +46,16 @@ def _save_upload(upload, name):
 
 
 @st.cache_data(show_spinner=False)
+def ids_available():
+    return ids.available()
+
+
+@st.cache_data(show_spinner=False)
+def prove_cached(before_pcap, after_pcaps):
+    return ids.prove_detection(before_pcap, list(after_pcaps))
+
+
+@st.cache_data(show_spinner=False)
 def run_cached(pcap, ingress, tool, vlans, use_agent, _mtime):
     ctx = FeedContext("feed-1", pcap, load_profile(tool, list(vlans)), ingress)
     return run_loop(ctx, use_agent=use_agent, workdir=tempfile.mkdtemp(dir=TMP))
@@ -62,7 +73,8 @@ if source == "Demo case":
     else:
         manifest = json.load(open(os.path.join(CASES, "manifest.json")))
         cases = {c["name"]: c for c in manifest["cases"]}
-        pick = st.sidebar.selectbox("Case", list(cases), index=list(cases).index("combined") if "combined" in cases else 0)
+        default = "breach" if "breach" in cases else ("combined" if "combined" in cases else list(cases)[0])
+        pick = st.sidebar.selectbox("Case", list(cases), index=list(cases).index(default))
         pcap = os.path.join(CASES, cases[pick]["file"])
         ingress = os.path.join(CASES, cases[pick]["ingress"])
 else:
@@ -84,6 +96,8 @@ if dsrc == "Upload":
         diagram = _save_upload(upd, "diagram_" + upd.name)
 
 use_agent = st.sidebar.checkbox("Explain with Muse Spark (about US$0.01)", value=True)
+use_ids = st.sidebar.checkbox("Detection proof with Suricata", value=True,
+                              help="Runs Suricata with a harmless test signature on the feed before and after the fix")
 go = st.sidebar.button("Run VisiLoop", type="primary", width="stretch", disabled=pcap is None)
 
 # ---------------- main ----------------
@@ -92,12 +106,12 @@ st.markdown("**See → Diagnose → Fix → Prove.** Checks whether a security t
             "traffic, writes a vendor-neutral packet broker fix, and proves it works in a simulated broker.")
 
 if go:
-    st.session_state["args"] = (pcap, ingress, tool, vlans, use_agent, diagram)
+    st.session_state["args"] = (pcap, ingress, tool, vlans, use_agent, diagram, use_ids)
 args = st.session_state.get("args")
 if not args:
     st.info("Choose a capture and a diagram in the sidebar, then click **Run VisiLoop**.")
     st.stop()
-pcap, ingress, tool, vlans, use_agent, diagram = args
+pcap, ingress, tool, vlans, use_agent, diagram, use_ids = args
 
 with st.spinner("Checking the feed, planning fixes and proving them..."):
     try:
@@ -226,6 +240,31 @@ with c2:
     after_rows = [{"Tool port": port, "Faults found": ", ".join(NICE.get(f["fault"], f["fault"]) for f in fs) or "none"}
                   for port, fs in report["after"].items()]
     st.dataframe(after_rows, hide_index=True, width="stretch")
+
+if use_ids and report.get("after_pcaps"):
+    st.subheader("Detection proof (Suricata)")
+    if not ids_available():
+        st.caption("Suricata not found. On Windows, install it in WSL Ubuntu: sudo apt install suricata")
+    else:
+        with st.spinner("Running Suricata on the feed before and after the fix..."):
+            try:
+                proof = prove_cached(pcap, tuple(report["after_pcaps"]))
+            except Exception as e:
+                proof = None
+                st.warning(f"Suricata could not run: {e}")
+        if proof:
+            c1, c2, c3 = st.columns([1, 1, 2])
+            c1.metric("IDS alerts on the broken feed", proof["before"])
+            c2.metric("IDS alerts after VisiLoop's fix", proof["after"], proof["after"] - proof["before"])
+            with c3:
+                if proof["after"] > proof["before"]:
+                    st.success(f"The {tool} was blind to {proof['after'] - proof['before']} alert(s) until the feed was fixed.")
+                elif proof["after"] == proof["before"] == 0:
+                    st.caption("No test signatures in this capture, so no alerts before or after.")
+                for a in proof["after_alerts"][:5]:
+                    st.markdown(f"🚨 **{a['signature']}**  \n`{a['src']} → {a['dst']}`")
+            st.caption("Uses a harmless test signature (visikit/proof/visiloop.rules) that matches only VisiLoop's "
+                       "synthetic test traffic.")
 
 if report.get("agent_meta"):
     m = report["agent_meta"]

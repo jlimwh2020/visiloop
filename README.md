@@ -75,6 +75,14 @@ The inventory is cached next to the image, so each diagram is read once.
 python -m visikit.vision.diagram demo/diagram.png --pcap bench/cases/combined.pcap --tool IDS
 ```
 
+## Detection proof (Suricata)
+The breach case contains a harmless test signature in a server response. The IDS feed arrives through an
+RX-only SPAN, so Suricata never sees that response. After VisiLoop aggregates both TAP legs, Suricata
+raises the alert. Rules: `visikit/proof/visiloop.rules`. On Windows, Suricata runs inside WSL Ubuntu.
+```
+python bench/run_breach_demo.py     # Suricata alerts: 0 on the broken feed -> 1 after the fix
+```
+
 ## Dashboard
 One page that walks through See -> Diagnose -> Fix -> Prove, with the pinned diagram before and after.
 ```
