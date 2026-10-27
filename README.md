@@ -57,11 +57,11 @@ Measured on 13 synthetic test cases: 6 single-fault, 3 mild (below threshold, mu
 | What | Result |
 |---|---|
 | Fault checks | **11/11** injected faults found, **0** missed, **0** false alarms |
-| Muse Spark diagnosis | **12/12** cases diagnosed correctly, **10/10** sensible fixes, **0** ungrounded claims |
+| Muse Spark diagnosis | **13/13** cases diagnosed correctly, **11/11** sensible fixes, **0** ungrounded claims |
 | Fixes proven by simulation | **9/9** fixable faults verified fixed; 2 decryption items reported as advice |
 | Diagram reading | **13/13** devices found; RX-only SPAN and both-direction TAP read correctly |
 | Detection proof | Suricata: **0** alerts on the broken feed → **1** alert after VisiLoop's fix |
-| Cost and speed | About **US$0.01** and **10 seconds** per Muse Spark diagnosis |
+| Cost and speed | About **US$0.01** and **9 seconds** per Muse Spark diagnosis (US$0.135 for all 13 cases) |
 
 Example: a 6.51 Gbps burst against a 1 Gbps IDS port. VisiLoop calculates a 13-port load-balanced tool group
 with symmetric hashing (every port's peak at or below 0.70 Gbps), or one 10 Gbps port as the alternative.
@@ -70,7 +70,9 @@ with symmetric hashing (every port's peak at or below 0.70 Gbps), or one 10 Gbps
 
 Requirements: Python 3.11+, [Wireshark](https://www.wireshark.org/) with TShark, and optionally Suricata
 for the detection proof (on Windows, install it inside WSL Ubuntu: `sudo apt install suricata`).
-A Meta Model API key is needed for the agent and diagram reading.
+A Meta Model API key is needed for live Muse Spark diagnosis and for reading new diagrams. Without a key, the
+dashboard shows recorded real Muse Spark runs for the demo cases (`demo/agent_runs/`, labelled with their date)
+and the saved reading of the demo diagram, so it works anywhere at no cost.
 
 ```bash
 pip install -r requirements.txt
@@ -84,7 +86,7 @@ Command-line tools:
 ```bash
 python bench/run_bench.py --detail                          # fault checks (free)
 python bench/run_loop_bench.py                              # diagnose -> fix -> prove (free)
-python bench/run_agent_bench.py                             # Muse Spark diagnosis (~US$0.15)
+python bench/run_agent_bench.py                             # Muse Spark diagnosis (~US$0.14); also records runs for the public demo
 python bench/run_breach_demo.py                             # Suricata 0 -> 1 alert
 python -m visikit.agent.diagnose bench/cases/one_way.pcap --tool IDS
 python -m visikit.vision.diagram demo/diagram.png --pcap bench/cases/combined.pcap --tool IDS
