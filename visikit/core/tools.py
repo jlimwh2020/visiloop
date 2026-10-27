@@ -31,3 +31,14 @@ def packet_count(pcap: str) -> int:
     # Tab-separated: file name, packet count
     last = out.strip().splitlines()[-1]
     return int(last.split("\t")[-1])
+
+
+def fields(pcap: str, names: list[str], display_filter: str | None = None) -> list[list[str]]:
+    """Extract fields per packet with tshark. Returns one list of strings per packet."""
+    args = ["-r", pcap, "-T", "fields", "-E", "separator=\t", "-E", "occurrence=f"]
+    if display_filter:
+        args += ["-Y", display_filter]
+    for n in names:
+        args += ["-e", n]
+    out = run("tshark", args)
+    return [line.split("\t") for line in out.splitlines() if line.strip()]

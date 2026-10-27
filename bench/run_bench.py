@@ -1,6 +1,6 @@
 """Run every detector on every test case and score against the answer key.
 
-Usage (from the repo root):  python bench/run_bench.py
+Usage (from the repo root):  python bench/run_bench.py [--detail]
 """
 import json
 import os
@@ -30,14 +30,16 @@ def main():
             todo.append(name)
 
     tp = fp = fn = 0
-    print(f"{'case':<17}{'expected':<18}{'found':<30}result")
-    print("-" * 75)
+    show_detail = "--detail" in sys.argv
+    print(f"{'case':<17}{'expected':<32}{'found':<48}result")
+    print("-" * 105)
     for case in manifest["cases"]:
         ctx = FeedContext(case["name"], os.path.join(CASES, case["file"]), profile)
-        found = []
+        found, details = [], []
         for name in ready:
             for finding in detectors[name]().run(ctx):
                 found.append(f"{finding.fault} ({finding.metric:.1%})")
+                details.append(f"    - [{finding.severity}] {finding.detail}")
         found_faults = {f.split(" ")[0] for f in found}
         expected = set(case["faults"])
         # Only score faults whose detector exists
@@ -51,9 +53,12 @@ def main():
             result = "PASS"
         else:
             result = "FAIL"
-        print(f"{case['name']:<17}{', '.join(expected) or 'none':<18}{', '.join(found) or '-':<30}{result}")
+        print(f"{case['name']:<17}{', '.join(sorted(expected)) or 'none':<32}{', '.join(found) or '-':<48}{result}")
+        if show_detail:
+            for d in details:
+                print(d)
 
-    print("-" * 75)
+    print("-" * 105)
     print(f"Detectors built: {len(ready)}/{len(detectors)} ({', '.join(ready)})")
     if todo:
         print(f"Still to build:  {', '.join(todo)}")

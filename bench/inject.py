@@ -89,6 +89,15 @@ def main():
     generate(nov, vlans=False, seed=3)
     add("missing_vlan", ["missing_vlan"], nov)
 
+    # Harder cases: mild faults below threshold must NOT alarm; combined faults must all be found
+    add("mild_duplicates", [], _save("mild_duplicates", inject_duplicates(base(), rng, share=0.02)))
+    add("mild_one_way", [], _save("mild_one_way", inject_one_way(base(), rng, share=0.05)))
+    add("mild_drops", [], _save("mild_drops", inject_drops(base(), rng, share=0.002)))
+    combo = inject_one_way(inject_duplicates(base(), rng), rng)
+    add("combined", ["duplicates", "one_way"], _save("combined", combo))
+    combo2 = inject_drops(rdpcap(enc), rng)
+    add("combined_2", ["encrypted_share", "packet_drops"], _save("combined_2", combo2))
+
     with open(os.path.join(CASES, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)
     print(f"Wrote {len(manifest['cases'])} cases and manifest.json to {CASES}")
