@@ -1,0 +1,243 @@
+{
+  "devices": [
+    {
+      "box": 0,
+      "label": "Internet",
+      "type": "internet"
+    },
+    {
+      "box": 1,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+    },
+    {
+      "box": 2,
+      "label": "SPAN port on CORE-SW-01",
+      "type": "span"
+    },
+    {
+      "box": 3,
+      "label": "TAP-01 (10G fiber)",
+      "type": "tap"
+    },
+    {
+      "box": 4,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+    },
+    {
+      "box": 5,
+      "label": "Packet Broker NPB-01",
+      "type": "packet_broker"
+    },
+    {
+      "box": 6,
+      "label": "Access Switch ACC-SW-01",
+      "type": "switch"
+    },
+    {
+      "box": 7,
+      "label": "Server Switch SRV-SW-01",
+      "type": "switch"
+    },
+    {
+      "box": 8,
+      "label": "NDR",
+      "type": "security_tool"
+    },
+    {
+      "box": 9,
+      "label": "IDS (Suricata)",
+      "type": "security_tool"
+    },
+    {
+      "box": 10,
+      "label": "SIEM",
+      "type": "security_tool"
+    },
+    {
+      "box": 11,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+    },
+    {
+      "box": 12,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+    }
+  ],
+  "links": [
+    {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+    },
+    {
+      "from": 1,
+      "to": 3,
+      "speed": "10G",
+      "kind": "production"
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "speed": "10G",
+      "kind": "production"
+    },
+    {
+      "from": 4,
+      "to": 6,
+      "speed": "1G",
+      "kind": "production"
+    },
+    {
+      "from": 4,
+      "to": 7,
+      "speed": "10G",
+      "kind": "production"
+    },
+    {
+      "from": 6,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+    },
+    {
+      "from": 7,
+      "to": 12,
+      "speed": "",
+      "kind": "production"
+    },
+    {
+      "from": 2,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+    },
+    {
+      "from": 3,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+    },
+    {
+      "from": 5,
+      "to": 8,
+      "speed": "10G",
+      "kind": "tool"
+    },
+    {
+      "from": 5,
+      "to": 9,
+      "speed": "1G",
+      "kind": "tool"
+    },
+    {
+      "from": 5,
+      "to": 10,
+      "speed": "1G",
+      "kind": "tool"
+    }
+  ],
+  "capture_points": [
+    {
+      "box": 2,
+      "kind": "span",
+      "mirrors": "mirror (RX only)",
+      "direction": "rx_only",
+      "feeds": 5
+    },
+    {
+      "box": 3,
+      "kind": "tap",
+      "mirrors": "mirror A+B",
+      "direction": "both",
+      "feeds": 5
+    }
+  ],
+  "boxes": [
+    [
+      558,
+      7,
+      701,
+      83
+    ],
+    [
+      568,
+      159,
+      692,
+      235
+    ],
+    [
+      268,
+      332,
+      496,
+      408
+    ],
+    [
+      553,
+      332,
+      706,
+      408
+    ],
+    [
+      242,
+      505,
+      434,
+      581
+    ],
+    [
+      604,
+      505,
+      797,
+      581
+    ],
+    [
+      7,
+      678,
+      206,
+      754
+    ],
+    [
+      243,
+      678,
+      433,
+      754
+    ],
+    [
+      471,
+      678,
+      585,
+      754
+    ],
+    [
+      621,
+      678,
+      814,
+      754
+    ],
+    [
+      850,
+      678,
+      964,
+      754
+    ],
+    [
+      34,
+      830,
+      179,
+      906
+    ],
+    [
+      233,
+      830,
+      443,
+      906
+    ]
+  ],
+  "_usage": {
+    "tokens_in": 1510,
+    "tokens_out": 3579
+  }
+}

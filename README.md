@@ -66,5 +66,14 @@ python bench/run_loop_bench.py            # free: detectors + fixes + simulator
 python bench/run_loop_bench.py --agent    # add Muse Spark explanations (uses API credits)
 ```
 
+## Diagram vision (SAM 3.1 + Muse Spark)
+SAM 3.1 finds every device box on the customer's network diagram. The boxes are numbered on a copy of the
+image and Muse Spark reads it into an inventory (devices, links, speeds, TAP/SPAN capture points and the
+direction each mirrors). Findings are then pinned onto the devices that explain them and the diagram is redrawn.
+The inventory is cached next to the image, so each diagram is read once.
+```
+python -m visikit.vision.diagram demo/diagram.png --pcap bench/cases/combined.pcap --tool IDS
+```
+
 ## Responsible use
 VisiLoop is a defensive tool for owners of a network to make sure their own monitoring receives complete traffic. It never pushes changes to equipment; every fix needs engineer approval. Test data is synthetic or from public datasets.

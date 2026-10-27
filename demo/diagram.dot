@@ -1,0 +1,33 @@
+digraph G {
+  rankdir=TB; bgcolor="white"; fontname="Arial";
+  node [shape=box, style="rounded,filled", fillcolor="#EAF2FB", color="#1F3864", fontname="Arial", fontsize=12];
+  edge [fontname="Arial", fontsize=10, color="#555555"];
+  internet [label="Internet", shape=ellipse, fillcolor="#F2F2F2"];
+  fw [label="Firewall\nFW-01"];
+  core [label="Core Switch\nCORE-SW-01"];
+  srv [label="Server Switch\nSRV-SW-01"];
+  usr [label="Access Switch\nACC-SW-01"];
+  servers [label="Server Zone\n(File, Web App)", fillcolor="#F2F2F2"];
+  users [label="User LAN\n(PCs)", fillcolor="#F2F2F2"];
+  tap1 [label="TAP-01\n(10G fiber)", fillcolor="#FFF2CC", color="#BF9000"];
+  span [label="SPAN port\non CORE-SW-01", fillcolor="#FFF2CC", color="#BF9000"];
+  npb [label="Packet Broker\nNPB-01", fillcolor="#E2F0D9", color="#38761D"];
+  ndr [label="NDR", fillcolor="#FCE4D6", color="#C55A11"];
+  ids [label="IDS (Suricata)", fillcolor="#FCE4D6", color="#C55A11"];
+  siem [label="SIEM", fillcolor="#FCE4D6", color="#C55A11"];
+  internet -> fw [dir=none];
+  fw -> tap1 [dir=none, label=" 10G"];
+  tap1 -> core [dir=none, label=" 10G"];
+  core -> srv [dir=none, label=" 10G"];
+  core -> usr [dir=none, label=" 1G"];
+  srv -> servers [dir=none];
+  usr -> users [dir=none];
+  tap1 -> npb [style=dashed, color="#BF9000", label=" mirror A+B"];
+  core -> span [dir=none, style=dotted];
+  span -> npb [style=dashed, color="#BF9000", label=" mirror (RX only)"];
+  npb -> ndr [color="#38761D", label=" 10G"];
+  npb -> ids [color="#38761D", label=" 1G"];
+  npb -> siem [color="#38761D", label=" 1G"];
+  {rank=same; tap1; span}
+  {rank=same; ndr; ids; siem}
+}
