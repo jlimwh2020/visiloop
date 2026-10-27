@@ -2,6 +2,9 @@
 
 **Your security tools may be blind. VisiLoop finds out why, fixes it, and proves it.**
 
+**▶ Demo video (2 min): [youtu.be/Jd9V8uX0U1g](https://youtu.be/Jd9V8uX0U1g)** · **Live demo: [visiloop.streamlit.app](https://visiloop.streamlit.app/)** (no sign-in needed; open the sidebar,
+keep the *breach* case and click **Run VisiLoop**. If the app is asleep, click to wake it and wait about a minute.)
+
 Security tools such as IDS, NDR and SIEM can only detect what the network feeds them. In real deployments
 those feeds, delivered by TAPs, SPAN ports and packet brokers, are often silently broken: packets dropped in
 bursts, duplicated, missing one direction of a conversation, untagged, or encrypted beyond what the tool can
