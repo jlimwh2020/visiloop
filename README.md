@@ -75,5 +75,11 @@ The inventory is cached next to the image, so each diagram is read once.
 python -m visikit.vision.diagram demo/diagram.png --pcap bench/cases/combined.pcap --tool IDS
 ```
 
+## Dashboard
+One page that walks through See -> Diagnose -> Fix -> Prove, with the pinned diagram before and after.
+```
+python -m streamlit run ui/app.py
+```
+
 ## Responsible use
 VisiLoop is a defensive tool for owners of a network to make sure their own monitoring receives complete traffic. It never pushes changes to equipment; every fix needs engineer approval. Test data is synthetic or from public datasets.

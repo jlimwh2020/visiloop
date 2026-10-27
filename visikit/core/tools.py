@@ -42,3 +42,9 @@ def fields(pcap: str, names: list[str], display_filter: str | None = None) -> li
         args += ["-e", n]
     out = run("tshark", args)
     return [line.split("\t") for line in out.splitlines() if line.strip()]
+
+
+def data_bytes(pcap: str) -> int:
+    """Total bytes of packet data in a capture."""
+    out = run("capinfos", ["-d", "-M", "-T", pcap])
+    return int(out.strip().splitlines()[-1].split("\t")[-1])

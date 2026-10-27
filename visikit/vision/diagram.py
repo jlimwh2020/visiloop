@@ -188,35 +188,64 @@ def pin_findings(inv, findings, tool_type):
 
 # ---------- step 4: draw ----------
 FAULT_COLOUR = (220, 30, 30)
+STATUS_COLOUR = {
+    "fault": (220, 30, 30),
+    "verified fixed": (20, 150, 70),
+    "advice (cannot be verified offline)": (230, 140, 0),
+    "not fixed": (220, 30, 30),
+}
 
 
-def render(image_path, inv, pins, out_path, title=None):
+def _colour(pin):
+    return STATUS_COLOUR.get(pin.get("status", "fault"), FAULT_COLOUR)
+
+
+def render(image_path, inv, pins, out_path=None, title=None):
+    """Draw pins on the diagram. Each pin may carry a "status" that sets its colour:
+    fault (red), verified fixed (green), advice (amber), not fixed (red).
+    Returns the saved path, or the PIL image when out_path is None."""
     img = Image.open(image_path).convert("RGB")
     W, H = img.size
-    legend_h = 34 + 26 * max(1, len(pins))
+    legend_h = 44 + 32 * max(1, len(pins))
     canvas = Image.new("RGB", (W, H + legend_h), "white")
     canvas.paste(img, (0, 0))
-    d, f, fb = ImageDraw.Draw(canvas), _font(15), _font(17)
+    d, f, fb, fl = ImageDraw.Draw(canvas), _font(15), _font(22), _font(19)
     boxes = inv["boxes"]
     tags_on = {}
     for n, pin in enumerate(pins, 1):
+        col = _colour(pin)
         for b in pin["boxes"]:
             x1, y1, x2, y2 = boxes[b]
-            d.rectangle([x1 - 4, y1 - 4, x2 + 4, y2 + 4], outline=FAULT_COLOUR, width=4)
+            d.rectangle([x1 - 4, y1 - 4, x2 + 4, y2 + 4], outline=col, width=4)
             k = tags_on.get(b, 0)
             tags_on[b] = k + 1
             cx = x2 + 6 - 28 * k            # several findings on one box: tags side by side
             tag = str(n)
-            d.ellipse([cx - 12, y1 - 18, cx + 12, y1 + 6], fill=FAULT_COLOUR)
+            d.ellipse([cx - 12, y1 - 18, cx + 12, y1 + 6], fill=col)
             d.text((cx - d.textlength(tag, font=f) / 2, y1 - 16), tag, fill="white", font=f)
-    y = H + 8
+    y = H + 10
     d.text((10, y), title or ("Feed healthy" if not pins else "VisiLoop findings"), fill="black", font=fb)
+    y += 4
     for n, pin in enumerate(pins, 1):
-        y += 26
-        d.ellipse([10, y, 30, y + 20], fill=FAULT_COLOUR)
-        d.text((20 - d.textlength(str(n), font=f) / 2, y + 1), str(n), fill="white", font=f)
-        d.text((38, y + 1), f"{pin['fault']}: {pin['reason']}", fill="black", font=f)
-    canvas.save(out_path)
+        y += 32
+        col = _colour(pin)
+        d.ellipse([10, y, 34, y + 24], fill=col)
+        d.text((22 - d.textlength(str(n), font=f) / 2, y + 3), str(n), fill="white", font=f)
+        status = pin.get("status")
+        text = f"{pin['fault']}: {pin['reason']}" if status in (None, "fault") else f"{pin['fault']}: {status}"
+        while d.textlength(text, font=fl) > W - 50 and len(text) > 20:
+            text = text[:-4] + "..."
+        d.text((44, y + 1), text, fill="black", font=fl)
+    if out_path is None:
+        return canvas
+    try:
+        canvas.save(out_path)
+    except OSError:
+        # On Windows the old image may still be open in a viewer, which blocks overwriting it
+        import time
+        root, ext = os.path.splitext(out_path)
+        out_path = f"{root}_{time.strftime('%H%M%S')}{ext}"
+        canvas.save(out_path)
     return out_path
 
 
@@ -245,7 +274,7 @@ def main():
     for p in pins:
         print(f"  {p['fault']}: {p['reason']}")
     out = os.path.splitext(a.pcap)[0] + "_on_diagram.png"
-    render(a.image, inv, pins, out)
+    out = render(a.image, inv, pins, out)
     print(f"Saved {out}")
 
 

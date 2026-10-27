@@ -64,6 +64,8 @@ def remediate(ctx, findings, workdir):
             status = "verified fixed"
         fix_reports.append({**fx.to_dict(), "status": status})
 
+    from visikit.core.tools import data_bytes
+    bytes_before, bytes_after = data_bytes(ctx.pcap), sum(data_bytes(p) for p in pcaps)
     new_faults = sorted(remaining - before)
     unresolved = sorted((remaining & before) - set(advice_only))
     healthy = not new_faults and not unresolved
@@ -72,6 +74,8 @@ def remediate(ctx, findings, workdir):
         "fixes": fix_reports,
         "after": {port: [f.to_dict() for f in fs] for port, fs in after.items()},
         "tool_ports_after": len(pcaps),
+        "bytes_before": bytes_before,
+        "bytes_after": bytes_after,
         "new_faults": new_faults,
         "unresolved": unresolved,
         "advice_only": sorted(advice_only),
