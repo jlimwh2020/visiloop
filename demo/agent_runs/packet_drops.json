@@ -1,0 +1,61 @@
+{
+  "feed": "packet_drops",
+  "status": "degraded",
+  "summary": "IDS feed 'packet_drops' is degraded due to high packet loss (4.9% TCP gaps). No duplicates, one-way, VLAN or encryption issues detected. Loss causes incomplete stream reassembly for IDS.",
+  "findings": [
+    {
+      "fault": "packet_drops",
+      "severity": "high",
+      "root_cause": "Upstream capture/broker is dropping packets under load - 145 of 2933 TCP packets (4.9%, threshold 1%) show gaps/retransmissions. Tool overload check is healthy so drops are not at IDS ingress policing but at SPAN source or packet broker ingress/egress buffers overflowing on bursts, common with SPAN vs TAP.",
+      "impact_on_tool": "IDS requires full payload and both directions for stream reassembly and signature matching. 4.9% missing data breaks TCP reassembly, causes missed exploits, fragmented file carving, and false negatives - detection coverage significantly reduced.",
+      "recommended_fix": {
+        "action": "replace_span_with_tap",
+        "params": {
+          "replace_source": "SPAN/mirror port feeding packet_drops",
+          "new_source": "passive TAP at core/distribution uplink",
+          "broker_action": "verify broker ingress buffers and add selective filter if aggregate >1Gbps to fit IDS 1Gbps port"
+        },
+        "why": "TAP provides lossless, full-duplex copy without SPAN buffer drops or switch CPU contention. Eliminates the 4-5% random loss and ensures IDS receives complete flows for reliable detection. If TAP already in use, apply broker filtering/load-balancing to keep egress within 1Gbps."
+      },
+      "evidence_frames": [
+        40,
+        41,
+        100,
+        101,
+        110,
+        113,
+        115,
+        116,
+        178,
+        179,
+        239,
+        245,
+        333,
+        334,
+        349,
+        350,
+        391,
+        394,
+        425,
+        426
+      ]
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2827,
+    "tokens_out": 3056,
+    "cost_usd": 0.01652,
+    "seconds": 15.1,
+    "recorded_at": "2026-10-27"
+  }
+}

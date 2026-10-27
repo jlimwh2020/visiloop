@@ -22,8 +22,10 @@ from visikit.vision import diagram as dg                          # noqa: E402
 
 CASES = os.path.join(ROOT, "bench", "cases")
 DEMO_DIAGRAM = os.path.join(ROOT, "demo", "diagram.png")
+RECORDED = os.path.join(ROOT, "demo", "agent_runs")
 TMP = os.path.join(tempfile.gettempdir(), "visiloop_ui")
 os.makedirs(TMP, exist_ok=True)
+HAS_KEY = bool(os.environ.get("MODEL_API_KEY"))
 
 NICE = {
     "duplicates": "Duplicates", "one_way": "One-way traffic", "packet_drops": "Packet drops",
@@ -45,6 +47,24 @@ def _save_upload(upload, name):
     return path
 
 
+@st.cache_resource(show_spinner="Generating the demo traffic captures (first start only, about a minute)...")
+def ensure_cases():
+    """On a fresh server (e.g. the live demo) the test captures don't exist yet: generate them once."""
+    if not os.path.exists(os.path.join(CASES, "manifest.json")):
+        sys.path.insert(0, os.path.join(ROOT, "bench"))
+        import inject
+        inject.main()
+    return True
+
+
+def load_recorded(case_name):
+    path = os.path.join(RECORDED, f"{case_name}.json")
+    if case_name and os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    return None
+
+
 @st.cache_data(show_spinner=False)
 def ids_available():
     return ids.available()
@@ -56,20 +76,23 @@ def prove_cached(before_pcap, after_pcaps):
 
 
 @st.cache_data(show_spinner=False)
-def run_cached(pcap, ingress, tool, vlans, use_agent, _mtime):
+def run_cached(pcap, ingress, tool, vlans, live_agent, recorded_json, _mtime):
     ctx = FeedContext("feed-1", pcap, load_profile(tool, list(vlans)), ingress)
-    return run_loop(ctx, use_agent=use_agent, workdir=tempfile.mkdtemp(dir=TMP))
+    recorded = json.loads(recorded_json) if recorded_json else None
+    return run_loop(ctx, use_agent=live_agent, workdir=tempfile.mkdtemp(dir=TMP), diagnosis=recorded)
 
 
 # ---------------- sidebar ----------------
 st.sidebar.title("VisiLoop")
 st.sidebar.caption("Your security tools may be blind. VisiLoop finds out why, fixes it, and proves it.")
 
+ensure_cases()
 source = st.sidebar.radio("Traffic capture", ["Demo case", "Upload my own"], horizontal=True)
-pcap = ingress = None
+pcap = ingress = case_name = None
+demo_profile = ("IDS", (10, 20))
 if source == "Demo case":
     if not os.path.exists(os.path.join(CASES, "manifest.json")):
-        st.sidebar.error("No demo cases yet. Run: python bench/inject.py")
+        st.sidebar.error("Demo cases could not be generated. Run: python bench/inject.py")
     else:
         manifest = json.load(open(os.path.join(CASES, "manifest.json")))
         cases = {c["name"]: c for c in manifest["cases"]}
@@ -77,6 +100,8 @@ if source == "Demo case":
         pick = st.sidebar.selectbox("Case", list(cases), index=list(cases).index(default))
         pcap = os.path.join(CASES, cases[pick]["file"])
         ingress = os.path.join(CASES, cases[pick]["ingress"])
+        case_name = pick
+        demo_profile = (manifest["profile"], tuple(manifest["required_vlans"]))
 else:
     up = st.sidebar.file_uploader("Capture from the tool's input (.pcap)", type=["pcap", "pcapng"])
     up_in = st.sidebar.file_uploader("Optional: broker ingress capture, to prove fixes", type=["pcap", "pcapng"])
@@ -95,7 +120,11 @@ if dsrc == "Upload":
     if upd:
         diagram = _save_upload(upd, "diagram_" + upd.name)
 
-use_agent = st.sidebar.checkbox("Explain with Muse Spark (about US$0.01)", value=True)
+if HAS_KEY:
+    use_agent = st.sidebar.checkbox("Explain with Muse Spark (live, about US$0.01)", value=True)
+else:
+    use_agent = False
+    st.sidebar.caption("Muse Spark: this server has no API key, so demo cases show a recorded real run.")
 use_ids = st.sidebar.checkbox("Detection proof with Suricata", value=True,
                               help="Runs Suricata with a harmless test signature on the feed before and after the fix")
 go = st.sidebar.button("Run VisiLoop", type="primary", width="stretch", disabled=pcap is None)
@@ -106,28 +135,40 @@ st.markdown("**See → Diagnose → Fix → Prove.** Checks whether a security t
             "traffic, writes a vendor-neutral packet broker fix, and proves it works in a simulated broker.")
 
 if go:
-    st.session_state["args"] = (pcap, ingress, tool, vlans, use_agent, diagram, use_ids)
+    st.session_state["args"] = (pcap, ingress, tool, vlans, use_agent, diagram, use_ids, case_name,
+                                (tool, vlans) == demo_profile)
 args = st.session_state.get("args")
 if not args:
     st.info("Choose a capture and a diagram in the sidebar, then click **Run VisiLoop**.")
     st.stop()
-pcap, ingress, tool, vlans, use_agent, diagram, use_ids = args
+pcap, ingress, tool, vlans, use_agent, diagram, use_ids, case_name, demo_settings = args
 
+# Recorded Muse Spark runs only apply to demo cases with the settings they were recorded with
+recorded_json = None if use_agent or not demo_settings else load_recorded(case_name)
 with st.spinner("Checking the feed, planning fixes and proving them..."):
     try:
-        report = run_cached(pcap, ingress, tool, vlans, use_agent and bool(os.environ.get("MODEL_API_KEY")),
-                            os.path.getmtime(pcap))
+        report = run_cached(pcap, ingress, tool, vlans, use_agent, recorded_json, os.path.getmtime(pcap))
     except Exception as e:
         st.error(f"VisiLoop could not finish: {e}")
         st.stop()
-if use_agent and not os.environ.get("MODEL_API_KEY"):
-    st.warning("MODEL_API_KEY is not set, so Muse Spark explanations were skipped.")
+if use_agent and case_name and demo_settings and report.get("diagnosis"):
+    # A live run on a demo case refreshes its recording for the public dashboard
+    os.makedirs(RECORDED, exist_ok=True)
+    d = dict(report["diagnosis"])
+    d["_meta"] = {**d["_meta"], "recorded_at": __import__("time").strftime("%Y-%m-%d")}
+    with open(os.path.join(RECORDED, f"{case_name}.json"), "w", encoding="utf-8") as f:
+        json.dump(d, f, indent=2)
+recorded_label = ""
+if recorded_json and report.get("agent_meta"):
+    recorded_label = f" (recorded run, {report['agent_meta'].get('recorded_at', 'earlier')})"
 
 inv = None
 if diagram:
     with st.spinner("Reading the network diagram (SAM 3.1 + Muse Spark, cached after the first read)..."):
         try:
             inv = dg.load_or_read(diagram)
+        except KeyError:
+            st.warning("Reading a new diagram needs a Meta API key on this server; showing results without it.")
         except Exception as e:
             st.warning(f"Diagram could not be read: {e}")
 
@@ -168,7 +209,7 @@ if not before:
     st.stop()
 
 if report.get("summary"):
-    st.info(f"**Muse Spark:** {report['summary']}")
+    st.info(f"**Muse Spark{recorded_label}:** {report['summary']}")
 
 pins = dg.pin_findings(inv, before, tool) if inv else []
 c1, c2 = st.columns([3, 2])
@@ -268,5 +309,5 @@ if use_ids and report.get("after_pcaps"):
 
 if report.get("agent_meta"):
     m = report["agent_meta"]
-    st.caption(f"Muse Spark ({m['model']}): {m['tokens_in']} tokens in, {m['tokens_out']} out, "
+    st.caption(f"Muse Spark ({m['model']}){recorded_label}: {m['tokens_in']} tokens in, {m['tokens_out']} out, "
                f"US${m['cost_usd']:.4f}, {m['seconds']} s")

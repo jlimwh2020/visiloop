@@ -1,0 +1,23 @@
+{
+  "feed": "mild_one_way",
+  "status": "healthy",
+  "summary": "All visibility checks passed for IDS feed 'mild_one_way'. No duplicates, drops, overload, one-way traffic, missing VLANs, or excessive encryption detected. Tool is receiving complete, correct traffic per its profile (bidirectional, full payload, VLANs 10,20).",
+  "findings": [],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2700,
+    "tokens_out": 825,
+    "cost_usd": 0.00688,
+    "seconds": 5.6,
+    "recorded_at": "2026-10-27"
+  }
+}

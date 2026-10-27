@@ -1,0 +1,43 @@
+{
+  "feed": "tool_overload",
+  "status": "degraded",
+  "summary": "IDS feed is severely overloaded: 6.51 Gbps microbursts exceed 1 Gbps IDS port (651% of capacity, 2 overloaded intervals). IDS will drop traffic and miss detections. All other checks (drops, duplicates, one-way, encryption, VLAN) are healthy.",
+  "findings": [
+    {
+      "fault": "tool_overload",
+      "severity": "high",
+      "root_cause": "Packet broker is forwarding aggregate/burst traffic without adequate load-balancing or filtering to match the 1 Gbps IDS port. Measured 1ms peak of 6.51 Gbps is 6.5x port capacity, indicating multiple source ports aggregated to a single tool port with no burst handling.",
+      "impact_on_tool": "IDS will silently drop excess packets during bursts, causing missed exploits, broken TCP reassembly and flow state (IDS needs both directions and full payload), and major detection coverage gaps despite needing full fidelity.",
+      "recommended_fix": {
+        "action": "load_balance",
+        "params": {
+          "hash": "5-tuple",
+          "required_capacity_gbps": 7,
+          "target_per_port_utilization": 0.7
+        },
+        "why": "Distribute traffic flow-aware across an IDS cluster or multiple 1 Gbps tool ports via packet broker load-balancing to keep per-port utilization <80% while preserving both directions and full payload required for IDS inspection. Alternative is filtered feed if capacity cannot be added, but load balancing retains complete visibility."
+      },
+      "evidence_frames": [
+        1,
+        1400
+      ]
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2773,
+    "tokens_out": 1841,
+    "cost_usd": 0.01129,
+    "seconds": 10.3,
+    "recorded_at": "2026-10-27"
+  }
+}

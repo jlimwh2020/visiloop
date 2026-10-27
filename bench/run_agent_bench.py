@@ -10,6 +10,7 @@ Usage (from the repo root):
 import json
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -18,6 +19,7 @@ from visikit.core.schema import FeedContext     # noqa: E402
 from visikit.profiles import load_profile       # noqa: E402
 
 CASES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cases")
+RECORDED = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "demo", "agent_runs")
 
 # Fix actions a senior engineer would accept for each fault
 GOOD_FIXES = {
@@ -49,6 +51,11 @@ def run(selected=None, client=None):
             continue
         meta = d["_meta"]
         cost += meta["cost_usd"]
+        # Save this real run so the public dashboard can show it without an API key
+        os.makedirs(RECORDED, exist_ok=True)
+        meta["recorded_at"] = time.strftime("%Y-%m-%d")
+        with open(os.path.join(RECORDED, case["name"] + ".json"), "w") as f:
+            json.dump(d, f, indent=2)
         ungrounded += len(meta["ungrounded_dropped"])
         reported = {f["fault"]: f for f in d["findings"]}
         expected = set(case["faults"])
@@ -74,6 +81,7 @@ def run(selected=None, client=None):
     print(f"Fix choice sensible:     {fixes_ok}/{fixes_total}")
     print(f"Ungrounded claims removed by guard: {ungrounded}")
     print(f"Total cost: US${cost:.4f}")
+    print(f"Recorded runs saved to {RECORDED} (used by the public dashboard)")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,64 @@
+{
+  "feed": "missing_vlan",
+  "status": "degraded",
+  "summary": "Feed 'missing_vlan' to IDS is degraded: 100% of packets are untagged and required VLANs 10, 20 are completely missing (20/20 sampled frames). IDS is blind to VLAN segmentation.",
+  "findings": [
+    {
+      "fault": "missing_vlan",
+      "severity": "high",
+      "root_cause": "Upstream TAP/SPAN or packet broker is stripping 802.1Q tags or delivering from access ports instead of trunk. Broker ingress configured to strip VLAN or switch SPAN not preserving tags, so all frames arrive untagged and VLANs 10, 20 are lost before the IDS.",
+      "impact_on_tool": "IDS requires VLANs 10 and 20 for segmentation-aware detection and needs full context. Without tags it cannot apply VLAN-specific policies, correlate lateral movement between VLAN 10/20, or attribute attacks to correct tenant/segment, causing missed detections and incorrect incident scoping.",
+      "recommended_fix": {
+        "action": "vlan",
+        "params": {
+          "preserve_dot1q": true,
+          "required_vlans": [
+            10,
+            20
+          ],
+          "mode": "trunk_passthrough"
+        },
+        "why": "Preserve and forward 802.1Q tags for VLANs 10,20 through TAP/SPAN and packet broker to restore IDS visibility into segmented traffic without stripping."
+      },
+      "evidence_frames": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2826,
+    "tokens_out": 1723,
+    "cost_usd": 0.01086,
+    "seconds": 9.1,
+    "recorded_at": "2026-10-27"
+  }
+}

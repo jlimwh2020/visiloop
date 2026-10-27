@@ -1,0 +1,76 @@
+{
+  "feed": "combined",
+  "status": "degraded",
+  "summary": "Feed 'combined' to IDS is degraded: 13.8% duplicate packets and 40% one-way TCP sessions (80/200). IDS requires bidirectional, full-payload traffic and is missing return direction for stateful analysis.",
+  "findings": [
+    {
+      "fault": "one_way",
+      "severity": "high",
+      "root_cause": "Only one direction of 40% of TCP sessions reaches the IDS. Feed 'combined' likely aggregates SPAN/TAP sources with incomplete coverage or packet broker policy that splits directions across different tool ports / asymmetric routing where only one side is tapped, so return traffic is not aggregated to this IDS port.",
+      "impact_on_tool": "IDS needs both directions for TCP handshake tracking, stream reassembly and bidirectional signature matching. With 40% one-way flows the IDS cannot establish state, misses payload in response, and fails to detect exploits, C2 and data exfiltration.",
+      "recommended_fix": {
+        "action": "aggregate",
+        "params": {
+          "ensure_bidirectional_aggregation": true,
+          "hash_mode": "symmetric_5tuple",
+          "verify_tap_span_both_directions": true
+        },
+        "why": "Configure packet broker to aggregate both directions of each flow to the same IDS tool port using symmetric 5-tuple hashing and verify TAP/SPAN sources capture both Tx and Rx for all monitored links."
+      },
+      "evidence_frames": [
+        1,
+        8,
+        62,
+        147,
+        158,
+        166,
+        175,
+        181,
+        212,
+        216,
+        249,
+        334,
+        381,
+        434,
+        484,
+        563,
+        623,
+        631,
+        672,
+        698
+      ]
+    },
+    {
+      "fault": "duplicates",
+      "severity": "medium",
+      "root_cause": "Feed 'combined' aggregates multiple overlapping SPAN/TAP sources without broker deduplication. The same packet ingressing on two monitored links is forwarded twice to the IDS, causing 401 of 2903 packets (13.8%) to be duplicates, above 5% threshold.",
+      "impact_on_tool": "Wastes IDS 1Gbps capacity and CPU on redundant 13.8% traffic, inflates flow counts, skews analytics and can cause false positives or mask rate-based detections while reducing headroom for real traffic.",
+      "recommended_fix": {
+        "action": "dedup",
+        "params": {
+          "window_ms": 10,
+          "mode": "header_hash"
+        },
+        "why": "Enable packet broker deduplication on the combined feed to drop identical packets seen within a short time window before delivery to the IDS, preserving capacity for unique traffic."
+      },
+      "evidence_frames": []
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2873,
+    "tokens_out": 2054,
+    "cost_usd": 0.01232,
+    "seconds": 10.2,
+    "recorded_at": "2026-10-27"
+  }
+}

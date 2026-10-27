@@ -1,0 +1,61 @@
+{
+  "feed": "one_way",
+  "status": "degraded",
+  "summary": "Feed 'one_way' to IDS is degraded: 40.0% of TCP sessions (80/200) are one-way, exceeding 10% threshold. IDS requires bidirectional traffic, so detection coverage is significantly reduced.",
+  "findings": [
+    {
+      "fault": "one_way",
+      "severity": "high",
+      "root_cause": "Packet broker/SPAN is forwarding only one direction for many flows - likely asymmetric routing with single-sided SPAN/TAP or broker hash/policy that splits client->server and server->client to different tool ports, so return traffic never reaches this IDS port.",
+      "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly, stream tracking and signature matching. With 40% one-way sessions it cannot reconstruct flows, causing missed intrusions, broken state tracking and high false-negative rate.",
+      "recommended_fix": {
+        "action": "aggregate",
+        "params": {
+          "ensure_bidirectional_aggregation": true,
+          "hash_mode": "5-tuple symmetric",
+          "deliver_both_directions_to_same_tool_port": true
+        },
+        "why": "Aggregate both directions of each session to the same IDS tool port using symmetric 5-tuple hashing so the IDS sees complete bidirectional flows required for stateful detection."
+      },
+      "evidence_frames": [
+        14,
+        70,
+        109,
+        117,
+        159,
+        289,
+        430,
+        439,
+        551,
+        591,
+        604,
+        621,
+        631,
+        637,
+        658,
+        659,
+        688,
+        707,
+        777,
+        850
+      ]
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2813,
+    "tokens_out": 2116,
+    "cost_usd": 0.01251,
+    "seconds": 9.5,
+    "recorded_at": "2026-10-27"
+  }
+}

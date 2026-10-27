@@ -1,0 +1,60 @@
+{
+  "feed": "encrypted_share",
+  "status": "degraded",
+  "summary": "Feed 'encrypted_share' to IDS is degraded: 82.0% encrypted bytes exceeds IDS tolerance of 60%, limiting payload inspection. All other visibility checks (duplicates, VLANs, one-way, drops, overload) are healthy.",
+  "findings": [
+    {
+      "fault": "encrypted_share",
+      "severity": "high",
+      "root_cause": "82% of bytes are encrypted (metric 0.8198 vs threshold 0.6), likely due to predominantly TLS/HTTPS traffic being forwarded to the IDS without prior decryption or selective bypass on the packet broker.",
+      "impact_on_tool": "IDS requires full payload inspection and tolerates ~60% encrypted traffic; at 82% the payload is opaque, causing missed signatures, reduced detection coverage, and blind spots for threats inside encrypted sessions.",
+      "recommended_fix": {
+        "action": "decrypt_advice",
+        "params": {
+          "target_encrypted_share": 0.6,
+          "location": "packet_broker"
+        },
+        "why": "Deploy SSL/TLS visibility/decryption for relevant traffic or selectively filter/bypass trusted encrypted flows at the packet broker to bring encrypted share below 60% and restore IDS payload inspection capability."
+      },
+      "evidence_frames": [
+        18,
+        20,
+        21,
+        22,
+        23,
+        25,
+        26,
+        29,
+        34,
+        36,
+        37,
+        38,
+        39,
+        42,
+        43,
+        49,
+        61,
+        63,
+        64,
+        65
+      ]
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2820,
+    "tokens_out": 1522,
+    "cost_usd": 0.00999,
+    "seconds": 8.3,
+    "recorded_at": "2026-10-27"
+  }
+}

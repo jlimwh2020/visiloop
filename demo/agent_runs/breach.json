@@ -1,0 +1,60 @@
+{
+  "feed": "breach",
+  "status": "degraded",
+  "summary": "IDS feed 'breach' is degraded: 40.3% of TCP sessions (81/201) are one-way, violating IDS requirement for bidirectional traffic. All other visibility checks (duplicates, drops, overload, VLANs, encryption) are healthy.",
+  "findings": [
+    {
+      "fault": "one_way",
+      "severity": "high",
+      "root_cause": "Packet broker/SPAN is delivering only one direction per session to the IDS tool port. Likely SPAN configured as rx-only/tx-only or broker not aggregating both sides of the flow (asymmetric routing or separate TAPs) to the same tool port, so 81 of 201 sessions show only client->server or server->client.",
+      "impact_on_tool": "IDS needs_both_directions=true for TCP stream reassembly and stateful signature matching. With 40.3% one-way sessions the IDS cannot see handshakes, track state, or match bidirectional signatures, causing missed exploits and false negatives.",
+      "recommended_fix": {
+        "action": "aggregate",
+        "params": {
+          "ensure_bidirectional_aggregation": true,
+          "aggregate_both_directions_to_same_tool_port": true
+        },
+        "why": "Aggregating both directions of each session to the same IDS port restores full flow visibility required for stateful IDS detection and eliminates one-way blindness."
+      },
+      "evidence_frames": [
+        42,
+        50,
+        57,
+        134,
+        158,
+        224,
+        279,
+        282,
+        294,
+        303,
+        311,
+        316,
+        329,
+        440,
+        475,
+        484,
+        504,
+        598,
+        608,
+        649
+      ]
+    }
+  ],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2815,
+    "tokens_out": 1932,
+    "cost_usd": 0.01173,
+    "seconds": 11.3,
+    "recorded_at": "2026-10-27"
+  }
+}

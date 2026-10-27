@@ -1,0 +1,23 @@
+{
+  "feed": "clean",
+  "status": "healthy",
+  "summary": "Feed 'clean' is healthy: IDS receives complete bidirectional traffic with full payload, no packet drops, duplicates, overload, missing VLANs (10, 20 present), or excessive encryption. No packet broker changes required.",
+  "findings": [],
+  "_meta": {
+    "model": "muse-spark-1.2",
+    "checks_called": [
+      "duplicates",
+      "encrypted_share",
+      "missing_vlan",
+      "one_way",
+      "packet_drops",
+      "tool_overload"
+    ],
+    "ungrounded_dropped": [],
+    "tokens_in": 2697,
+    "tokens_out": 800,
+    "cost_usd": 0.00677,
+    "seconds": 7.2,
+    "recorded_at": "2026-10-27"
+  }
+}

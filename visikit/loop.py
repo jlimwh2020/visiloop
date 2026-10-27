@@ -84,10 +84,10 @@ def remediate(ctx, findings, workdir):
     }
 
 
-def run_loop(ctx, use_agent=False, client=None, workdir=None):
+def run_loop(ctx, use_agent=False, client=None, workdir=None, diagnosis=None):
+    """diagnosis: optional recorded Muse Spark diagnosis to use instead of calling the model."""
     findings = check_all(ctx)
-    diagnosis = None
-    if use_agent and findings:
+    if use_agent and findings and diagnosis is None:
         from visikit.agent.diagnose import diagnose
         diagnosis = diagnose(ctx, client=client)
     own_tmp = workdir is None
@@ -104,6 +104,7 @@ def run_loop(ctx, use_agent=False, client=None, workdir=None):
             fx["agent_action"] = a.get("recommended_fix", {}).get("action")
         report["summary"] = diagnosis.get("summary", "")
         report["agent_meta"] = diagnosis["_meta"]
+        report["diagnosis"] = diagnosis
     report["workdir"] = workdir if not own_tmp else None
     return report
 
