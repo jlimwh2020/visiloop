@@ -1,0 +1,21 @@
+# What each tool type needs from its feed. Edit to match your own experience.
+NDR:
+  needs_both_directions: true
+  needs_full_payload: true
+  max_rate_gbps: 10
+  max_encrypted_share: 0.9
+IDS:
+  needs_both_directions: true
+  needs_full_payload: true
+  max_rate_gbps: 1
+  max_encrypted_share: 0.6
+APM:
+  needs_both_directions: true
+  needs_full_payload: false
+  max_rate_gbps: 10
+  max_encrypted_share: 1.0
+SIEM:
+  needs_both_directions: false
+  needs_full_payload: false
+  max_rate_gbps: 1
+  max_encrypted_share: 1.0
