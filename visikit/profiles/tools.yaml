@@ -4,18 +4,22 @@ NDR:
   needs_full_payload: true
   max_rate_gbps: 10
   max_encrypted_share: 0.9
+  max_frame_bytes: 9216
 IDS:
   needs_both_directions: true
   needs_full_payload: true
   max_rate_gbps: 1
   max_encrypted_share: 0.6
+  max_frame_bytes: 1518
 APM:
   needs_both_directions: true
   needs_full_payload: false
   max_rate_gbps: 10
   max_encrypted_share: 1.0
+  max_frame_bytes: 9216
 SIEM:
   needs_both_directions: false
   needs_full_payload: false
   max_rate_gbps: 1
   max_encrypted_share: 1.0
+  max_frame_bytes: 1518

@@ -33,9 +33,12 @@ def packet_count(pcap: str) -> int:
     return int(last.split("\t")[-1])
 
 
-def fields(pcap: str, names: list[str], display_filter: str | None = None) -> list[list[str]]:
-    """Extract fields per packet with tshark. Returns one list of strings per packet."""
-    args = ["-r", pcap, "-T", "fields", "-E", "separator=\t", "-E", "occurrence=f"]
+def fields(pcap: str, names: list[str], display_filter: str | None = None, occurrence: str = "f") -> list[list[str]]:
+    """Extract fields per packet with tshark. Returns one list of strings per packet.
+
+    occurrence "f" takes the first (outermost) value of a field, "l" the last (innermost),
+    which matters for tunnelled traffic where a packet carries two IP headers."""
+    args = ["-r", pcap, "-T", "fields", "-E", "separator=\t", "-E", f"occurrence={occurrence}"]
     if display_filter:
         args += ["-Y", display_filter]
     for n in names:

@@ -45,6 +45,7 @@ def one(case):
                                  for x in r["fixes"]],
                        "after": {p: sorted({f["fault"] for f in fs}) for p, fs in r["after"].items()},
                        "new_faults": r["new_faults"], "unresolved": r["unresolved"], "result": r["result"],
+                       "rounds": r.get("rounds", 1), "revealed": r.get("revealed", []),
                        "tool_ports_after": r["tool_ports_after"]}
     else:
         out["loop"] = {"fixes": [], "result": "healthy (no faults found)"}

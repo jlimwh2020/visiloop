@@ -21,13 +21,17 @@ from visikit.core.schema import FeedContext
 from visikit.profiles import load_profile
 
 
-def check_all(ctx):
+PER_PORT = {"tool_overload"}    # capacity is judged per tool port; everything else on the whole tool group
+MAX_ROUNDS = 3
+
+
+def check_all(ctx, only=None, skip=()):
     detectors, _ = load_plugins()
-    return [f for cls in detectors.values() for f in cls().run(ctx)]
+    return [f for name, cls in detectors.items() if (only is None or name in only) and name not in skip
+            for f in cls().run(ctx)]
 
 
-def remediate(ctx, findings, workdir):
-    """Plan, simulate and verify fixes for the given findings."""
+def _plan(ctx, findings, workdir):
     _, fixes = load_plugins()
     planned = []
     for finding in findings:
@@ -38,36 +42,93 @@ def remediate(ctx, findings, workdir):
         kwargs = {"workdir": workdir} if "workdir" in inspect.signature(plugin.config).parameters else {}
         planned.append((plugin, plugin.config(ctx, finding, **kwargs)))
     planned.sort(key=lambda pf: pf[0].stage)
+    return planned
 
-    pcaps, advice_only = [ctx.pcap], []
+
+def _simulate(planned, ctx, pcaps, workdir):
+    """Apply fixes in pipeline order. Returns (tool-port captures, the stream before any split, advice faults)."""
+    group, advice = None, []
     for plugin, fx in planned:
+        if plugin.action == "load_balance":
+            group = list(pcaps)
         result = plugin.simulate(pcaps, ctx, fx, workdir)
         if result is None:
-            advice_only.append(fx.fault)
+            advice.append(fx.fault)
         else:
             pcaps = result
+    return pcaps, group or list(pcaps), advice
 
+
+def _check_after(ctx, pcaps, group):
+    """Re-check the result. With a load-balanced tool group, port capacity is checked per port and
+    everything else (traffic mix, directions, duplicates...) on the group as a whole, because hashing
+    whole flows to ports makes each port's mix differ a little from the group's."""
+    if len(pcaps) == 1:
+        return {ctx.feed: check_all(replace(ctx, pcap=pcaps[0], ingress=None))}
     after = {}
     for i, p in enumerate(pcaps):
-        port = ctx.feed if len(pcaps) == 1 else f"{ctx.feed}-port{i + 1}"
-        after[port] = check_all(replace(ctx, feed=port, pcap=p, ingress=None))
-    remaining = {f.fault for fs in after.values() for f in fs}
+        after[f"{ctx.feed}-port{i + 1}"] = check_all(replace(ctx, feed=f"{ctx.feed}-port{i + 1}", pcap=p, ingress=None),
+                                                     only=PER_PORT)
+    for j, g in enumerate(group):
+        name = f"{ctx.feed}-group" if len(group) == 1 else f"{ctx.feed}-group{j + 1}"
+        after[name] = check_all(replace(ctx, feed=name, pcap=g, ingress=None), skip=PER_PORT)
+    return after
+
+
+def remediate(ctx, findings, workdir):
+    """Plan, simulate and verify fixes. If a fix reveals a new fault (turning slicing off brings back
+    jumbo frames; aggregating both directions doubles the load), plan a further round, up to MAX_ROUNDS."""
     before = {f.fault for f in findings}
+    pcaps, group = [ctx.pcap], [ctx.pcap]
+    planned_all, advice_all, attempted = [], [], set()
+    lb = None
+    cur_ctx, cur_findings = ctx, findings
+    rounds = 0
+    revealed = []
+    for rnd in range(1, MAX_ROUNDS + 1):
+        rounds = rnd
+        rd = os.path.join(workdir, f"round{rnd}")
+        os.makedirs(rd, exist_ok=True)
+        planned = _plan(cur_ctx, cur_findings, rd)
+        attempted |= {fx.fault for _, fx in planned}
+        planned_all += [(pl, fx, rnd) for pl, fx in planned]
+        run = list(planned)
+        if lb and not any(pl.action == "load_balance" for pl, _ in run):
+            run.append(lb)                              # keep the tool group sized in an earlier round
+        start = pcaps if rnd == 1 else group
+        pcaps, group, advice = _simulate(run, cur_ctx, start, rd)
+        lb = next(((pl, fx) for pl, fx in planned if pl.action == "load_balance"), lb)
+        advice_all += advice
+        after = _check_after(ctx, pcaps, group)
+        remaining = {f.fault for fs in after.values() for f in fs}
+        to_fix = remaining - set(advice_all) - attempted
+        if not to_fix or rnd == MAX_ROUNDS:
+            break
+        # A fix revealed something new: diagnose it on the repaired stream and go round again
+        cur_findings, seen = [], set()
+        for fs in after.values():
+            for f in fs:
+                if f.fault in to_fix and f.fault not in seen:
+                    cur_findings.append(f)
+                    seen.add(f.fault)
+        revealed += sorted(seen)
+        cur_ctx = replace(ctx, pcap=group[0] if len(group) == 1 else pcaps[0], ingress=None)
 
     fix_reports = []
-    for plugin, fx in planned:
-        if fx.fault in advice_only:
+    for plugin, fx, rnd in planned_all:
+        if fx.fault in advice_all:
             status = "advice (cannot be verified offline)"
         elif fx.fault in remaining:
             status = "not fixed"
         else:
             status = "verified fixed"
-        fix_reports.append({**fx.to_dict(), "status": status})
+        fix_reports.append({**fx.to_dict(), "status": status, "round": rnd})
 
     from visikit.core.tools import data_bytes
     bytes_before, bytes_after = data_bytes(ctx.pcap), sum(data_bytes(p) for p in pcaps)
-    new_faults = sorted(remaining - before)
-    unresolved = sorted((remaining & before) - set(advice_only))
+    advice_set = set(advice_all)
+    new_faults = sorted(remaining - before - advice_set)
+    unresolved = sorted((remaining & before) - advice_set)
     healthy = not new_faults and not unresolved
     return {
         "before": [f.to_dict() for f in findings],
@@ -77,10 +138,12 @@ def remediate(ctx, findings, workdir):
         "after_pcaps": pcaps,
         "bytes_before": bytes_before,
         "bytes_after": bytes_after,
+        "rounds": rounds,
+        "revealed": revealed,
         "new_faults": new_faults,
         "unresolved": unresolved,
-        "advice_only": sorted(advice_only),
-        "result": ("healthy" if not advice_only else "healthy except advice items") if healthy else "still broken",
+        "advice_only": sorted(advice_set),
+        "result": ("healthy" if not advice_set else "healthy except advice items") if healthy else "still broken",
     }
 
 

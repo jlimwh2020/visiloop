@@ -11,6 +11,7 @@ class ToolProfile:
     max_rate_gbps: float            # speed of the tool's input port
     required_vlans: list[int] = field(default_factory=list)
     max_encrypted_share: float = 1.0  # above this, the tool loses most visibility
+    max_frame_bytes: int = 1518     # largest frame the tool's network card accepts (MTU + headers)
 
 
 @dataclass

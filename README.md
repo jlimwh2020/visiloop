@@ -15,7 +15,7 @@ VisiLoop is an AI visibility engineer built on Meta's models. It closes the loop
 | Step | What happens |
 |---|---|
 | **See** | SAM 3.1 finds every device on the customer's network diagram; Muse Spark reads it into an inventory, including which way each TAP or SPAN mirrors. |
-| **Diagnose** | Six checks measure the tool's feed. A Muse Spark agent calls them as tools, explains the root cause and pins each fault onto the diagram. |
+| **Diagnose** | Nine checks measure the tool's feed. A Muse Spark agent calls them as tools, explains the root cause and pins each fault onto the diagram. |
 | **Fix** | Each fault gets a vendor-neutral packet broker change with settings calculated from the measurements. |
 | **Prove** | A simulated broker applies the fixes and every tool port is re-checked. Suricata then shows the alert the tool was missing. |
 
@@ -49,7 +49,7 @@ flowchart LR
 |---|---|
 | **SAM 3.1** | Segments every device box on the diagram, giving exact positions for pinning faults. |
 | **Muse Spark (vision)** | Reads the diagram with numbered boxes (set-of-marks prompting) into a structured inventory: device types, link speeds, capture points and the direction each mirrors. |
-| **Muse Spark (agent)** | Calls the six checks and the tool profile as tools, in parallel, and returns a structured diagnosis: root cause, impact on the tool, recommended fix and evidence packets. |
+| **Muse Spark (agent)** | Calls the nine checks and the tool profile as tools, in parallel, and returns a structured diagnosis: root cause, impact on the tool, recommended fix and evidence packets. |
 | **Muse Code** | Used during development. |
 
 ## Results
@@ -142,16 +142,25 @@ python -m visikit.agent.diagnose bench/cases/one_way.pcap --tool IDS
 python -m visikit.vision.diagram demo/diagram.png --pcap bench/cases/combined.pcap --tool IDS
 ```
 
-## The six checks
+## The nine checks
 
-| Check | Measures | Fault when |
-|---|---|---|
-| Duplicates | Packets removed by deduplication | over 5% |
-| One-way traffic | TCP sessions with only one side seen | over 10% |
-| Packet drops | ACKs for data missing from the capture | over 1% of TCP packets |
-| Tool overload | Peak 1 ms burst vs the tool's port speed | over 80% |
-| Encrypted share | TLS/QUIC share of bytes | above the tool's tolerance |
-| Missing VLANs | Required VLANs absent, or untagged traffic | any missing, or over 5% untagged |
+Every check is tool-aware: it is judged against what that tool type needs (`visikit/profiles/tools.yaml`).
+
+| Check | Measures | Fault when | Fix |
+|---|---|---|---|
+| Duplicates | Packets removed by deduplication | over 5% | deduplication |
+| One-way traffic | TCP sessions with only one side seen | over 10%, for tools that need both directions | aggregate both TAP legs |
+| Packet drops | Data the endpoints exchanged but the capture is missing | over 1% of TCP packets | replace the SPAN with a TAP |
+| Tool overload | Peak 1 ms burst vs the tool's port speed | over 80% | load-balanced tool group, sized |
+| Encrypted share | TLS/QUIC share of bytes | above the tool's tolerance | decryption point (advice) |
+| Missing VLANs | Required VLANs absent, or untagged traffic | any missing, or over 5% untagged | preserve VLAN tags |
+| Packet slicing | Frames shorter than their IP header states | over 5%, for tools that need the full payload | turn slicing off |
+| Tunnel headers | Traffic still inside ERSPAN, GRE or VXLAN | over 10% | strip tunnel headers |
+| Oversize frames | Frames above the tool port's maximum frame size | over 1% | raise the MTU (advice) |
+
+The fix loop applies the fixes in a simulated broker and re-checks the result: port capacity per tool port,
+everything else on the tool group as a whole. If a fix reveals a fault the broken feed was hiding (aggregating
+both directions doubles the load; turning slicing off brings back jumbo frames), it plans another round.
 
 ## VisiKit: the plug-in framework
 
@@ -173,7 +182,8 @@ class MyCheck:
 visikit/
   core/        common data format, plug-in registry, tshark helpers
   detectors/   one file per fault
-  fixes/       one file per fix: dedup, aggregate, replace_span_with_tap, load_balance, vlan, decrypt_advice
+  fixes/       one file per fix: dedup, aggregate, replace_span_with_tap, load_balance, vlan, decrypt_advice,
+               disable_slicing, strip_tunnel, mtu_advice
   agent/       Muse Spark diagnosis agent
   vision/      SAM 3.1 + Muse Spark diagram reading and pinning
   proof/       Suricata detection proof and test rule

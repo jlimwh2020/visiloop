@@ -1,6 +1,6 @@
 """Encrypted share: how much of the feed the tool cannot inspect.
 
-Counts bytes in TLS or QUIC traffic (by dissector, or on port 443) and compares
+Counts bytes in TLS or QUIC traffic (by dissector, or to or from port 443) and compares
 the share with what this tool type can tolerate (profile.max_encrypted_share).
 """
 from visikit.core.registry import detector
@@ -8,9 +8,9 @@ from visikit.core.schema import FeedContext, Finding
 from visikit.core.tools import fields
 
 
-def _is_encrypted(protocols: str, tport: str, uport: str) -> bool:
+def _is_encrypted(protocols: str, ports: list[str]) -> bool:
     protos = protocols.split(":")
-    return "tls" in protos or "quic" in protos or tport == "443" or uport == "443"
+    return "tls" in protos or "quic" in protos or "443" in ports
 
 
 @detector
@@ -18,14 +18,17 @@ class EncryptedShare:
     fault = "encrypted_share"
 
     def run(self, ctx: FeedContext) -> list[Finding]:
-        rows = fields(ctx.pcap, ["frame.number", "frame.len", "frame.protocols", "tcp.port", "udp.port"])
+        # Both ports of the innermost header ("l"), so every packet of a TLS session counts, including
+        # client-to-server acknowledgements, and tunnelled traffic is judged by what is inside the tunnel
+        names = ["frame.number", "frame.len", "frame.protocols", "tcp.srcport", "tcp.dstport", "udp.srcport", "udp.dstport"]
+        rows = fields(ctx.pcap, names, occurrence="l")
         total = enc = 0
         sample = []
         for row in rows:
-            row += [""] * (5 - len(row))
-            frame, length, protos, tport, uport = row
+            row += [""] * (len(names) - len(row))
+            frame, length, protos, *ports = row
             total += int(length)
-            if _is_encrypted(protos, tport, uport):
+            if _is_encrypted(protos, ports):
                 enc += int(length)
                 if len(sample) < 20:
                     sample.append(int(frame))

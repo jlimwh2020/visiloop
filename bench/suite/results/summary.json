@@ -1,5 +1,5 @@
 {
- "suite_version": 2,
+ "suite_version": 3,
  "cases": 200,
  "kinds": {
   "clean": [
@@ -31,42 +31,63 @@
   "exact": 200,
   "per_fault": {
    "duplicates": {
-    "tp": 35,
+    "tp": 26,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
     "recall": 1.0
    },
    "one_way": {
-    "tp": 32,
+    "tp": 27,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
     "recall": 1.0
    },
    "packet_drops": {
-    "tp": 29,
+    "tp": 27,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
     "recall": 1.0
    },
    "tool_overload": {
-    "tp": 49,
+    "tp": 24,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
     "recall": 1.0
    },
    "encrypted_share": {
-    "tp": 46,
+    "tp": 29,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
     "recall": 1.0
    },
    "missing_vlan": {
-    "tp": 44,
+    "tp": 21,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "truncated": {
+    "tp": 22,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "tunnel": {
+    "tp": 32,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "oversize": {
+    "tp": 27,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
@@ -83,180 +104,45 @@
   "failures": [],
   "by_tool": {
    "APM": [
-    29,
-    29
+    26,
+    26
    ],
    "IDS": [
-    79,
-    79
+    81,
+    81
    ],
    "NDR": [
-    65,
-    65
+    55,
+    55
    ],
    "SIEM": [
-    27,
-    27
+    38,
+    38
    ]
   },
   "near_threshold": {
    "clear": [
-    174,
-    174
+    155,
+    155
    ],
    "near threshold": [
-    26,
-    26
+    45,
+    45
    ]
   }
  },
  "loop": {
-  "fixes_verified": 189,
-  "fixable": 189,
-  "advice": 46,
+  "fixes_verified": 179,
+  "fixable": 179,
+  "advice": 56,
   "cases_with_faults": 135,
   "healthy_after": 135,
   "still_broken": {},
   "load_balance_ports": {
    "min": 2,
-   "max": 11,
-   "median": 4
-  }
- },
- "agent": {
-  "tool_aware": {
-   "exact": 200,
-   "fix_sensible": 234,
-   "fix_total": 235,
-   "one_way_optional_cases": [],
-   "summaries": {}
+   "max": 21,
+   "median": 5.5
   },
-  "cases": 200,
-  "exact": 200,
-  "per_fault": {
-   "duplicates": {
-    "tp": 35,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   },
-   "one_way": {
-    "tp": 32,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   },
-   "packet_drops": {
-    "tp": 29,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   },
-   "tool_overload": {
-    "tp": 49,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   },
-   "encrypted_share": {
-    "tp": 46,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   },
-   "missing_vlan": {
-    "tp": 44,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   },
-   "all": {
-    "tp": 235,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1.0,
-    "recall": 1.0
-   }
-  },
-  "failures": [],
-  "fix_sensible": 234,
-  "fix_total": 235,
-  "bad_fixes": [
-   [
-    "s151_double",
-    "packet_drops",
-    "aggregate"
-   ]
-  ],
-  "ungrounded_dropped": 0,
-  "omitted_vs_checks": [],
-  "by_kind": {
-   "clean": [
-    20,
-    20
-   ],
-   "double": [
-    50,
-    50
-   ],
-   "mild": [
-    30,
-    30
-   ],
-   "single": [
-    60,
-    60
-   ],
-   "tool_aware": [
-    15,
-    15
-   ],
-   "triple": [
-    25,
-    25
-   ]
-  },
-  "by_tool": {
-   "APM": [
-    29,
-    29
-   ],
-   "IDS": [
-    79,
-    79
-   ],
-   "NDR": [
-    65,
-    65
-   ],
-   "SIEM": [
-    27,
-    27
-   ]
-  },
-  "near_threshold": {
-   "clear": [
-    174,
-    174
-   ],
-   "near threshold": [
-    26,
-    26
-   ]
-  },
-  "cost_usd": 2.1603,
-  "cost_per_case": 0.0108,
-  "seconds_median": 9.55,
-  "seconds_p95": 15.2,
-  "tokens_in": 564849,
-  "tokens_out": 342161,
-  "model": "muse-spark-1.2",
-  "recorded": "2026-10-28"
+  "second_round": {}
  }
 }

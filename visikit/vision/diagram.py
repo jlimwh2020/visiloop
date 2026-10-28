@@ -193,6 +193,15 @@ def pin_findings(inv, findings, tool_type):
         elif fault == "missing_vlan":
             boxes = brokers[:1] or [c["box"] for c in caps]
             reason = f"VLAN tags are stripped before reaching {label(tool)}"
+        elif fault == "truncated":
+            boxes = brokers[:1]
+            reason = f"{label(brokers[0]) if brokers else 'the broker'} slices packets sent to {label(tool)}"
+        elif fault == "tunnel":
+            boxes = [c["box"] for c in caps] + brokers[:1]
+            reason = f"mirrored traffic reaches {label(tool)} still inside its tunnel; the broker should strip it"
+        elif fault == "oversize":
+            boxes = brokers[:1]
+            reason = f"jumbo frames exceed the {label(tool)} port's maximum frame size and are dropped"
         elif fault == "encrypted_share":
             boxes = [tool] if tool is not None else []
             reason = f"{label(tool)} cannot inspect most of its traffic"

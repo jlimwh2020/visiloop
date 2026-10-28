@@ -24,8 +24,9 @@ def _tls_payload(rng, size):
     return b"\x17\x03\x03" + len(body).to_bytes(2, "big") + body
 
 
-def tcp_session(rng, t, cip, sip, cport, tls, vlans):
-    """Return a list of (time, packet) for one complete TCP session."""
+def tcp_session(rng, t, cip, sip, cport, tls, vlans, size=1400):
+    """Return a list of (time, packet) for one complete TCP session.
+    size: data segment payload in bytes (1400 normally; up to 8900 for jumbo frames)."""
     sport = 443 if tls else 80
     out, c_seq, s_seq = [], rng.randint(1, 2**31), rng.randint(1, 2**31)
 
@@ -55,7 +56,6 @@ def tcp_session(rng, t, cip, sip, cport, tls, vlans):
     send(False, "A")
     segments = rng.randint(3, 6)
     for i in range(segments):
-        size = 1400
         if tls:
             data = _tls_payload(rng, size)
         else:
@@ -107,14 +107,19 @@ def dns_pair(rng, t, cip, vlans):
     return [(t, query), (t + rng.uniform(0.0005, 0.003), reply)]
 
 
-def generate(out, sessions=200, dns=50, tls_share=0.2, vlans=True, duration=10.0, seed=1, breach=False):
+def generate(out, sessions=200, dns=50, tls_share=0.2, vlans=True, duration=10.0, seed=1, breach=False,
+             jumbo_share=0.0):
+    """jumbo_share: fraction of TCP sessions using 8000-byte jumbo segments (a separate random
+    stream, so the rest of the traffic is identical whatever the share)."""
     rng = random.Random(seed)
+    jrng = random.Random(seed + 7919)
     timed = []
     for i in range(sessions):
         start = rng.uniform(0, duration)
         cip = f"10.10.10.{rng.randint(10, 250)}"
         sip = f"10.20.20.{rng.randint(10, 40)}"
-        timed += tcp_session(rng, start, cip, sip, 20000 + i, rng.random() < tls_share, vlans)
+        size = 8000 if jumbo_share and jrng.random() < jumbo_share else 1400
+        timed += tcp_session(rng, start, cip, sip, 20000 + i, rng.random() < tls_share, vlans, size)
     for _ in range(dns):
         timed += dns_pair(rng, rng.uniform(0, duration), f"10.10.10.{rng.randint(10, 250)}", vlans)
     if breach:

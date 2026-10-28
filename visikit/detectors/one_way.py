@@ -25,7 +25,8 @@ class OneWay:
             return []
         senders = defaultdict(set)
         first_frame = {}
-        for frame, stream, src in fields(ctx.pcap, ["frame.number", "tcp.stream", "ip.src"], "tcp"):
+        # occurrence "l": the inner IP address, so tunnelled traffic is judged by its real endpoints
+        for frame, stream, src in fields(ctx.pcap, ["frame.number", "tcp.stream", "ip.src"], "tcp", occurrence="l"):
             senders[stream].add(src)
             first_frame.setdefault(stream, int(frame))
         if not senders:

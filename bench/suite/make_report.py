@@ -13,7 +13,8 @@ from collections import defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__))
 CASES = os.path.join(HERE, "cases")
 RES = os.path.join(HERE, "results")
-FAULTS = ["duplicates", "one_way", "packet_drops", "tool_overload", "encrypted_share", "missing_vlan"]
+FAULTS = ["duplicates", "one_way", "packet_drops", "tool_overload", "encrypted_share", "missing_vlan",
+          "truncated", "tunnel", "oversize"]
 
 # Fix actions a senior visibility engineer would accept for each fault
 GOOD_FIXES = {
@@ -23,6 +24,9 @@ GOOD_FIXES = {
     "tool_overload": {"load_balance", "filter", "slice"},
     "encrypted_share": {"decrypt_advice", "filter"},
     "missing_vlan": {"vlan"},
+    "truncated": {"disable_slicing"},
+    "tunnel": {"strip_tunnel"},
+    "oversize": {"mtu_advice"},
 }
 
 
@@ -80,6 +84,7 @@ def main():
     healthy_after = [n for n in with_faults if checks[n]["loop"]["result"].startswith("healthy")]
     broken = [n for n in with_faults if not checks[n]["loop"]["result"].startswith("healthy")]
     lb = [x["ports"] for x in fixes if x["action"] == "load_balance"]
+    second_round = {n: checks[n]["loop"].get("revealed", []) for n in order if checks[n]["loop"].get("rounds", 1) > 1}
 
     summary = {"suite_version": manifest.get("version", 1), "cases": len(order), "kinds": by(cs, crow, lambda c: c["kind"]),
                "checks": {"exact": c_exact, "per_fault": c_prf, "failures": c_fail,
@@ -89,7 +94,8 @@ def main():
                         "cases_with_faults": len(with_faults), "healthy_after": len(healthy_after),
                         "still_broken": {n: {k: checks[n]["loop"].get(k) for k in ("new_faults", "unresolved", "fixes")}
                                          for n in broken},
-                        "load_balance_ports": {"min": min(lb), "max": max(lb), "median": statistics.median(lb)} if lb else None}}
+                        "load_balance_ports": {"min": min(lb), "max": max(lb), "median": statistics.median(lb)} if lb else None,
+                        "second_round": second_round}}
 
     # ---- agent
     v = manifest.get("version", 1)
@@ -183,11 +189,17 @@ def write_md(s):
     c, l = s["checks"], s["loop"]
     kinds = {"clean": "healthy feed", "mild": "only below-threshold faults (must not alarm)",
              "single": "one fault", "double": "two faults", "triple": "three faults",
-             "tool_aware": "heavy TLS, untagged or one-way traffic on a tool that tolerates it (must not alarm)"}
+             "tool_aware": "traffic a tool tolerates: heavy TLS, untagged, one-way, sliced or jumbo (must not alarm)"}
     md = [
         f"# VisiLoop benchmark suite v{s.get('suite_version', 1)}: results",
         "",
-        *(["Version 2 makes the one-way check tool-aware (a gap Muse Spark found in version 1) and adds "
+        *(["Version 3 adds three faults (packet slicing, tunnel encapsulation, oversize frames), tool-awareness "
+           "traps for them, and a fix loop that re-checks a load-balanced tool group as a whole and plans a second "
+           "round when a fix reveals a hidden fault. Version 2 made the one-way check tool-aware, a gap Muse Spark "
+           "found in version 1. Earlier results: [results/RESULTS_v2.md](results/RESULTS_v2.md), "
+           "[results/RESULTS_v1.md](results/RESULTS_v1.md).", ""]
+          if s.get("suite_version", 1) >= 3 else
+          ["Version 2 makes the one-way check tool-aware (a gap Muse Spark found in version 1) and adds "
            "one-way traps on SIEM tools. Version 1 results: [results/RESULTS_v1.md](results/RESULTS_v1.md).", ""]
           if s.get("suite_version", 1) >= 2 else []),
         f"**{s['cases']} generated test cases** across four tool types (IDS, NDR, APM, SIEM), with 0 to 3 faults each, "
@@ -228,11 +240,15 @@ def write_md(s):
 
     md += ["", "## 2. Fix and prove (simulated broker, free)", "",
            f"- Fixable faults verified fixed: **{pct(l['fixes_verified'], l['fixable'])}**",
-           f"- Advice-only items (decryption, cannot be simulated offline): **{l['advice']}**",
+           f"- Advice-only items (decryption point or MTU change on the customer side, cannot be simulated offline): **{l['advice']}**",
            f"- Cases healthy after the fixes: **{pct(l['healthy_after'], l['cases_with_faults'])}** of cases with faults"]
     if l["load_balance_ports"]:
         p = l["load_balance_ports"]
         md.append(f"- Load-balanced tool groups sized from {p['min']} to {p['max']} ports (median {p['median']:g})")
+    if l.get("second_round"):
+        md += ["", f"**{len(l['second_round'])} cases needed a second round of fixes**, because the first fixes revealed a "
+               "fault the broken feed was hiding:", ""]
+        md += [f"- `{n}`: revealed {', '.join(f) or '-'}" for n, f in l["second_round"].items()]
     if l["still_broken"]:
         md += ["", "Cases still broken after one round of fixes:", ""]
         for n, v in l["still_broken"].items():

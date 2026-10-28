@@ -31,26 +31,85 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))                       # bench/ (make_clean)
 sys.path.insert(0, os.path.dirname(os.path.dirname(HERE)))      # repo root (visikit)
 
-from scapy.all import IP, TCP, UDP, Dot1Q, Ether, rdpcap, wrpcap   # noqa: E402
+import zlib                                                       # noqa: E402
+
+from scapy.all import GRE, IP, TCP, UDP, Dot1Q, Ether, rdpcap, wrpcap   # noqa: E402
+from scapy.contrib.erspan import ERSPAN_II                       # noqa: E402
+from scapy.layers.vxlan import VXLAN                             # noqa: E402
 
 from make_clean import generate                                  # noqa: E402
 from visikit.profiles import load_profile                        # noqa: E402
 
 CASES = os.path.join(HERE, "cases")
-FAULTS = ["duplicates", "one_way", "packet_drops", "tool_overload", "encrypted_share", "missing_vlan"]
+FAULTS = ["duplicates", "one_way", "packet_drops", "tool_overload", "encrypted_share", "missing_vlan",
+          "truncated", "tunnel", "oversize"]
 TOOLS = ["IDS"] * 8 + ["NDR"] * 5 + ["APM"] * 3 + ["SIEM"] * 4
 
 # Labels. VisiLoop's packet-drop threshold (1% of TCP packets flagged) corresponds to
 # about 0.67% true loss: each lost packet is flagged about 1.5 times (measured).
-LIMITS = {"duplicates": 0.05, "one_way": 0.10, "packet_drops": 0.0067, "tool_overload": 0.8, "untagged": 0.05}
+LIMITS = {"duplicates": 0.05, "one_way": 0.10, "packet_drops": 0.0067, "tool_overload": 0.8, "untagged": 0.05,
+          "truncated": 0.05, "tunnel": 0.10, "oversize": 0.01}
 GRAY = {"duplicates": (0.035, 0.07), "one_way": (0.07, 0.14), "packet_drops": (0.004, 0.011),
-        "tool_overload": (0.6, 1.05), "untagged": (0.03, 0.08), "encrypted_margin": 0.06}
+        "tool_overload": (0.6, 1.05), "untagged": (0.03, 0.08), "encrypted_margin": 0.06,
+        "truncated": (0.03, 0.08), "tunnel": (0.06, 0.15), "oversize": (0.005, 0.02)}
 
 
 # ---------------------------------------------------------------- injections
+def inner_ip(p):
+    """Innermost IP header (the real endpoints, also inside a tunnel)."""
+    ip, layer = None, p
+    while layer is not None and layer.__class__.__name__ != "NoPayload":
+        if isinstance(layer, IP):
+            ip = layer
+        layer = layer.payload
+    return ip
+
+
 def flow_key(p):
-    ip, l4 = p[IP], p[TCP]
+    ip = inner_ip(p)
+    l4 = ip[TCP] if TCP in ip else ip[UDP]
     return tuple(sorted([(ip.src, l4.sport), (ip.dst, l4.dport)]))
+
+
+def is_tunnelled(p):
+    return p.haslayer(VXLAN) or p.haslayer(GRE)
+
+
+def encapsulate(pkts, kind, share, seed):
+    """Wrap a share of flows in a mirror tunnel (remote SPAN or cloud mirroring), whole flows at a time."""
+    if share <= 0:
+        return pkts
+    out = []
+    for p in pkts:
+        ip = inner_ip(p)
+        if ip is None or zlib.crc32(repr((flow_key(p), seed)).encode()) % 10000 >= share * 10000:
+            out.append(p)
+            continue
+        outer = Ether(src="00:00:00:00:99:01", dst="00:00:00:00:99:02") / IP(src="10.99.0.1", dst="10.99.0.2")
+        if kind == "vxlan":
+            q = outer / UDP(sport=49152 + zlib.crc32(repr(flow_key(p)).encode()) % 16000, dport=4789) / VXLAN(vni=100) / p
+        elif kind == "erspan":
+            q = outer / GRE(proto=0x88be, seqnum_present=1) / ERSPAN_II(session_id=1) / p
+        else:
+            q = outer / GRE(proto=0x6558) / p
+        q.time = p.time
+        out.append(q)
+    return out
+
+
+def slice_packets(pkts, rng, prob, snap):
+    """The broker cuts frames longer than `snap` bytes (with probability `prob` per frame)."""
+    out, n = [], 0
+    for p in pkts:
+        raw = bytes(p)
+        if len(raw) > snap and rng.random() < prob:
+            q = Ether(raw[:snap])
+            q.time = p.time
+            out.append(q)
+            n += 1
+        else:
+            out.append(p)
+    return out, n
 
 
 def add_duplicates(pkts, rng, share):
@@ -101,7 +160,7 @@ def strip_vlans(pkts, rng, mode, share=0.0):
 
 
 # ---------------------------------------------------------------- answer key (independent of tshark)
-def truth(feed, injected_loss, profile):
+def truth(feed, injected_loss, profile, n_sliced=0):
     lens = [len(bytes(p)) for p in feed]
     total = sum(lens)
 
@@ -121,7 +180,7 @@ def truth(feed, injected_loss, profile):
     senders = defaultdict(set)
     for p in feed:
         if p.haslayer(TCP):
-            senders[flow_key(p)].add(p[IP].src)
+            senders[flow_key(p)].add(inner_ip(p).src)
     one_way = sum(len(s) == 1 for s in senders.values()) / max(1, len(senders))
 
     tcp_pkts = sum(p.haslayer(TCP) for p in feed)
@@ -142,8 +201,13 @@ def truth(feed, injected_loss, profile):
     untagged = tags.count(None) / len(feed)
     missing = sorted(set(profile.required_vlans) - {t for t in tags if t is not None})
 
+    sliced = n_sliced / len(feed)
+    tunnelled = sum(is_tunnelled(p) for p in feed) / len(feed)
+    oversize = sum(n > profile.max_frame_bytes for n in lens) / len(feed)
+
     metrics = {"duplicates": dup_rate, "one_way": one_way, "packet_drops": loss, "tool_overload": load,
-               "encrypted_share": enc, "untagged": untagged, "missing_vlans": missing}
+               "encrypted_share": enc, "untagged": untagged, "missing_vlans": missing,
+               "truncated": sliced, "tunnel": tunnelled, "oversize": oversize}
     labels = {
         "duplicates": dup_rate > LIMITS["duplicates"],
         "one_way": profile.needs_both_directions and one_way > LIMITS["one_way"],
@@ -151,6 +215,9 @@ def truth(feed, injected_loss, profile):
         "tool_overload": load > LIMITS["tool_overload"],
         "encrypted_share": enc > profile.max_encrypted_share,
         "missing_vlan": bool(profile.required_vlans) and (bool(missing) or untagged > LIMITS["untagged"]),
+        "truncated": profile.needs_full_payload and sliced > LIMITS["truncated"],
+        "tunnel": tunnelled > LIMITS["tunnel"],
+        "oversize": oversize > LIMITS["oversize"],
     }
     gray = [k for k in ("duplicates", "one_way", "packet_drops", "tool_overload")
             if GRAY[k][0] < metrics[k] < GRAY[k][1] and (k != "one_way" or profile.needs_both_directions)]
@@ -158,6 +225,11 @@ def truth(feed, injected_loss, profile):
         gray.append("encrypted_share")
     if profile.required_vlans and not missing and GRAY["untagged"][0] < untagged < GRAY["untagged"][1]:
         gray.append("missing_vlan")
+    if profile.needs_full_payload and GRAY["truncated"][0] < sliced < GRAY["truncated"][1]:
+        gray.append("truncated")
+    for k in ("tunnel", "oversize"):
+        if GRAY[k][0] < metrics[k] < GRAY[k][1]:
+            gray.append(k)
     return labels, {k: (round(v, 4) if isinstance(v, float) else v) for k, v in metrics.items()}, gray
 
 
@@ -173,14 +245,21 @@ def plan(n, rng):
         out.append("double")
     singles = [FAULTS[i % len(FAULTS)] for i in range(out.count("single"))]
     rng.shuffle(singles)
+    def sample(k):
+        # Slicing cuts jumbo frames down, so both faults cannot be visible on one feed at once
+        while True:
+            fs = rng.sample(FAULTS, k)
+            if not {"truncated", "oversize"} <= set(fs):
+                return fs
+
     result = []
     for kind in out:
         if kind == "single":
             result.append((kind, [singles.pop()]))
         elif kind == "double":
-            result.append((kind, rng.sample(FAULTS, 2)))
+            result.append((kind, sample(2)))
         elif kind == "triple":
-            result.append((kind, rng.sample(FAULTS, 3)))
+            result.append((kind, sample(3)))
         else:
             result.append((kind, []))
     return result
@@ -193,6 +272,10 @@ def pick_tool(rng, faults):
         options = [t for t in options if t in ("IDS", "NDR")]    # APM and SIEM tolerate 100% TLS
     if "one_way" in faults:
         options = [t for t in options if t != "SIEM"]            # a SIEM does not need both directions
+    if "truncated" in faults:
+        options = [t for t in options if t in ("IDS", "NDR")]    # only these need the full payload
+    if "oversize" in faults:
+        options = [t for t in options if t in ("IDS", "SIEM")]   # NDR and APM ports take jumbo frames
     return rng.choice(options)
 
 
@@ -214,6 +297,12 @@ def levels(rng, faults, mild, kind, profile):
             lv[f] = min(0.995, lim + (rng.uniform(0.08, 0.12) if near else rng.uniform(0.12, 0.35)))
         elif f == "missing_vlan":
             lv[f] = rng.choice(["all", "server_leg"])
+        elif f == "truncated":
+            lv[f] = (rng.uniform(0.22, 0.32) if near else rng.uniform(0.4, 1.0), rng.choice([128, 192, 256]))
+        elif f == "tunnel":
+            lv[f] = (rng.uniform(0.2, 0.3) if near else rng.uniform(0.3, 1.0), rng.choice(["erspan", "vxlan", "gre"]))
+        elif f == "oversize":
+            lv[f] = rng.uniform(0.06, 0.1) if near else rng.uniform(0.1, 0.5)
     for f in mild:
         if f == "duplicates":
             lv[f] = rng.uniform(0.0, 0.025)
@@ -227,6 +316,12 @@ def levels(rng, faults, mild, kind, profile):
             lv[f] = max(0.02, profile.max_encrypted_share - rng.uniform(0.15, 0.4))
         elif f == "missing_vlan":
             lv[f] = ("some", rng.uniform(0.0, 0.02))
+        elif f == "truncated":
+            lv[f] = (rng.uniform(0.0, 0.04), rng.choice([128, 192, 256]))
+        elif f == "tunnel":
+            lv[f] = (rng.uniform(0.0, 0.04), rng.choice(["erspan", "vxlan", "gre"]))
+        elif f == "oversize":
+            lv[f] = rng.uniform(0.0, 0.01)
     return lv
 
 
@@ -254,6 +349,10 @@ def build_case(idx, kind, faults, rng, workdir):
         lv = levels(rng, faults, mild, kind, profile)
         if kind == "tool_aware" and tool == "SIEM":
             lv["one_way"] = rng.uniform(0.2, 0.6)        # one-way traffic on a SIEM: must not alarm
+        if kind == "tool_aware" and rng.random() < 0.5:
+            lv["truncated"] = (1.0, rng.choice([128, 192]))   # slicing on a tool that needs no payload: must not alarm
+        if kind == "tool_aware" and tool == "APM" and rng.random() < 0.5:
+            lv["oversize"] = rng.uniform(0.2, 0.5)           # jumbo frames on a 9216-byte port: must not alarm
 
         # traffic
         big = "tool_overload" in faults and profile.max_rate_gbps >= 10
@@ -267,7 +366,7 @@ def build_case(idx, kind, faults, rng, workdir):
         seed = rng.randint(1, 10**9)
         base = os.path.join(workdir, "base.pcap")
         generate(base, sessions=sessions, dns=rng.randint(20, 80), tls_share=tls,
-                 duration=rng.uniform(5, 15), seed=seed)
+                 duration=rng.uniform(5, 15), seed=seed, jumbo_share=lv.get("oversize", 0.0))
         prng = random.Random(seed)
 
         # ingress: what the broker receives (overlapping TAPs -> duplicates, bursts -> overload)
@@ -292,15 +391,28 @@ def build_case(idx, kind, faults, rng, workdir):
             mode = lv["missing_vlan"]
             feed = strip_vlans(feed, prng, mode[0], mode[1]) if isinstance(mode, tuple) else strip_vlans(feed, prng, mode)
             changed = True
+        # mirror tunnels: the traffic reaches the broker (ingress) and the tool already encapsulated
+        if "tunnel" in lv:
+            share, kind_t = lv["tunnel"]
+            ingress = encapsulate(ingress, kind_t, share, seed)
+            feed = encapsulate(feed, kind_t, share, seed)
+        # packet slicing happens at the broker's egress to the tool, so only the feed is cut
+        n_sliced = 0
+        if "truncated" in lv:
+            prob, snap = lv["truncated"]
+            feed, n_sliced = slice_packets(feed, prng, prob, snap)
+            changed = True
 
-        labels, metrics, gray = truth(feed, lost, profile)
+        labels, metrics, gray = truth(feed, lost, profile, n_sliced)
         expected = sorted(f for f, v in labels.items() if v)
         if gray or set(expected) != set(faults):
             continue                                                       # ambiguous or off-plan: try again
         name = f"s{idx:03d}_{kind}"
         case = {"name": name, "kind": kind, "tool": tool, "required_vlans": vlans_req,
                 "faults": expected, "injected": sorted(faults), "mild": sorted(mild),
-                "levels": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in lv.items()},
+                "levels": {k: (round(v, 4) if isinstance(v, float) else
+                               [round(x, 4) if isinstance(x, float) else x for x in v] if isinstance(v, tuple) else v)
+                           for k, v in lv.items()},
                 "near_threshold": False, "truth": metrics, "sessions": sessions, "tls_share": round(tls, 3),
                 "attempts": attempt + 1, "file": name + ".pcap",
                 "ingress": name + ("_ingress.pcap" if changed else ".pcap")}
@@ -312,7 +424,8 @@ def near(case):
     """Flag cases whose fault sits close to its threshold (harder)."""
     t, lim = case["truth"], LIMITS
     checks = {"duplicates": t["duplicates"] < 0.1, "one_way": t["one_way"] < 0.2,
-              "packet_drops": t["packet_drops"] < 0.015, "tool_overload": t["tool_overload"] < 1.4}
+              "packet_drops": t["packet_drops"] < 0.015, "tool_overload": t["tool_overload"] < 1.4,
+              "truncated": t["truncated"] < 0.12, "tunnel": t["tunnel"] < 0.3, "oversize": t["oversize"] < 0.04}
     return any(checks.get(f, False) for f in case["faults"])
 
 
@@ -323,7 +436,7 @@ def main():
     a = ap.parse_args()
     os.makedirs(CASES, exist_ok=True)
     rng = random.Random(a.seed)
-    manifest = {"version": 2, "seed": a.seed, "limits": LIMITS, "gray_zones": GRAY, "cases": []}
+    manifest = {"version": 3, "seed": a.seed, "limits": LIMITS, "gray_zones": GRAY, "cases": []}
     work = tempfile.mkdtemp(prefix="suite_")
     for i, (kind, faults) in enumerate(plan(a.n, rng), start=1):
         case, feed, ingress = build_case(i, kind, faults, rng, work)

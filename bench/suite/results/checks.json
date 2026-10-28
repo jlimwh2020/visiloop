@@ -1,23 +1,371 @@
 {
- "generated": "2026-10-28 21:50",
+ "generated": "2026-10-29 00:25",
  "results": [
   {
    "name": "s001_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.71,
+   "check_seconds": 2.75,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.71
+   "seconds": 2.75
   },
   {
    "name": "s002_clean",
    "expected": [],
    "found": [],
    "metrics": {},
+   "check_seconds": 3.05,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.05
+  },
+  {
+   "name": "s003_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.56,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.56
+  },
+  {
+   "name": "s004_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.4,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.4
+  },
+  {
+   "name": "s005_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.1,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.1
+  },
+  {
+   "name": "s006_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.61,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.61
+  },
+  {
+   "name": "s007_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.52,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.52
+  },
+  {
+   "name": "s008_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.21,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.21
+  },
+  {
+   "name": "s009_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.66,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.66
+  },
+  {
+   "name": "s010_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.21,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.21
+  },
+  {
+   "name": "s011_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.02,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.02
+  },
+  {
+   "name": "s012_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.63,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.63
+  },
+  {
+   "name": "s013_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.57,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.57
+  },
+  {
+   "name": "s014_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.59,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.59
+  },
+  {
+   "name": "s015_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.15,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.15
+  },
+  {
+   "name": "s016_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.87,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.87
+  },
+  {
+   "name": "s017_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.37,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.37
+  },
+  {
+   "name": "s018_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.81,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.81
+  },
+  {
+   "name": "s019_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.19,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.19
+  },
+  {
+   "name": "s020_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.23,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.23
+  },
+  {
+   "name": "s021_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.27,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.27
+  },
+  {
+   "name": "s022_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.86,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.86
+  },
+  {
+   "name": "s023_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.15,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.15
+  },
+  {
+   "name": "s024_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.48,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.48
+  },
+  {
+   "name": "s025_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.37,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.37
+  },
+  {
+   "name": "s026_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.64,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.64
+  },
+  {
+   "name": "s027_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.05,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.05
+  },
+  {
+   "name": "s028_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.13,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.13
+  },
+  {
+   "name": "s029_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.23,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.23
+  },
+  {
+   "name": "s030_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.32,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.32
+  },
+  {
+   "name": "s031_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
    "check_seconds": 2.71,
    "loop": {
     "fixes": [],
@@ -26,391 +374,67 @@
    "seconds": 2.71
   },
   {
-   "name": "s003_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.47,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.47
-  },
-  {
-   "name": "s004_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.48,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.48
-  },
-  {
-   "name": "s005_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.26,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.26
-  },
-  {
-   "name": "s006_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.42,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.42
-  },
-  {
-   "name": "s007_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.3,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.3
-  },
-  {
-   "name": "s008_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.42,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.42
-  },
-  {
-   "name": "s009_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.71,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.71
-  },
-  {
-   "name": "s010_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.74,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.74
-  },
-  {
-   "name": "s011_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.54,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.54
-  },
-  {
-   "name": "s012_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.31,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.31
-  },
-  {
-   "name": "s013_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.4,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.4
-  },
-  {
-   "name": "s014_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.53,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.53
-  },
-  {
-   "name": "s015_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.77,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.77
-  },
-  {
-   "name": "s016_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.77,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.77
-  },
-  {
-   "name": "s017_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.62,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.62
-  },
-  {
-   "name": "s018_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.8,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.8
-  },
-  {
-   "name": "s019_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.53,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.53
-  },
-  {
-   "name": "s020_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.66,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.66
-  },
-  {
-   "name": "s021_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.84,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.84
-  },
-  {
-   "name": "s022_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.57,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.57
-  },
-  {
-   "name": "s023_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.59,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.59
-  },
-  {
-   "name": "s024_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.69,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.69
-  },
-  {
-   "name": "s025_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.58,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.58
-  },
-  {
-   "name": "s026_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.36,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.36
-  },
-  {
-   "name": "s027_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.91,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.91
-  },
-  {
-   "name": "s028_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.32,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.32
-  },
-  {
-   "name": "s029_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.68,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.68
-  },
-  {
-   "name": "s030_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.71,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.71
-  },
-  {
-   "name": "s031_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.46,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.46
-  },
-  {
    "name": "s032_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.2,
+   "check_seconds": 2.54,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.2
+   "seconds": 2.54
   },
   {
    "name": "s033_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.94,
+   "check_seconds": 2.28,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.94
+   "seconds": 2.28
   },
   {
    "name": "s034_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.33,
+   "check_seconds": 2.32,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.33
+   "seconds": 2.32
   },
   {
    "name": "s035_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.5,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.5
+  },
+  {
+   "name": "s036_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.92,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.92
+  },
+  {
+   "name": "s037_mild",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -422,202 +446,178 @@
    "seconds": 1.89
   },
   {
-   "name": "s036_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.39,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.39
-  },
-  {
-   "name": "s037_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.47,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.47
-  },
-  {
    "name": "s038_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.44,
+   "check_seconds": 2.24,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.44
+   "seconds": 2.24
   },
   {
    "name": "s039_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.91,
+   "check_seconds": 2.48,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.91
+   "seconds": 2.48
   },
   {
    "name": "s040_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.76,
+   "check_seconds": 2.3,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.76
+   "seconds": 2.3
   },
   {
    "name": "s041_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.48,
+   "check_seconds": 2.61,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.48
+   "seconds": 2.61
   },
   {
    "name": "s042_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.31,
+   "check_seconds": 2.52,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.31
+   "seconds": 2.52
   },
   {
    "name": "s043_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.69,
+   "check_seconds": 3.23,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.69
+   "seconds": 3.23
   },
   {
    "name": "s044_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.02,
+   "check_seconds": 3.03,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.02
+   "seconds": 3.03
   },
   {
    "name": "s045_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.12,
+   "check_seconds": 2.3,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.12
+   "seconds": 2.3
   },
   {
    "name": "s046_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.46,
+   "check_seconds": 2.25,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.46
+   "seconds": 2.25
   },
   {
    "name": "s047_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.98,
+   "check_seconds": 2.39,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.98
+   "seconds": 2.39
   },
   {
    "name": "s048_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.67,
+   "check_seconds": 3.04,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.67
+   "seconds": 3.04
   },
   {
    "name": "s049_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.84,
+   "check_seconds": 3.01,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.84
+   "seconds": 3.01
   },
   {
    "name": "s050_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.5,
+   "check_seconds": 2.45,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.5
+   "seconds": 2.45
   },
   {
    "name": "s051_single",
    "expected": [
-    "one_way"
+    "tunnel"
    ],
    "found": [
-    "one_way"
+    "tunnel"
    ],
    "metrics": {
-    "one_way": 0.3223
+    "tunnel": 0.6122
    },
-   "check_seconds": 1.67,
+   "check_seconds": 2.56,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -627,9 +627,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.81
+   "seconds": 7.2
   },
   {
    "name": "s052_single",
@@ -640,9 +642,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0161
+    "packet_drops": 0.0764
    },
-   "check_seconds": 1.06,
+   "check_seconds": 2.18,
    "loop": {
     "fixes": [
      {
@@ -657,27 +659,29 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.38
+   "seconds": 4.6
   },
   {
    "name": "s053_single",
    "expected": [
-    "packet_drops"
+    "missing_vlan"
    ],
    "found": [
-    "packet_drops"
+    "missing_vlan"
    ],
    "metrics": {
-    "packet_drops": 0.0457
+    "missing_vlan": 0.5
    },
-   "check_seconds": 2.1,
+   "check_seconds": 2.85,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "missing_vlan",
+      "action": "vlan",
       "status": "verified fixed"
      }
     ],
@@ -687,9 +691,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.75
+   "seconds": 5.87
   },
   {
    "name": "s054_single",
@@ -700,29 +706,31 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 1.491
+    "tool_overload": 1.251
    },
-   "check_seconds": 1.84,
+   "check_seconds": 5.16,
    "loop": {
     "fixes": [
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
+      "ports": 2
      }
     ],
     "after": {
      "s054_single-port1": [],
      "s054_single-port2": [],
-     "s054_single-port3": []
+     "s054_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 2
    },
-   "seconds": 10.22
+   "seconds": 19.61
   },
   {
    "name": "s055_single",
@@ -735,7 +743,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.71,
+   "check_seconds": 2.07,
    "loop": {
     "fixes": [
      {
@@ -750,27 +758,29 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.87
+   "seconds": 4.54
   },
   {
    "name": "s056_single",
    "expected": [
-    "duplicates"
+    "truncated"
    ],
    "found": [
-    "duplicates"
+    "truncated"
    ],
    "metrics": {
-    "duplicates": 0.2321
+    "truncated": 0.2271
    },
-   "check_seconds": 1.98,
+   "check_seconds": 2.53,
    "loop": {
     "fixes": [
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      }
     ],
@@ -780,27 +790,29 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.52
+   "seconds": 5.53
   },
   {
    "name": "s057_single",
    "expected": [
-    "packet_drops"
+    "missing_vlan"
    ],
    "found": [
-    "packet_drops"
+    "missing_vlan"
    ],
    "metrics": {
-    "packet_drops": 0.0174
+    "missing_vlan": 1.0
    },
-   "check_seconds": 1.27,
+   "check_seconds": 2.79,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "missing_vlan",
+      "action": "vlan",
       "status": "verified fixed"
      }
     ],
@@ -810,9 +822,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.49
+   "seconds": 5.59
   },
   {
    "name": "s058_single",
@@ -823,9 +837,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.044
+    "packet_drops": 0.023
    },
-   "check_seconds": 2.05,
+   "check_seconds": 2.65,
    "loop": {
     "fixes": [
      {
@@ -840,9 +854,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.86
+   "seconds": 5.1
   },
   {
    "name": "s059_single",
@@ -853,89 +869,102 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 1.608
+    "tool_overload": 3.156
    },
-   "check_seconds": 1.5,
+   "check_seconds": 5.42,
    "loop": {
     "fixes": [
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
+      "ports": 5
      }
     ],
     "after": {
      "s059_single-port1": [],
      "s059_single-port2": [],
-     "s059_single-port3": []
+     "s059_single-port3": [],
+     "s059_single-port4": [],
+     "s059_single-port5": [],
+     "s059_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 5
    },
-   "seconds": 8.89
+   "seconds": 20.64
   },
   {
    "name": "s060_single",
    "expected": [
-    "missing_vlan"
+    "oversize"
    ],
    "found": [
-    "missing_vlan"
+    "oversize"
    ],
    "metrics": {
-    "missing_vlan": 0.5
+    "oversize": 0.0477
    },
-   "check_seconds": 1.82,
+   "check_seconds": 2.87,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s060_single": []
+     "s060_single": [
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.6
+   "seconds": 5.79
   },
   {
    "name": "s061_single",
    "expected": [
-    "packet_drops"
+    "oversize"
    ],
    "found": [
-    "packet_drops"
+    "oversize"
    ],
    "metrics": {
-    "packet_drops": 0.074
+    "oversize": 0.0385
    },
-   "check_seconds": 1.23,
+   "check_seconds": 2.28,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s061_single": []
+     "s061_single": [
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.67
+   "seconds": 4.74
   },
   {
    "name": "s062_single",
@@ -946,9 +975,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.2714
+    "duplicates": 0.2891
    },
-   "check_seconds": 2.34,
+   "check_seconds": 2.52,
    "loop": {
     "fixes": [
      {
@@ -963,27 +992,29 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.2
+   "seconds": 5.16
   },
   {
    "name": "s063_single",
    "expected": [
-    "packet_drops"
+    "missing_vlan"
    ],
    "found": [
-    "packet_drops"
+    "missing_vlan"
    ],
    "metrics": {
-    "packet_drops": 0.056
+    "missing_vlan": 1.0
    },
-   "check_seconds": 1.95,
+   "check_seconds": 1.98,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "missing_vlan",
+      "action": "vlan",
       "status": "verified fixed"
      }
     ],
@@ -993,54 +1024,24 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.47
+   "seconds": 4.35
   },
   {
    "name": "s064_single",
    "expected": [
-    "encrypted_share"
-   ],
-   "found": [
-    "encrypted_share"
-   ],
-   "metrics": {
-    "encrypted_share": 0.8656
-   },
-   "check_seconds": 1.99,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s064_single": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 4.15
-  },
-  {
-   "name": "s065_single",
-   "expected": [
     "one_way"
    ],
    "found": [
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.7664
+    "one_way": 0.2181
    },
-   "check_seconds": 1.38,
+   "check_seconds": 2.86,
    "loop": {
     "fixes": [
      {
@@ -1050,14 +1051,50 @@
      }
     ],
     "after": {
-     "s065_single": []
+     "s064_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.24
+   "seconds": 6.32
+  },
+  {
+   "name": "s065_single",
+   "expected": [
+    "encrypted_share"
+   ],
+   "found": [
+    "encrypted_share"
+   ],
+   "metrics": {
+    "encrypted_share": 0.6889
+   },
+   "check_seconds": 3.47,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s065_single": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.66
   },
   {
    "name": "s066_single",
@@ -1068,9 +1105,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.5798
+    "one_way": 0.2059
    },
-   "check_seconds": 1.67,
+   "check_seconds": 2.72,
    "loop": {
     "fixes": [
      {
@@ -1085,75 +1122,75 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.53
+   "seconds": 6.2
   },
   {
    "name": "s067_single",
    "expected": [
-    "encrypted_share"
+    "one_way"
    ],
    "found": [
-    "encrypted_share"
+    "one_way"
    ],
    "metrics": {
-    "encrypted_share": 0.9255
+    "one_way": 0.3626
    },
-   "check_seconds": 1.51,
+   "check_seconds": 2.64,
    "loop": {
     "fixes": [
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s067_single": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 2.81
-  },
-  {
-   "name": "s068_single",
-   "expected": [
-    "tool_overload"
-   ],
-   "found": [
-    "tool_overload"
-   ],
-   "metrics": {
-    "tool_overload": 2.549
-   },
-   "check_seconds": 2.78,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     }
-    ],
-    "after": {
-     "s068_single-port1": [],
-     "s068_single-port2": [],
-     "s068_single-port3": [],
-     "s068_single-port4": []
+     "s067_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 4
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 16.85
+   "seconds": 6.27
+  },
+  {
+   "name": "s068_single",
+   "expected": [
+    "truncated"
+   ],
+   "found": [
+    "truncated"
+   ],
+   "metrics": {
+    "truncated": 0.2785
+   },
+   "check_seconds": 2.61,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s068_single": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.55
   },
   {
    "name": "s069_single",
@@ -1164,9 +1201,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.093
+    "duplicates": 0.19
    },
-   "check_seconds": 1.15,
+   "check_seconds": 2.58,
    "loop": {
     "fixes": [
      {
@@ -1181,48 +1218,43 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.42
+   "seconds": 5.04
   },
   {
    "name": "s070_single",
    "expected": [
-    "tool_overload"
+    "truncated"
    ],
    "found": [
-    "tool_overload"
+    "truncated"
    ],
    "metrics": {
-    "tool_overload": 3.725
+    "truncated": 0.0831
    },
-   "check_seconds": 1.32,
+   "check_seconds": 2.69,
    "loop": {
     "fixes": [
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 9
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s070_single-port1": [],
-     "s070_single-port2": [],
-     "s070_single-port3": [],
-     "s070_single-port4": [],
-     "s070_single-port5": [],
-     "s070_single-port6": [],
-     "s070_single-port7": [],
-     "s070_single-port8": [],
-     "s070_single-port9": []
+     "s070_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 9
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 20.27
+   "seconds": 5.51
   },
   {
    "name": "s071_single",
@@ -1233,9 +1265,9 @@
     "missing_vlan"
    ],
    "metrics": {
-    "missing_vlan": 1.0
+    "missing_vlan": 0.5
    },
-   "check_seconds": 1.76,
+   "check_seconds": 2.38,
    "loop": {
     "fixes": [
      {
@@ -1250,9 +1282,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.45
+   "seconds": 5.27
   },
   {
    "name": "s072_single",
@@ -1263,9 +1297,9 @@
     "missing_vlan"
    ],
    "metrics": {
-    "missing_vlan": 1.0
+    "missing_vlan": 0.5
    },
-   "check_seconds": 1.71,
+   "check_seconds": 2.22,
    "loop": {
     "fixes": [
      {
@@ -1280,9 +1314,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.67
+   "seconds": 4.72
   },
   {
    "name": "s073_single",
@@ -1293,9 +1329,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.0976
+    "duplicates": 0.0771
    },
-   "check_seconds": 1.62,
+   "check_seconds": 2.29,
    "loop": {
     "fixes": [
      {
@@ -1310,9 +1346,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.07
+   "seconds": 4.59
   },
   {
    "name": "s074_single",
@@ -1323,9 +1361,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.2028
+    "duplicates": 0.1322
    },
-   "check_seconds": 2.14,
+   "check_seconds": 2.66,
    "loop": {
     "fixes": [
      {
@@ -1340,27 +1378,29 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.32
+   "seconds": 5.45
   },
   {
    "name": "s075_single",
    "expected": [
-    "one_way"
+    "tunnel"
    ],
    "found": [
-    "one_way"
+    "tunnel"
    ],
    "metrics": {
-    "one_way": 0.1714
+    "tunnel": 0.257
    },
-   "check_seconds": 1.61,
+   "check_seconds": 3.59,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -1370,9 +1410,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.27
+   "seconds": 8.47
   },
   {
    "name": "s076_single",
@@ -1383,9 +1425,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.5094
+    "one_way": 0.2185
    },
-   "check_seconds": 1.26,
+   "check_seconds": 3.16,
    "loop": {
     "fixes": [
      {
@@ -1400,46 +1442,43 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.81
+   "seconds": 6.34
   },
   {
    "name": "s077_single",
    "expected": [
-    "tool_overload"
+    "duplicates"
    ],
    "found": [
-    "tool_overload"
+    "duplicates"
    ],
    "metrics": {
-    "tool_overload": 3.048
+    "duplicates": 0.1785
    },
-   "check_seconds": 1.76,
+   "check_seconds": 3.42,
    "loop": {
     "fixes": [
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 7
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s077_single-port1": [],
-     "s077_single-port2": [],
-     "s077_single-port3": [],
-     "s077_single-port4": [],
-     "s077_single-port5": [],
-     "s077_single-port6": [],
-     "s077_single-port7": []
+     "s077_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 7
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 16.66
+   "seconds": 6.47
   },
   {
    "name": "s078_single",
@@ -1450,9 +1489,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.9309
+    "encrypted_share": 0.7448
    },
-   "check_seconds": 1.67,
+   "check_seconds": 2.46,
    "loop": {
     "fixes": [
      {
@@ -1469,72 +1508,123 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.26
+   "seconds": 5.3
   },
   {
    "name": "s079_single",
    "expected": [
-    "one_way"
+    "encrypted_share"
    ],
    "found": [
-    "one_way"
+    "encrypted_share"
    ],
    "metrics": {
-    "one_way": 0.4035
+    "encrypted_share": 0.9854
    },
-   "check_seconds": 1.21,
+   "check_seconds": 2.62,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s079_single": []
+     "s079_single": [
+      "encrypted_share"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.69
+   "seconds": 5.15
   },
   {
    "name": "s080_single",
    "expected": [
-    "duplicates"
+    "tool_overload"
    ],
    "found": [
-    "duplicates"
+    "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.2825
+    "tool_overload": 4.325
    },
-   "check_seconds": 1.94,
+   "check_seconds": 2.33,
    "loop": {
     "fixes": [
      {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 8
      }
     ],
     "after": {
-     "s080_single": []
+     "s080_single-port1": [],
+     "s080_single-port2": [],
+     "s080_single-port3": [],
+     "s080_single-port4": [],
+     "s080_single-port5": [],
+     "s080_single-port6": [],
+     "s080_single-port7": [],
+     "s080_single-port8": [],
+     "s080_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 1
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 8
    },
-   "seconds": 3.46
+   "seconds": 13.58
   },
   {
    "name": "s081_single",
+   "expected": [
+    "oversize"
+   ],
+   "found": [
+    "oversize"
+   ],
+   "metrics": {
+    "oversize": 0.113
+   },
+   "check_seconds": 3.07,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s081_single": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.32
+  },
+  {
+   "name": "s082_single",
    "expected": [
     "packet_drops"
    ],
@@ -1542,9 +1632,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0745
+    "packet_drops": 0.0318
    },
-   "check_seconds": 1.62,
+   "check_seconds": 3.12,
    "loop": {
     "fixes": [
      {
@@ -1554,62 +1644,34 @@
      }
     ],
     "after": {
-     "s081_single": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.26
-  },
-  {
-   "name": "s082_single",
-   "expected": [
-    "missing_vlan"
-   ],
-   "found": [
-    "missing_vlan"
-   ],
-   "metrics": {
-    "missing_vlan": 1.0
-   },
-   "check_seconds": 1.34,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
      "s082_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.75
+   "seconds": 6.1
   },
   {
    "name": "s083_single",
    "expected": [
-    "missing_vlan"
+    "packet_drops"
    ],
    "found": [
-    "missing_vlan"
+    "packet_drops"
    ],
    "metrics": {
-    "missing_vlan": 0.5
+    "packet_drops": 0.0734
    },
-   "check_seconds": 1.48,
+   "check_seconds": 2.9,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      }
     ],
@@ -1619,27 +1681,29 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.95
+   "seconds": 5.67
   },
   {
    "name": "s084_single",
    "expected": [
-    "one_way"
+    "tunnel"
    ],
    "found": [
-    "one_way"
+    "tunnel"
    ],
    "metrics": {
-    "one_way": 0.7722
+    "tunnel": 0.2314
    },
-   "check_seconds": 1.34,
+   "check_seconds": 3.07,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -1649,39 +1713,52 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.2
+   "seconds": 7.53
   },
   {
    "name": "s085_single",
    "expected": [
-    "duplicates"
+    "tool_overload"
    ],
    "found": [
-    "duplicates"
+    "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.2839
+    "tool_overload": 3.696
    },
-   "check_seconds": 1.88,
+   "check_seconds": 2.24,
    "loop": {
     "fixes": [
      {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 8
      }
     ],
     "after": {
-     "s085_single": []
+     "s085_single-port1": [],
+     "s085_single-port2": [],
+     "s085_single-port3": [],
+     "s085_single-port4": [],
+     "s085_single-port5": [],
+     "s085_single-port6": [],
+     "s085_single-port7": [],
+     "s085_single-port8": [],
+     "s085_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 1
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 8
    },
-   "seconds": 3.42
+   "seconds": 13.78
   },
   {
    "name": "s086_single",
@@ -1692,9 +1769,9 @@
     "missing_vlan"
    ],
    "metrics": {
-    "missing_vlan": 1.0
+    "missing_vlan": 0.5
    },
-   "check_seconds": 1.32,
+   "check_seconds": 3.29,
    "loop": {
     "fixes": [
      {
@@ -1709,41 +1786,43 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.76
+   "seconds": 6.53
   },
   {
    "name": "s087_single",
    "expected": [
-    "encrypted_share"
+    "tunnel"
    ],
    "found": [
-    "encrypted_share"
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.9334
+    "tunnel": 0.2071
    },
-   "check_seconds": 1.38,
+   "check_seconds": 2.16,
    "loop": {
     "fixes": [
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s087_single": [
-      "encrypted_share"
-     ]
+     "s087_single": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.69
+   "seconds": 5.48
   },
   {
    "name": "s088_single",
@@ -1754,9 +1833,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0494
+    "packet_drops": 0.0295
    },
-   "check_seconds": 1.93,
+   "check_seconds": 2.37,
    "loop": {
     "fixes": [
      {
@@ -1771,9 +1850,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.18
+   "seconds": 5.1
   },
   {
    "name": "s089_single",
@@ -1784,9 +1865,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0736
+    "packet_drops": 0.0673
    },
-   "check_seconds": 1.73,
+   "check_seconds": 3.29,
    "loop": {
     "fixes": [
      {
@@ -1801,41 +1882,43 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.24
+   "seconds": 6.11
   },
   {
    "name": "s090_single",
    "expected": [
-    "encrypted_share"
+    "one_way"
    ],
    "found": [
-    "encrypted_share"
+    "one_way"
    ],
    "metrics": {
-    "encrypted_share": 0.9417
+    "one_way": 0.5227
    },
-   "check_seconds": 2.01,
+   "check_seconds": 2.54,
    "loop": {
     "fixes": [
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s090_single": [
-      "encrypted_share"
-     ]
+     "s090_single": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.18
+   "seconds": 5.12
   },
   {
    "name": "s091_single",
@@ -1846,150 +1929,113 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 4.233
+    "tool_overload": 1.446
    },
-   "check_seconds": 1.34,
+   "check_seconds": 5.18,
    "loop": {
     "fixes": [
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 10
+      "ports": 3
      }
     ],
     "after": {
      "s091_single-port1": [],
      "s091_single-port2": [],
      "s091_single-port3": [],
-     "s091_single-port4": [],
-     "s091_single-port5": [],
-     "s091_single-port6": [],
-     "s091_single-port7": [],
-     "s091_single-port8": [],
-     "s091_single-port9": [],
-     "s091_single-port10": []
+     "s091_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 10
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 3
    },
-   "seconds": 24.83
+   "seconds": 18.43
   },
   {
    "name": "s092_single",
    "expected": [
-    "missing_vlan"
+    "oversize"
    ],
    "found": [
-    "missing_vlan"
+    "oversize"
    ],
    "metrics": {
-    "missing_vlan": 1.0
+    "oversize": 0.0417
    },
-   "check_seconds": 1.87,
+   "check_seconds": 2.95,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s092_single": []
+     "s092_single": [
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.73
+   "seconds": 5.91
   },
   {
    "name": "s093_single",
    "expected": [
-    "packet_drops"
+    "oversize"
    ],
    "found": [
-    "packet_drops"
+    "oversize"
    ],
    "metrics": {
-    "packet_drops": 0.047
+    "oversize": 0.1021
    },
-   "check_seconds": 1.69,
+   "check_seconds": 2.46,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s093_single": []
+     "s093_single": [
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.39
+   "seconds": 4.58
   },
   {
    "name": "s094_single",
    "expected": [
-    "tool_overload"
-   ],
-   "found": [
-    "tool_overload"
-   ],
-   "metrics": {
-    "tool_overload": 4.697
-   },
-   "check_seconds": 1.74,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 11
-     }
-    ],
-    "after": {
-     "s094_single-port1": [],
-     "s094_single-port2": [],
-     "s094_single-port3": [],
-     "s094_single-port4": [],
-     "s094_single-port5": [],
-     "s094_single-port6": [],
-     "s094_single-port7": [],
-     "s094_single-port8": [],
-     "s094_single-port9": [],
-     "s094_single-port10": [],
-     "s094_single-port11": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 11
-   },
-   "seconds": 31.48
-  },
-  {
-   "name": "s095_single",
-   "expected": [
     "duplicates"
    ],
    "found": [
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.2244
+    "duplicates": 0.186
    },
-   "check_seconds": 2.06,
+   "check_seconds": 2.42,
    "loop": {
     "fixes": [
      {
@@ -1999,46 +2045,80 @@
      }
     ],
     "after": {
+     "s094_single": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 4.54
+  },
+  {
+   "name": "s095_single",
+   "expected": [
+    "truncated"
+   ],
+   "found": [
+    "truncated"
+   ],
+   "metrics": {
+    "truncated": 0.0949
+   },
+   "check_seconds": 2.12,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
      "s095_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.12
+   "seconds": 4.51
   },
   {
    "name": "s096_single",
    "expected": [
-    "encrypted_share"
+    "tunnel"
    ],
    "found": [
-    "encrypted_share"
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.8251
+    "tunnel": 0.1819
    },
-   "check_seconds": 1.65,
+   "check_seconds": 2.8,
    "loop": {
     "fixes": [
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s096_single": [
-      "encrypted_share"
-     ]
+     "s096_single": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.05
+   "seconds": 7.19
   },
   {
    "name": "s097_single",
@@ -2049,9 +2129,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.5652
+    "one_way": 0.204
    },
-   "check_seconds": 1.32,
+   "check_seconds": 3.27,
    "loop": {
     "fixes": [
      {
@@ -2066,9 +2146,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.64
+   "seconds": 6.34
   },
   {
    "name": "s098_single",
@@ -2079,9 +2161,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.8647
+    "encrypted_share": 0.9231
    },
-   "check_seconds": 1.33,
+   "check_seconds": 2.82,
    "loop": {
     "fixes": [
      {
@@ -2098,54 +2180,24 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.64
+   "seconds": 5.7
   },
   {
    "name": "s099_single",
    "expected": [
-    "tool_overload"
-   ],
-   "found": [
-    "tool_overload"
-   ],
-   "metrics": {
-    "tool_overload": 1.281
-   },
-   "check_seconds": 2.65,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 2
-     }
-    ],
-    "after": {
-     "s099_single-port1": [],
-     "s099_single-port2": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 2
-   },
-   "seconds": 13.38
-  },
-  {
-   "name": "s100_single",
-   "expected": [
     "duplicates"
    ],
    "found": [
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.0772
+    "duplicates": 0.0987
    },
-   "check_seconds": 1.7,
+   "check_seconds": 2.44,
    "loop": {
     "fixes": [
      {
@@ -2155,14 +2207,48 @@
      }
     ],
     "after": {
+     "s099_single": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 4.96
+  },
+  {
+   "name": "s100_single",
+   "expected": [
+    "truncated"
+   ],
+   "found": [
+    "truncated"
+   ],
+   "metrics": {
+    "truncated": 0.1712
+   },
+   "check_seconds": 2.72,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
      "s100_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.61
+   "seconds": 5.7
   },
   {
    "name": "s101_single",
@@ -2173,9 +2259,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.8656
+    "encrypted_share": 0.707
    },
-   "check_seconds": 1.5,
+   "check_seconds": 2.47,
    "loop": {
     "fixes": [
      {
@@ -2192,41 +2278,43 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.09
+   "seconds": 5.2
   },
   {
    "name": "s102_single",
    "expected": [
-    "encrypted_share"
+    "tunnel"
    ],
    "found": [
-    "encrypted_share"
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.9371
+    "tunnel": 0.5627
    },
-   "check_seconds": 1.96,
+   "check_seconds": 2.62,
    "loop": {
     "fixes": [
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s102_single": [
-      "encrypted_share"
-     ]
+     "s102_single": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.56
+   "seconds": 7.28
   },
   {
    "name": "s103_single",
@@ -2237,9 +2325,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.9458
+    "encrypted_share": 0.986
    },
-   "check_seconds": 1.37,
+   "check_seconds": 3.11,
    "loop": {
     "fixes": [
      {
@@ -2256,42 +2344,43 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.74
+   "seconds": 6.35
   },
   {
    "name": "s104_single",
    "expected": [
-    "tool_overload"
+    "truncated"
    ],
    "found": [
-    "tool_overload"
+    "truncated"
    ],
    "metrics": {
-    "tool_overload": 1.446
+    "truncated": 0.1777
    },
-   "check_seconds": 2.88,
+   "check_seconds": 1.87,
    "loop": {
     "fixes": [
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s104_single-port1": [],
-     "s104_single-port2": [],
-     "s104_single-port3": []
+     "s104_single": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 16.59
+   "seconds": 4.0
   },
   {
    "name": "s105_single",
@@ -2302,9 +2391,9 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 1.458
+    "tool_overload": 1.933
    },
-   "check_seconds": 2.86,
+   "check_seconds": 4.9,
    "loop": {
     "fixes": [
      {
@@ -2317,62 +2406,69 @@
     "after": {
      "s105_single-port1": [],
      "s105_single-port2": [],
-     "s105_single-port3": []
+     "s105_single-port3": [],
+     "s105_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 3
    },
-   "seconds": 16.82
+   "seconds": 19.96
   },
   {
    "name": "s106_single",
    "expected": [
-    "missing_vlan"
+    "oversize"
    ],
    "found": [
-    "missing_vlan"
+    "oversize"
    ],
    "metrics": {
-    "missing_vlan": 0.5
+    "oversize": 0.079
    },
-   "check_seconds": 1.75,
+   "check_seconds": 3.02,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s106_single": []
+     "s106_single": [
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.31
+   "seconds": 6.25
   },
   {
    "name": "s107_single",
    "expected": [
-    "missing_vlan"
+    "packet_drops"
    ],
    "found": [
-    "missing_vlan"
+    "packet_drops"
    ],
    "metrics": {
-    "missing_vlan": 0.5
+    "packet_drops": 0.0163
    },
-   "check_seconds": 1.58,
+   "check_seconds": 2.37,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      }
     ],
@@ -2382,9 +2478,11 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.21
+   "seconds": 4.69
   },
   {
    "name": "s108_single",
@@ -2395,9 +2493,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.2286
+    "one_way": 0.735
    },
-   "check_seconds": 1.3,
+   "check_seconds": 3.01,
    "loop": {
     "fixes": [
      {
@@ -2412,92 +2510,26 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.75
+   "seconds": 6.4
   },
   {
    "name": "s109_single",
    "expected": [
-    "duplicates"
-   ],
-   "found": [
-    "duplicates"
-   ],
-   "metrics": {
-    "duplicates": 0.2793
-   },
-   "check_seconds": 1.97,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s109_single": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.73
-  },
-  {
-   "name": "s110_single",
-   "expected": [
-    "one_way"
-   ],
-   "found": [
-    "one_way"
-   ],
-   "metrics": {
-    "one_way": 0.2035
-   },
-   "check_seconds": 1.45,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s110_single": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.25
-  },
-  {
-   "name": "s111_double",
-   "expected": [
-    "duplicates",
     "tool_overload"
    ],
    "found": [
-    "duplicates",
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.0904,
-    "tool_overload": 4.624
+    "tool_overload": 4.353
    },
-   "check_seconds": 1.35,
+   "check_seconds": 2.43,
    "loop": {
     "fixes": [
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
      {
       "fault": "tool_overload",
       "action": "load_balance",
@@ -2506,45 +2538,164 @@
      }
     ],
     "after": {
-     "s111_double-port1": [],
-     "s111_double-port2": [],
-     "s111_double-port3": [],
-     "s111_double-port4": [],
-     "s111_double-port5": [],
-     "s111_double-port6": [],
-     "s111_double-port7": [],
-     "s111_double-port8": [],
-     "s111_double-port9": [],
-     "s111_double-port10": [],
-     "s111_double-port11": []
+     "s109_single-port1": [],
+     "s109_single-port2": [],
+     "s109_single-port3": [],
+     "s109_single-port4": [],
+     "s109_single-port5": [],
+     "s109_single-port6": [],
+     "s109_single-port7": [],
+     "s109_single-port8": [],
+     "s109_single-port9": [],
+     "s109_single-port10": [],
+     "s109_single-port11": [],
+     "s109_single-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 11
    },
-   "seconds": 26.89
+   "seconds": 21.42
+  },
+  {
+   "name": "s110_single",
+   "expected": [
+    "encrypted_share"
+   ],
+   "found": [
+    "encrypted_share"
+   ],
+   "metrics": {
+    "encrypted_share": 0.8705
+   },
+   "check_seconds": 3.18,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s110_single": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.31
+  },
+  {
+   "name": "s111_double",
+   "expected": [
+    "one_way",
+    "truncated"
+   ],
+   "found": [
+    "one_way",
+    "truncated"
+   ],
+   "metrics": {
+    "one_way": 0.1765,
+    "truncated": 0.1319
+   },
+   "check_seconds": 2.16,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s111_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 4.74
   },
   {
    "name": "s112_double",
    "expected": [
-    "encrypted_share",
-    "missing_vlan"
+    "oversize",
+    "tunnel"
    ],
    "found": [
-    "encrypted_share",
-    "missing_vlan"
+    "oversize",
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.9399,
-    "missing_vlan": 0.5
+    "oversize": 0.0949,
+    "tunnel": 0.707
    },
-   "check_seconds": 1.58,
+   "check_seconds": 3.29,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s112_double": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 8.22
+  },
+  {
+   "name": "s113_double",
+   "expected": [
+    "encrypted_share",
+    "truncated"
+   ],
+   "found": [
+    "encrypted_share",
+    "truncated"
+   ],
+   "metrics": {
+    "encrypted_share": 0.7832,
+    "truncated": 0.0828
+   },
+   "check_seconds": 2.88,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      },
      {
@@ -2554,74 +2705,116 @@
      }
     ],
     "after": {
-     "s112_double": [
+     "s113_double": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.94
-  },
-  {
-   "name": "s113_double",
-   "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "tool_overload": 1.624
-   },
-   "check_seconds": 1.42,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     }
-    ],
-    "after": {
-     "s113_double-port1": [],
-     "s113_double-port2": [],
-     "s113_double-port3": [],
-     "s113_double-port4": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 4
-   },
-   "seconds": 10.58
+   "seconds": 5.51
   },
   {
    "name": "s114_double",
    "expected": [
-    "encrypted_share",
-    "packet_drops"
+    "truncated",
+    "tunnel"
    ],
    "found": [
-    "encrypted_share",
-    "packet_drops"
+    "truncated",
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.7948,
-    "packet_drops": 0.0188
+    "truncated": 0.2893,
+    "tunnel": 0.5804
    },
-   "check_seconds": 1.67,
+   "check_seconds": 2.99,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s114_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.89
+  },
+  {
+   "name": "s115_double",
+   "expected": [
+    "duplicates",
+    "oversize"
+   ],
+   "found": [
+    "duplicates",
+    "oversize"
+   ],
+   "metrics": {
+    "duplicates": 0.096,
+    "oversize": 0.1484
+   },
+   "check_seconds": 2.58,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s115_double": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 4.97
+  },
+  {
+   "name": "s116_double",
+   "expected": [
+    "packet_drops",
+    "tool_overload"
+   ],
+   "found": [
+    "packet_drops",
+    "tool_overload"
+   ],
+   "metrics": {
+    "packet_drops": 0.0348,
+    "tool_overload": 3.796
+   },
+   "check_seconds": 2.06,
    "loop": {
     "fixes": [
      {
@@ -2630,222 +2823,138 @@
       "status": "verified fixed"
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s114_double": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.18
-  },
-  {
-   "name": "s115_double",
-   "expected": [
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "found": [
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "metrics": {
-    "encrypted_share": 0.7179,
-    "tool_overload": 1.711
-   },
-   "check_seconds": 1.48,
-   "loop": {
-    "fixes": [
-     {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "ports": 9
      }
     ],
     "after": {
-     "s115_double-port1": [
-      "encrypted_share"
-     ],
-     "s115_double-port2": [
-      "encrypted_share"
-     ],
-     "s115_double-port3": [
-      "encrypted_share"
-     ]
+     "s116_double-port1": [],
+     "s116_double-port2": [],
+     "s116_double-port3": [],
+     "s116_double-port4": [],
+     "s116_double-port5": [],
+     "s116_double-port6": [],
+     "s116_double-port7": [],
+     "s116_double-port8": [],
+     "s116_double-port9": [],
+     "s116_double-group": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 3
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 9
    },
-   "seconds": 7.82
-  },
-  {
-   "name": "s116_double",
-   "expected": [
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "found": [
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "metrics": {
-    "encrypted_share": 0.8231,
-    "tool_overload": 1.559
-   },
-   "check_seconds": 1.33,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s116_double-port1": [
-      "encrypted_share"
-     ],
-     "s116_double-port2": [
-      "encrypted_share"
-     ],
-     "s116_double-port3": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 3
-   },
-   "seconds": 6.98
+   "seconds": 16.54
   },
   {
    "name": "s117_double",
    "expected": [
     "duplicates",
-    "encrypted_share"
+    "one_way"
    ],
    "found": [
     "duplicates",
-    "encrypted_share"
+    "one_way"
    ],
    "metrics": {
-    "duplicates": 0.0918,
-    "encrypted_share": 0.6775
+    "duplicates": 0.1128,
+    "one_way": 0.5625
    },
-   "check_seconds": 1.8,
+   "check_seconds": 2.35,
    "loop": {
     "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
      {
       "fault": "duplicates",
       "action": "dedup",
       "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s117_double": [
-      "encrypted_share"
-     ]
+     "s117_double": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.68
+   "seconds": 4.63
   },
   {
    "name": "s118_double",
    "expected": [
-    "encrypted_share",
-    "one_way"
+    "truncated",
+    "tunnel"
    ],
    "found": [
-    "encrypted_share",
-    "one_way"
+    "truncated",
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.9071,
-    "one_way": 0.216
+    "truncated": 0.2748,
+    "tunnel": 0.9721
    },
-   "check_seconds": 1.3,
+   "check_seconds": 3.71,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s118_double": [
-      "encrypted_share"
-     ]
+     "s118_double": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.82
+   "seconds": 10.35
   },
   {
    "name": "s119_double",
    "expected": [
-    "duplicates",
-    "one_way"
+    "packet_drops",
+    "tunnel"
    ],
    "found": [
-    "duplicates",
-    "one_way"
+    "packet_drops",
+    "tunnel"
    ],
    "metrics": {
-    "duplicates": 0.2146,
-    "one_way": 0.619
+    "packet_drops": 0.0194,
+    "tunnel": 0.2915
    },
-   "check_seconds": 1.47,
+   "check_seconds": 2.76,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -2855,173 +2964,15 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.83
+   "seconds": 6.13
   },
   {
    "name": "s120_double",
    "expected": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "encrypted_share": 0.9424,
-    "missing_vlan": 0.5
-   },
-   "check_seconds": 1.54,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s120_double": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.29
-  },
-  {
-   "name": "s121_double",
-   "expected": [
-    "duplicates",
-    "missing_vlan"
-   ],
-   "found": [
-    "duplicates",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "duplicates": 0.2769,
-    "missing_vlan": 1.0
-   },
-   "check_seconds": 1.29,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s121_double": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 2.71
-  },
-  {
-   "name": "s122_double",
-   "expected": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "encrypted_share": 0.935,
-    "missing_vlan": 0.5
-   },
-   "check_seconds": 1.43,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s122_double": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.01
-  },
-  {
-   "name": "s123_double",
-   "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "tool_overload": 1.821
-   },
-   "check_seconds": 1.83,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     }
-    ],
-    "after": {
-     "s123_double-port1": [],
-     "s123_double-port2": [],
-     "s123_double-port3": [],
-     "s123_double-port4": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 4
-   },
-   "seconds": 13.14
-  },
-  {
-   "name": "s124_double",
-   "expected": [
     "one_way",
     "tool_overload"
    ],
@@ -3030,10 +2981,10 @@
     "tool_overload"
    ],
    "metrics": {
-    "one_way": 0.2105,
-    "tool_overload": 1.814
+    "one_way": 0.2177,
+    "tool_overload": 1.345
    },
-   "check_seconds": 2.67,
+   "check_seconds": 2.79,
    "loop": {
     "fixes": [
      {
@@ -3045,167 +2996,219 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 4
+      "ports": 3
+     }
+    ],
+    "after": {
+     "s120_double-port1": [],
+     "s120_double-port2": [],
+     "s120_double-port3": [],
+     "s120_double-group": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 3
+   },
+   "seconds": 8.52
+  },
+  {
+   "name": "s121_double",
+   "expected": [
+    "oversize",
+    "tunnel"
+   ],
+   "found": [
+    "oversize",
+    "tunnel"
+   ],
+   "metrics": {
+    "oversize": 0.0287,
+    "tunnel": 0.7059
+   },
+   "check_seconds": 2.24,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s121_double": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.23
+  },
+  {
+   "name": "s122_double",
+   "expected": [
+    "encrypted_share",
+    "oversize"
+   ],
+   "found": [
+    "encrypted_share",
+    "oversize"
+   ],
+   "metrics": {
+    "encrypted_share": 0.7292,
+    "oversize": 0.0435
+   },
+   "check_seconds": 2.7,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s122_double": [
+      "encrypted_share",
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.06
+  },
+  {
+   "name": "s123_double",
+   "expected": [
+    "encrypted_share",
+    "tunnel"
+   ],
+   "found": [
+    "encrypted_share",
+    "tunnel"
+   ],
+   "metrics": {
+    "encrypted_share": 0.9726,
+    "tunnel": 1.0
+   },
+   "check_seconds": 3.75,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s123_double": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 9.98
+  },
+  {
+   "name": "s124_double",
+   "expected": [
+    "encrypted_share",
+    "tool_overload"
+   ],
+   "found": [
+    "encrypted_share",
+    "tool_overload"
+   ],
+   "metrics": {
+    "encrypted_share": 0.9922,
+    "tool_overload": 2.995
+   },
+   "check_seconds": 5.29,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 5
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
      "s124_double-port1": [],
      "s124_double-port2": [],
      "s124_double-port3": [],
-     "s124_double-port4": []
+     "s124_double-port4": [],
+     "s124_double-port5": [],
+     "s124_double-group": [
+      "encrypted_share"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 4
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 5
    },
-   "seconds": 18.38
+   "seconds": 19.85
   },
   {
    "name": "s125_double",
    "expected": [
     "duplicates",
-    "one_way"
+    "encrypted_share"
    ],
    "found": [
     "duplicates",
-    "one_way"
+    "encrypted_share"
    ],
    "metrics": {
-    "duplicates": 0.1642,
-    "one_way": 0.6855
+    "duplicates": 0.0839,
+    "encrypted_share": 0.9716
    },
-   "check_seconds": 1.55,
+   "check_seconds": 2.64,
    "loop": {
     "fixes": [
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     },
      {
       "fault": "duplicates",
       "action": "dedup",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s125_double": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.3
-  },
-  {
-   "name": "s126_double",
-   "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "tool_overload": 3.213
-   },
-   "check_seconds": 1.65,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 6
-     }
-    ],
-    "after": {
-     "s126_double-port1": [],
-     "s126_double-port2": [],
-     "s126_double-port3": [],
-     "s126_double-port4": [],
-     "s126_double-port5": [],
-     "s126_double-port6": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 6
-   },
-   "seconds": 14.28
-  },
-  {
-   "name": "s127_double",
-   "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "tool_overload": 3.13
-   },
-   "check_seconds": 2.82,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 5
-     }
-    ],
-    "after": {
-     "s127_double-port1": [],
-     "s127_double-port2": [],
-     "s127_double-port3": [],
-     "s127_double-port4": [],
-     "s127_double-port5": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 5
-   },
-   "seconds": 19.82
-  },
-  {
-   "name": "s128_double",
-   "expected": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "encrypted_share": 0.9391,
-    "missing_vlan": 0.5
-   },
-   "check_seconds": 1.7,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
       "status": "verified fixed"
      },
      {
@@ -3215,37 +3218,166 @@
      }
     ],
     "after": {
-     "s128_double": [
+     "s125_double": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.48
+   "seconds": 5.32
   },
   {
-   "name": "s129_double",
+   "name": "s126_double",
    "expected": [
-    "encrypted_share",
+    "duplicates",
     "packet_drops"
    ],
    "found": [
-    "encrypted_share",
+    "duplicates",
     "packet_drops"
    ],
    "metrics": {
-    "encrypted_share": 0.6485,
-    "packet_drops": 0.0307
+    "duplicates": 0.0927,
+    "packet_drops": 0.0182
    },
-   "check_seconds": 1.86,
+   "check_seconds": 2.25,
    "loop": {
     "fixes": [
      {
       "fault": "packet_drops",
       "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s126_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 4.75
+  },
+  {
+   "name": "s127_double",
+   "expected": [
+    "oversize",
+    "tunnel"
+   ],
+   "found": [
+    "oversize",
+    "tunnel"
+   ],
+   "metrics": {
+    "oversize": 0.042,
+    "tunnel": 0.2863
+   },
+   "check_seconds": 3.86,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s127_double": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 9.43
+  },
+  {
+   "name": "s128_double",
+   "expected": [
+    "missing_vlan",
+    "tool_overload"
+   ],
+   "found": [
+    "missing_vlan",
+    "tool_overload"
+   ],
+   "metrics": {
+    "missing_vlan": 1.0,
+    "tool_overload": 2.722
+   },
+   "check_seconds": 4.9,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "missing_vlan",
+      "action": "vlan",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 4
+     }
+    ],
+    "after": {
+     "s128_double-port1": [],
+     "s128_double-port2": [],
+     "s128_double-port3": [],
+     "s128_double-port4": [],
+     "s128_double-group": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 4
+   },
+   "seconds": 18.11
+  },
+  {
+   "name": "s129_double",
+   "expected": [
+    "encrypted_share",
+    "tunnel"
+   ],
+   "found": [
+    "encrypted_share",
+    "tunnel"
+   ],
+   "metrics": {
+    "encrypted_share": 0.9886,
+    "tunnel": 0.6009
+   },
+   "check_seconds": 3.47,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      },
      {
@@ -3262,55 +3394,96 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.93
+   "seconds": 7.77
   },
   {
    "name": "s130_double",
    "expected": [
-    "packet_drops",
-    "tool_overload"
+    "oversize",
+    "tunnel"
    ],
    "found": [
-    "packet_drops",
-    "tool_overload"
+    "oversize",
+    "tunnel"
    ],
    "metrics": {
-    "packet_drops": 0.0206,
-    "tool_overload": 2.908
+    "oversize": 0.123,
+    "tunnel": 0.5216
    },
-   "check_seconds": 3.84,
+   "check_seconds": 2.98,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      },
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 5
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s130_double-port1": [],
-     "s130_double-port2": [],
-     "s130_double-port3": [],
-     "s130_double-port4": [],
-     "s130_double-port5": []
+     "s130_double": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 7.62
+  },
+  {
+   "name": "s131_double",
+   "expected": [
+    "duplicates",
+    "truncated"
+   ],
+   "found": [
+    "duplicates",
+    "truncated"
+   ],
+   "metrics": {
+    "duplicates": 0.2052,
+    "truncated": 0.1396
+   },
+   "check_seconds": 2.8,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s131_double": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 5
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 22.58
+   "seconds": 5.95
   },
   {
-   "name": "s131_double",
+   "name": "s132_double",
    "expected": [
     "encrypted_share",
     "missing_vlan"
@@ -3320,10 +3493,10 @@
     "missing_vlan"
    ],
    "metrics": {
-    "encrypted_share": 0.7971,
-    "missing_vlan": 1.0
+    "encrypted_share": 0.985,
+    "missing_vlan": 0.5
    },
-   "check_seconds": 1.52,
+   "check_seconds": 2.67,
    "loop": {
     "fixes": [
      {
@@ -3338,117 +3511,34 @@
      }
     ],
     "after": {
-     "s131_double": [
+     "s132_double": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.16
-  },
-  {
-   "name": "s132_double",
-   "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 1.0,
-    "tool_overload": 1.679
-   },
-   "check_seconds": 1.67,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
-     }
-    ],
-    "after": {
-     "s132_double-port1": [],
-     "s132_double-port2": [],
-     "s132_double-port3": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 3
-   },
-   "seconds": 7.93
+   "seconds": 5.86
   },
   {
    "name": "s133_double",
    "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 1.0,
-    "tool_overload": 2.889
-   },
-   "check_seconds": 1.81,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 6
-     }
-    ],
-    "after": {
-     "s133_double-port1": [],
-     "s133_double-port2": [],
-     "s133_double-port3": [],
-     "s133_double-port4": [],
-     "s133_double-port5": [],
-     "s133_double-port6": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 6
-   },
-   "seconds": 14.59
-  },
-  {
-   "name": "s134_double",
-   "expected": [
     "one_way",
-    "packet_drops"
+    "tunnel"
    ],
    "found": [
     "one_way",
-    "packet_drops"
+    "tunnel"
    ],
    "metrics": {
-    "one_way": 0.7431,
-    "packet_drops": 0.0227
+    "one_way": 0.1845,
+    "tunnel": 0.3843
    },
-   "check_seconds": 1.52,
+   "check_seconds": 2.04,
    "loop": {
     "fixes": [
      {
@@ -3457,36 +3547,80 @@
       "status": "verified fixed"
      },
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
     "after": {
-     "s134_double": []
+     "s133_double": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.82
+   "seconds": 5.39
+  },
+  {
+   "name": "s134_double",
+   "expected": [
+    "encrypted_share",
+    "tunnel"
+   ],
+   "found": [
+    "encrypted_share",
+    "tunnel"
+   ],
+   "metrics": {
+    "encrypted_share": 0.8057,
+    "tunnel": 0.3056
+   },
+   "check_seconds": 2.74,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s134_double": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.85
   },
   {
    "name": "s135_double",
    "expected": [
-    "duplicates",
-    "packet_drops"
+    "packet_drops",
+    "tunnel"
    ],
    "found": [
-    "duplicates",
-    "packet_drops"
+    "packet_drops",
+    "tunnel"
    ],
    "metrics": {
-    "duplicates": 0.2424,
-    "packet_drops": 0.0179
+    "packet_drops": 0.0331,
+    "tunnel": 0.7671
    },
-   "check_seconds": 1.66,
+   "check_seconds": 2.95,
    "loop": {
     "fixes": [
      {
@@ -3495,8 +3629,8 @@
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -3506,35 +3640,37 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.25
+   "seconds": 8.91
   },
   {
    "name": "s136_double",
    "expected": [
-    "duplicates",
-    "one_way"
+    "truncated",
+    "tunnel"
    ],
    "found": [
-    "duplicates",
-    "one_way"
+    "truncated",
+    "tunnel"
    ],
    "metrics": {
-    "duplicates": 0.08,
-    "one_way": 0.6937
+    "truncated": 0.1448,
+    "tunnel": 0.5865
    },
-   "check_seconds": 1.79,
+   "check_seconds": 3.64,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -3544,30 +3680,32 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.79
+   "seconds": 9.24
   },
   {
    "name": "s137_double",
    "expected": [
     "encrypted_share",
-    "missing_vlan"
+    "one_way"
    ],
    "found": [
     "encrypted_share",
-    "missing_vlan"
+    "one_way"
    ],
    "metrics": {
-    "encrypted_share": 0.947,
-    "missing_vlan": 1.0
+    "encrypted_share": 0.7805,
+    "one_way": 0.1789
    },
-   "check_seconds": 1.71,
+   "check_seconds": 3.14,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
+      "fault": "one_way",
+      "action": "aggregate",
       "status": "verified fixed"
      },
      {
@@ -3584,74 +3722,72 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.33
+   "seconds": 6.37
   },
   {
    "name": "s138_double",
    "expected": [
-    "encrypted_share",
-    "tool_overload"
+    "missing_vlan",
+    "tunnel"
    ],
    "found": [
-    "encrypted_share",
-    "tool_overload"
+    "missing_vlan",
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.942,
-    "tool_overload": 1.349
+    "missing_vlan": 0.5,
+    "tunnel": 0.6375
    },
-   "check_seconds": 2.31,
+   "check_seconds": 2.82,
    "loop": {
     "fixes": [
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 2
+      "fault": "missing_vlan",
+      "action": "vlan",
+      "status": "verified fixed"
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s138_double-port1": [
-      "encrypted_share"
-     ],
-     "s138_double-port2": [
-      "encrypted_share"
-     ]
+     "s138_double": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 2
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 13.48
+   "seconds": 7.2
   },
   {
    "name": "s139_double",
    "expected": [
-    "packet_drops",
+    "one_way",
     "tool_overload"
    ],
    "found": [
-    "packet_drops",
+    "one_way",
     "tool_overload"
    ],
    "metrics": {
-    "packet_drops": 0.0543,
-    "tool_overload": 3.335
+    "one_way": 0.1905,
+    "tool_overload": 2.365
    },
-   "check_seconds": 1.49,
+   "check_seconds": 3.02,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "one_way",
+      "action": "aggregate",
       "status": "verified fixed"
      },
      {
@@ -3668,40 +3804,43 @@
      "s139_double-port4": [],
      "s139_double-port5": [],
      "s139_double-port6": [],
-     "s139_double-port7": []
+     "s139_double-port7": [],
+     "s139_double-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 7
    },
-   "seconds": 15.44
+   "seconds": 15.26
   },
   {
    "name": "s140_double",
    "expected": [
-    "one_way",
-    "packet_drops"
+    "packet_drops",
+    "truncated"
    ],
    "found": [
-    "one_way",
-    "packet_drops"
+    "packet_drops",
+    "truncated"
    ],
    "metrics": {
-    "one_way": 0.2121,
-    "packet_drops": 0.0473
+    "packet_drops": 0.0868,
+    "truncated": 0.124
    },
-   "check_seconds": 1.67,
+   "check_seconds": 2.49,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      },
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      }
     ],
@@ -3711,211 +3850,217 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.38
+   "seconds": 5.2
   },
   {
    "name": "s141_double",
    "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 1.0,
-    "tool_overload": 2.164
-   },
-   "check_seconds": 3.27,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     }
-    ],
-    "after": {
-     "s141_double-port1": [],
-     "s141_double-port2": [],
-     "s141_double-port3": [],
-     "s141_double-port4": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 4
-   },
-   "seconds": 20.29
-  },
-  {
-   "name": "s142_double",
-   "expected": [
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "found": [
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "metrics": {
-    "encrypted_share": 0.9435,
-    "tool_overload": 2.995
-   },
-   "check_seconds": 2.87,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 5
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s142_double-port1": [
-      "encrypted_share"
-     ],
-     "s142_double-port2": [
-      "encrypted_share"
-     ],
-     "s142_double-port3": [
-      "encrypted_share"
-     ],
-     "s142_double-port4": [
-      "encrypted_share"
-     ],
-     "s142_double-port5": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 5
-   },
-   "seconds": 19.94
-  },
-  {
-   "name": "s143_double",
-   "expected": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "tool_overload": 1.526
-   },
-   "check_seconds": 1.72,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
-     }
-    ],
-    "after": {
-     "s143_double-port1": [],
-     "s143_double-port2": [],
-     "s143_double-port3": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 3
-   },
-   "seconds": 8.1
-  },
-  {
-   "name": "s144_double",
-   "expected": [
     "duplicates",
-    "encrypted_share"
+    "tunnel"
    ],
    "found": [
     "duplicates",
-    "encrypted_share"
+    "tunnel"
    ],
    "metrics": {
-    "duplicates": 0.1977,
-    "encrypted_share": 0.9181
+    "duplicates": 0.1826,
+    "tunnel": 0.7011
    },
-   "check_seconds": 2.19,
+   "check_seconds": 3.04,
    "loop": {
     "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
      {
       "fault": "duplicates",
       "action": "dedup",
       "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s141_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 7.46
+  },
+  {
+   "name": "s142_double",
+   "expected": [
+    "duplicates",
+    "one_way"
+   ],
+   "found": [
+    "duplicates",
+    "one_way"
+   ],
+   "metrics": {
+    "duplicates": 0.1161,
+    "one_way": 0.5115
+   },
+   "check_seconds": 3.11,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s142_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.47
+  },
+  {
+   "name": "s143_double",
+   "expected": [
+    "one_way",
+    "tunnel"
+   ],
+   "found": [
+    "one_way",
+    "tunnel"
+   ],
+   "metrics": {
+    "one_way": 0.2147,
+    "tunnel": 0.5805
+   },
+   "check_seconds": 3.92,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s143_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 9.51
+  },
+  {
+   "name": "s144_double",
+   "expected": [
+    "oversize",
+    "tool_overload"
+   ],
+   "found": [
+    "oversize",
+    "tool_overload"
+   ],
+   "metrics": {
+    "oversize": 0.0854,
+    "tool_overload": 2.779
+   },
+   "check_seconds": 2.8,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 17
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
       "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s144_double": [
-      "encrypted_share"
+     "s144_double-port1": [],
+     "s144_double-port2": [],
+     "s144_double-port3": [],
+     "s144_double-port4": [],
+     "s144_double-port5": [],
+     "s144_double-port6": [],
+     "s144_double-port7": [],
+     "s144_double-port8": [],
+     "s144_double-port9": [],
+     "s144_double-port10": [],
+     "s144_double-port11": [],
+     "s144_double-port12": [],
+     "s144_double-port13": [],
+     "s144_double-port14": [],
+     "s144_double-port15": [],
+     "s144_double-port16": [],
+     "s144_double-port17": [],
+     "s144_double-group": [
+      "oversize"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 1
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 17
    },
-   "seconds": 3.75
+   "seconds": 53.15
   },
   {
    "name": "s145_double",
    "expected": [
-    "missing_vlan",
-    "packet_drops"
+    "duplicates",
+    "one_way"
    ],
    "found": [
-    "missing_vlan",
-    "packet_drops"
+    "duplicates",
+    "one_way"
    ],
    "metrics": {
-    "missing_vlan": 1.0,
-    "packet_drops": 0.0177
+    "duplicates": 0.0907,
+    "one_way": 0.1859
    },
-   "check_seconds": 1.58,
+   "check_seconds": 3.04,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
+      "fault": "one_way",
+      "action": "aggregate",
       "status": "verified fixed"
      },
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "duplicates",
+      "action": "dedup",
       "status": "verified fixed"
      }
     ],
@@ -3925,208 +4070,70 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.38
+   "seconds": 6.16
   },
   {
    "name": "s146_double",
    "expected": [
-    "duplicates",
-    "tool_overload"
-   ],
-   "found": [
-    "duplicates",
-    "tool_overload"
-   ],
-   "metrics": {
-    "duplicates": 0.0888,
-    "tool_overload": 3.104
-   },
-   "check_seconds": 1.65,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 8
-     }
-    ],
-    "after": {
-     "s146_double-port1": [],
-     "s146_double-port2": [],
-     "s146_double-port3": [],
-     "s146_double-port4": [],
-     "s146_double-port5": [],
-     "s146_double-port6": [],
-     "s146_double-port7": [],
-     "s146_double-port8": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 8
-   },
-   "seconds": 22.94
-  },
-  {
-   "name": "s147_double",
-   "expected": [
     "encrypted_share",
-    "tool_overload"
+    "oversize"
    ],
    "found": [
     "encrypted_share",
-    "tool_overload"
+    "oversize"
    ],
    "metrics": {
-    "encrypted_share": 0.6366,
-    "tool_overload": 1.962
+    "encrypted_share": 0.8204,
+    "oversize": 0.0744
    },
-   "check_seconds": 1.89,
+   "check_seconds": 3.14,
    "loop": {
     "fixes": [
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     },
      {
       "fault": "encrypted_share",
       "action": "decrypt_advice",
       "status": "advice (cannot be verified offline)"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s147_double-port1": [
-      "encrypted_share"
-     ],
-     "s147_double-port2": [
-      "encrypted_share"
-     ],
-     "s147_double-port3": [
-      "encrypted_share"
-     ],
-     "s147_double-port4": []
+     "s146_double": [
+      "encrypted_share",
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 4
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 12.37
+   "seconds": 6.42
   },
   {
-   "name": "s148_double",
-   "expected": [
-    "packet_drops",
-    "tool_overload"
-   ],
-   "found": [
-    "packet_drops",
-    "tool_overload"
-   ],
-   "metrics": {
-    "packet_drops": 0.0192,
-    "tool_overload": 2.466
-   },
-   "check_seconds": 3.83,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     }
-    ],
-    "after": {
-     "s148_double-port1": [],
-     "s148_double-port2": [],
-     "s148_double-port3": [],
-     "s148_double-port4": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 4
-   },
-   "seconds": 21.46
-  },
-  {
-   "name": "s149_double",
-   "expected": [
-    "one_way",
-    "tool_overload"
-   ],
-   "found": [
-    "one_way",
-    "tool_overload"
-   ],
-   "metrics": {
-    "one_way": 0.7817,
-    "tool_overload": 1.428
-   },
-   "check_seconds": 1.92,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 9
-     }
-    ],
-    "after": {
-     "s149_double-port1": [],
-     "s149_double-port2": [],
-     "s149_double-port3": [],
-     "s149_double-port4": [],
-     "s149_double-port5": [],
-     "s149_double-port6": [],
-     "s149_double-port7": [],
-     "s149_double-port8": [],
-     "s149_double-port9": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 9
-   },
-   "seconds": 21.52
-  },
-  {
-   "name": "s150_double",
+   "name": "s147_double",
    "expected": [
     "missing_vlan",
-    "tool_overload"
+    "packet_drops"
    ],
    "found": [
     "missing_vlan",
-    "tool_overload"
+    "packet_drops"
    ],
    "metrics": {
     "missing_vlan": 0.5,
-    "tool_overload": 1.626
+    "packet_drops": 0.0604
    },
-   "check_seconds": 3.44,
+   "check_seconds": 2.71,
    "loop": {
     "fixes": [
      {
@@ -4135,39 +4142,78 @@
       "status": "verified fixed"
      },
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s150_double-port1": [],
-     "s150_double-port2": [],
-     "s150_double-port3": []
+     "s147_double": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 20.01
+   "seconds": 5.67
   },
   {
-   "name": "s151_double",
+   "name": "s148_double",
    "expected": [
     "duplicates",
-    "packet_drops"
+    "missing_vlan"
    ],
    "found": [
     "duplicates",
-    "packet_drops"
+    "missing_vlan"
    ],
    "metrics": {
-    "duplicates": 0.0891,
-    "packet_drops": 0.0179
+    "duplicates": 0.2452,
+    "missing_vlan": 1.0
    },
-   "check_seconds": 1.63,
+   "check_seconds": 2.86,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "missing_vlan",
+      "action": "vlan",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s148_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.27
+  },
+  {
+   "name": "s149_double",
+   "expected": [
+    "packet_drops",
+    "tunnel"
+   ],
+   "found": [
+    "packet_drops",
+    "tunnel"
+   ],
+   "metrics": {
+    "packet_drops": 0.0813,
+    "tunnel": 0.6395
+   },
+   "check_seconds": 4.18,
    "loop": {
     "fixes": [
      {
@@ -4176,8 +4222,108 @@
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s149_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 9.52
+  },
+  {
+   "name": "s150_double",
+   "expected": [
+    "oversize",
+    "tool_overload"
+   ],
+   "found": [
+    "oversize",
+    "tool_overload"
+   ],
+   "metrics": {
+    "oversize": 0.1448,
+    "tool_overload": 3.054
+   },
+   "check_seconds": 3.66,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 17
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s150_double-port1": [],
+     "s150_double-port2": [],
+     "s150_double-port3": [],
+     "s150_double-port4": [],
+     "s150_double-port5": [],
+     "s150_double-port6": [],
+     "s150_double-port7": [],
+     "s150_double-port8": [],
+     "s150_double-port9": [],
+     "s150_double-port10": [],
+     "s150_double-port11": [],
+     "s150_double-port12": [],
+     "s150_double-port13": [],
+     "s150_double-port14": [],
+     "s150_double-port15": [],
+     "s150_double-port16": [],
+     "s150_double-port17": [],
+     "s150_double-group": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 17
+   },
+   "seconds": 59.07
+  },
+  {
+   "name": "s151_double",
+   "expected": [
+    "packet_drops",
+    "tunnel"
+   ],
+   "found": [
+    "packet_drops",
+    "tunnel"
+   ],
+   "metrics": {
+    "packet_drops": 0.0448,
+    "tunnel": 0.9398
+   },
+   "check_seconds": 4.43,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      }
     ],
@@ -4187,67 +4333,70 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.38
+   "seconds": 10.23
   },
   {
    "name": "s152_double",
    "expected": [
-    "packet_drops",
-    "tool_overload"
+    "encrypted_share",
+    "oversize"
    ],
    "found": [
-    "packet_drops",
-    "tool_overload"
+    "encrypted_share",
+    "oversize"
    ],
    "metrics": {
-    "packet_drops": 0.0673,
-    "tool_overload": 1.46
+    "encrypted_share": 0.7906,
+    "oversize": 0.0262
    },
-   "check_seconds": 1.6,
+   "check_seconds": 2.59,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
      },
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s152_double-port1": [],
-     "s152_double-port2": [],
-     "s152_double-port3": [],
-     "s152_double-port4": []
+     "s152_double": [
+      "encrypted_share",
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 4
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 10.52
+   "seconds": 5.55
   },
   {
    "name": "s153_double",
    "expected": [
-    "duplicates",
-    "one_way"
+    "one_way",
+    "truncated"
    ],
    "found": [
-    "duplicates",
-    "one_way"
+    "one_way",
+    "truncated"
    ],
    "metrics": {
-    "duplicates": 0.2319,
-    "one_way": 0.4397
+    "one_way": 0.5176,
+    "truncated": 0.1686
    },
-   "check_seconds": 1.42,
+   "check_seconds": 2.56,
    "loop": {
     "fixes": [
      {
@@ -4256,8 +4405,8 @@
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      }
     ],
@@ -4267,25 +4416,378 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.61
+   "seconds": 5.89
   },
   {
    "name": "s154_double",
    "expected": [
-    "missing_vlan",
+    "oversize",
+    "packet_drops"
+   ],
+   "found": [
+    "oversize",
+    "packet_drops"
+   ],
+   "metrics": {
+    "oversize": 0.1039,
+    "packet_drops": 0.1009
+   },
+   "check_seconds": 2.53,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s154_double": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.64
+  },
+  {
+   "name": "s155_double",
+   "expected": [
+    "encrypted_share",
+    "truncated"
+   ],
+   "found": [
+    "encrypted_share",
+    "truncated"
+   ],
+   "metrics": {
+    "encrypted_share": 0.8022,
+    "truncated": 0.2913
+   },
+   "check_seconds": 2.43,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s155_double": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.1
+  },
+  {
+   "name": "s156_double",
+   "expected": [
+    "packet_drops",
+    "truncated"
+   ],
+   "found": [
+    "packet_drops",
+    "truncated"
+   ],
+   "metrics": {
+    "packet_drops": 0.1039,
+    "truncated": 0.1482
+   },
+   "check_seconds": 2.67,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s156_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.78
+  },
+  {
+   "name": "s157_double",
+   "expected": [
+    "oversize",
     "tool_overload"
    ],
    "found": [
-    "missing_vlan",
+    "oversize",
     "tool_overload"
    ],
    "metrics": {
-    "missing_vlan": 0.5,
-    "tool_overload": 1.659
+    "oversize": 0.0838,
+    "tool_overload": 2.559
    },
-   "check_seconds": 2.0,
+   "check_seconds": 2.59,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 10
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s157_double-port1": [],
+     "s157_double-port2": [],
+     "s157_double-port3": [],
+     "s157_double-port4": [],
+     "s157_double-port5": [],
+     "s157_double-port6": [],
+     "s157_double-port7": [],
+     "s157_double-port8": [],
+     "s157_double-port9": [],
+     "s157_double-port10": [],
+     "s157_double-group": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 10
+   },
+   "seconds": 22.53
+  },
+  {
+   "name": "s158_double",
+   "expected": [
+    "duplicates",
+    "truncated"
+   ],
+   "found": [
+    "duplicates",
+    "truncated"
+   ],
+   "metrics": {
+    "duplicates": 0.1556,
+    "truncated": 0.2547
+   },
+   "check_seconds": 2.84,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s158_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.7
+  },
+  {
+   "name": "s159_double",
+   "expected": [
+    "one_way",
+    "truncated"
+   ],
+   "found": [
+    "one_way",
+    "truncated"
+   ],
+   "metrics": {
+    "one_way": 0.3456,
+    "truncated": 0.1473
+   },
+   "check_seconds": 2.58,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s159_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.35
+  },
+  {
+   "name": "s160_double",
+   "expected": [
+    "duplicates",
+    "one_way"
+   ],
+   "found": [
+    "duplicates",
+    "one_way"
+   ],
+   "metrics": {
+    "duplicates": 0.1262,
+    "one_way": 0.194
+   },
+   "check_seconds": 2.68,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s160_double": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.5
+  },
+  {
+   "name": "s161_triple",
+   "expected": [
+    "duplicates",
+    "encrypted_share",
+    "oversize"
+   ],
+   "found": [
+    "duplicates",
+    "encrypted_share",
+    "oversize"
+   ],
+   "metrics": {
+    "duplicates": 0.1743,
+    "encrypted_share": 0.9118,
+    "oversize": 0.1076
+   },
+   "check_seconds": 3.03,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s161_triple": [
+      "encrypted_share",
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.87
+  },
+  {
+   "name": "s162_triple",
+   "expected": [
+    "missing_vlan",
+    "oversize",
+    "tunnel"
+   ],
+   "found": [
+    "missing_vlan",
+    "oversize",
+    "tunnel"
+   ],
+   "metrics": {
+    "missing_vlan": 0.5,
+    "oversize": 0.0532,
+    "tunnel": 0.277
+   },
+   "check_seconds": 2.58,
    "loop": {
     "fixes": [
      {
@@ -4294,44 +4796,108 @@
       "status": "verified fixed"
      },
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s154_double-port1": [],
-     "s154_double-port2": [],
-     "s154_double-port3": []
+     "s162_triple": [
+      "oversize"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 3
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 9.9
+   "seconds": 6.77
   },
   {
-   "name": "s155_double",
+   "name": "s163_triple",
+   "expected": [
+    "encrypted_share",
+    "packet_drops",
+    "tunnel"
+   ],
+   "found": [
+    "encrypted_share",
+    "packet_drops",
+    "tunnel"
+   ],
+   "metrics": {
+    "encrypted_share": 0.7355,
+    "packet_drops": 0.0541,
+    "tunnel": 0.2909
+   },
+   "check_seconds": 3.17,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s163_triple": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 8.07
+  },
+  {
+   "name": "s164_triple",
    "expected": [
     "one_way",
-    "tool_overload"
+    "tool_overload",
+    "tunnel"
    ],
    "found": [
     "one_way",
-    "tool_overload"
+    "tool_overload",
+    "tunnel"
    ],
    "metrics": {
-    "one_way": 0.1897,
-    "tool_overload": 2.024
+    "one_way": 0.1776,
+    "tool_overload": 2.172,
+    "tunnel": 0.9519
    },
-   "check_seconds": 2.41,
+   "check_seconds": 6.7,
    "loop": {
     "fixes": [
      {
       "fault": "one_way",
       "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      },
      {
@@ -4342,559 +4908,159 @@
      }
     ],
     "after": {
-     "s155_double-port1": [],
-     "s155_double-port2": [],
-     "s155_double-port3": [],
-     "s155_double-port4": []
+     "s164_triple-port1": [],
+     "s164_triple-port2": [],
+     "s164_triple-port3": [],
+     "s164_triple-port4": [],
+     "s164_triple-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 4
    },
-   "seconds": 16.11
-  },
-  {
-   "name": "s156_double",
-   "expected": [
-    "duplicates",
-    "missing_vlan"
-   ],
-   "found": [
-    "duplicates",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "duplicates": 0.0907,
-    "missing_vlan": 0.5
-   },
-   "check_seconds": 1.61,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s156_double": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.31
-  },
-  {
-   "name": "s157_double",
-   "expected": [
-    "duplicates",
-    "tool_overload"
-   ],
-   "found": [
-    "duplicates",
-    "tool_overload"
-   ],
-   "metrics": {
-    "duplicates": 0.1243,
-    "tool_overload": 3.019
-   },
-   "check_seconds": 1.81,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 6
-     }
-    ],
-    "after": {
-     "s157_double-port1": [],
-     "s157_double-port2": [],
-     "s157_double-port3": [],
-     "s157_double-port4": [],
-     "s157_double-port5": [],
-     "s157_double-port6": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 6
-   },
-   "seconds": 13.28
-  },
-  {
-   "name": "s158_double",
-   "expected": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "encrypted_share": 0.6601,
-    "missing_vlan": 0.5
-   },
-   "check_seconds": 1.31,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s158_double": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 2.98
-  },
-  {
-   "name": "s159_double",
-   "expected": [
-    "duplicates",
-    "encrypted_share"
-   ],
-   "found": [
-    "duplicates",
-    "encrypted_share"
-   ],
-   "metrics": {
-    "duplicates": 0.2629,
-    "encrypted_share": 0.9172
-   },
-   "check_seconds": 1.85,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s159_double": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.41
-  },
-  {
-   "name": "s160_double",
-   "expected": [
-    "missing_vlan",
-    "one_way"
-   ],
-   "found": [
-    "missing_vlan",
-    "one_way"
-   ],
-   "metrics": {
-    "missing_vlan": 1.0,
-    "one_way": 0.2484
-   },
-   "check_seconds": 1.59,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s160_double": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.27
-  },
-  {
-   "name": "s161_triple",
-   "expected": [
-    "duplicates",
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "found": [
-    "duplicates",
-    "encrypted_share",
-    "missing_vlan"
-   ],
-   "metrics": {
-    "duplicates": 0.1639,
-    "encrypted_share": 0.9291,
-    "missing_vlan": 0.5
-   },
-   "check_seconds": 1.62,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s161_triple": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.2
-  },
-  {
-   "name": "s162_triple",
-   "expected": [
-    "encrypted_share",
-    "missing_vlan",
-    "packet_drops"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan",
-    "packet_drops"
-   ],
-   "metrics": {
-    "encrypted_share": 0.9275,
-    "missing_vlan": 0.5,
-    "packet_drops": 0.0593
-   },
-   "check_seconds": 1.63,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s162_triple": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.39
-  },
-  {
-   "name": "s163_triple",
-   "expected": [
-    "duplicates",
-    "one_way",
-    "packet_drops"
-   ],
-   "found": [
-    "duplicates",
-    "one_way",
-    "packet_drops"
-   ],
-   "metrics": {
-    "duplicates": 0.178,
-    "one_way": 0.1727,
-    "packet_drops": 0.0457
-   },
-   "check_seconds": 1.65,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     }
-    ],
-    "after": {
-     "s163_triple": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 1
-   },
-   "seconds": 3.45
-  },
-  {
-   "name": "s164_triple",
-   "expected": [
-    "encrypted_share",
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "encrypted_share": 0.7571,
-    "missing_vlan": 1.0,
-    "tool_overload": 3.527
-   },
-   "check_seconds": 1.52,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 6
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s164_triple-port1": [
-      "encrypted_share"
-     ],
-     "s164_triple-port2": [
-      "encrypted_share"
-     ],
-     "s164_triple-port3": [
-      "encrypted_share"
-     ],
-     "s164_triple-port4": [
-      "encrypted_share"
-     ],
-     "s164_triple-port5": [
-      "encrypted_share"
-     ],
-     "s164_triple-port6": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 6
-   },
-   "seconds": 11.54
+   "seconds": 30.15
   },
   {
    "name": "s165_triple",
    "expected": [
     "encrypted_share",
-    "missing_vlan",
-    "one_way"
+    "oversize",
+    "packet_drops"
    ],
    "found": [
     "encrypted_share",
-    "missing_vlan",
-    "one_way"
+    "oversize",
+    "packet_drops"
    ],
    "metrics": {
-    "encrypted_share": 0.7575,
-    "missing_vlan": 0.5,
-    "one_way": 0.2051
+    "encrypted_share": 0.8575,
+    "oversize": 0.0221,
+    "packet_drops": 0.0656
    },
-   "check_seconds": 1.62,
+   "check_seconds": 2.19,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      },
      {
       "fault": "encrypted_share",
       "action": "decrypt_advice",
       "status": "advice (cannot be verified offline)"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
      "s165_triple": [
-      "encrypted_share"
+      "encrypted_share",
+      "oversize"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.34
+   "seconds": 4.56
   },
   {
    "name": "s166_triple",
    "expected": [
-    "encrypted_share",
-    "one_way",
-    "tool_overload"
+    "oversize",
+    "tool_overload",
+    "tunnel"
    ],
    "found": [
-    "encrypted_share",
-    "one_way",
-    "tool_overload"
+    "oversize",
+    "tool_overload",
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.6691,
-    "one_way": 0.6303,
-    "tool_overload": 2.057
+    "oversize": 0.085,
+    "tool_overload": 3.929,
+    "tunnel": 0.2118
    },
-   "check_seconds": 1.54,
+   "check_seconds": 2.85,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      },
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 9
+      "ports": 18
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
+      "fault": "oversize",
+      "action": "mtu_advice",
       "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s166_triple-port1": [
-      "encrypted_share"
-     ],
-     "s166_triple-port2": [
-      "encrypted_share"
-     ],
-     "s166_triple-port3": [
-      "encrypted_share"
-     ],
-     "s166_triple-port4": [
-      "encrypted_share"
-     ],
+     "s166_triple-port1": [],
+     "s166_triple-port2": [],
+     "s166_triple-port3": [],
+     "s166_triple-port4": [],
      "s166_triple-port5": [],
      "s166_triple-port6": [],
-     "s166_triple-port7": [
-      "encrypted_share"
-     ],
-     "s166_triple-port8": [
-      "encrypted_share"
-     ],
-     "s166_triple-port9": [
-      "encrypted_share"
+     "s166_triple-port7": [],
+     "s166_triple-port8": [],
+     "s166_triple-port9": [],
+     "s166_triple-port10": [],
+     "s166_triple-port11": [],
+     "s166_triple-port12": [],
+     "s166_triple-port13": [],
+     "s166_triple-port14": [],
+     "s166_triple-port15": [],
+     "s166_triple-port16": [],
+     "s166_triple-port17": [],
+     "s166_triple-port18": [],
+     "s166_triple-group": [
+      "oversize"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 9
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 18
    },
-   "seconds": 22.49
+   "seconds": 59.08
   },
   {
    "name": "s167_triple",
    "expected": [
     "encrypted_share",
     "missing_vlan",
-    "packet_drops"
+    "tunnel"
    ],
    "found": [
     "encrypted_share",
     "missing_vlan",
-    "packet_drops"
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.7071,
-    "missing_vlan": 1.0,
-    "packet_drops": 0.0271
+    "encrypted_share": 0.9781,
+    "missing_vlan": 0.5,
+    "tunnel": 0.6797
    },
-   "check_seconds": 1.99,
+   "check_seconds": 2.51,
    "loop": {
     "fixes": [
      {
@@ -4903,8 +5069,8 @@
       "status": "verified fixed"
      },
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      },
      {
@@ -4921,28 +5087,30 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.74
+   "seconds": 6.13
   },
   {
    "name": "s168_triple",
    "expected": [
-    "duplicates",
+    "encrypted_share",
     "one_way",
     "tool_overload"
    ],
    "found": [
-    "duplicates",
+    "encrypted_share",
     "one_way",
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.2781,
-    "one_way": 0.6616,
-    "tool_overload": 1.319
+    "encrypted_share": 0.7365,
+    "one_way": 0.4167,
+    "tool_overload": 1.572
    },
-   "check_seconds": 3.03,
+   "check_seconds": 2.91,
    "loop": {
     "fixes": [
      {
@@ -4951,15 +5119,15 @@
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
       "ports": 6
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
@@ -4968,38 +5136,91 @@
      "s168_triple-port3": [],
      "s168_triple-port4": [],
      "s168_triple-port5": [],
-     "s168_triple-port6": []
+     "s168_triple-port6": [],
+     "s168_triple-group": [
+      "encrypted_share"
+     ]
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy",
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 6
    },
-   "seconds": 28.32
+   "seconds": 15.55
   },
   {
    "name": "s169_triple",
    "expected": [
-    "encrypted_share",
+    "duplicates",
     "one_way",
-    "packet_drops"
+    "truncated"
    ],
    "found": [
-    "encrypted_share",
+    "duplicates",
     "one_way",
-    "packet_drops"
+    "truncated"
    ],
    "metrics": {
-    "encrypted_share": 0.8328,
-    "one_way": 0.5714,
-    "packet_drops": 0.0325
+    "duplicates": 0.1792,
+    "one_way": 0.3413,
+    "truncated": 0.102
    },
-   "check_seconds": 1.23,
+   "check_seconds": 2.55,
    "loop": {
     "fixes": [
      {
       "fault": "one_way",
       "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s169_triple": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.49
+  },
+  {
+   "name": "s170_triple",
+   "expected": [
+    "duplicates",
+    "missing_vlan",
+    "packet_drops"
+   ],
+   "found": [
+    "duplicates",
+    "missing_vlan",
+    "packet_drops"
+   ],
+   "metrics": {
+    "duplicates": 0.1239,
+    "missing_vlan": 1.0,
+    "packet_drops": 0.0299
+   },
+   "check_seconds": 2.82,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "missing_vlan",
+      "action": "vlan",
       "status": "verified fixed"
      },
      {
@@ -5008,147 +5229,41 @@
       "status": "verified fixed"
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
      }
     ],
     "after": {
-     "s169_triple": [
-      "encrypted_share"
-     ]
+     "s170_triple": []
     },
     "new_faults": [],
     "unresolved": [],
-    "result": "healthy except advice items",
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 2.63
-  },
-  {
-   "name": "s170_triple",
-   "expected": [
-    "encrypted_share",
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan",
-    "tool_overload"
-   ],
-   "metrics": {
-    "encrypted_share": 0.9474,
-    "missing_vlan": 0.5,
-    "tool_overload": 2.473
-   },
-   "check_seconds": 3.02,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s170_triple-port1": [
-      "encrypted_share"
-     ],
-     "s170_triple-port2": [
-      "encrypted_share"
-     ],
-     "s170_triple-port3": [
-      "encrypted_share"
-     ],
-     "s170_triple-port4": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 4
-   },
-   "seconds": 17.51
+   "seconds": 5.67
   },
   {
    "name": "s171_triple",
    "expected": [
-    "encrypted_share",
-    "missing_vlan",
-    "one_way"
-   ],
-   "found": [
-    "encrypted_share",
-    "missing_vlan",
-    "one_way"
-   ],
-   "metrics": {
-    "encrypted_share": 0.6963,
-    "missing_vlan": 0.5,
-    "one_way": 0.201
-   },
-   "check_seconds": 2.17,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s171_triple": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 1
-   },
-   "seconds": 4.05
-  },
-  {
-   "name": "s172_triple",
-   "expected": [
     "duplicates",
-    "encrypted_share",
+    "oversize",
     "tool_overload"
    ],
    "found": [
     "duplicates",
-    "encrypted_share",
+    "oversize",
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.2599,
-    "encrypted_share": 0.9305,
-    "tool_overload": 3.408
+    "duplicates": 0.0741,
+    "oversize": 0.0556,
+    "tool_overload": 3.62
    },
-   "check_seconds": 3.54,
+   "check_seconds": 2.31,
    "loop": {
     "fixes": [
      {
@@ -5160,100 +5275,102 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 6
+      "ports": 19
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
+      "fault": "oversize",
+      "action": "mtu_advice",
       "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s172_triple-port1": [
-      "encrypted_share"
-     ],
-     "s172_triple-port2": [
-      "encrypted_share"
-     ],
-     "s172_triple-port3": [
-      "encrypted_share"
-     ],
-     "s172_triple-port4": [
-      "encrypted_share"
-     ],
-     "s172_triple-port5": [
-      "encrypted_share"
-     ],
-     "s172_triple-port6": [
-      "encrypted_share"
+     "s171_triple-port1": [],
+     "s171_triple-port2": [],
+     "s171_triple-port3": [],
+     "s171_triple-port4": [],
+     "s171_triple-port5": [],
+     "s171_triple-port6": [],
+     "s171_triple-port7": [],
+     "s171_triple-port8": [],
+     "s171_triple-port9": [],
+     "s171_triple-port10": [],
+     "s171_triple-port11": [],
+     "s171_triple-port12": [],
+     "s171_triple-port13": [],
+     "s171_triple-port14": [],
+     "s171_triple-port15": [],
+     "s171_triple-port16": [],
+     "s171_triple-port17": [],
+     "s171_triple-port18": [],
+     "s171_triple-port19": [],
+     "s171_triple-group": [
+      "oversize"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 6
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 19
    },
-   "seconds": 30.02
+   "seconds": 64.46
+  },
+  {
+   "name": "s172_triple",
+   "expected": [
+    "missing_vlan",
+    "tool_overload",
+    "tunnel"
+   ],
+   "found": [
+    "missing_vlan",
+    "tool_overload",
+    "tunnel"
+   ],
+   "metrics": {
+    "missing_vlan": 1.0,
+    "tool_overload": 1.33,
+    "tunnel": 0.2788
+   },
+   "check_seconds": 5.29,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "missing_vlan",
+      "action": "vlan",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 2
+     }
+    ],
+    "after": {
+     "s172_triple-port1": [],
+     "s172_triple-port2": [],
+     "s172_triple-group": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 2
+   },
+   "seconds": 23.35
   },
   {
    "name": "s173_triple",
    "expected": [
     "duplicates",
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "found": [
-    "duplicates",
-    "encrypted_share",
-    "tool_overload"
-   ],
-   "metrics": {
-    "duplicates": 0.1849,
-    "encrypted_share": 0.864,
-    "tool_overload": 1.784
-   },
-   "check_seconds": 1.97,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s173_triple-port1": [
-      "encrypted_share"
-     ],
-     "s173_triple-port2": [
-      "encrypted_share"
-     ],
-     "s173_triple-port3": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 3
-   },
-   "seconds": 8.64
-  },
-  {
-   "name": "s174_triple",
-   "expected": [
-    "duplicates",
     "missing_vlan",
     "packet_drops"
    ],
@@ -5263,11 +5380,11 @@
     "packet_drops"
    ],
    "metrics": {
-    "duplicates": 0.1954,
-    "missing_vlan": 0.5,
-    "packet_drops": 0.03
+    "duplicates": 0.2539,
+    "missing_vlan": 1.0,
+    "packet_drops": 0.0103
    },
-   "check_seconds": 1.82,
+   "check_seconds": 3.33,
    "loop": {
     "fixes": [
      {
@@ -5287,38 +5404,239 @@
      }
     ],
     "after": {
-     "s174_triple": []
+     "s173_triple": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.85
+   "seconds": 6.53
+  },
+  {
+   "name": "s174_triple",
+   "expected": [
+    "one_way",
+    "oversize",
+    "packet_drops"
+   ],
+   "found": [
+    "one_way",
+    "oversize",
+    "packet_drops"
+   ],
+   "metrics": {
+    "one_way": 0.6754,
+    "oversize": 0.0428,
+    "packet_drops": 0.0191
+   },
+   "check_seconds": 2.37,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s174_triple": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.0
   },
   {
    "name": "s175_triple",
    "expected": [
-    "duplicates",
-    "encrypted_share",
-    "tool_overload"
+    "one_way",
+    "packet_drops",
+    "truncated"
    ],
    "found": [
-    "duplicates",
-    "encrypted_share",
-    "tool_overload"
+    "one_way",
+    "packet_drops",
+    "truncated"
    ],
    "metrics": {
-    "duplicates": 0.0845,
-    "encrypted_share": 0.9445,
-    "tool_overload": 3.402
+    "one_way": 0.2552,
+    "packet_drops": 0.0675,
+    "truncated": 0.1104
    },
-   "check_seconds": 2.39,
+   "check_seconds": 2.44,
    "loop": {
     "fixes": [
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s175_triple": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 5.1
+  },
+  {
+   "name": "s176_triple",
+   "expected": [
+    "missing_vlan",
+    "one_way",
+    "packet_drops"
+   ],
+   "found": [
+    "missing_vlan",
+    "one_way",
+    "packet_drops"
+   ],
+   "metrics": {
+    "missing_vlan": 1.0,
+    "one_way": 0.4028,
+    "packet_drops": 0.0224
+   },
+   "check_seconds": 2.69,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "missing_vlan",
+      "action": "vlan",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "one_way",
+      "action": "aggregate",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     }
+    ],
+    "after": {
+     "s176_triple": []
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.17
+  },
+  {
+   "name": "s177_triple",
+   "expected": [
+    "encrypted_share",
+    "tool_overload",
+    "tunnel"
+   ],
+   "found": [
+    "encrypted_share",
+    "tool_overload",
+    "tunnel"
+   ],
+   "metrics": {
+    "encrypted_share": 0.9939,
+    "tool_overload": 1.338,
+    "tunnel": 0.2811
+   },
+   "check_seconds": 5.44,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "tunnel",
+      "action": "strip_tunnel",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "tool_overload",
+      "action": "load_balance",
+      "status": "verified fixed",
+      "ports": 2
+     },
+     {
+      "fault": "encrypted_share",
+      "action": "decrypt_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s177_triple-port1": [],
+     "s177_triple-port2": [],
+     "s177_triple-group": [
+      "encrypted_share"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 2
+   },
+   "seconds": 23.32
+  },
+  {
+   "name": "s178_triple",
+   "expected": [
+    "encrypted_share",
+    "tool_overload",
+    "truncated"
+   ],
+   "found": [
+    "encrypted_share",
+    "tool_overload",
+    "truncated"
+   ],
+   "metrics": {
+    "encrypted_share": 0.9892,
+    "tool_overload": 1.71,
+    "truncated": 0.1903
+   },
+   "check_seconds": 4.19,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      },
      {
@@ -5334,203 +5652,42 @@
      }
     ],
     "after": {
-     "s175_triple-port1": [
-      "encrypted_share"
-     ],
-     "s175_triple-port2": [
-      "encrypted_share"
-     ],
-     "s175_triple-port3": [
-      "encrypted_share"
-     ],
-     "s175_triple-port4": [
-      "encrypted_share"
-     ],
-     "s175_triple-port5": [
+     "s178_triple-port1": [],
+     "s178_triple-port2": [],
+     "s178_triple-port3": [],
+     "s178_triple-port4": [],
+     "s178_triple-port5": [],
+     "s178_triple-group": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 5
    },
-   "seconds": 17.49
-  },
-  {
-   "name": "s176_triple",
-   "expected": [
-    "missing_vlan",
-    "packet_drops",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "packet_drops",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "packet_drops": 0.0488,
-    "tool_overload": 1.281
-   },
-   "check_seconds": 3.1,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
-     }
-    ],
-    "after": {
-     "s176_triple-port1": [],
-     "s176_triple-port2": [],
-     "s176_triple-port3": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 3
-   },
-   "seconds": 19.34
-  },
-  {
-   "name": "s177_triple",
-   "expected": [
-    "duplicates",
-    "packet_drops",
-    "tool_overload"
-   ],
-   "found": [
-    "duplicates",
-    "packet_drops",
-    "tool_overload"
-   ],
-   "metrics": {
-    "duplicates": 0.0842,
-    "packet_drops": 0.0828,
-    "tool_overload": 1.437
-   },
-   "check_seconds": 1.62,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "duplicates",
-      "action": "dedup",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 3
-     }
-    ],
-    "after": {
-     "s177_triple-port1": [],
-     "s177_triple-port2": [],
-     "s177_triple-port3": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 3
-   },
-   "seconds": 8.7
-  },
-  {
-   "name": "s178_triple",
-   "expected": [
-    "encrypted_share",
-    "one_way",
-    "tool_overload"
-   ],
-   "found": [
-    "encrypted_share",
-    "one_way",
-    "tool_overload"
-   ],
-   "metrics": {
-    "encrypted_share": 0.9351,
-    "one_way": 0.1906,
-    "tool_overload": 2.079
-   },
-   "check_seconds": 3.2,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 4
-     },
-     {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
-      "status": "advice (cannot be verified offline)"
-     }
-    ],
-    "after": {
-     "s178_triple-port1": [
-      "encrypted_share"
-     ],
-     "s178_triple-port2": [
-      "encrypted_share"
-     ],
-     "s178_triple-port3": [
-      "encrypted_share"
-     ],
-     "s178_triple-port4": [
-      "encrypted_share"
-     ]
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy except advice items",
-    "tool_ports_after": 4
-   },
-   "seconds": 18.92
+   "seconds": 18.12
   },
   {
    "name": "s179_triple",
    "expected": [
     "encrypted_share",
     "missing_vlan",
-    "one_way"
+    "packet_drops"
    ],
    "found": [
     "encrypted_share",
     "missing_vlan",
-    "one_way"
+    "packet_drops"
    ],
    "metrics": {
-    "encrypted_share": 0.9091,
+    "encrypted_share": 0.832,
     "missing_vlan": 0.5,
-    "one_way": 0.4041
+    "packet_drops": 0.0757
    },
-   "check_seconds": 2.08,
+   "check_seconds": 2.78,
    "loop": {
     "fixes": [
      {
@@ -5539,8 +5696,8 @@
       "status": "verified fixed"
      },
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      },
      {
@@ -5557,93 +5714,80 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.23
+   "seconds": 5.89
   },
   {
    "name": "s180_triple",
    "expected": [
-    "encrypted_share",
-    "packet_drops",
-    "tool_overload"
+    "duplicates",
+    "oversize",
+    "tunnel"
    ],
    "found": [
-    "encrypted_share",
-    "packet_drops",
-    "tool_overload"
+    "duplicates",
+    "oversize",
+    "tunnel"
    ],
    "metrics": {
-    "encrypted_share": 0.7283,
-    "packet_drops": 0.0405,
-    "tool_overload": 3.069
+    "duplicates": 0.1935,
+    "oversize": 0.1526,
+    "tunnel": 0.2826
    },
-   "check_seconds": 1.51,
+   "check_seconds": 2.78,
    "loop": {
     "fixes": [
      {
-      "fault": "packet_drops",
-      "action": "replace_span_with_tap",
+      "fault": "tunnel",
+      "action": "strip_tunnel",
       "status": "verified fixed"
      },
      {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 7
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
+      "fault": "oversize",
+      "action": "mtu_advice",
       "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s180_triple-port1": [
-      "encrypted_share"
-     ],
-     "s180_triple-port2": [
-      "encrypted_share"
-     ],
-     "s180_triple-port3": [],
-     "s180_triple-port4": [
-      "encrypted_share"
-     ],
-     "s180_triple-port5": [
-      "encrypted_share"
-     ],
-     "s180_triple-port6": [
-      "encrypted_share"
-     ],
-     "s180_triple-port7": [
-      "encrypted_share"
+     "s180_triple": [
+      "oversize"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 7
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
    },
-   "seconds": 17.27
+   "seconds": 7.39
   },
   {
    "name": "s181_triple",
    "expected": [
-    "encrypted_share",
     "one_way",
+    "oversize",
     "tool_overload"
    ],
    "found": [
-    "encrypted_share",
     "one_way",
+    "oversize",
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.7075,
-    "one_way": 0.4667,
-    "tool_overload": 2.744
+    "one_way": 0.2846,
+    "oversize": 0.1104,
+    "tool_overload": 3.422
    },
-   "check_seconds": 1.42,
+   "check_seconds": 2.12,
    "loop": {
     "fixes": [
      {
@@ -5655,79 +5799,72 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 11
+      "ports": 21
      },
      {
-      "fault": "encrypted_share",
-      "action": "decrypt_advice",
+      "fault": "oversize",
+      "action": "mtu_advice",
       "status": "advice (cannot be verified offline)"
      }
     ],
     "after": {
-     "s181_triple-port1": [
-      "encrypted_share"
-     ],
-     "s181_triple-port2": [
-      "encrypted_share"
-     ],
-     "s181_triple-port3": [
-      "encrypted_share"
-     ],
-     "s181_triple-port4": [
-      "encrypted_share"
-     ],
-     "s181_triple-port5": [
-      "encrypted_share"
-     ],
-     "s181_triple-port6": [
-      "encrypted_share"
-     ],
-     "s181_triple-port7": [
-      "encrypted_share"
-     ],
-     "s181_triple-port8": [
-      "encrypted_share"
-     ],
-     "s181_triple-port9": [
-      "encrypted_share"
-     ],
-     "s181_triple-port10": [
-      "encrypted_share"
-     ],
-     "s181_triple-port11": [
-      "encrypted_share"
+     "s181_triple-port1": [],
+     "s181_triple-port2": [],
+     "s181_triple-port3": [],
+     "s181_triple-port4": [],
+     "s181_triple-port5": [],
+     "s181_triple-port6": [],
+     "s181_triple-port7": [],
+     "s181_triple-port8": [],
+     "s181_triple-port9": [],
+     "s181_triple-port10": [],
+     "s181_triple-port11": [],
+     "s181_triple-port12": [],
+     "s181_triple-port13": [],
+     "s181_triple-port14": [],
+     "s181_triple-port15": [],
+     "s181_triple-port16": [],
+     "s181_triple-port17": [],
+     "s181_triple-port18": [],
+     "s181_triple-port19": [],
+     "s181_triple-port20": [],
+     "s181_triple-port21": [],
+     "s181_triple-group": [
+      "oversize"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 11
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 21
    },
-   "seconds": 29.8
+   "seconds": 60.31
   },
   {
    "name": "s182_triple",
    "expected": [
     "duplicates",
-    "missing_vlan",
+    "one_way",
     "tool_overload"
    ],
    "found": [
     "duplicates",
-    "missing_vlan",
+    "one_way",
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.2094,
-    "missing_vlan": 0.5,
-    "tool_overload": 3.143
+    "duplicates": 0.091,
+    "one_way": 0.5325,
+    "tool_overload": 1.534
    },
-   "check_seconds": 3.63,
+   "check_seconds": 4.05,
    "loop": {
     "fixes": [
      {
-      "fault": "missing_vlan",
-      "action": "vlan",
+      "fault": "one_way",
+      "action": "aggregate",
       "status": "verified fixed"
      },
      {
@@ -5747,43 +5884,46 @@
      "s182_triple-port2": [],
      "s182_triple-port3": [],
      "s182_triple-port4": [],
-     "s182_triple-port5": []
+     "s182_triple-port5": [],
+     "s182_triple-group": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 5
    },
-   "seconds": 20.6
+   "seconds": 18.84
   },
   {
    "name": "s183_triple",
    "expected": [
-    "duplicates",
     "encrypted_share",
-    "one_way"
+    "missing_vlan",
+    "truncated"
    ],
    "found": [
-    "duplicates",
     "encrypted_share",
-    "one_way"
+    "missing_vlan",
+    "truncated"
    ],
    "metrics": {
-    "duplicates": 0.2132,
-    "encrypted_share": 0.6345,
-    "one_way": 0.4587
+    "encrypted_share": 0.7484,
+    "missing_vlan": 1.0,
+    "truncated": 0.086
    },
-   "check_seconds": 1.34,
+   "check_seconds": 2.54,
    "loop": {
     "fixes": [
      {
-      "fault": "one_way",
-      "action": "aggregate",
+      "fault": "missing_vlan",
+      "action": "vlan",
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "truncated",
+      "action": "disable_slicing",
       "status": "verified fixed"
      },
      {
@@ -5800,28 +5940,80 @@
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.0
+   "seconds": 4.94
   },
   {
    "name": "s184_triple",
    "expected": [
     "duplicates",
-    "encrypted_share",
-    "missing_vlan"
+    "oversize",
+    "packet_drops"
    ],
    "found": [
     "duplicates",
-    "encrypted_share",
-    "missing_vlan"
+    "oversize",
+    "packet_drops"
    ],
    "metrics": {
-    "duplicates": 0.0803,
-    "encrypted_share": 0.7417,
-    "missing_vlan": 0.5
+    "duplicates": 0.1024,
+    "oversize": 0.0659,
+    "packet_drops": 0.0264
    },
-   "check_seconds": 1.97,
+   "check_seconds": 3.51,
+   "loop": {
+    "fixes": [
+     {
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "duplicates",
+      "action": "dedup",
+      "status": "verified fixed"
+     },
+     {
+      "fault": "oversize",
+      "action": "mtu_advice",
+      "status": "advice (cannot be verified offline)"
+     }
+    ],
+    "after": {
+     "s184_triple": [
+      "oversize"
+     ]
+    },
+    "new_faults": [],
+    "unresolved": [],
+    "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
+    "tool_ports_after": 1
+   },
+   "seconds": 6.53
+  },
+  {
+   "name": "s185_triple",
+   "expected": [
+    "encrypted_share",
+    "missing_vlan",
+    "packet_drops"
+   ],
+   "found": [
+    "encrypted_share",
+    "missing_vlan",
+    "packet_drops"
+   ],
+   "metrics": {
+    "encrypted_share": 0.8326,
+    "missing_vlan": 0.5,
+    "packet_drops": 0.0731
+   },
+   "check_seconds": 3.22,
    "loop": {
     "fixes": [
      {
@@ -5830,8 +6022,8 @@
       "status": "verified fixed"
      },
      {
-      "fault": "duplicates",
-      "action": "dedup",
+      "fault": "packet_drops",
+      "action": "replace_span_with_tap",
       "status": "verified fixed"
      },
      {
@@ -5841,171 +6033,105 @@
      }
     ],
     "after": {
-     "s184_triple": [
+     "s185_triple": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
+    "rounds": 1,
+    "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 3.65
-  },
-  {
-   "name": "s185_triple",
-   "expected": [
-    "missing_vlan",
-    "one_way",
-    "tool_overload"
-   ],
-   "found": [
-    "missing_vlan",
-    "one_way",
-    "tool_overload"
-   ],
-   "metrics": {
-    "missing_vlan": 0.5,
-    "one_way": 0.2095,
-    "tool_overload": 3.579
-   },
-   "check_seconds": 1.98,
-   "loop": {
-    "fixes": [
-     {
-      "fault": "missing_vlan",
-      "action": "vlan",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "one_way",
-      "action": "aggregate",
-      "status": "verified fixed"
-     },
-     {
-      "fault": "tool_overload",
-      "action": "load_balance",
-      "status": "verified fixed",
-      "ports": 10
-     }
-    ],
-    "after": {
-     "s185_triple-port1": [],
-     "s185_triple-port2": [],
-     "s185_triple-port3": [],
-     "s185_triple-port4": [],
-     "s185_triple-port5": [],
-     "s185_triple-port6": [],
-     "s185_triple-port7": [],
-     "s185_triple-port8": [],
-     "s185_triple-port9": [],
-     "s185_triple-port10": []
-    },
-    "new_faults": [],
-    "unresolved": [],
-    "result": "healthy",
-    "tool_ports_after": 10
-   },
-   "seconds": 29.01
+   "seconds": 6.44
   },
   {
    "name": "s186_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.51,
+   "check_seconds": 1.6,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.51
+   "seconds": 1.6
   },
   {
    "name": "s187_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 0.92,
+   "check_seconds": 2.07,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 0.92
+   "seconds": 2.07
   },
   {
    "name": "s188_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.38,
+   "check_seconds": 2.38,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.38
+   "seconds": 2.38
   },
   {
    "name": "s189_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.04,
+   "check_seconds": 1.64,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.04
+   "seconds": 1.64
   },
   {
    "name": "s190_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.37,
+   "check_seconds": 1.52,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.37
+   "seconds": 1.52
   },
   {
    "name": "s191_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.35,
+   "check_seconds": 1.77,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.35
+   "seconds": 1.77
   },
   {
    "name": "s192_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.53,
+   "check_seconds": 1.97,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.53
+   "seconds": 1.97
   },
   {
    "name": "s193_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.37,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.37
-  },
-  {
-   "name": "s194_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -6017,76 +6143,88 @@
    "seconds": 1.44
   },
   {
-   "name": "s195_tool_aware",
+   "name": "s194_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.2,
+   "check_seconds": 2.12,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.2
+   "seconds": 2.12
+  },
+  {
+   "name": "s195_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.89,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.89
   },
   {
    "name": "s196_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.2,
+   "check_seconds": 1.86,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.2
+   "seconds": 1.86
   },
   {
    "name": "s197_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.67,
+   "check_seconds": 1.69,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.67
+   "seconds": 1.69
   },
   {
    "name": "s198_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.13,
+   "check_seconds": 2.07,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.13
+   "seconds": 2.07
   },
   {
    "name": "s199_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.17,
+   "check_seconds": 2.07,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.17
+   "seconds": 2.07
   },
   {
    "name": "s200_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.06,
+   "check_seconds": 2.04,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.06
+   "seconds": 2.04
   }
  ]
 }

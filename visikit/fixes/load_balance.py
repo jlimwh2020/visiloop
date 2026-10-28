@@ -18,11 +18,21 @@ TARGET = 0.7
 MAX_PORTS = 32
 
 
+def _innermost_ip(pkt):
+    """The innermost IP header, so tunnelled traffic is spread by its real flows."""
+    ip, layer = None, pkt
+    while layer is not None and layer.__class__.__name__ != "NoPayload":
+        if isinstance(layer, IP):
+            ip = layer
+        layer = layer.payload
+    return ip
+
+
 def _port_of(pkt, n):
-    if IP not in pkt:
+    ip = _innermost_ip(pkt)
+    if ip is None:
         return 0
-    ip = pkt[IP]
-    l4 = pkt[TCP] if TCP in pkt else pkt[UDP] if UDP in pkt else None
+    l4 = ip[TCP] if TCP in ip else ip[UDP] if UDP in ip else None
     sp, dp = (l4.sport, l4.dport) if l4 else (0, 0)
     a, b = sorted([(ip.src, sp), (ip.dst, dp)])
     return zlib.crc32(f"{a}{b}{ip.proto}".encode()) % n

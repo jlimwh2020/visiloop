@@ -22,7 +22,8 @@ BASE_URL = "https://api.meta.ai/v1"
 PRICE_IN, PRICE_OUT = 1.25 / 1e6, 4.25 / 1e6       # US$ per token (muse-spark)
 MAX_TURNS = 6
 
-FIX_ACTIONS = ["dedup", "aggregate", "replace_span_with_tap", "load_balance", "filter", "slice", "vlan", "decrypt_advice", "none"]
+FIX_ACTIONS = ["dedup", "aggregate", "replace_span_with_tap", "load_balance", "filter", "slice", "vlan", "decrypt_advice",
+               "disable_slicing", "strip_tunnel", "mtu_advice", "none"]
 
 SYSTEM = (
     "You are VisiLoop, a network visibility assistant used by the network owner's own "
@@ -56,7 +57,7 @@ def _tool_specs(detectors):
         "type": "function",
         "function": {
             "name": "get_tool_profile",
-            "description": "What the monitoring tool on this feed needs: directions, payload, port speed, VLANs, encryption tolerance.",
+            "description": "What the monitoring tool on this feed needs: directions, payload, port speed, VLANs, encryption tolerance, largest frame.",
             "parameters": {"type": "object", "properties": {}},
         },
     })
@@ -90,7 +91,8 @@ def diagnose(ctx: FeedContext, client=None, model: str = MODEL, verbose: bool = 
             p = ctx.profile
             return {"tool_type": p.tool_type, "needs_both_directions": p.needs_both_directions,
                     "needs_full_payload": p.needs_full_payload, "port_speed_gbps": p.max_rate_gbps,
-                    "required_vlans": p.required_vlans, "max_encrypted_share": p.max_encrypted_share}
+                    "required_vlans": p.required_vlans, "max_encrypted_share": p.max_encrypted_share,
+                    "max_frame_bytes": p.max_frame_bytes}
         fault = name.removeprefix("check_")
         if fault not in detectors:
             return {"error": f"unknown check {name}"}

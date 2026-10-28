@@ -30,11 +30,14 @@ HAS_KEY = bool(os.environ.get("MODEL_API_KEY"))
 NICE = {
     "duplicates": "Duplicates", "one_way": "One-way traffic", "packet_drops": "Packet drops",
     "tool_overload": "Tool overload", "encrypted_share": "Encrypted share", "missing_vlan": "Missing VLANs",
+    "truncated": "Packet slicing", "tunnel": "Tunnel headers", "oversize": "Oversize frames",
 }
 ACTION_NICE = {
     "dedup": "Enable deduplication", "aggregate": "Aggregate both TAP legs",
     "replace_span_with_tap": "Replace SPAN with a passive TAP", "load_balance": "Load balance across tool ports",
     "vlan": "Preserve VLAN tags", "decrypt_advice": "Add a decryption point",
+    "disable_slicing": "Turn off packet slicing", "strip_tunnel": "Strip tunnel headers",
+    "mtu_advice": "Raise the MTU to 9216",
 }
 
 st.set_page_config(page_title="VisiLoop", page_icon="🔁", layout="wide")
@@ -197,15 +200,17 @@ else:
 # ---- 2. Diagnose ----
 st.header("2 · Diagnose")
 detectors, _ = load_plugins()
-cols = st.columns(len(detectors))
 by_fault = {f["fault"]: f for f in before}
-for col, name in zip(cols, sorted(detectors)):
-    f = by_fault.get(name)
-    with col:
-        if f:
-            st.error(f"**{NICE.get(name, name)}**\n\n{f['metric']:.1%} (limit {f['threshold']:.0%})")
-        else:
-            st.success(f"**{NICE.get(name, name)}**\n\nhealthy")
+PER_ROW = 5
+names = sorted(detectors)
+for row in range(0, len(names), PER_ROW):
+    for col, name in zip(st.columns(PER_ROW), names[row:row + PER_ROW]):
+        f = by_fault.get(name)
+        with col:
+            if f:
+                st.error(f"**{NICE.get(name, name)}**\n\n{f['metric']:.1%} (limit {f['threshold']:.0%})")
+            else:
+                st.success(f"**{NICE.get(name, name)}**\n\nhealthy")
 
 if not before:
     st.success(f"This {tool} receives complete, correct traffic. Nothing to fix.")
@@ -260,13 +265,17 @@ with c1:
                  width="stretch")
 with c2:
     for fx in report["fixes"]:
-        st.markdown(f"{status_icon.get(fx['status'], '')} **{ACTION_NICE.get(fx['action'], fx['action'])}**: {fx['status']}")
+        rnd = f" (round {fx['round']})" if report.get("rounds", 1) > 1 else ""
+        st.markdown(f"{status_icon.get(fx['status'], '')} **{ACTION_NICE.get(fx['action'], fx['action'])}**{rnd}: {fx['status']}")
+    if report.get("revealed"):
+        st.info("The first fixes revealed " + ", ".join(NICE.get(f, f).lower() for f in report["revealed"])
+                + ", which the original feed was hiding, so VisiLoop planned another round of fixes.")
     result = report["result"]
     if result == "healthy":
         st.success(f"Every fault is fixed. The {tool} now receives complete, correct traffic.")
     elif result.startswith("healthy except"):
-        st.warning("All simulated faults are fixed. Remaining items are advice that needs the customer's "
-                   "decryption setup to verify.")
+        st.warning("All simulated faults are fixed. Remaining items are advice that needs a change on the "
+                   "customer's side to verify (a decryption point or the tool's MTU).")
     else:
         st.error("Some faults remain after the fixes. Review the details below.")
     st.markdown(f"**Tool ports after the fix:** {report['tool_ports_after']}")
@@ -281,7 +290,8 @@ with c2:
         elif change > 0:
             st.caption("More traffic because the tool now receives what it was missing (e.g. the second "
                        "direction or dropped packets).")
-    after_rows = [{"Tool port": port, "Faults found": ", ".join(NICE.get(f["fault"], f["fault"]) for f in fs) or "none"}
+    after_rows = [{"Tool port": port.replace("-group", " (whole tool group)"),
+                   "Faults found": ", ".join(NICE.get(f["fault"], f["fault"]) for f in fs) or "none"}
                   for port, fs in report["after"].items()]
     st.dataframe(after_rows, hide_index=True, width="stretch")
 
