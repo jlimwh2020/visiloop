@@ -90,6 +90,32 @@ both directions, so no broker change was needed. It was right: our one-way check
 check tool-aware, added SIEM one-way traps to the suite (v2), and Muse Spark scored 200/200.
 v1 results: [bench/suite/results/RESULTS_v1.md](bench/suite/results/RESULTS_v1.md).
 
+### Diagram stress test: 36 diagrams, 9 styles (28 Oct 2026)
+
+![Diagram styles in the stress test](docs/diagram_styles.png)
+
+Generated network diagrams with an exact answer key (536 devices, 71 capture points, 114 tools), drawn as clean
+vendor-style diagrams, black-and-white "Visio" drawings, mixed shapes, dark themes, dense 22-device diagrams,
+organic layouts, handwritten whiteboard photos and crooked scans. Mirror directions are written in varied wording
+("ingress only", "RX+TX", "mirror: outbound only"), on the mirror line or inside the device label.
+Full details: [bench/diagrams/RESULTS.md](bench/diagrams/RESULTS.md).
+
+| What | Result |
+|---|---|
+| SAM 3.1 devices found | **534/536**, **0** false boxes |
+| Muse Spark labels read | **534/534** |
+| Capture-point mirror direction | **69/69** correct wherever SAM found the capture point |
+| Tool port speeds | **114/114** |
+| Diagrams ready to pin findings on | **34/36**; the other 2 warn by name about the one capture point SAM could not locate |
+| Cost | **US$2.96** for the whole test, including the comparison runs |
+
+**The test changed the product.** With VisiLoop's original two SAM prompts, 98% of devices were found; every miss
+was an unusual shape (hexagons, trapezoids, parallelograms). Comparing nine prompts showed that adding just
+"hexagon" lifts this to 99.6% with no false boxes, so it is now the default. The last two misses, SPAN sessions
+drawn as parallelograms, were found by no prompt, so Muse Spark now also lists any device it can see that has no
+tag, and the dashboard warns: "SPAN-2 is on the diagram but SAM 3.1 did not locate it". Both misses were flagged,
+with no false flags. Nothing is missed silently.
+
 ## Quick start
 
 Requirements: Python 3.11+, [Wireshark](https://www.wireshark.org/) with TShark, and optionally Suricata
