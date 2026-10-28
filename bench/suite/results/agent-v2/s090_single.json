@@ -1,0 +1,60 @@
+{
+ "feed": "s090_single",
+ "status": "degraded",
+ "summary": "Feed s090_single is degraded due to 94.2% encrypted traffic exceeding NDR tolerance of 90%. All other checks (duplicates, one-way, packet drops, tool overload, VLANs) are healthy, but payload visibility is limited to metadata.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.2% of bytes are TLS-encrypted and forwarded as-is by the packet broker without decryption or key sharing. NDR is receiving ciphertext rather than cleartext payload, typical when HTTPS/TLS traffic is mirrored directly without an SSL visibility appliance.",
+   "impact_on_tool": "This NDR requires full payload inspection and tolerates up to 90% encrypted traffic. At 94.2% encrypted, deep packet inspection, signature matching, and anomaly detection are blinded to content, reducing detection coverage for C2, exfiltration and lateral movement to flow metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "ssl_visibility_or_key_share",
+     "location": "packet_broker_egress_to_ndr"
+    },
+    "why": "Decrypting relevant TLS sessions (or providing session keys/metadata via an SSL visibility solution) before the NDR will restore payload visibility and bring encrypted share below 90% threshold, enabling full NDR detection without violating privacy/policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    8,
+    9,
+    11,
+    12,
+    14,
+    17,
+    20,
+    22,
+    23,
+    24,
+    25,
+    27,
+    30,
+    33,
+    35,
+    36,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2817,
+  "tokens_out": 1935,
+  "cost_usd": 0.01175,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-28"
+ }
+}

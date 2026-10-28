@@ -1,0 +1,101 @@
+{
+ "feed": "s120_double",
+ "status": "degraded",
+ "summary": "Feed s120_double to NDR is degraded: VLAN 20 traffic is missing/stripped (50% untagged) and encrypted share 94.2% exceeds NDR tolerance of 90%. No duplicates, one-way, drops, or overload detected.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP ingress is stripping 802.1Q tags or not trunking VLAN 20. 50% of packets arrive untagged and VLAN 20 is never observed, while NDR requires VLANs 10 and 20 for segmentation visibility.",
+   "impact_on_tool": "NDR cannot segment or correlate traffic by VLAN, misses lateral movement and policy violations in VLAN 20, and loses detection coverage for that tenant/segment.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "trunk_and_retain_tags"
+    },
+    "why": "Retain 802.1Q tags end-to-end from TAP/SPAN through packet broker to NDR so VLAN 20 is visible and filtering/correlation works."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    22,
+    23,
+    25,
+    26,
+    29,
+    32,
+    33,
+    34,
+    36,
+    37
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.2% of bytes are TLS/encrypted, above the NDR's 90% tolerance. No inline decryption is present, so payload is opaque to the NDR which needs full payload for detection.",
+   "impact_on_tool": "NDR is limited to metadata/flow analysis only; cannot perform deep payload inspection, reducing detection of C2, exfiltration, and exploit payloads inside encrypted sessions.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "out_of_band",
+     "method": "centralized_ssl_visibility",
+     "target_encrypted_share_below": 0.9
+    },
+    "why": "Decrypt once at the packet broker visibility layer and feed cleartext copy to NDR, or selectively bypass trusted high-volume encrypted flows, to bring inspectable traffic within NDR's effective range without breaking privacy/compliance."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    21,
+    22,
+    23,
+    25,
+    26,
+    29,
+    30,
+    32,
+    33
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2949,
+  "tokens_out": 1841,
+  "cost_usd": 0.01151,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

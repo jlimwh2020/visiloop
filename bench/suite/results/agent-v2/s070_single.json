@@ -1,0 +1,43 @@
+{
+ "feed": "s070_single",
+ "status": "degraded",
+ "summary": "SIEM feed s070_single is overloaded: microbursts peak at 3.73 Gbps vs 1 Gbps port (373% capacity, 3 intervals) causing ingress drops. All other checks (duplicates, encryption, VLANs, one-way, drops) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker forwards unsliced, unfiltered aggregate at full packet size with no load-balancing or rate-shaping. 1ms bursts hit 3.73 Gbps, exceeding the SIEM's 1 Gbps port capacity, causing buffer overrun and tail drops at the tool ingress.",
+   "impact_on_tool": "SIEM randomly drops packets during bursts, missing flow/event records and creating gaps in correlation, alerting and forensic coverage. Sustained 373% overload guarantees incomplete visibility.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "snaplen": 512,
+     "preserve": "headers-metadata"
+    },
+    "why": "SIEM profile needs_full_payload=false and max_encrypted_share=1.0, so it only needs headers/metadata for correlation. Slicing to ~512B retains L2-L7 headers while cutting burst throughput well below 1 Gbps without new hardware. If full payload retention is required, use load_balance across 4x1G ports with 5-tuple hash instead."
+   },
+   "evidence_frames": [
+    1,
+    858,
+    1853
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2791,
+  "tokens_out": 3067,
+  "cost_usd": 0.01652,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-28"
+ }
+}

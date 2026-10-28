@@ -1,0 +1,97 @@
+{
+ "feed": "s182_triple",
+ "status": "degraded",
+ "summary": "Feed s182_triple is degraded: 20.9% duplicates, VLAN 20 missing (50% untagged), and 31.43 Gbps microbursts overloading the 10 Gbps NDR port (314% capacity).",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Traffic is duplicated before the NDR - likely overlapping SPAN/mirror sessions or multiple TAPs aggregated to one broker output without deduplication, causing the same packets to be delivered twice.",
+   "impact_on_tool": "NDR wastes CPU/storage on 20.9% duplicate packets (1994/9522), inflates flow counts, confuses TCP state tracking and can cause false positives/missed detections.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet broker deduplication to remove duplicates before the NDR and restore accurate counts and detection fidelity."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is stripping 802.1Q tags or not trunking VLAN 20 - 50% of packets arrive untagged and required VLAN 20 is never observed despite NDR requiring VLANs 10 and 20.",
+   "impact_on_tool": "NDR is blind to VLAN 20 traffic and loses segmentation context for untagged traffic, breaking VLAN-aware detection rules and reducing coverage for required VLANs.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "restore_tags": true,
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Configure broker/SPAN trunk to preserve and forward 802.1Q tags for VLANs 10 and 20 so NDR receives complete segmented traffic."
+   },
+   "evidence_frames": [
+    2,
+    3,
+    7,
+    8,
+    9,
+    10,
+    12,
+    13,
+    16,
+    17,
+    24,
+    26,
+    27,
+    30,
+    31,
+    32,
+    33,
+    34,
+    36,
+    37
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst of 31.43 Gbps in a 1 ms interval exceeds the NDR's 10 Gbps port capacity by 314% - single tool port is undersized for the aggregated feed with no load balancing or buffering.",
+   "impact_on_tool": "NDR port buffers overflow during bursts causing tool-side drops and incomplete flows, leading to missed detections even though broker shows no drops yet.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 4,
+     "capacity_gbps": 10
+    },
+    "why": "Load-balance traffic across multiple NDR ports/instances with flow-aware hashing to absorb 31+ Gbps bursts and prevent tool overload while preserving both directions per flow."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2974,
+  "tokens_out": 2535,
+  "cost_usd": 0.01449,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "feed": "s032_mild",
+ "status": "healthy",
+ "summary": "All 6 visibility checks passed for NDR feed s032_mild. Tool receives complete, correct traffic: bidirectional flows intact, full payload preserved, VLANs 10 and 20 present, no duplicates, no packet drops, no overload (10G port within limits), and encrypted share below 0.9 threshold. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2698,
+  "tokens_out": 993,
+  "cost_usd": 0.00759,
+  "seconds": 7.0,
+  "recorded_at": "2026-10-28"
+ }
+}

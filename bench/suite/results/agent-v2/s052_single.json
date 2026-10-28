@@ -1,0 +1,59 @@
+{
+ "feed": "s052_single",
+ "status": "degraded",
+ "summary": "Feed s052_single to SIEM is degraded due to 2.1% packet drops (52 of 2419 TCP packets) exceeding 1% threshold. No duplicates, one-way, VLAN, encryption or tool overload issues detected.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream loss before the SIEM - 2.1% of TCP packets show gaps/retransmissions indicating SPAN oversubscription or packet broker buffer overflow. Tool overload check is healthy and port is 1Gbps, so drops occur at the TAP/SPAN or broker aggregation stage, not at the tool itself.",
+   "impact_on_tool": "SIEM receives incomplete flows/events; correlation, alerting and forensic timeline have gaps, increasing risk of missed detections even though SIEM does not require full payload or bidirectional traffic.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "snaplen": 256
+    },
+    "why": "SIEM needs_full_payload=false, so truncating packets to headers/metadata (e.g., 256 bytes) on the packet broker preserves detection-relevant data while sharply reducing bandwidth and buffer pressure to eliminate the 2.1% drops."
+   },
+   "evidence_frames": [
+    23,
+    25,
+    106,
+    108,
+    329,
+    462,
+    464,
+    483,
+    486,
+    573,
+    574,
+    629,
+    630,
+    953,
+    954,
+    977,
+    979,
+    1009,
+    1010,
+    1047
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2826,
+  "tokens_out": 2633,
+  "cost_usd": 0.01472,
+  "seconds": 14.5,
+  "recorded_at": "2026-10-28"
+ }
+}

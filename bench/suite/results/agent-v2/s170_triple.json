@@ -1,0 +1,128 @@
+{
+ "feed": "s170_triple",
+ "status": "degraded",
+ "summary": "Feed s170_triple is degraded: 3 faults detected. VLAN 20 is completely missing (50% untagged), NDR 10G port is severely oversubscribed with 24.73 Gbps bursts (247% capacity), and 94.7% encrypted traffic exceeds NDR 90% tolerance. NDR requires both directions and full payload with VLANs 10,20.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker egress is stripping 802.1Q tags or ingress trunk not configured to forward VLAN 20. 50% of packets arrive untagged and VLAN 20 is never observed, while NDR requires VLANs 10 and 20. Classic broker VLAN passthrough misconfiguration.",
+   "impact_on_tool": "NDR loses segmentation context for VLAN 20, cannot attribute detections to correct tenant/segment, misses lateral movement and VLAN-hopping attacks; 50% of traffic lacks classification.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough",
+     "check_trunk_membership": true
+    },
+    "why": "Restore end-to-end 802.1Q preservation so NDR receives both required VLANs for correct policy and detection correlation."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    14,
+    18,
+    19,
+    21,
+    22,
+    24,
+    25,
+    28,
+    31,
+    33,
+    36,
+    37,
+    38,
+    40
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps NDR port fed by aggregated/bursty traffic peaking at 24.73 Gbps in 1ms burst (247% of capacity). No load balancing or burst buffering on packet broker, so egress oversubscribes tool port.",
+   "impact_on_tool": "NDR drops packets during bursts, breaks TCP reassembly and flow reconstruction, causes missed detections and false negatives exactly when traffic spikes (often during attacks).",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 3,
+     "port_speed_gbps": 10,
+     "burst_buffer": true,
+     "aggregate_burst_cap_gbps": 25
+    },
+    "why": "Distribute bursts across 3x10G NDR cluster members with 5-tuple hashing to keep per-port load <80% and prevent drops while preserving flow stickiness."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.7% of bytes are encrypted (TLS) vs NDR tolerance of 90%. Traffic is predominantly encrypted without selective decryption or enriched metadata, and NDR needs full payload.",
+   "impact_on_tool": "NDR cannot inspect payload for signatures, exploits, or C2; detection degrades to metadata-only (JA3, SNI, flow stats), reducing coverage for encrypted attacks.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "out_of_band_selective_decryption",
+     "decrypt_location": "packet_broker_or_proxy",
+     "add_metadata": [
+      "ja3",
+      "ja4",
+      "sni",
+      "tls_version"
+     ],
+     "privacy_bypass": true
+    },
+    "why": "Decrypt selectively or enrich with TLS metadata before NDR so it regains payload visibility without exceeding privacy/compliance limits."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    18,
+    19,
+    21,
+    22,
+    24,
+    25,
+    28,
+    33,
+    35,
+    36,
+    37,
+    38
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3036,
+  "tokens_out": 2843,
+  "cost_usd": 0.01588,
+  "seconds": 13.8,
+  "recorded_at": "2026-10-28"
+ }
+}

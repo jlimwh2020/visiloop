@@ -1,0 +1,64 @@
+{
+ "feed": "s055_single",
+ "status": "degraded",
+ "summary": "Feed s055_single to IDS is degraded: required VLANs 10 and 20 are completely absent (100% of packets untagged) while duplicates, one-way, drops, overload and encrypted share are healthy. IDS lacks segmentation context for detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Upstream TAP/SPAN or packet broker is stripping 802.1Q tags before delivery to the IDS. All 20 sampled frames are untagged instead of carrying VLAN 10/20, indicating trunk configured as access, SPAN 'vlan strip' or broker policy removing tags.",
+   "impact_on_tool": "IDS needs VLANs 10 and 20 for segmentation and policy context and requires full payload with both directions. Without tags it cannot attribute traffic to correct tenant/segment, misses VLAN-specific detections and lateral movement between VLAN 10/20, reducing detection coverage to effectively blind for those segments.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough"
+    },
+    "why": "Preserving/restoring 802.1Q tags end-to-end from tap through packet broker to IDS restores required VLAN 10/20 visibility so IDS can apply correct policies and detect cross-VLAN attacks."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2821,
+  "tokens_out": 1493,
+  "cost_usd": 0.00987,
+  "seconds": 7.3,
+  "recorded_at": "2026-10-28"
+ }
+}

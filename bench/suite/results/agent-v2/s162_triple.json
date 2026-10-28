@@ -1,0 +1,144 @@
+{
+ "feed": "s162_triple",
+ "status": "degraded",
+ "summary": "Feed s162_triple is degraded for NDR: 6.8% TCP packet loss, VLAN 20 completely missing (49% untagged), and 92.7% encrypted traffic above 90% tolerance. NDR will miss reassembled flows, blind to VLAN 20 segment, and limited to metadata-only detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 never appears and 49% of packets arrive untagged - packet broker or SPAN/TAP trunk is stripping 802.1Q tags or forwarding only native VLAN. Likely broker egress set to 'strip tags' or SPAN trunk not configured to forward VLANs 10 and 20.",
+   "impact_on_tool": "NDR has zero visibility into VLAN 20 segment and cannot apply VLAN-aware policies; misses lateral movement and segmentation violations, 50% coverage gap for required VLANs.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "check_broker_egress": "disable tag stripping",
+     "verify_trunk": "allow VLANs 10,20 on TAP/SPAN and broker ingress"
+    },
+    "why": "Restore 802.1Q tags end-to-end so NDR receives both required VLANs 10 and 20 for complete segmentation-aware detection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    22,
+    23,
+    24,
+    26,
+    28,
+    30,
+    31,
+    32,
+    33,
+    35,
+    37
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "6.8% of TCP packets (186/2716) show gaps/retransmissions indicating upstream loss, not tool overload (tool ingress healthy). Classic SPAN oversubscription/buffer exhaustion or packet broker egress congestion dropping packets before NDR.",
+   "impact_on_tool": "NDR cannot reliably reassemble TCP streams - 6.8% missing data causes broken flows, missed signatures, failed file extraction and increased false negatives; needs full payload and both directions.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_source": "SPAN",
+     "with": "passive TAP",
+     "add_broker_buffer": true,
+     "verify_broker_egress_drops": true
+    },
+    "why": "TAPs do not drop under load like SPAN; eliminates buffer drops and restores complete TCP streams for NDR reassembly and detection."
+   },
+   "evidence_frames": [
+    107,
+    109,
+    116,
+    121,
+    150,
+    152,
+    170,
+    171,
+    190,
+    191,
+    206,
+    207,
+    222,
+    223,
+    315,
+    316,
+    318,
+    320,
+    373,
+    374
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "92.75% of bytes are encrypted, exceeding NDR's 90% tolerance. Traffic is predominantly TLS 1.2/1.3 with no decryption in path, so NDR sees only handshakes/metadata.",
+   "impact_on_tool": "NDR is blind to payload - cannot do deep packet inspection, JA3, file extraction or C2 detection on 93% of traffic; detection reduced to flow metadata and anomalies only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "out-of-band SSL visibility with key sharing or passive decryption",
+     "protocols": [
+      "TLS1.2",
+      "TLS1.3"
+     ],
+     "policy": "decrypt selectively or forward keys to NDR"
+    },
+    "why": "Provide cleartext to NDR where policy allows; without decryption NDR cannot inspect 93% encrypted payload despite needing full payload."
+   },
+   "evidence_frames": [
+    18,
+    20,
+    22,
+    23,
+    24,
+    26,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    35,
+    37,
+    38,
+    39,
+    44,
+    45,
+    49,
+    51
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3074,
+  "tokens_out": 2967,
+  "cost_usd": 0.01645,
+  "seconds": 14.8,
+  "recorded_at": "2026-10-28"
+ }
+}

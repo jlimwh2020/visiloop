@@ -1,0 +1,44 @@
+{
+ "feed": "s091_single",
+ "status": "degraded",
+ "summary": "Feed s091_single is degraded: SIEM port (1 Gbps) is severely overloaded by microbursts up to 4.23 Gbps (423% capacity). All other visibility checks (duplicates, encryption, VLAN, one-way, drops) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding aggregated/bursty traffic directly to a single 1 Gbps SIEM ingest port without shaping or load distribution. 1 ms microbursts peak at 4.23 Gbps, exceeding the physical port capacity by 4.2x across 3 intervals.",
+   "impact_on_tool": "SIEM NIC buffer overruns and drops excess packets during bursts. Results in missing flow/event records, incomplete correlation, and blind spots for detection despite SIEM not requiring full payload or bidirectional traffic.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "additional_ports": 4,
+     "target_capacity_gbps": 5
+    },
+    "why": "Distribute microbursts across a SIEM ingest pool (or add packet broker egress ports) so aggregate capacity exceeds 4.23 Gbps peak. SIEM tolerates flow-level distribution (needs_both_directions=false) and 5-tuple hashing preserves flow coherence. Alternative/complementary: enable slicing/filtering since SIEM needs_full_payload=false to further reduce bps."
+   },
+   "evidence_frames": [
+    1,
+    1008,
+    2116
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2778,
+  "tokens_out": 1978,
+  "cost_usd": 0.01188,
+  "seconds": 12.7,
+  "recorded_at": "2026-10-28"
+ }
+}

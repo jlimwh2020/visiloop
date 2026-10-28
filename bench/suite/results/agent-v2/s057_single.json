@@ -1,0 +1,57 @@
+{
+ "feed": "s057_single",
+ "status": "degraded",
+ "summary": "Feed s057_single to NDR is degraded due to packet loss: 2.4% of TCP packets (38/1553) show missing data, exceeding 1% threshold. All other checks (duplicates, one-way, VLAN, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream SPAN/mirror or packet broker egress dropping packets under burst load. SPAN buffers overflow under congestion and broker egress oversubscription discards packets before delivery. Tool overload is healthy, so loss is in the visibility path, not at the NDR ingress policer.",
+   "impact_on_tool": "NDR requires both directions and full payload for TCP reassembly and detection. 2.4% gaps break stream reassembly, cause missed signatures/anomalies and false negatives, directly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Passive TAP provides lossless line-rate copy unlike SPAN which drops under load. Replacing SPAN with TAP (or TAP aggregation to broker) eliminates mirror-induced drops and ensures complete traffic to the NDR. If TAP already present, investigate broker egress drops/buffer and consider load_balance or selective filter."
+   },
+   "evidence_frames": [
+    71,
+    72,
+    101,
+    103,
+    110,
+    111,
+    272,
+    273,
+    745,
+    746,
+    775,
+    776,
+    811,
+    812,
+    901,
+    902,
+    951,
+    952,
+    998,
+    1003
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2815,
+  "tokens_out": 2149,
+  "cost_usd": 0.01265,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

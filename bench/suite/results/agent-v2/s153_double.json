@@ -1,0 +1,75 @@
+{
+ "feed": "s153_double",
+ "status": "degraded",
+ "summary": "Feed s153_double is degraded: 23.2% duplicate packets and 44.0% one-way TCP sessions prevent IDS from reassembling flows and detecting attacks reliably.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Same packets delivered twice via overlapping SPAN/TAP feeds aggregated to the same tool port without broker deduplication - broker is forwarding both sides of the link or duplicate SPAN copies.",
+   "impact_on_tool": "IDS wastes ~23% of capacity processing duplicates, inflates counts, causes state confusion and false positives, and risks missing real attacks due to resource exhaustion.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet broker deduplication to drop identical packets within a short window before delivery, restoring accurate traffic volume and freeing IDS capacity for real detection."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions reaches the IDS - likely asymmetric routing, single-direction SPAN (Tx-only), or broker load-balancing splitting client/server directions to different tool ports without flow-aware aggregation.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and signature matching; with 51 of 116 sessions (44%) one-way, it cannot reconstruct flows and will miss exploits, C2, and exfiltration.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash": "5-tuple"
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow to the same IDS port using 5-tuple flow-aware hashing, ensuring complete bidirectional sessions for detection."
+   },
+   "evidence_frames": [
+    4,
+    17,
+    98,
+    171,
+    258,
+    280,
+    284,
+    320,
+    342,
+    371,
+    390,
+    454,
+    485,
+    489,
+    530,
+    546,
+    559,
+    641,
+    651,
+    677
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2876,
+  "tokens_out": 2152,
+  "cost_usd": 0.01274,
+  "seconds": 9.3,
+  "recorded_at": "2026-10-28"
+ }
+}

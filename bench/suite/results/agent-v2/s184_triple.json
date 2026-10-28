@@ -1,0 +1,122 @@
+{
+ "feed": "s184_triple",
+ "status": "degraded",
+ "summary": "Feed s184_triple to IDS is degraded with 3 faults: VLAN 20 missing (high), high encrypted share above IDS tolerance (medium), and duplicate packets (medium). No packet drops, one-way, or overload detected.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen and 50% of packets are untagged. Packet broker or SPAN trunk is stripping 802.1Q tags or not forwarding VLAN 20 to this IDS tool port, despite IDS requiring VLANs 10 and 20.",
+   "impact_on_tool": "IDS has zero visibility into VLAN 20 segment; attacks or lateral movement on that VLAN will be missed, creating a major detection coverage gap.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      20
+     ],
+     "preserve_tags": true,
+     "forward_trunk_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Restore and preserve 802.1Q tags for VLANs 10 and 20 through the broker to the IDS so policy and detection for VLAN 20 is restored."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    14,
+    15,
+    16,
+    17,
+    18,
+    21,
+    22,
+    23,
+    24,
+    29,
+    32,
+    35,
+    36,
+    38
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "74% of bytes are encrypted, exceeding the IDS tolerance of 60%. Traffic is predominantly TLS/encrypted and is being forwarded without selective decryption or filtering at the packet broker.",
+   "impact_on_tool": "IDS requires full payload inspection but is blind to most traffic; encrypted payloads cannot be inspected for exploits/malware, sharply reducing detection efficacy and wasting IDS cycles.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.7417,
+     "tolerance": 0.6,
+     "options": [
+      "decrypt_relevant_TLS_at_broker",
+      "filter_known_encrypted_bulk",
+      "route_to_decryption_zone"
+     ]
+    },
+    "why": "IDS cannot detect threats inside encryption; decrypt relevant flows at broker/proxy or filter bulk encrypted traffic so IDS receives inspectable payload within its 60% tolerance."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    14,
+    16,
+    21,
+    32,
+    40,
+    42,
+    43,
+    44,
+    45,
+    46,
+    48,
+    49,
+    52,
+    57
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "8.0% duplicates (221 of 2752 packets) indicates overlapping SPAN/mirror sources or dual TAP feeds aggregated without deduplication on the packet broker, sending the same packet twice to the IDS.",
+   "impact_on_tool": "IDS wastes CPU/storage re-analyzing identical packets, inflates event counts, can cause false correlation and masks true traffic rates; at 8% it exceeds 5% threshold.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to deliver only unique packets to the 1G IDS port, freeing capacity for real detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3005,
+  "tokens_out": 2241,
+  "cost_usd": 0.01328,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

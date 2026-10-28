@@ -1,0 +1,39 @@
+{
+ "feed": "s056_single",
+ "status": "degraded",
+ "summary": "IDS feed s056_single is degraded due to excessive duplicate packets (23.2% - 1006/4334) exceeding 5% threshold. All other visibility checks (one-way, drops, overload, encryption, VLAN) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating the same traffic from multiple SPAN/mirror or TAP paths without deduplication, delivering identical packets twice to the IDS tool port. 23.2% duplicate rate indicates overlapping capture points or looped aggregation.",
+   "impact_on_tool": "IDS wastes CPU and memory processing 23% duplicate packets, inflates flow tables and signature matches, creates duplicate alerts/noise, and risks missing real attacks due to resource exhaustion despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker-level deduplication within a short time window to drop identical packets before delivery to the 1Gbps IDS port, eliminating wasted processing and restoring accurate detection coverage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2747,
+  "tokens_out": 1495,
+  "cost_usd": 0.00979,
+  "seconds": 9.1,
+  "recorded_at": "2026-10-28"
+ }
+}

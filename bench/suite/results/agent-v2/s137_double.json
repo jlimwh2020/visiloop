@@ -1,0 +1,101 @@
+{
+ "feed": "s137_double",
+ "status": "degraded",
+ "summary": "Feed s137_double to NDR is degraded: 100% of packets are untagged so required VLANs 10, 20 are missing (high), and 94.7% of bytes are encrypted exceeding the NDR's 90% tolerance (medium). No duplicates, drops, one-way, or overload detected.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP egress is stripping 802.1Q tags before delivery to the tool. All packets arrive untagged, so VLANs 10 and 20 are invisible. Typically caused by broker egress port set to access/untagged mode or 'strip VLAN' enabled, or SPAN not preserving tags.",
+   "impact_on_tool": "NDR cannot segment or correlate traffic by VLAN/tenant for VLANs 10 and 20. VLAN-aware detection, filtering, and forensics fail, creating blind spots for lateral movement and tenant-specific threats.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "strip_vlan": false
+    },
+    "why": "Restore and preserve 802.1Q tags for VLANs 10 and 20 through the TAP/SPAN and packet broker to the NDR so it can see tenant segmentation as required by its profile."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.7% of bytes are encrypted (TLS/QUIC), above the NDR's 90% tolerance. The feed is delivering mostly opaque payloads with no decryption or selective filtering upstream.",
+   "impact_on_tool": "NDR needs full payload for deep inspection but is blind to encrypted content. Detection coverage drops to metadata-only, missing payload-based IOCs, C2, and exfiltration inside encryption.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.947,
+     "max_tolerated": 0.9,
+     "location": "before_tool"
+    },
+    "why": "Advise decrypting relevant TLS flows via a dedicated decryption zone before the packet broker or filtering/steering encrypted traffic so the NDR receives inspectable payload within its tolerance, improving detection without overloading it."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    26,
+    29,
+    36,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2950,
+  "tokens_out": 2016,
+  "cost_usd": 0.01226,
+  "seconds": 8.5,
+  "recorded_at": "2026-10-28"
+ }
+}

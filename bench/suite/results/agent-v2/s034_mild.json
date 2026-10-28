@@ -1,0 +1,23 @@
+{
+ "feed": "s034_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s034_mild: no duplicates, no one-way traffic, no packet drops, no tool overload, no missing VLANs, and encrypted share within IDS tolerance (max 60%). Tool receives complete, correct bidirectional traffic with full payload.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2689,
+  "tokens_out": 798,
+  "cost_usd": 0.00675,
+  "seconds": 5.4,
+  "recorded_at": "2026-10-28"
+ }
+}

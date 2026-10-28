@@ -1,0 +1,79 @@
+{
+ "feed": "s142_double",
+ "status": "degraded",
+ "summary": "Feed s142_double is degraded: NDR port severely overloaded by microbursts (29.95 Gbps on 10 Gbps port, 299% capacity) and encrypted traffic share 94.3% exceeds NDR tolerance of 90%, reducing payload inspection and causing burst drops.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker aggregates multiple high-rate sources onto a single 10 Gbps NDR port without load balancing or burst buffering. 1ms microburst peaked at 29.95 Gbps (299% of port capacity), indicating lack of distribution across tool ports.",
+   "impact_on_tool": "NDR will drop packets during bursts, leading to incomplete flow reassembly, missed detections, and gaps in NDR coverage. Needs both directions and full payload but cannot keep up.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "tool_ports": 3,
+     "target_utilization": 0.8
+    },
+    "why": "Distribute traffic across 3x10G tool ports with flow-aware hashing to keep per-port peaks below 80% and absorb microbursts without drops"
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.3% of bytes are encrypted (TLS/QUIC), above the NDR's 90% tolerance. Traffic is forwarded encrypted with no prior decryption, leaving almost no cleartext payload for inspection.",
+   "impact_on_tool": "NDR requires full payload for detection but can only use metadata (JA3, flow sizes, timing). Payload-based threat detection, C2 and exfiltration detection is severely limited.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "selective_TLS_decryption_or_key_forwarding",
+     "target_encrypted_share": 0.9
+    },
+    "why": "Decrypt relevant TLS at the broker or forward session keys to the NDR to bring encrypted share below 90% and restore payload visibility for detection"
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    13,
+    14,
+    15,
+    16,
+    17,
+    19,
+    21,
+    24,
+    25,
+    26,
+    30,
+    31,
+    33
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2897,
+  "tokens_out": 2176,
+  "cost_usd": 0.01287,
+  "seconds": 14.9,
+  "recorded_at": "2026-10-28"
+ }
+}

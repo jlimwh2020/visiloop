@@ -1,0 +1,75 @@
+{
+ "feed": "s151_double",
+ "status": "degraded",
+ "summary": "Feed s151_double to NDR is degraded: 8.9% duplicate packets and 2.0% TCP packet loss detected. Both faults reduce NDR detection coverage - duplicates waste capacity and skew analytics, drops break stream reassembly and full payload inspection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "8.9% duplicates (168/1885) indicates overlapping ingress feeds (e.g., both sides of a TAP pair or overlapping SPANs aggregated) delivered to the NDR without packet broker deduplication.",
+   "impact_on_tool": "NDR wastes cycles processing same packet twice, inflates flow/byte counts, can cause false positives and inaccurate analytics, and unnecessarily consumes 10G tool port bandwidth despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "header_hash"
+    },
+    "why": "Enable hardware deduplication on the packet broker for this feed to suppress identical packets within a short window before egress to the NDR, preserving bidirectional visibility while eliminating double-counting."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "2.0% TCP gaps (36/1845 packets with missing data) indicates loss between capture point and NDR, likely packet broker egress buffer exhaustion/microburst drops or oversubscribed SPAN. Tool overload is healthy, so loss is in the visibility fabric, not the NDR itself.",
+   "impact_on_tool": "NDR cannot reassemble TCP streams with missing segments, breaking full payload inspection, file extraction, and signature matching - directly reduces detection coverage for attacks that span multiple packets.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "enable_buffering": true,
+     "buffer_mode": "flow_aware"
+    },
+    "why": "Use packet broker aggregation with deep, flow-aware buffering on the egress to the 10G NDR port to absorb microbursts and prevent random drops, ensuring complete TCP streams for full payload analysis."
+   },
+   "evidence_frames": [
+    43,
+    44,
+    58,
+    59,
+    70,
+    71,
+    316,
+    317,
+    614,
+    615,
+    675,
+    678,
+    689,
+    692,
+    729,
+    730,
+    837,
+    838,
+    960,
+    964
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2888,
+  "tokens_out": 2913,
+  "cost_usd": 0.01599,
+  "seconds": 14.7,
+  "recorded_at": "2026-10-28"
+ }
+}

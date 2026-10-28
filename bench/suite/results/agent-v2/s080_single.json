@@ -1,0 +1,39 @@
+{
+ "feed": "s080_single",
+ "status": "degraded",
+ "summary": "Feed s080_single to APM is degraded: 28.2% duplicate packets (670/2372) exceeds 5% threshold. All other checks (one-way traffic, packet drops, VLAN completeness, encrypted share, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating the same traffic from multiple SPAN/TAP sources without deduplication. The same packets arriving via redundant paths or overlapping SPAN sessions are merged and forwarded twice to the APM port.",
+   "impact_on_tool": "APM will double-count transactions and flows, inflate throughput and latency metrics, waste CPU/storage on duplicate processing, and generate inaccurate application performance baselines and false alerts.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Enable packet-broker deduplication with a short window to drop identical packets before delivery to the 10G APM, eliminating 28% duplicates while preserving complete bidirectional visibility."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2761,
+  "tokens_out": 1689,
+  "cost_usd": 0.01063,
+  "seconds": 9.6,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s108_single",
+ "status": "degraded",
+ "summary": "Feed s108_single is degraded for NDR: 22.9% of TCP sessions (24/105) are one-way, exceeding 10% threshold. NDR requires bidirectional traffic and will have incomplete session reconstruction.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding only one direction for ~23% of TCP sessions. Most likely asymmetric routing without bidirectional aggregation or SPAN/TAP feed covering only one side of the conversation, so return traffic is sent to a different tool port or dropped.",
+   "impact_on_tool": "NDR needs both directions to reassemble TCP, track state, and detect C2/exfiltration. One-way sessions appear as incomplete flows, causing missed detections, false positives, and broken application identification.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_flow_5tuple": true
+    },
+    "why": "Aggregate both directions of each flow to the same NDR tool port (flow-aware aggregation) to restore complete bidirectional sessions required for NDR detection."
+   },
+   "evidence_frames": [
+    20,
+    29,
+    171,
+    175,
+    179,
+    209,
+    241,
+    347,
+    559,
+    617,
+    642,
+    652,
+    692,
+    751,
+    779,
+    804,
+    840,
+    1014,
+    1050,
+    1105
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2824,
+  "tokens_out": 1568,
+  "cost_usd": 0.01019,
+  "seconds": 8.9,
+  "recorded_at": "2026-10-28"
+ }
+}

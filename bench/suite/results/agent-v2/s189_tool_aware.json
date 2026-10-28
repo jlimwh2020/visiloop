@@ -1,0 +1,23 @@
+{
+ "feed": "s189_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s189_tool_aware. SIEM is receiving complete, correct traffic within its requirements (single direction sufficient, no full payload needed, 1G port). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2706,
+  "tokens_out": 798,
+  "cost_usd": 0.00677,
+  "seconds": 4.5,
+  "recorded_at": "2026-10-28"
+ }
+}

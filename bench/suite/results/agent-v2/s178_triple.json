@@ -1,0 +1,119 @@
+{
+ "feed": "s178_triple",
+ "status": "degraded",
+ "summary": "Feed s178_triple is degraded: NDR port overloaded at 208% of 10G capacity, 19.1% of TCP sessions are one-way, and 93.5% encrypted traffic exceeds 90% tolerance - all reduce NDR detection coverage.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst peak of 20.79 Gbps exceeds the single 10 Gbps NDR port capacity (208% load). Likely caused by aggregating multiple high-rate taps/SPANs to one egress without load balancing or burst buffering on the packet broker.",
+   "impact_on_tool": "NDR ingress drops during bursts, causing missed packets, incomplete flow records and failed detection; stateful analysis and alerting are unreliable under overload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple-symmetric",
+     "egress_ports": 3,
+     "target_utilization": 0.7
+    },
+    "why": "Distribute flows across 2-3x 10G ports with symmetric 5-tuple hashing to keep per-port rate <80% and keep both directions of each flow together."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "89 of 467 TCP sessions (19.1%) show only one direction at the NDR. Indicates asymmetric routing or packet broker not aggregating both directions to same tool - forward and reverse paths captured on different taps but not combined with symmetric hashing.",
+   "impact_on_tool": "NDR requires both directions for TCP reassembly and stateful detection. One-way sessions cannot be reconstructed, so IDS signatures, anomaly detection and session logging fail for ~19% of traffic.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash": "bidirectional_5tuple",
+     "aggregate_taps": "both_directions"
+    },
+    "why": "Aggregate complementary tap/SPAN feeds and use bidirectional flow hashing to guarantee forward and reverse packets of each session go to the same NDR instance."
+   },
+   "evidence_frames": [
+    86,
+    179,
+    228,
+    237,
+    257,
+    341,
+    381,
+    436,
+    506,
+    610,
+    734,
+    823,
+    864,
+    938,
+    950,
+    969,
+    991,
+    1001,
+    1068,
+    1085
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93.5% of bytes are encrypted (TLS), above the NDR's 90% tolerance. Traffic is forwarded encrypted with no prior decryption; NDR sees only ciphertext.",
+   "impact_on_tool": "NDR needs full payload for deep packet inspection. With opaque payloads it is limited to metadata/flow analysis and misses payload-based exploits, malware and C2 signatures.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker_or_out_of_band",
+     "protocols": [
+      "TLS 1.2",
+      "TLS 1.3"
+     ],
+     "policy": "decrypt_selectively_and_forward_cleartext_per_privacy_policy"
+    },
+    "why": "Offload selective TLS decryption before the NDR (or via trusted proxy) to restore payload visibility while respecting privacy/compliance, bringing encrypted share below 90%."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    18,
+    21,
+    23,
+    24,
+    25,
+    26,
+    28,
+    29,
+    31,
+    34,
+    38
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3032,
+  "tokens_out": 2360,
+  "cost_usd": 0.01382,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-28"
+ }
+}

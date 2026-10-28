@@ -1,0 +1,137 @@
+{
+ "feed": "s165_triple",
+ "status": "degraded",
+ "summary": "Feed s165_triple to IDS is degraded: 20.5% one-way TCP sessions, VLAN 20 missing/stripped (45% untagged), and 75.8% encrypted traffic exceeds IDS 60% tolerance.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP conversations is reaching the IDS - likely SPAN/mirror configured for single direction or asymmetric routing without aggregation at the packet broker, so return traffic takes a different path and is not combined.",
+   "impact_on_tool": "IDS needs both directions (needs_both_directions=true) for stateful TCP reassembly and signature matching; 32 of 156 sessions are one-way, causing missed handshakes, broken stream reassembly, and evasion of detection.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "use_packet_broker_aggregation": true
+    },
+    "why": "Aggregate both directions of each flow at the packet broker so the IDS sees client-to-server and server-to-client together for complete session reconstruction."
+   },
+   "evidence_frames": [
+    32,
+    57,
+    186,
+    189,
+    264,
+    318,
+    364,
+    469,
+    507,
+    515,
+    519,
+    551,
+    575,
+    633,
+    634,
+    657,
+    762,
+    777,
+    835,
+    843
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 traffic is not visible and 45% of packets are untagged - packet broker or SPAN is stripping 802.1Q tags (e.g., trunk not preserved, port in access mode) so VLAN context is lost.",
+   "impact_on_tool": "IDS requires VLANs [10, 20] for segmentation-aware detection; without VLAN 20 tags it cannot apply VLAN-specific policies and misses lateral movement or attacks inside VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "trunk_mode": true
+    },
+    "why": "Configure TAP/SPAN and packet broker to preserve and forward 802.1Q tags for VLANs 10 and 20 so IDS retains tenant/segment visibility."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    28,
+    31,
+    41,
+    44,
+    45,
+    46,
+    48
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "75.8% of bytes are encrypted (TLS/QUIC) exceeding the IDS 60% tolerance - traffic is opaque without decryption, not a broker sampling issue.",
+   "impact_on_tool": "IDS needs full payload (needs_full_payload=true) for deep packet inspection; high encryption blinds signature and anomaly detection, reducing coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "before_ids",
+     "max_encrypted_share": 0.6,
+     "selective_decryption": true
+    },
+    "why": "Add selective TLS decryption / visibility (e.g., decrypt mirror or key sharing) before the IDS or offload encrypted flows, to bring inspectable traffic within the IDS 60% encrypted-share budget."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    28,
+    34,
+    41,
+    43,
+    44
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3071,
+  "tokens_out": 2239,
+  "cost_usd": 0.01335,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-28"
+ }
+}

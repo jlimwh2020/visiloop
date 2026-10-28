@@ -1,0 +1,114 @@
+{
+ "feed": "s183_triple",
+ "status": "degraded",
+ "summary": "Feed s183_triple to IDS is degraded: 21.3% duplicate packets, 45.9% one-way TCP sessions, and 63.4% encrypted bytes exceeding 60% tolerance. IDS requires bidirectional, deduplicated, inspectable traffic for stateful detection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "21.3% duplicates (349/1637) indicates overlapping SPAN/mirror sessions or multiple TAPs feeding the same broker without deduplication, causing the same packet to be delivered twice.",
+   "impact_on_tool": "IDS wastes cycles processing duplicates, inflates event counts, skews analytics and can cause missed detections due to state confusion and resource waste.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "enable": true,
+     "window_ms": 10,
+     "mode": "packet_broker"
+    },
+    "why": "Enable packet-broker deduplication to drop duplicate copies before IDS, restoring accurate traffic counts and freeing IDS resources for real detection."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "45.9% of TCP sessions (50/109) are one-way, typical of asymmetric routing where only one direction is tapped/SPANned or broker is forwarding directions to different tools without aggregating both sides of a flow to this IDS.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and stateful signatures; one-way traffic prevents stream reconstruction, causing missed exploits, broken flow tracking, and high false-negative rate.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "hash_by": "5-tuple",
+     "ensure_affinity": true
+    },
+    "why": "Configure broker to aggregate both directions of each flow (5-tuple hashing) to the same IDS port so it sees complete bidirectional sessions."
+   },
+   "evidence_frames": [
+    1,
+    10,
+    19,
+    41,
+    51,
+    127,
+    177,
+    211,
+    213,
+    250,
+    263,
+    276,
+    285,
+    293,
+    343,
+    355,
+    365,
+    449,
+    516,
+    546
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "63.4% of bytes are encrypted vs 60% IDS tolerance, meaning majority of payload is TLS/encrypted and opaque to IDS without decryption.",
+   "impact_on_tool": "IDS needs_full_payload=true but cannot inspect encrypted payload, reducing detection coverage for payload-based signatures and allowing threats inside TLS to bypass detection.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "out-of-band_decryption",
+     "location": "packet_broker_with_SSL_visibility",
+     "policy": "decrypt_selectively_or_add_metadata"
+    },
+    "why": "Add SSL visibility appliance or broker decryption capability to provide cleartext to IDS or enrich with metadata, bringing encrypted share within IDS tolerance."
+   },
+   "evidence_frames": [
+    13,
+    21,
+    55,
+    63,
+    64,
+    66,
+    67,
+    68,
+    69,
+    70,
+    72,
+    73,
+    75,
+    78,
+    130,
+    138,
+    140,
+    142,
+    143,
+    144
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2999,
+  "tokens_out": 2146,
+  "cost_usd": 0.01287,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-28"
+ }
+}

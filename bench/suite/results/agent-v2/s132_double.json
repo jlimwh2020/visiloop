@@ -1,0 +1,85 @@
+{
+ "feed": "s132_double",
+ "status": "degraded",
+ "summary": "Feed s132_double is degraded: 100% of packets are untagged (VLANs 10,20 missing) and IDS 1 Gbps port is overloaded by 1.68 Gbps microbursts (168% capacity).",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN aggregation is stripping 802.1Q tags or delivering via access/untagged port instead of trunk passthrough. All packets arrive untagged so required VLANs 10 and 20 are never seen.",
+   "impact_on_tool": "IDS loses tenant/segment context for VLANs 10 and 20, cannot apply VLAN-aware policies or detect lateral movement/cross-VLAN violations, creating blind spots for detection coverage.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "trunk_mode": "passthrough"
+    },
+    "why": "Preserve and forward 802.1Q tags end-to-end from TAP through packet broker to IDS so VLANs 10 and 20 are visible for IDS classification and correlation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic microbursts peak at 1.68 Gbps in 1ms intervals, exceeding the IDS 1 Gbps port capacity by 68%. Packet broker is forwarding line-rate bursts without shaping or distribution, causing 4 overloaded intervals.",
+   "impact_on_tool": "IDS with 1 Gbps port and needs_full_payload=true will drop packets during bursts, causing missed signatures, broken flow reassembly, and incomplete detection. IDS cannot keep up with burst rate.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "flow_hash_5tuple",
+     "additional_ports": 1,
+     "group_size": 2
+    },
+    "why": "Distribute flows across 2x1G IDS ports or a higher-speed port via load balancing to absorb 1.68 Gbps bursts without drops; slicing/filtering not suitable because IDS needs full payload and both directions."
+   },
+   "evidence_frames": [
+    1,
+    393,
+    829,
+    1284
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2914,
+  "tokens_out": 1936,
+  "cost_usd": 0.01187,
+  "seconds": 9.1,
+  "recorded_at": "2026-10-28"
+ }
+}

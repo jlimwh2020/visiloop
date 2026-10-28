@@ -1,0 +1,60 @@
+{
+ "feed": "s061_single",
+ "status": "degraded",
+ "summary": "Feed s061_single to IDS is degraded due to significant packet loss (8.3% of TCP packets, 136/1636) exceeding 1% threshold. All other visibility checks (duplicates, encryption, VLAN, one-way, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream SPAN/mirror or packet broker is dropping packets under load - 8.3% TCP gaps indicate buffer overflow/oversubscription before the IDS, not IDS overload (tool_overload healthy). SPAN ports drop randomly when ingress exceeds mirror capacity.",
+   "impact_on_tool": "IDS with needs_both_directions=true and needs_full_payload=true cannot reassemble TCP streams or match signatures on missing segments; 8.3% loss causes false negatives, broken flow reassembly, and reduced detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "feed": "s061_single",
+     "tap_type": "passive_tap"
+    },
+    "why": "Passive TAP provides lossless, line-rate copy vs SPAN which drops under congestion. Eliminates the 8.3% random loss at source, ensuring IDS receives complete packets for full payload inspection. If TAP already in use, add packet broker with drop-free buffering or filter/slice only non-security traffic."
+   },
+   "evidence_frames": [
+    62,
+    63,
+    71,
+    75,
+    129,
+    130,
+    131,
+    133,
+    193,
+    196,
+    224,
+    225,
+    240,
+    242,
+    263,
+    266,
+    297,
+    301,
+    305,
+    309
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2810,
+  "tokens_out": 1778,
+  "cost_usd": 0.01107,
+  "seconds": 8.2,
+  "recorded_at": "2026-10-28"
+ }
+}

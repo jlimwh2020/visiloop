@@ -1,0 +1,39 @@
+{
+ "feed": "s100_single",
+ "status": "degraded",
+ "summary": "Feed s100_single to IDS is degraded due to 7.7% duplicate packets (159/2059, threshold 5%). All other checks healthy: no one-way traffic, no packet drops, no tool overload, no missing VLANs, and encrypted share within tolerance.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding the same packet twice, most likely aggregating both sides of a link (SPAN RX+TX or dual TAPs) without deduplication. Same 5-tuple/sequence seen twice within short window.",
+   "impact_on_tool": "IDS wastes CPU and state table on duplicate packets, inflates flow counts, risks duplicate alerts and inaccurate detection analytics while still receiving both directions and full payload.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "header_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets within dedup window before delivery to IDS, eliminating 7.7% overhead without losing coverage. No other broker changes needed as drops, overload, VLAN and encryption are healthy."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2756,
+  "tokens_out": 1652,
+  "cost_usd": 0.01047,
+  "seconds": 12.5,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "feed": "s144_double",
+ "status": "degraded",
+ "summary": "Feed s144_double to NDR is degraded: 19.8% duplicate packets (threshold 5%) and 91.8% encrypted bytes exceeds NDR tolerance of 90%. No packet drops, one-way, VLAN stripping, or tool overload detected.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Overlapping SPAN/TAP aggregation without packet broker deduplication - same packets forwarded twice via two paths to the same tool port, causing 540 of 2731 packets (19.8%) to be duplicates.",
+   "impact_on_tool": "NDR wastes cycles processing ~20% duplicate traffic, inflates flow/connection counts, risks false positives and masks true anomalies, reducing detection accuracy.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to drop identical packets within a short window before delivery to NDR, restoring correct traffic counts without losing unique flows."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Traffic is predominantly TLS/encrypted (91.8% of bytes) with no decryption point before the NDR; feed exceeds the NDR's 90% encrypted tolerance.",
+   "impact_on_tool": "NDR requires full payload inspection but receives opaque payloads for most flows, so it can only use metadata - blind to malware, C2, and exploit payloads inside encryption, significantly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "approach": "decrypt_via_proxy_or_key_share",
+     "selective": "decrypt relevant VLANs/flows only"
+    },
+    "why": "Add selective SSL/TLS decryption (e.g., passive decryption with keys or active proxy) upstream of packet broker and forward cleartext to NDR, or deploy NDR with integrated decryption, to restore payload visibility while respecting privacy policy."
+   },
+   "evidence_frames": [
+    3,
+    5,
+    7,
+    8,
+    9,
+    11,
+    12,
+    15,
+    18,
+    20,
+    21,
+    22,
+    23,
+    24,
+    26,
+    29,
+    32,
+    34,
+    35,
+    36
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2877,
+  "tokens_out": 1996,
+  "cost_usd": 0.01208,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "feed": "s197_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks healthy for APM feed s197_tool_aware: no duplicates, no one-way traffic, no packet drops, no tool overload, no missing VLANs, and encrypted share within tolerance (max 100%). APM receives complete bidirectional traffic within 10G capacity.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2703,
+  "tokens_out": 839,
+  "cost_usd": 0.00694,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-28"
+ }
+}

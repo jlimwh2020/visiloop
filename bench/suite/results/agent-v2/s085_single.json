@@ -1,0 +1,39 @@
+{
+ "feed": "s085_single",
+ "status": "degraded",
+ "summary": "Feed s085_single to IDS is degraded due to high duplicate rate (28.4%, 940/3311 packets) exceeding 5% threshold. All other checks (one-way, drops, overload, VLAN, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding duplicate copies of the same packets to the IDS, most likely from aggregating overlapping SPAN sessions or dual TAP feeds without deduplication. 28.4% duplicates indicates the same traffic is being mirrored from two points in the path and merged without dedup.",
+   "impact_on_tool": "IDS wastes cycles processing 28% duplicate packets, inflates flow/connection counts, breaks TCP reassembly and stream detection, causes false-positive alerts and risks missing true attacks due to resource exhaustion and state table bloat.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "header_hash"
+    },
+    "why": "Enable packet deduplication on the packet broker for feed s085_single to deliver a single copy of each packet to the IDS, restoring accurate detection and freeing IDS capacity."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2757,
+  "tokens_out": 1534,
+  "cost_usd": 0.00997,
+  "seconds": 8.9,
+  "recorded_at": "2026-10-28"
+ }
+}

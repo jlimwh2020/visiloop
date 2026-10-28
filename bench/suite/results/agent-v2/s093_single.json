@@ -1,0 +1,61 @@
+{
+ "feed": "s093_single",
+ "status": "degraded",
+ "summary": "NDR feed s093_single is degraded due to significant packet loss: 5.6% of TCP packets (171/3044) show missing data, exceeding 1% threshold. Tool is not overloaded, indicating drops in visibility fabric (SPAN/broker) before the NDR. Other checks (duplicates, one-way, VLAN, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream packet loss before the NDR - most likely SPAN/mirror oversubscription or packet broker egress buffer congestion dropping packets under burst. Tool overload check is healthy, so drops are not at the NDR itself but in the TAP/SPAN or broker egress toward the 10G tool port, causing TCP sequence gaps.",
+   "impact_on_tool": "NDR requires both directions and full payload for flow reassembly and detection. 5.6% missing TCP segments breaks stream reassembly, causes incomplete flows, missed signatures and behavioral detections, and reduces detection coverage with potential false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "egress_ports": 2,
+     "preserve_both_directions": true
+    },
+    "why": "Distribute the feed across two or more 10G NDR egress ports with 5-tuple hashing (keeping both directions of a flow together) to eliminate broker egress congestion and burst drops while preserving full payload and bidirectional visibility. If SPAN is in use, replace SPAN with passive TAP at the source as a complementary lossless capture fix."
+   },
+   "evidence_frames": [
+    55,
+    57,
+    85,
+    87,
+    97,
+    98,
+    113,
+    114,
+    116,
+    121,
+    157,
+    159,
+    169,
+    172,
+    334,
+    335,
+    336,
+    337,
+    390,
+    391
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2823,
+  "tokens_out": 2938,
+  "cost_usd": 0.01602,
+  "seconds": 15.6,
+  "recorded_at": "2026-10-28"
+ }
+}

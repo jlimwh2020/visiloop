@@ -1,0 +1,23 @@
+{
+ "feed": "s033_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s033_mild. Tool receives complete, correct bidirectional traffic with no drops, duplicates, VLAN gaps, or overload.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2705,
+  "tokens_out": 780,
+  "cost_usd": 0.0067,
+  "seconds": 6.4,
+  "recorded_at": "2026-10-28"
+ }
+}

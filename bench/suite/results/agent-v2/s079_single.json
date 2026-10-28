@@ -1,0 +1,60 @@
+{
+ "feed": "s079_single",
+ "status": "degraded",
+ "summary": "IDS on s079_single is degraded: 40.4% of TCP sessions (46 of 114) are one-way, exceeding 10% threshold. IDS requires both directions for stateful inspection and this breaks detection coverage.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "RX and TX directions are not aggregated to the same IDS tool port. Likely only one side of a TAP/SPAN is delivered or dual feeds are split across different broker egress ports without aggregation, or asymmetric routing is not correlated, so the broker forwards only half of each session to this IDS.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP handshake tracking, stream reassembly and signature matching. With only one direction visible, it cannot reassemble flows, misses client attacks and server responses, and generates false negatives / incomplete alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions_to_same_port": true,
+     "feed": "s079_single"
+    },
+    "why": "Aggregating RX and TX to the same 1G IDS port ensures the IDS sees complete bidirectional sessions required for stateful detection."
+   },
+   "evidence_frames": [
+    33,
+    52,
+    77,
+    85,
+    93,
+    135,
+    145,
+    172,
+    240,
+    258,
+    310,
+    318,
+    330,
+    409,
+    416,
+    476,
+    479,
+    555,
+    565,
+    605
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2815,
+  "tokens_out": 1706,
+  "cost_usd": 0.01077,
+  "seconds": 8.2,
+  "recorded_at": "2026-10-28"
+ }
+}

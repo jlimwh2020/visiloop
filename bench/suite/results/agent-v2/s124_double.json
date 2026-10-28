@@ -1,0 +1,80 @@
+{
+ "feed": "s124_double",
+ "status": "degraded",
+ "summary": "Feed s124_double to NDR is degraded: 21.1% of TCP sessions are one-way (needs both directions) and microbursts hit 18.14 Gbps on a 10 Gbps tool port (181% capacity). Both cause incomplete session reconstruction and dropped traffic during bursts, creating blind spots for NDR detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction for 116 of 551 TCP sessions (21.1% > 10% threshold). NDR requires both directions, so this indicates incomplete bidirectional aggregation - likely asymmetric routing where forward and reverse paths use different links and only one link is tapped/aggregated to this tool port, or SPAN/TAP aggregation is misconfigured.",
+   "impact_on_tool": "NDR cannot reassemble TCP sessions or correlate request/response. Results in incomplete flow records, missed C2/lateral movement detections, and failed handshake analysis for 1 in 5 sessions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash": "5-tuple",
+     "deliver_both_directions_to_same_tool_port": true
+    },
+    "why": "NDR needs_both_directions=true. Aggregating both sides of each flow to the same tool port with flow-aware hashing ensures complete bidirectional visibility without splitting sessions."
+   },
+   "evidence_frames": [
+    152,
+    239,
+    254,
+    298,
+    337,
+    388,
+    426,
+    548,
+    630,
+    685,
+    696,
+    698,
+    757,
+    878,
+    1075,
+    1090,
+    1156,
+    1299,
+    1300,
+    1332
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic microburst peaked at 18.14 Gbps in a 1ms interval, 181% of the NDR's 10 Gbps port capacity (threshold 80%). Packet broker has no load-balancing or burst handling for this feed, so aggregate rate exceeds single tool port line rate.",
+   "impact_on_tool": "NDR port will drop packets indiscriminately during bursts. Even with no packet_drops check firing yet, bursts cause random loss, incomplete payloads (NDR needs_full_payload=true), and missed detections exactly when traffic spikes - often during attacks or scans.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow_aware_5_tuple",
+     "tool_ports": 2,
+     "port_speed_gbps": 10,
+     "preserve_bidirectional": true
+    },
+    "why": "Distribute load across 2x10G NDR ports with flow-aware hashing to keep both directions of each session together, keep utilization under 80%, and absorb 18+ Gbps bursts without drops. Alternative is filter to reduce scope, but load_balance preserves full payload NDR needs."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2902,
+  "tokens_out": 2513,
+  "cost_usd": 0.01431,
+  "seconds": 13.0,
+  "recorded_at": "2026-10-28"
+ }
+}

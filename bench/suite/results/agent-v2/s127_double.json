@@ -1,0 +1,82 @@
+{
+ "feed": "s127_double",
+ "status": "degraded",
+ "summary": "Feed s127_double is degraded: 2 faults detected - VLAN 20 completely missing (50% packets untagged) and NDR port overload (31.30 Gbps burst vs 10 Gbps port, 313% capacity). Both create detection blind spots for this NDR.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker egress is stripping 802.1Q tags or filtering VLAN 20. Required VLAN 20 not seen at all and 50% of packets are untagged, indicating strip-tag enabled or trunk not forwarding VLAN 20 to tool port.",
+   "impact_on_tool": "NDR loses segmentation context for VLAN 20 and 50% of traffic; cannot apply VLAN-aware detection policies or track lateral movement per segment, creating blind spot despite needing VLANs 10 and 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "forward_vlans": [
+      10,
+      20
+     ],
+     "mode": "trunk"
+    },
+    "why": "Preserve 802.1Q tags and explicitly forward required VLANs 10 and 20 to restore full segmentation visibility for NDR correlation"
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    17,
+    20,
+    22,
+    25,
+    26,
+    27,
+    29,
+    30,
+    34,
+    35,
+    39,
+    40
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregated traffic microburst peaked at 31.30 Gbps in a 1ms interval, 313% of the 10 Gbps NDR port capacity. Single 10G tool port is oversubscribed with no load balancing to absorb bursts.",
+   "impact_on_tool": "NDR will drop packets during bursts, causing incomplete flows and missed detections; critical as NDR requires both directions and full payload for session reassembly and threat detection.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "target_ports": 4,
+     "capacity_gbps": 10
+    },
+    "why": "Distribute traffic across 3-4 NDR ports with flow-aware 5-tuple hashing to keep per-port utilization <80% and absorb 31 Gbps bursts without drops while preserving flow coherence"
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2907,
+  "tokens_out": 2472,
+  "cost_usd": 0.01414,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

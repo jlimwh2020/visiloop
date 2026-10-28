@@ -1,0 +1,23 @@
+{
+ "feed": "s017_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s017_clean. Tool receives complete, correct bidirectional traffic with full payload, no drops, duplicates, overload, VLAN or encryption issues.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2690,
+  "tokens_out": 687,
+  "cost_usd": 0.00628,
+  "seconds": 6.9,
+  "recorded_at": "2026-10-28"
+ }
+}

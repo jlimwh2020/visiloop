@@ -1,0 +1,80 @@
+{
+ "feed": "s130_double",
+ "status": "degraded",
+ "summary": "Feed s130_double is degraded: 29.08 Gbps microbursts overload single 10 Gbps APM port (291% capacity, 1 interval) causing 2.6% TCP packet drops (199/7606 packets). APM loses transactions during bursts.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Microbursts up to 29.08 Gbps exceed the single 10 Gbps APM port and packet broker buffers, causing tail drops that appear as TCP sequence gaps (2.6% of packets). Drops correlate directly with tool_overload intervals, not SPAN/TAP misconfiguration.",
+   "impact_on_tool": "APM sees incomplete flows, retransmissions and truncated transactions; latency and error calculations are skewed and application performance visibility is incomplete.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "target_ports": 3,
+     "port_speed_gbps": 10
+    },
+    "why": "Distributing flows across 3x10G APM ports scales capacity to ~30 Gbps to absorb 29 Gbps bursts and eliminates buffer drops while preserving both directions required by APM. Since APM needs_full_payload=false, optional slicing/filtering to VLANs 10,20 can further reduce load."
+   },
+   "evidence_frames": [
+    66,
+    67,
+    85,
+    89,
+    175,
+    176,
+    370,
+    371,
+    439,
+    442,
+    544,
+    549,
+    659,
+    667,
+    735,
+    746,
+    835,
+    836,
+    864,
+    865
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps APM port fed 29.08 Gbps peak in 1 ms burst (291% of capacity). No load balancing or aggregation to scale capacity for microbursts.",
+   "impact_on_tool": "APM port discards excess traffic during bursts, creating blind spots, loss of bidirectional flow correlation (needs_both_directions=true) and missed application transactions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "target_ports": 3,
+     "port_speed_gbps": 10,
+     "hash": "5-tuple"
+    },
+    "why": "Hash-based load balancing across multiple 10G APM ports (or 2-3 port LAG) provides ~30 Gbps headroom, preserves flow symmetry for APM, and prevents burst drops. Add broker buffering and consider slicing as APM does not need full payload."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2909,
+  "tokens_out": 3414,
+  "cost_usd": 0.01815,
+  "seconds": 16.9,
+  "recorded_at": "2026-10-28"
+ }
+}

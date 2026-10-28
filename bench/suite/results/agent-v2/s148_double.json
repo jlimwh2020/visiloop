@@ -1,0 +1,79 @@
+{
+ "feed": "s148_double",
+ "status": "degraded",
+ "summary": "Feed s148_double is degraded: 24.66 Gbps microburst exceeds 10 Gbps NDR port (247% capacity) causing egress queue overflow and 2.5% TCP packet drops (200/8061), degrading NDR detection coverage.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker forwards line-rate microbursts without load balancing or shaping: 24.66 Gbps peak in 1ms interval vs 10 Gbps NDR tool port (147% over capacity, 247% of capacity total). Egress buffer overflows at broker tool port.",
+   "impact_on_tool": "NDR port drops traffic during bursts, misses packets/flows, TCP reassembly fails and detections are missed; burst loss creates blind spots for threat detection.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple hash",
+     "tool_ports": 3,
+     "aggregate_capacity_gbps": 30,
+     "burst_handling": "broker buffering"
+    },
+    "why": "Distribute microbursts across 3x10G NDR ports (30G aggregate) via 5-tuple load balancing so no single 10G port exceeds capacity; eliminates 24.66 Gbps overload and prevents burst drops while preserving full payload for NDR."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "2.5% TCP sequence gaps (200 of 8061 packets) caused by same tool-port overload: broker egress queue drops packets when 24.66 Gbps burst exceeds 10 Gbps port, not random link errors.",
+   "impact_on_tool": "NDR requires full payload and both directions; missing segments break stream reassembly, file extraction and IDS signatures fail, causing false negatives and incomplete flow records.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple hash",
+     "tool_ports": 3
+    },
+    "why": "Same overload root cause as tool_overload; load balancing bursts across multiple tool ports removes egress drops and restores complete TCP streams without filtering or slicing which would hurt NDR payload needs."
+   },
+   "evidence_frames": [
+    87,
+    88,
+    263,
+    266,
+    390,
+    392,
+    417,
+    418,
+    520,
+    524,
+    594,
+    595,
+    647,
+    648,
+    810,
+    815,
+    1056,
+    1057,
+    1115,
+    1116
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2908,
+  "tokens_out": 2603,
+  "cost_usd": 0.0147,
+  "seconds": 13.1,
+  "recorded_at": "2026-10-28"
+ }
+}

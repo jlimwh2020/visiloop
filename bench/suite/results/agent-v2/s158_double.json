@@ -1,0 +1,102 @@
+{
+ "feed": "s158_double",
+ "status": "degraded",
+ "summary": "Feed s158_double to IDS is degraded: required VLAN 20 missing (50% packets untagged) and encrypted share 66% exceeds IDS tolerance of 60%. Both reduce IDS detection coverage.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "VLAN tags are being stripped before the IDS - likely SPAN/mirror port or packet broker ingress configured to strip 802.1Q, or TAP aggregation without tag preservation. Result is 50% untagged packets and VLAN 20 never observed despite being required.",
+   "impact_on_tool": "IDS cannot segment or correlate traffic for VLAN 20; rules/policies tied to VLAN 20 will never fire and attacks in that segment are invisible, creating a major coverage gap for required VLANs [10, 20].",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "strip_mode": "disable"
+    },
+    "why": "Preserve/restore 802.1Q tags through TAP and packet broker so IDS receives VLAN 20 tagged correctly and can apply VLAN-aware detection."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    20,
+    21,
+    22,
+    24,
+    25,
+    27,
+    30,
+    33,
+    36,
+    37,
+    38,
+    40
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "66% of bytes are encrypted (TLS/encrypted payloads) exceeding the IDS 60% tolerance. Traffic is encrypted before reaching the IDS with no upstream decryption/visibility layer.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection but is blind to encrypted payloads; with 66% encrypted, detection efficacy drops and malicious payloads inside TLS tunnels will be missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "max_encrypted_share": 0.6,
+     "current_share": 0.6601,
+     "location": "packet_broker",
+     "method": "decrypt_or_mirror_plaintext"
+    },
+    "why": "Add selective TLS decryption / SSL visibility at the packet broker or forward decrypted copy to IDS to bring encrypted share below 60% and restore payload inspection."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    19,
+    20,
+    21,
+    22,
+    24,
+    25,
+    27,
+    30,
+    33,
+    35,
+    36,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2944,
+  "tokens_out": 2202,
+  "cost_usd": 0.01304,
+  "seconds": 9.0,
+  "recorded_at": "2026-10-28"
+ }
+}

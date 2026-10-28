@@ -1,0 +1,95 @@
+{
+ "feed": "s152_double",
+ "status": "degraded",
+ "summary": "Feed s152_double is degraded: IDS port (1 Gbps) is overloaded by 1.46 Gbps bursts (146% capacity) causing 8.5% TCP packet drops. Both faults correlate and will cause missed IDS detections.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "8.5% of TCP packets (155/1828) show gaps/retransmissions indicating packet broker egress buffer drops. Correlated with 1.46 Gbps bursts exceeding the 1 Gbps IDS port, the broker is discarding packets before delivery.",
+   "impact_on_tool": "IDS cannot reassemble TCP streams and misses payload for signature matching, leading to false negatives and evadable attacks. Needs full payload but receives incomplete flows.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_group": "ids_s152_cluster",
+     "hash_fields": [
+      "ip_src",
+      "ip_dst",
+      "port_src",
+      "port_dst",
+      "protocol"
+     ],
+     "target_utilization": 0.8
+    },
+    "why": "Spreading bursts across multiple IDS ports keeps per-port rate below 80% threshold, eliminating buffer overflow drops and restoring complete TCP delivery for detection."
+   },
+   "evidence_frames": [
+    33,
+    34,
+    52,
+    53,
+    67,
+    68,
+    79,
+    81,
+    82,
+    130,
+    131,
+    160,
+    161,
+    162,
+    190,
+    193,
+    208,
+    210,
+    238,
+    244
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak traffic hits 1.46 Gbps in 1ms intervals vs 1 Gbps IDS port capacity (146% overload, 5 intervals). Single 1G tool port is undersized for aggregated burst rate from packet broker.",
+   "impact_on_tool": "IDS NIC and broker egress queue overflow, causing tail drops, incomplete flow tables, and degraded detection coverage. IDS needs both directions and full payload but is missing data under load.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_group": "ids_s152_cluster",
+     "hash_fields": [
+      "ip_src",
+      "ip_dst",
+      "port_src",
+      "port_dst",
+      "protocol"
+     ],
+     "mode": "5-tuple_hash"
+    },
+    "why": "Hash-based load balancing across 2+ IDS members distributes bursts and keeps each 1G port below 80% utilization, preventing overload drops while preserving flow symmetry for IDS."
+   },
+   "evidence_frames": [
+    1,
+    280,
+    542,
+    935,
+    1317
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2907,
+  "tokens_out": 2383,
+  "cost_usd": 0.01376,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-28"
+ }
+}

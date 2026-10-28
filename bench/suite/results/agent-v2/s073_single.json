@@ -1,0 +1,38 @@
+{
+ "feed": "s073_single",
+ "status": "degraded",
+ "summary": "SIEM feed s073_single is degraded due to 9.8% duplicate packets (348/3564, threshold 5%). All other checks (one-way, drops, overload, VLANs, encryption) are healthy and meet SIEM requirements (no bidirectional or full payload needed).",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Overlapping SPAN/mirror sources or aggregation of both sides of the same link without broker deduplication; packet broker is forwarding the same packet twice to the SIEM port.",
+   "impact_on_tool": "SIEM wastes ingest, storage and license on duplicate events, inflates EPS/event counts, skews correlation and analytics, and can generate duplicate alerts without improving detection coverage.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10
+    },
+    "why": "Enable packet-broker deduplication on feed s073_single to drop identical packets within a short time window before delivery and bring duplicate rate below 5% threshold."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2764,
+  "tokens_out": 1883,
+  "cost_usd": 0.01146,
+  "seconds": 8.8,
+  "recorded_at": "2026-10-28"
+ }
+}

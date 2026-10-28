@@ -1,0 +1,75 @@
+{
+ "feed": "s125_double",
+ "status": "degraded",
+ "summary": "Feed s125_double to APM is degraded: 68.5% of TCP sessions are one-way (APM requires bidirectional) and 16.4% duplicate packets detected. Both faults reduce APM transaction correlation and waste capacity.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of most TCP sessions is reaching the APM. Most likely asymmetric routing with TAP/SPAN on single link or packet broker load-balancing/policy splitting client->server and server->client to different tool ports without bidirectional aggregation.",
+   "impact_on_tool": "APM needs_both_directions=true to correlate requests/responses and measure latency. With 85/124 sessions one-way, APM cannot build complete transactions, latency/error breakdowns will be incomplete and many transactions will be missed or flagged as incomplete.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_delivery": true,
+     "hash_mode": "5-tuple-symmetric"
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow and hash symmetrically to the same APM tool port so request and response are seen together."
+   },
+   "evidence_frames": [
+    1,
+    4,
+    26,
+    54,
+    66,
+    91,
+    141,
+    167,
+    176,
+    233,
+    240,
+    265,
+    279,
+    289,
+    376,
+    392,
+    402,
+    414,
+    418,
+    434
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "16.4% duplicates (247/1504) indicates same packet delivered twice - typical when both sides of a link are SPAN-mirrored or two TAPs feed the same broker without deduplication, or 's125_double' feed is aggregated from overlapping sources.",
+   "impact_on_tool": "APM will count duplicate transactions/packets, inflating throughput and response counts, skewing latency histograms, and wasting its 10Gbps processing budget on redundant data.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication window to drop identical packets arriving within milliseconds from overlapping TAP/SPAN sources before delivery to APM."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2876,
+  "tokens_out": 1864,
+  "cost_usd": 0.01152,
+  "seconds": 8.5,
+  "recorded_at": "2026-10-28"
+ }
+}

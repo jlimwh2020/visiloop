@@ -1,0 +1,23 @@
+{
+ "feed": "s043_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s043_mild. No duplicates, drops, one-way traffic, missing VLANs, overload, or excessive encryption detected. Tool is receiving complete, correct traffic.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2707,
+  "tokens_out": 814,
+  "cost_usd": 0.00684,
+  "seconds": 6.6,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "feed": "s195_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed s195_tool_aware. No duplicates, drops, overload, one-way, VLAN or encryption issues detected. Tool is receiving complete, correct traffic per its profile (1 Gbps, no bidirectional/payload/VLAN requirements).",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2700,
+  "tokens_out": 747,
+  "cost_usd": 0.00655,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-28"
+ }
+}

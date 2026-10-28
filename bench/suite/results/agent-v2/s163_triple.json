@@ -1,0 +1,111 @@
+{
+ "feed": "s163_triple",
+ "status": "degraded",
+ "summary": "Feed s163_triple is degraded: IDS missing both directions (17.3% one-way sessions) and 5.4% TCP packet loss impairs detection, plus 17.8% duplicates waste capacity. Tool requires both directions and full payload.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Asymmetric visibility - only one direction of TCP sessions is delivered to the IDS. Likely uplink/downlink or east/west SPANs are not aggregated to the same tool port, or a hash-based load-balancer is splitting client->server and server->client across different outputs.",
+   "impact_on_tool": "IDS needs both directions for TCP reassembly and state tracking. With 24 of 139 sessions (17.3%) one-way, it cannot reconstruct flows, misses bidirectional attack patterns, creates false one-way alerts and incomplete session logs.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "use_bidirectional_hash": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS port using bidirectional 5-tuple hashing so TCP reassembly and detection work correctly."
+   },
+   "evidence_frames": [
+    39,
+    51,
+    94,
+    117,
+    691,
+    850,
+    964,
+    1026,
+    1141,
+    1150,
+    1444,
+    1482,
+    1492,
+    1503,
+    1529,
+    1675,
+    1755,
+    1803,
+    1828,
+    1840
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet loss in the visibility path - 121 of 2231 TCP packets (5.4%) show gaps/retransmissions indicating drops. Tool overload is healthy, so drops are likely SPAN oversubscription or packet broker buffer exhaustion during bursts before the IDS.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection. Missing packets break reassembly, cause missed exploits, truncated files and unreliable flow records; IDS will fail to detect attacks hidden in dropped segments.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "flow_based_bidirectional",
+     "add_capacity_or_tap": true
+    },
+    "why": "Reduce loss by replacing oversubscribed SPAN with TAP where possible and load-balancing flows bidirectionally across IDS capacity to eliminate broker drops while preserving both directions."
+   },
+   "evidence_frames": [
+    30,
+    33,
+    171,
+    173,
+    182,
+    183,
+    204,
+    205,
+    206,
+    207,
+    263,
+    268,
+    326,
+    327,
+    373,
+    374,
+    402,
+    405,
+    407,
+    409
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Overlapping capture points feeding the same tool port without deduplication - 419 of 2354 packets (17.8%) are duplicates, typical when the same traffic is tapped/SPANned at multiple points and aggregated.",
+   "impact_on_tool": "IDS wastes CPU/storage processing the same packet twice, inflates connection counts and alerts, skews analytics and can mask true throughput leading to false capacity planning.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet broker deduplication to strip identical packets within a short window before delivery, giving the IDS a single correct copy of each packet."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3025,
+  "tokens_out": 2382,
+  "cost_usd": 0.0139,
+  "seconds": 15.2,
+  "recorded_at": "2026-10-28"
+ }
+}

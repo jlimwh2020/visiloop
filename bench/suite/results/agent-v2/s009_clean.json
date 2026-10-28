@@ -1,0 +1,23 @@
+{
+ "feed": "s009_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s009_clean. No duplicates, drops, one-way traffic, missing VLANs, overload, or excessive encryption detected. Traffic is complete and correct for IDS detection coverage (bidirectional, full payload, VLANs 10/20). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2697,
+  "tokens_out": 820,
+  "cost_usd": 0.00686,
+  "seconds": 6.1,
+  "recorded_at": "2026-10-28"
+ }
+}

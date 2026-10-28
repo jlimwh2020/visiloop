@@ -1,0 +1,23 @@
+{
+ "feed": "s007_clean",
+ "status": "healthy",
+ "summary": "IDS feed 's007_clean' is healthy. All visibility checks passed: no duplicates, no excessive encryption (within 60% tolerance), no missing VLANs, no one-way traffic, no packet drops, and no tool overload. Tool requirements for bidirectional traffic and full payload at 1 Gbps are met. No packet broker changes needed; detection coverage is complete.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2686,
+  "tokens_out": 950,
+  "cost_usd": 0.0074,
+  "seconds": 6.7,
+  "recorded_at": "2026-10-28"
+ }
+}

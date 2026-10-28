@@ -1,0 +1,23 @@
+{
+ "feed": "s022_mild",
+ "status": "healthy",
+ "summary": "Feed s022_mild to APM is healthy: bidirectional traffic complete, no duplicates, no packet drops, VLANs 10 and 20 present, encrypted share within tolerance (max 1.0), and tool port (10Gbps) not overloaded. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2707,
+  "tokens_out": 901,
+  "cost_usd": 0.00721,
+  "seconds": 10.0,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s051_single",
+ "status": "degraded",
+ "summary": "Feed s051_single is degraded: 32.2% of TCP sessions (68/211) are one-way, violating NDR requirement for bidirectional traffic. All other visibility checks (duplicates, encryption, VLANs, drops, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN is forwarding only one direction of traffic to the NDR port. Likely only ingress or egress is tapped, or RX/TX from a TAP pair are not aggregated, or asymmetric routing sends return path via a different link that is not captured. 68 of 211 sessions show single direction, well above 10% threshold.",
+   "impact_on_tool": "NDR requires both directions (needs_both_directions=true) for TCP reassembly, flow correlation and detection. With 32.2% one-way sessions the NDR cannot reconstruct sessions, will miss lateral movement, C2 and data exfiltration, and will generate incomplete flow records and false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "aggregate_rx_tx_to_same_tool_port": true
+    },
+    "why": "Aggregate both directions (RX and TX / ingress and egress) from the TAP/SPAN pair and hash both sides of a flow to the same NDR tool port so the NDR sees complete bidirectional sessions for detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    8,
+    44,
+    51,
+    58,
+    133,
+    140,
+    193,
+    200,
+    371,
+    446,
+    533,
+    563,
+    614,
+    649,
+    656,
+    680,
+    749,
+    785,
+    859
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2816,
+  "tokens_out": 1797,
+  "cost_usd": 0.01116,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "feed": "s088_single",
+ "status": "degraded",
+ "summary": "Feed s088_single to IDS is degraded due to significant packet loss: 5.8% of TCP packets (176/3055) show missing data, exceeding 1% threshold. All other visibility checks (duplicates, one-way, VLAN, encryption, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Traffic sourced via SPAN/mirror is dropping packets under load before reaching the packet broker/IDS. 5.8% TCP gaps indicate switch buffer exhaustion or SPAN oversubscription, not IDS overload (tool_overload healthy, 1Gbps port not overloaded).",
+   "impact_on_tool": "IDS requires complete bidirectional streams with full payload for TCP reassembly and signature matching. Missing segments break flow reassembly, cause missed exploits, evasion opportunities, and false negatives, directly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Passive TAP provides lossless line-rate copy without SPAN buffer/CPU drops. Replacing SPAN with TAP (aggregated via packet broker) will eliminate the 5.8% loss and restore complete traffic to the IDS for reliable detection."
+   },
+   "evidence_frames": [
+    9,
+    10,
+    25,
+    26,
+    35,
+    38,
+    39,
+    41,
+    46,
+    49,
+    73,
+    79,
+    130,
+    132,
+    270,
+    271,
+    313,
+    314,
+    384,
+    387
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2820,
+  "tokens_out": 1955,
+  "cost_usd": 0.01183,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-28"
+ }
+}

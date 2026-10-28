@@ -1,0 +1,45 @@
+{
+ "feed": "s077_single",
+ "status": "degraded",
+ "summary": "IDS feed s077_single is degraded due to tool overload: 3.05 Gbps micro-bursts exceed the 1 Gbps IDS port by 305% (3 overloaded intervals). All other checks (duplicates, encrypted_share, missing_vlan, one_way, packet_drops) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding aggregated/bursty traffic peaking at 3.05 Gbps in 1ms bursts directly to a single 1 Gbps IDS port with no load balancing or shaping, exceeding port capacity by 305% and crossing the 80% (0.8 Gbps) overload threshold in 3 intervals.",
+   "impact_on_tool": "IDS will suffer buffer overruns and random packet drops during bursts, breaking TCP reassembly and bidirectional flow tracking. With needs_both_directions=true and needs_full_payload=true, this causes missed signatures, false negatives, and severely degraded detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow-aware",
+     "hash": "5-tuple-bidirectional",
+     "target_utilization": 0.8,
+     "add_tool_ports": 3
+    },
+    "why": "Distribute bursts across multiple IDS ports/instances with bidirectional 5-tuple hashing to keep each 1 Gbps port under 80% utilization while preserving both directions and full payload required for IDS detection."
+   },
+   "evidence_frames": [
+    1,
+    778,
+    1573
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2782,
+  "tokens_out": 1734,
+  "cost_usd": 0.01085,
+  "seconds": 10.1,
+  "recorded_at": "2026-10-28"
+ }
+}

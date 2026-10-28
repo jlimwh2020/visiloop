@@ -1,0 +1,91 @@
+{
+ "feed": "s154_double",
+ "status": "degraded",
+ "summary": "Feed s154_double to IDS is degraded: 50% of traffic is untagged with required VLAN 20 missing, and traffic bursts to 1.66 Gbps exceed the 1 Gbps IDS port (166% capacity, 10 intervals). IDS has incomplete visibility and will drop packets under load.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 is not seen and 50% of packets are untagged, indicating VLAN tags are being stripped before the IDS. Most likely the source SPAN/mirror is configured as access port or the packet broker is set to strip 802.1Q tags / not preserving trunk tags, so VLAN 20 traffic arrives untagged and cannot be identified.",
+   "impact_on_tool": "IDS cannot segment or correlate traffic for VLAN 20, misses VLAN-specific policies and lateral movement, and loses ~50% of required visibility. Detection coverage for VLAN 20 is effectively blind.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "check_trunk_config": true
+    },
+    "why": "Enable 802.1Q tag preservation on TAP/SPAN and packet broker ingress/egress, ensure trunk carries VLANs 10 and 20 end-to-end so IDS receives correctly tagged traffic."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    19,
+    22,
+    23,
+    24,
+    26,
+    27,
+    29,
+    32,
+    35,
+    37,
+    40,
+    41
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Burst analysis shows peak 1.66 Gbps in 1ms intervals vs 1 Gbps IDS port capacity (166% of capacity, 10 overloaded intervals). Single 1G tool port is undersized for bursty aggregate feed, causing buffer overrun and drops at the IDS ingress.",
+   "impact_on_tool": "IDS drops packets during bursts, fails to reassemble flows and needs_full_payload inspection, misses exploits and allows evasion. As IDS needs both directions and full payload, any loss breaks detection.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_group_size": 2,
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute traffic across 2+ IDS ports/instances with 5-tuple load balancing to keep per-port utilization below 80% and eliminate burst drops while preserving flow integrity for IDS."
+   },
+   "evidence_frames": [
+    1,
+    229,
+    530,
+    919,
+    1357,
+    1698,
+    2015,
+    2295,
+    2717,
+    3122
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2934,
+  "tokens_out": 2146,
+  "cost_usd": 0.01279,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

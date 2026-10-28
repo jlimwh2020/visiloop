@@ -1,0 +1,98 @@
+{
+ "feed": "s114_double",
+ "status": "degraded",
+ "summary": "IDS feed s114_double is degraded: 79.5% encrypted traffic exceeds IDS tolerance (60%) and 2.4% TCP packets show gaps from drops. Both reduce IDS detection coverage despite healthy duplication, VLAN, directionality and load.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Majority of traffic is TLS-encrypted (79.5% of bytes). No inline decryption before the IDS, so payload is opaque. This is expected for modern HTTPS/TLS 1.3 traffic but exceeds what this IDS can usefully inspect.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection but is blind to ~79% of bytes. Encrypted attacks, C2, and exploits inside TLS will be missed, sharply reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "out-of-band TLS decryption with re-encryption",
+     "policy": "decrypt selected categories and forward plaintext copy to IDS, respect privacy bypass list"
+    },
+    "why": "IDS max_encrypted_share is 0.6 but feed is 0.79. Decrypting at the packet broker restores payload visibility without breaking end-to-end encryption for the endpoints."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    16,
+    18,
+    19,
+    20,
+    21,
+    23,
+    24,
+    27,
+    47,
+    49,
+    50,
+    51
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "60 of 2501 TCP packets (2.4%, threshold 1%) show gaps/retransmissions indicating capture loss. Tool overload is healthy, so loss is upstream - classic SPAN/mirror oversubscription and switch buffer drops under bursts, not IDS ingest capacity.",
+   "impact_on_tool": "IDS sees incomplete TCP streams and broken reassembly. Signatures spanning missing segments fail to fire, causing false negatives and unreliable flow state for this IDS that needs both directions and full payload.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_type": "passive_fiber_or_aggregation_tap",
+     "target": "replace SPAN/mirror with physical TAP feeding packet broker",
+     "also_consider": "broker buffering and load_balance if bursts persist"
+    },
+    "why": "TAP provides lossless, out-of-band copy without switch CPU/buffer contention that causes SPAN drops, ensuring complete packets reach the IDS at 1G."
+   },
+   "evidence_frames": [
+    108,
+    110,
+    188,
+    191,
+    360,
+    361,
+    436,
+    437,
+    590,
+    592,
+    771,
+    773,
+    783,
+    784,
+    808,
+    810,
+    881,
+    883,
+    1040,
+    1041
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2948,
+  "tokens_out": 2231,
+  "cost_usd": 0.01317,
+  "seconds": 25.4,
+  "recorded_at": "2026-10-28"
+ }
+}

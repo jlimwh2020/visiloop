@@ -1,0 +1,23 @@
+{
+ "feed": "s028_mild",
+ "status": "healthy",
+ "summary": "Feed s028_mild to NDR is healthy: all checks passed (no duplicates, no one-way traffic, no packet drops, no tool overload, no missing VLANs, encrypted share within 0.9 limit). NDR receives complete bidirectional full-payload traffic at 10Gbps with no broker correction needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2704,
+  "tokens_out": 815,
+  "cost_usd": 0.00684,
+  "seconds": 5.1,
+  "recorded_at": "2026-10-28"
+ }
+}

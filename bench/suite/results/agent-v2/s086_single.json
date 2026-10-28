@@ -1,0 +1,64 @@
+{
+ "feed": "s086_single",
+ "status": "degraded",
+ "summary": "Feed s086_single is degraded: 100% of packets are untagged and required VLANs 10, 20 are completely missing. All other checks (duplicates, one-way, drops, overload, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/mirror is stripping 802.1Q tags before delivery - trunk not configured to preserve VLANs or broker is set to strip tags on egress to the SIEM. Result is 100% untagged traffic despite VLANs 10 and 20 being required.",
+   "impact_on_tool": "SIEM loses VLAN context for VLANs 10 and 20; cannot filter, correlate, or apply VLAN-based detection/content rules. Detection coverage for those segments is effectively blind even though SIEM does not need bidirectional or full payload.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "egress_mode": "tagged"
+    },
+    "why": "Restore 802.1Q tags for VLANs 10 and 20 on the broker egress/SPAN trunk so SIEM receives correctly tagged traffic and can restore detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2826,
+  "tokens_out": 1558,
+  "cost_usd": 0.01015,
+  "seconds": 8.0,
+  "recorded_at": "2026-10-28"
+ }
+}

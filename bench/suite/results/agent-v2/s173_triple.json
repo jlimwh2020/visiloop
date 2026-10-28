@@ -1,0 +1,100 @@
+{
+ "feed": "s173_triple",
+ "status": "degraded",
+ "summary": "Feed s173_triple to IDS is degraded with 3 active faults: 18.5% duplicates, 86% encrypted bytes vs 60% IDS tolerance, and 1.78 Gbps microbursts overloading 1 Gbps tool port (7 intervals). IDS wastes capacity on copies, is blind to most payloads, and will drop packets on bursts, significantly reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Duplicate packets from aggregated SPAN/mirror feeds or overlapping TAPs fed to same broker without deduplication; 507 of 2742 packets (18.5%) are copies exceeding 5% threshold.",
+   "impact_on_tool": "IDS wastes cycles reprocessing same packets, inflates connection state, risks duplicate alerts/false positives and reduces effective inspection capacity for unique traffic.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "location": "packet_broker_ingress"
+    },
+    "why": "Enable packet-broker deduplication to drop copies before the IDS, restoring capacity and alert fidelity without losing unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "86% of bytes are encrypted (TLS/QUIC) vs IDS tolerance of ~60%; traffic is forwarded encrypted without out-of-band decryption, leaving IDS with no payload to inspect.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection but is blind to 86% of traffic, missing exploits, C2 and malware inside encrypted streams.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "decrypt_at_broker_or_mirror_to_decryption_zone",
+     "target_share_below": 0.6,
+     "selective_decrypt": true
+    },
+    "why": "Decrypt relevant TLS centrally at the packet broker or route encrypted flows to a decryption-capable inspection zone so the IDS receives cleartext it can analyze; do not attempt inline decrypt on the IDS itself."
+   },
+   "evidence_frames": [
+    5,
+    7,
+    9,
+    10,
+    11,
+    13,
+    14,
+    15,
+    19,
+    20,
+    28,
+    30,
+    31,
+    32,
+    34,
+    36,
+    37,
+    38,
+    39,
+    40
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst peaks of 1.78 Gbps in 1ms intervals exceed the 1 Gbps IDS port (178% of capacity, 7 overloaded intervals); single-tool feed cannot absorb aggregate burst rate.",
+   "impact_on_tool": "IDS port buffers overflow and drop packets during bursts, causing missed flows, incomplete sessions and gaps in detection despite no broker drops yet.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "cluster_size": 2,
+     "per_tool_rate_gbps": 1
+    },
+    "why": "Spread traffic across 2+ IDS members with flow-aware load balancing to keep per-tool peaks below 80% of 1 Gbps and eliminate burst loss."
+   },
+   "evidence_frames": [
+    1,
+    297,
+    643,
+    1144,
+    1434,
+    1719,
+    2208
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2989,
+  "tokens_out": 3103,
+  "cost_usd": 0.01692,
+  "seconds": 15.6,
+  "recorded_at": "2026-10-28"
+ }
+}

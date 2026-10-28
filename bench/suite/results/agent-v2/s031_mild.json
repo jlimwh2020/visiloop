@@ -1,0 +1,23 @@
+{
+ "feed": "s031_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s031_mild: bidirectional traffic present, no packet drops, duplicates, missing VLANs, or tool overload. Encrypted share within 60% tolerance and full payload delivered.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2695,
+  "tokens_out": 750,
+  "cost_usd": 0.00656,
+  "seconds": 6.3,
+  "recorded_at": "2026-10-28"
+ }
+}

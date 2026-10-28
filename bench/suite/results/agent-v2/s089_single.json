@@ -1,0 +1,57 @@
+{
+ "feed": "s089_single",
+ "status": "degraded",
+ "summary": "Feed s089_single to IDS is degraded due to high packet loss (8.9% - 234/2635 TCP packets with missing data). All other visibility checks (duplicates, one-way traffic, VLAN stripping, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror source is dropping packets before the packet broker/IDS - switch SPAN ports prioritize production forwarding over mirroring and drop under burst load. 8.9% loss (threshold 1%) indicates sustained oversubscription/congestion at the capture point, not IDS overload (tool_overload healthy).",
+   "impact_on_tool": "IDS requires full payload and both directions for TCP stream reassembly and signature matching. With 8.9% missing segments, TCP reassembly fails, flows appear truncated, and exploit/malware signatures will miss - causing false negatives and reduced detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Passive TAP provides lossless, line-rate copy independent of switch CPU/buffer, eliminating SPAN-induced drops. Place TAP at the monitored link and feed via packet broker to the 1Gbps IDS port to ensure complete packets for reassembly."
+   },
+   "evidence_frames": [
+    41,
+    42,
+    43,
+    45,
+    71,
+    72,
+    73,
+    76,
+    80,
+    81,
+    97,
+    98,
+    115,
+    116,
+    151,
+    153,
+    174,
+    177,
+    181,
+    185
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2810,
+  "tokens_out": 1991,
+  "cost_usd": 0.01197,
+  "seconds": 13.4,
+  "recorded_at": "2026-10-28"
+ }
+}

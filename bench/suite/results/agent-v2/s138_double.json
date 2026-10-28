@@ -1,0 +1,83 @@
+{
+ "feed": "s138_double",
+ "status": "degraded",
+ "summary": "Feed s138_double is degraded: NDR port is overloaded by microbursts (13.49 Gbps vs 10 Gbps capacity) and encrypted traffic share (94.2%) exceeds 90% tolerance, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst aggregation exceeding tool port capacity: peak 13.49 Gbps in 1ms burst is 135% of the 10 Gbps NDR port (2 overloaded intervals). Likely multiple TAP/SPAN feeds aggregated to one tool port without load balancing or shaping.",
+   "impact_on_tool": "NDR will drop packets at ingress during bursts, causing missed flows, incomplete session reassembly and missed detections despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "add_tool_ports": 2,
+     "burst_threshold_gbps": 10
+    },
+    "why": "Distribute aggregated traffic across multiple NDR ports/instances with flow-aware (5-tuple) hashing to keep per-port rate <80% of 10 Gbps and eliminate drops while preserving both directions per flow."
+   },
+   "evidence_frames": [
+    1,
+    3089
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.2% of bytes are encrypted (TLS/QUIC) vs NDR tolerance of 90%. Traffic is predominantly encrypted so NDR has no payload visibility without decryption.",
+   "impact_on_tool": "NDR requiring full payload cannot inspect inside encrypted sessions; detection efficacy drops to metadata-only, increasing blind spot for C2, exfiltration and lateral movement inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker_or_proxy",
+     "protocols": [
+      "TLS 1.2",
+      "TLS 1.3"
+     ],
+     "selective_decrypt": true
+    },
+    "why": "Offload selective decryption (or provide keys via centralized decrypt zone) before NDR so it receives cleartext for allowed categories while respecting privacy, bringing encrypted share below 90% threshold."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    7,
+    8,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    19,
+    21,
+    24,
+    25,
+    27,
+    30,
+    35,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2906,
+  "tokens_out": 2090,
+  "cost_usd": 0.01252,
+  "seconds": 10.1,
+  "recorded_at": "2026-10-28"
+ }
+}

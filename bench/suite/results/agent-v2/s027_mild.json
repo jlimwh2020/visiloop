@@ -1,0 +1,23 @@
+{
+ "feed": "s027_mild",
+ "status": "healthy",
+ "summary": "Feed s027_mild to APM is healthy. All visibility checks passed: no duplicates, no one-way traffic, no packet drops, no tool overload, no missing VLANs (10, 20 present), and encrypted share within tolerance. Tool receives complete, correct bidirectional traffic.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2698,
+  "tokens_out": 803,
+  "cost_usd": 0.00679,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-28"
+ }
+}

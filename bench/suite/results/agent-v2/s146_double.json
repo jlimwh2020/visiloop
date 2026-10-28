@@ -1,0 +1,59 @@
+{
+ "feed": "s146_double",
+ "status": "degraded",
+ "summary": "Feed s146_double to IDS is degraded: 8.9% duplicate packets (313/3526) and repeated 3.10 Gbps microbursts overloading the 1 Gbps IDS port (310% capacity, 5 intervals), causing wasted processing and likely burst drops/missed detections.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Traffic aggregated from multiple SPAN/mirror sources or packet broker ingress ports without deduplication - same packet delivered twice to IDS. 8.9% duplicates exceeds 5% threshold.",
+   "impact_on_tool": "IDS wastes CPU inspecting duplicates, inflates flow/alert counts, risks duplicate alerts and reduces effective detection capacity for real threats.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets seen within a short window before delivery, eliminating 8.9% waste while preserving full payload for IDS inspection."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microbursts peak at 3.10 Gbps in 1 ms intervals vs 1 Gbps IDS port (310% of capacity). Packet broker is forwarding full aggregate without load-balancing, filtering, or shaping.",
+   "impact_on_tool": "IDS port buffers overrun and drops packets during bursts; with needs_both_directions and needs_full_payload, drops cause incomplete flows and missed intrusions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "ports": 4
+    },
+    "why": "Distribute traffic across multiple IDS ports/instances via 5-tuple load balancing to keep per-port rate under 1 Gbps, prevent burst drops and preserve flow integrity for detection."
+   },
+   "evidence_frames": [
+    1,
+    697,
+    1517,
+    2266,
+    2915
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2849,
+  "tokens_out": 2419,
+  "cost_usd": 0.01384,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-28"
+ }
+}

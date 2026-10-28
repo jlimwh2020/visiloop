@@ -1,0 +1,116 @@
+{
+ "feed": "s161_triple",
+ "status": "degraded",
+ "summary": "Feed s161_triple to NDR is degraded: 16.4% duplicates exceed 5% threshold, 92.9% encrypted bytes exceed NDR 90% tolerance, and VLAN 20 is missing with 50% packets untagged.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "VLAN tags stripped upstream - SPAN/mirror configured as access port instead of 802.1Q trunk or packet broker stripping tags on ingress/egress, causing required VLAN 20 traffic to arrive untagged and invisible.",
+   "impact_on_tool": "NDR loses segmentation context for required VLANs 10,20; cannot apply VLAN-aware detection policies and will miss lateral movement or policy violations in VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "restore_vlan": 20
+    },
+    "why": "Preserve/restore 802.1Q tags through TAP/SPAN and packet broker so NDR receives correctly tagged traffic for VLAN 20 and can enforce segmentation-aware detection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    13,
+    16,
+    17,
+    20,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    30,
+    31
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Traffic aggregated from multiple SPAN/mirror sessions or TAPs without deduplication - same packet arriving via two paths and forwarded twice by packet broker.",
+   "impact_on_tool": "NDR wastes 16.4% of capacity on duplicates (444/2709), inflates flow counts, skews analytics/baselining and can cause false positives and missed true positives.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet broker deduplication with short time window to drop identical packets before delivery, restoring accurate traffic counts for NDR."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "92.9% of bytes are encrypted (TLS/QUIC) - traffic forwarded without selective decryption or filtering, exceeding NDR's 90% encrypted tolerance.",
+   "impact_on_tool": "NDR needs full payload for deep packet inspection; at this encryption level it is largely blind to C2, exfiltration, and exploit payloads, sharply reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker_or_proxy",
+     "policy": "selective_decrypt",
+     "target_encrypted_share": 0.9
+    },
+    "why": "Use broker/proxy selective decryption or add filtered feed of decrypted relevant traffic so NDR stays below 90% encrypted and regains payload visibility without violating privacy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    13,
+    16,
+    17,
+    20,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3005,
+  "tokens_out": 2672,
+  "cost_usd": 0.01511,
+  "seconds": 11.1,
+  "recorded_at": "2026-10-28"
+ }
+}

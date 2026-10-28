@@ -1,0 +1,23 @@
+{
+ "feed": "s026_mild",
+ "status": "healthy",
+ "summary": "Feed s026_mild healthy: NDR receives complete, correct bidirectional traffic. All visibility checks (duplicates, drops, one-way, VLAN, encryption, overload) passed. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2698,
+  "tokens_out": 846,
+  "cost_usd": 0.00697,
+  "seconds": 5.7,
+  "recorded_at": "2026-10-28"
+ }
+}

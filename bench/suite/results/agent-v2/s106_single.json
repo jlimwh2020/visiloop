@@ -1,0 +1,64 @@
+{
+ "feed": "s106_single",
+ "status": "degraded",
+ "summary": "Feed s106_single to IDS is degraded: VLAN 20 is completely missing (50% of packets untagged) while IDS requires VLANs 10 and 20. All other visibility checks (duplicates, one-way, drops, overload, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker is stripping 802.1Q tags or VLAN 20 is pruned/filtered on the ingress trunk/broker map. 50% untagged matches the expected share of VLAN 20, indicating tags are removed before delivery to the IDS tool port or a VLAN filter is dropping VLAN 20.",
+   "impact_on_tool": "IDS requires both VLAN 10 and 20 with full payload and bidirectional visibility. Missing VLAN 20 blinds the IDS to ~50% of traffic, creating a complete detection gap for that segment and breaking correlation across VLANs.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "forward_untagged_as": "retain_tag"
+    },
+    "why": "Preserve 802.1Q tags end-to-end and ensure VLAN 20 is explicitly forwarded to the IDS tool port so the IDS receives complete, correctly segmented traffic for both required VLANs."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    8,
+    11,
+    12,
+    13,
+    16,
+    17,
+    19,
+    22,
+    24,
+    25,
+    26,
+    29,
+    33,
+    35,
+    38,
+    39,
+    40
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2825,
+  "tokens_out": 1894,
+  "cost_usd": 0.01158,
+  "seconds": 14.6,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,96 @@
+{
+ "feed": "s134_double",
+ "status": "degraded",
+ "summary": "Feed s134_double is degraded for APM: 74.3% of TCP sessions are one-way and 3.0% of packets show drops. APM requires bidirectional traffic and will have incomplete transaction/latency visibility.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "74.3% of TCP sessions (81/109) show only one direction, well above 10% threshold. Most likely only one direction is being tapped/SPANned or packet broker is not aggregating both RX and TX to the same tool port, or asymmetric routing with incomplete capture.",
+   "impact_on_tool": "APM needs_both_directions=true to correlate request/response for latency and transaction timing. With single-direction traffic it cannot measure response time, status codes, or complete transactions, causing blind spots and false performance metrics.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "aggregate_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregate both sides of each flow to the same APM port so the tool sees complete client-server conversations for accurate APM analysis."
+   },
+   "evidence_frames": [
+    1,
+    26,
+    35,
+    47,
+    54,
+    91,
+    94,
+    107,
+    118,
+    131,
+    147,
+    155,
+    162,
+    166,
+    189,
+    213,
+    218,
+    241,
+    248,
+    255
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "3.0% of TCP packets (30/1012) show sequence gaps/missing data, above 1% threshold. Tool overload is healthy, so drops are in the visibility path - typically SPAN port oversubscription/buffer exhaustion or packet broker ingress drops, not tool ingress overload.",
+   "impact_on_tool": "Even though APM needs_full_payload=false, missing packets break TCP reassembly, causing inaccurate latency/retransmission counts, incomplete transaction records and gaps in application performance monitoring.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_span_with_tap": true,
+     "verify_span_oversubscription": true
+    },
+    "why": "TAP provides lossless line-rate copy versus SPAN which drops under load. Replacing SPAN with TAP (and checking broker oversubscription) eliminates the 3% loss and restores complete packet delivery."
+   },
+   "evidence_frames": [
+    3,
+    174,
+    202,
+    203,
+    232,
+    234,
+    269,
+    270,
+    315,
+    322,
+    374,
+    375,
+    376,
+    377,
+    433,
+    434,
+    548,
+    549,
+    550,
+    551
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2945,
+  "tokens_out": 2373,
+  "cost_usd": 0.01377,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-28"
+ }
+}

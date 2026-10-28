@@ -1,0 +1,97 @@
+{
+ "feed": "s118_double",
+ "status": "degraded",
+ "summary": "Feed s118_double is degraded: 21.6% of TCP sessions are one-way (exceeds 10% threshold) and 90.7% of bytes are encrypted (exceeds 90% NDR tolerance). NDR requires bidirectional, full-payload visibility - both faults reduce detection coverage.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction of bidirectional flows to this NDR port. Most likely asymmetric routing where client->server and server->client traverse different TAP/SPAN points and are not aggregated to the same tool port, or SPAN is configured for Tx-only/Rx-only, or flow-hash load-balancing is splitting directions across tools.",
+   "impact_on_tool": "NDR needs both directions to reassemble TCP, track state and detect intrusions. With 27 of 125 sessions (21.6%) one-way, the NDR cannot correlate request/response, misses C2, lateral movement and data exfiltration detections and generates incomplete session records.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_mode": "bidirectional_5tuple"
+    },
+    "why": "Aggregate both directions of each flow to the same NDR port using bidirectional 5-tuple hashing at the packet broker so the NDR sees complete sessions."
+   },
+   "evidence_frames": [
+    47,
+    192,
+    206,
+    213,
+    221,
+    244,
+    264,
+    271,
+    272,
+    301,
+    347,
+    509,
+    584,
+    607,
+    820,
+    978,
+    985,
+    1028,
+    1050,
+    1058
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "91.0% of bytes are encrypted (TLS/QUIC), just above the NDR's 90% tolerance. Traffic is not being decrypted or enriched before the NDR, so payload is opaque to deep packet inspection.",
+   "impact_on_tool": "NDR needs full payload for signature and behavioral analysis. At 90.7% encrypted, the tool is largely blind to application content, reducing detection coverage to metadata/flow analysis only and missing payload-based threats.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "selective_passive_decryption",
+     "location": "packet_broker_or_out_of_band",
+     "target_encrypted_share_below": 0.9
+    },
+    "why": "Advise selective TLS decryption or provide decrypted copy / enriched metadata from packet broker to restore payload visibility while staying below the NDR's 90% encrypted tolerance; if decryption not possible, tune NDR to focus on metadata analytics for encrypted flows."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    20,
+    21,
+    22,
+    23,
+    25,
+    26,
+    28,
+    29,
+    32,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2950,
+  "tokens_out": 2611,
+  "cost_usd": 0.01478,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

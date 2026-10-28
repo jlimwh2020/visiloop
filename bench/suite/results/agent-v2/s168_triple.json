@@ -1,0 +1,94 @@
+{
+ "feed": "s168_triple",
+ "status": "degraded",
+ "summary": "Feed s168_triple is degraded: 3 high-severity faults detected - 27.8% duplicates, 66.2% one-way TCP sessions, and 13.19 Gbps microburst overload on 10 Gbps NDR port. NDR requires both directions and full payload.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "27.8% duplicate packets (1817/6534) indicates the packet broker is aggregating the same traffic from multiple TAP/SPAN sources without deduplication - same packet arriving via two paths and forwarded to the NDR.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicates, inflates flow counts, skews analytics and can trigger false-positive detections while masking real throughput.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 5,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Enable broker-level deduplication to drop identical packets within a short window before delivery to the NDR, eliminating 27% waste without losing unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "66.2% of TCP sessions (305/461) are one-way only, indicating asymmetric routing where client-to-server and server-to-client directions are on different links and not aggregated to the same tool port. Broker is forwarding only one direction per session.",
+   "impact_on_tool": "NDR needs both directions for TCP reassembly, session tracking and attack detection. With only one side, it cannot reconstruct flows, misses lateral movement/C2, and generates incomplete metadata.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "hash_policy": "symmetric_5tuple",
+     "aggregate_sources": "both_directions_to_same_tool_port"
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow using symmetric 5-tuple hashing to the same NDR port, satisfying NDR's needs_both_directions=true requirement."
+   },
+   "evidence_frames": [
+    1,
+    9,
+    19,
+    56,
+    68,
+    74,
+    113,
+    122,
+    126,
+    132,
+    158,
+    167,
+    190,
+    223,
+    232,
+    267,
+    289,
+    308,
+    327,
+    372
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 13.19 Gbps in 1ms burst exceeds the 10 Gbps NDR port capacity by 32% (132% utilization). Single 10G tool port is undersized for aggregated microbursts from the broker.",
+   "impact_on_tool": "NDR will drop packets during bursts, creating blind spots. Even without reported drops yet, overload causes random loss, incomplete flows and missed detections during peak attacks.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_ports": 2,
+     "hash": "symmetric_5tuple",
+     "port_speed_gbps": 10
+    },
+    "why": "Load-balance the feed across 2x10G NDR ports (or upgrade to 25G) with flow-aware hashing to keep both directions together while eliminating microburst drops; NDR needs full payload so slicing/filtering would reduce visibility."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2969,
+  "tokens_out": 2098,
+  "cost_usd": 0.01263,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-28"
+ }
+}

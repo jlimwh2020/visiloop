@@ -1,0 +1,63 @@
+{
+ "feed": "s076_single",
+ "status": "degraded",
+ "summary": "Feed s076_single is degraded for IDS use: 50.9% of TCP sessions are one-way (54/106), violating the IDS requirement for bidirectional traffic. All other checks (duplicates, encryption, VLANs, drops, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is delivering only one direction per flow to this IDS port. 54 of 106 TCP sessions show traffic in a single direction, indicating asymmetric capture - either only one side of the link is tapped/mirrored, or separate directional feeds are not aggregated, or load-balancing is splitting forward and reverse flows to different tool ports without bidirectional affinity.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP state tracking, stream reassembly and signature matching. With 50.9% one-way sessions the IDS cannot see handshakes, responses or return payloads, causing incomplete flow reconstruction, missed exploits/C2/exfiltration and high false-negative rate.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_delivery": true,
+     "affinity_mode": "5-tuple_bidirectional_hash",
+     "aggregate_sources": [
+      "both_directions_of_each_tap_span"
+     ]
+    },
+    "why": "Aggregate both forward and reverse directions of each flow to the same IDS tool port with bidirectional flow affinity to restore complete session visibility required for stateful IDS detection."
+   },
+   "evidence_frames": [
+    17,
+    25,
+    33,
+    56,
+    64,
+    73,
+    96,
+    104,
+    146,
+    166,
+    211,
+    287,
+    296,
+    376,
+    415,
+    427,
+    451,
+    461,
+    468,
+    490
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2818,
+  "tokens_out": 1745,
+  "cost_usd": 0.01094,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-28"
+ }
+}

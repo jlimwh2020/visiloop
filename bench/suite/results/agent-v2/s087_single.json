@@ -1,0 +1,57 @@
+{
+ "feed": "s087_single",
+ "status": "degraded",
+ "summary": "NDR feed s087_single is degraded due to 93.3% encrypted traffic exceeding 90% tolerance; all other checks (duplicates, one-way, drops, VLAN, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93.3% of bytes are TLS-encrypted, above the NDR's 90% tolerance. Traffic is predominantly modern HTTPS/TLS without prior decryption, leaving payload opaque to the NDR.",
+   "impact_on_tool": "NDR needs full payload for deep inspection. At 93% encrypted, it is limited to metadata/flow analysis only, cannot inspect payloads, signatures or JA3/behavioral detection, significantly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "NDR requires cleartext payload; deploy selective TLS decryption via packet broker/SSL visibility appliance and forward decrypted copy to NDR, or integrate key-sharing, to restore payload visibility while respecting privacy policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    21,
+    22,
+    23,
+    24,
+    26,
+    27,
+    29,
+    30,
+    33
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2817,
+  "tokens_out": 1680,
+  "cost_usd": 0.01066,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-28"
+ }
+}

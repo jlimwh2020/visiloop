@@ -1,0 +1,23 @@
+{
+ "feed": "s004_clean",
+ "status": "healthy",
+ "summary": "Feed s004_clean to APM is healthy: all visibility checks passed. Tool requirements (bidirectional traffic, VLANs 10,20, 10Gbps port, any encrypted share allowed) are satisfied with no drops, duplicates, one-way, VLAN or overload issues.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2695,
+  "tokens_out": 835,
+  "cost_usd": 0.00692,
+  "seconds": 6.9,
+  "recorded_at": "2026-10-28"
+ }
+}

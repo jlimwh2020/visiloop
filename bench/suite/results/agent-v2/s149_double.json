@@ -1,0 +1,81 @@
+{
+ "feed": "s149_double",
+ "status": "degraded",
+ "summary": "Feed s149_double is degraded: IDS sees 78.2% one-way TCP sessions and suffers microburst overload to 1.43 Gbps on a 1 Gbps port, both causing incomplete inspection and missed detections.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Visibility path is delivering only one direction of most TCP sessions (154/197 = 78.2% one-way). Most likely SPAN is configured for TX or RX only, or TAP aggregation is incomplete, or asymmetric routing sends return path past a different capture point that is not aggregated to this IDS port on the packet broker.",
+   "impact_on_tool": "IDS requires both directions for TCP handshake tracking, stream reassembly and signature matching. With only one side visible, state tables never establish, reassembly fails, and bidirectional attack signatures and C2 detection will miss true positives while generating incomplete flow logs.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_mode": "bidirectional_5tuple",
+     "include_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregate both forward and reverse directions from all relevant TAP/SPAN sources and hash them symmetrically to the same IDS tool port so each TCP session is seen bidirectionally for proper stateful inspection."
+   },
+   "evidence_frames": [
+    1,
+    8,
+    13,
+    17,
+    18,
+    41,
+    48,
+    50,
+    78,
+    85,
+    113,
+    133,
+    136,
+    161,
+    168,
+    176,
+    183,
+    188,
+    200,
+    207
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is bursting 1.43 Gbps in 1ms intervals into a 1 Gbps IDS port (143% of capacity, 2 overloaded intervals). No load-balancing or shaping is applied, so microbursts overflow tool port buffers and cause drops at the IDS ingress.",
+   "impact_on_tool": "IDS will drop packets during bursts, breaking TCP reassembly, causing missed signatures, gaps in flow/SIEM telemetry, and blind spots exactly when traffic volume (and attack opportunity) is highest.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_tool_ports": 2,
+     "hash": "bidirectional_5tuple",
+     "preserve_flow_symmetry": true,
+     "per_port_limit_gbps": 1
+    },
+    "why": "Flow-aware load balancing across 2+ IDS ports/instances keeps both directions of each flow together while keeping per-port rate under 1 Gbps, eliminating burst drops without filtering or slicing which would break IDS payload inspection."
+   },
+   "evidence_frames": [
+    1,
+    815
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2900,
+  "tokens_out": 2104,
+  "cost_usd": 0.01257,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-28"
+ }
+}

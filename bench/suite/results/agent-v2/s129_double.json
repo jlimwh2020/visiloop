@@ -1,0 +1,93 @@
+{
+ "feed": "s129_double",
+ "status": "degraded",
+ "summary": "IDS feed s129_double is degraded: 3.8% TCP packet loss (threshold 1%) impairs stream reassembly and 64.9% encrypted bytes exceeds IDS 60% tolerance, leaving significant blind spot for signature detection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "68 of 1792 TCP packets (3.8%) show sequence gaps/retransmission evidence indicating loss in SPAN/mirror or packet broker fabric due to oversubscription/congestion. Tool overload check is healthy, so loss is upstream of the IDS port, not IDS ingest overload.",
+   "impact_on_tool": "IDS requires both directions and full payload for TCP reassembly and signature matching. Missing segments prevent stream reassembly, cause missed detections, allow attacker evasion via dropped packets, and generate incomplete flows in IDS.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "SPAN/mirror buffers drop under load; replacing SPAN with passive TAP (or dedicated TAP + packet broker with lossless buffering) eliminates switch-level drops and provides complete copy to IDS. If TAP already in use, add aggregation/balancing to prevent broker egress drops."
+   },
+   "evidence_frames": [
+    28,
+    29,
+    120,
+    121,
+    151,
+    152,
+    251,
+    253,
+    299,
+    300,
+    302,
+    303,
+    465,
+    466,
+    516,
+    517,
+    518,
+    522,
+    542,
+    544
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "64.85% of bytes are encrypted (TLS/QUIC) exceeding IDS tolerance of 60%. Traffic is opaque to IDS without decryption; no VLAN or direction issue, purely payload visibility limit.",
+   "impact_on_tool": "IDS needs full cleartext payload for signature and anomaly detection. With 65% encrypted, IDS is blind to payload content and limited to metadata/flow analysis, significantly reducing detection coverage for encrypted attacks/C2.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "out_of_band_decrypt_before_ids",
+     "preserve_privacy": true
+    },
+    "why": "IDS cannot inspect encrypted payload natively; route relevant TLS traffic through an out-of-band SSL visibility/decryption appliance (with privacy/policy filters) to feed cleartext copy to IDS while respecting compliance."
+   },
+   "evidence_frames": [
+    19,
+    22,
+    23,
+    24,
+    25,
+    27,
+    29,
+    32,
+    37,
+    39,
+    40,
+    41,
+    42,
+    44,
+    47,
+    54,
+    56,
+    57,
+    58,
+    59
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2941,
+  "tokens_out": 2023,
+  "cost_usd": 0.01227,
+  "seconds": 10.3,
+  "recorded_at": "2026-10-28"
+ }
+}

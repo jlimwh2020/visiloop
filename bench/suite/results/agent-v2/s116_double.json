@@ -1,0 +1,83 @@
+{
+ "feed": "s116_double",
+ "status": "degraded",
+ "summary": "Feed s116_double is degraded: 82.3% encrypted traffic exceeds IDS 60% tolerance and 1.56 Gbps bursts overload the 1 Gbps IDS port (156% capacity), causing payload blindness and packet loss risk.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "82.3% of bytes are TLS-encrypted vs 60% IDS tolerance; packet broker is forwarding encrypted traffic without SSL visibility/decryption, so payloads remain opaque.",
+   "impact_on_tool": "IDS requires full payload inspection but cannot match signatures or detect malware/C2/exfiltration inside encrypted flows, severely reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "out_of_band_TLS_decryption_or_JA3_metadata_enrichment",
+     "target_share_below": 0.6
+    },
+    "why": "IDS is payload-dependent; decrypting relevant TLS at the broker or providing decrypted copy/metadata restores inspection capability without exceeding tool design limits."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    12,
+    13,
+    14,
+    16,
+    18,
+    19,
+    22,
+    25,
+    47,
+    49,
+    50,
+    51,
+    52,
+    54
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak burst 1.56 Gbps in 1ms intervals exceeds 1 Gbps IDS port capacity (156% utilization, 4 overloaded intervals); broker is sending unshaped bursts without load balancing or filtering.",
+   "impact_on_tool": "IDS port oversubscribed will drop packets during bursts, causing incomplete flows, missed signatures, and attacker evasion via burst-induced loss.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "hash_based",
+     "target_ports": 2,
+     "per_port_threshold_gbps": 0.8,
+     "hash": "5-tuple"
+    },
+    "why": "Distributing traffic across 2x1G IDS ports or adding filtering keeps per-port load below 80% threshold and prevents burst drops while preserving both directions for stateful inspection."
+   },
+   "evidence_frames": [
+    1,
+    410,
+    637,
+    992
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2904,
+  "tokens_out": 2119,
+  "cost_usd": 0.01264,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-28"
+ }
+}

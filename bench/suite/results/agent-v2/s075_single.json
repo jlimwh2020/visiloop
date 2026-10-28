@@ -1,0 +1,58 @@
+{
+ "feed": "s075_single",
+ "status": "degraded",
+ "summary": "Feed s075_single is degraded: 17.1% of TCP sessions (18/105) are one-way, exceeding 10% threshold. APM requires bidirectional traffic and will have incomplete transaction visibility.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN is forwarding only one direction of bidirectional flows to the APM port. Likely asymmetric routing capture or missing aggregation - e.g., only client->server or server->client side is being delivered, or two directional TAPs are not aggregated to the same tool port.",
+   "impact_on_tool": "APM needs both directions to correlate requests/responses, measure latency, and track TCP handshakes. With 17.1% one-way sessions, APM will report incomplete transactions, inaccurate response times, and miss performance degradations.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash_5tuple_to_single_tool_port": true
+    },
+    "why": "Aggregate both directions of each flow to the same APM tool port so the APM sees complete client-server exchanges for accurate transaction analysis."
+   },
+   "evidence_frames": [
+    49,
+    266,
+    287,
+    309,
+    337,
+    483,
+    506,
+    516,
+    603,
+    720,
+    768,
+    1002,
+    1026,
+    1045,
+    1072,
+    1097,
+    1170,
+    1239
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2826,
+  "tokens_out": 1454,
+  "cost_usd": 0.00971,
+  "seconds": 8.6,
+  "recorded_at": "2026-10-28"
+ }
+}

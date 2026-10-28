@@ -1,0 +1,23 @@
+{
+ "feed": "s019_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s019_clean. No duplicates, one-way traffic, packet drops, tool overload, missing VLANs, or excessive encryption detected. NDR requirements (both directions, full payload, 10 Gbps) are met. No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2695,
+  "tokens_out": 1091,
+  "cost_usd": 0.00801,
+  "seconds": 5.7,
+  "recorded_at": "2026-10-28"
+ }
+}

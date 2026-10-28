@@ -1,0 +1,80 @@
+{
+ "feed": "s139_double",
+ "status": "degraded",
+ "summary": "IDS feed s139_double is degraded: 3.34 Gbps microbursts overwhelm 1 Gbps IDS port (334% overload) causing 6.5% TCP packet drops - IDS receives incomplete traffic and misses detections.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak traffic hits 3.34 Gbps in 1ms bursts vs 1 Gbps IDS port capacity (334% of capacity, 3 overloaded intervals) - port buffers overflow and tail-drop. IDS requires both directions and full payload, so any burst over 1G causes loss.",
+   "impact_on_tool": "IDS drops packets under load, cannot reassemble TCP streams or match signatures during bursts, creating blind spots and allowing exploits to evade detection",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 4,
+     "target_capacity_gbps": 1
+    },
+    "why": "Distribute microbursts across multiple 1G tool ports (or upgrade to 10G) with 5-tuple hashing to keep per-port utilization <80% and preserve both directions per flow for IDS state tracking"
+   },
+   "evidence_frames": [
+    1,
+    937,
+    1735
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "122 of 1880 TCP packets (6.5% vs 1% threshold) show missing data/gaps - broker/SPAN buffers dropping packets when 3.3 Gbps bursts exceed 1G tool port. Correlated directly with tool_overload bursts.",
+   "impact_on_tool": "IDS sees truncated flows and incomplete payload, fails to detect multi-packet attacks, suffers TCP reassembly failures and false negatives; 6.5% loss severely degrades detection coverage",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 4
+    },
+    "why": "Load balancing is required instead of slicing/filtering because IDS needs_full_payload=true - slicing would break payload inspection, load balancing preserves full flows while eliminating congestion drops"
+   },
+   "evidence_frames": [
+    27,
+    28,
+    41,
+    44,
+    53,
+    56,
+    78,
+    80,
+    99,
+    100,
+    118,
+    119,
+    136,
+    138,
+    221,
+    223,
+    233,
+    235,
+    298,
+    300
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2907,
+  "tokens_out": 3978,
+  "cost_usd": 0.02054,
+  "seconds": 17.4,
+  "recorded_at": "2026-10-28"
+ }
+}

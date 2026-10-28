@@ -1,0 +1,59 @@
+{
+ "feed": "s111_double",
+ "status": "degraded",
+ "summary": "Feed s111_double to SIEM is degraded: 9.0% duplicate packets waste capacity and 4.62 Gbps microbursts overload the 1 Gbps SIEM port causing drops and detection gaps.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets arriving via multiple SPAN/TAP ingress ports aggregated to one SIEM output without deduplication at the packet broker - 301 of 3331 packets (9.0%) are duplicates exceeding 5% threshold.",
+   "impact_on_tool": "SIEM wastes EPS/license/storage processing duplicates, inflates event counts and correlation, and reduces effective detection coverage.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop duplicate copies before SIEM, restoring accurate counts and freeing bandwidth for unique events."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker forwards unshaped microbursts peaking at 4.62 Gbps in 1ms intervals to a 1 Gbps SIEM port (462% of capacity, 3 overloaded intervals).",
+   "impact_on_tool": "SIEM ingress port drops packets during bursts, creating blind spots and missed security events; SIEM cannot keep up with peak rate.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_group": "siem_cluster",
+     "hash": "5tuple",
+     "required_capacity_gbps": 5
+    },
+    "why": "Distribute traffic across multiple SIEM receivers or add filtering/slicing (SIEM needs_full_payload=false) to keep per-port rate below 1 Gbps and prevent burst drops."
+   },
+   "evidence_frames": [
+    1,
+    999,
+    2201
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2846,
+  "tokens_out": 1946,
+  "cost_usd": 0.01183,
+  "seconds": 9.6,
+  "recorded_at": "2026-10-28"
+ }
+}

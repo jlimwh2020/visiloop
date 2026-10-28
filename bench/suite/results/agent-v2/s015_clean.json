@@ -1,0 +1,23 @@
+{
+ "feed": "s015_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM on s015_clean: no duplicates, no one-way flows, no packet drops, no tool overload, required VLANs 10,20 present, encrypted share within tolerance (max 100%). Traffic is complete and correct for APM detection.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2704,
+  "tokens_out": 981,
+  "cost_usd": 0.00755,
+  "seconds": 7.0,
+  "recorded_at": "2026-10-28"
+ }
+}

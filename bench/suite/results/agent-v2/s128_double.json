@@ -1,0 +1,103 @@
+{
+ "feed": "s128_double",
+ "status": "degraded",
+ "summary": "Feed s128_double is degraded: required VLAN 20 is missing (50% untagged) and encrypted traffic at 93.9% exceeds NDR 90% tolerance. NDR needs both VLANs and full payload for detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker/TAP aggregation is stripping 802.1Q tags or forwarding from access ports as untagged. 50% of packets arrive untagged and VLAN 20 is never seen, indicating trunk tags are removed upstream or VLAN 20 not forwarded to this tool port.",
+   "impact_on_tool": "NDR requires VLANs 10 and 20 for segmentation-aware detection. Without VLAN 20 tags it cannot attribute traffic to the correct segment, missing lateral movement, segmentation violations and VLAN-specific policies - effectively blind to VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "ensure_trunk_forwarding": true
+    },
+    "why": "Preserving 802.1Q tags and ensuring the broker forwards trunk traffic for VLANs 10 and 20 restores visibility so the NDR can correlate and detect per-VLAN threats."
+   },
+   "evidence_frames": [
+    2,
+    6,
+    7,
+    9,
+    11,
+    12,
+    15,
+    17,
+    18,
+    19,
+    21,
+    24,
+    25,
+    28,
+    30,
+    33,
+    34,
+    38,
+    41,
+    44
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93.9% of bytes are encrypted (TLS), above the NDR's 90% tolerance. Traffic is predominantly TLS 1.2/1.3 with no upstream decryption, so the NDR receives only headers and encrypted payloads.",
+   "impact_on_tool": "NDR needs full payload for deep inspection. At this encryption level it is limited to metadata/flow analysis and cannot detect payload-based C2, exfiltration, or exploits inside encrypted sessions, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "selective_out_of_band_decryption",
+     "target_encrypted_share_below": 0.9,
+     "protocols": [
+      "TLS"
+     ]
+    },
+    "why": "Selective decryption via a packet broker-integrated SSL visibility solution or feeding a decrypted copy will bring encrypted share below 90% and restore payload inspection without overwhelming the NDR."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    7,
+    9,
+    11,
+    12,
+    13,
+    15,
+    17,
+    18,
+    19,
+    20,
+    21,
+    24,
+    25,
+    28,
+    30,
+    33,
+    34
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2947,
+  "tokens_out": 2110,
+  "cost_usd": 0.01265,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

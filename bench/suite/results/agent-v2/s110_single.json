@@ -1,0 +1,60 @@
+{
+ "feed": "s110_single",
+ "status": "degraded",
+ "summary": "Feed s110_single is degraded: 20.4% of TCP sessions (23/113) are one-way, exceeding 10% threshold for IDS that requires bidirectional traffic. All other checks (duplicates, encrypted share, VLAN 10/20, packet drops, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN aggregation is not delivering both directions of the same session to the IDS tool port. 20.4% one-way indicates asymmetric forwarding - likely only client-to-server or server-to-client is being forwarded, or east/west paths are split across different broker ingress ports without aggregation.",
+   "impact_on_tool": "IDS needs_both_directions=true for stateful TCP reassembly and signature matching. One-way sessions prevent stream reconstruction, causing missed detections, incomplete flows, and high false-negative rate for exploits and C2.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_flow_affinity": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port on the packet broker to restore full bidirectional visibility required for stateful inspection."
+   },
+   "evidence_frames": [
+    5,
+    16,
+    92,
+    170,
+    265,
+    324,
+    368,
+    473,
+    596,
+    647,
+    708,
+    798,
+    857,
+    904,
+    945,
+    1206,
+    1295,
+    1305,
+    1370,
+    1395
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2827,
+  "tokens_out": 1761,
+  "cost_usd": 0.01102,
+  "seconds": 8.1,
+  "recorded_at": "2026-10-28"
+ }
+}

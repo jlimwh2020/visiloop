@@ -1,0 +1,75 @@
+{
+ "feed": "s136_double",
+ "status": "degraded",
+ "summary": "Feed s136_double to APM is degraded: 69.4% of TCP sessions are one-way (APM requires bidirectional visibility) and 8.0% duplicate packets detected. No drops, overload, VLAN or encryption issues found.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of traffic is reaching the APM, likely due to TAP/SPAN placement monitoring a single link direction or asymmetric routing where return path is not tapped, or packet broker policy splitting forward/return flows to different tool ports without bidirectional aggregation.",
+   "impact_on_tool": "APM needs both directions to correlate requests/responses and measure latency; with 111 of 160 sessions one-way it cannot compute response times, will produce incomplete traces and miss performance errors.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "flow_hash": "5-tuple_bidirectional"
+    },
+    "why": "Ensure forward and return packets for each session are aggregated to the same APM tool port so bidirectional transaction correlation works"
+   },
+   "evidence_frames": [
+    1,
+    19,
+    31,
+    36,
+    46,
+    55,
+    62,
+    70,
+    82,
+    90,
+    103,
+    130,
+    140,
+    188,
+    217,
+    224,
+    232,
+    261,
+    268,
+    304
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "8.0% duplicates (148 of 1850 packets) indicates same packets delivered twice, typically from aggregating two SPAN/TAP feeds that see the same traffic or a packet broker forwarding loop without deduplication enabled.",
+   "impact_on_tool": "Duplicates inflate APM transaction counts, distort latency and retransmission metrics, and waste tool capacity on the 10G port, causing false performance alerts.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet broker deduplication to deliver each packet once so APM metrics are accurate and capacity is not wasted"
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2881,
+  "tokens_out": 2143,
+  "cost_usd": 0.01271,
+  "seconds": 8.4,
+  "recorded_at": "2026-10-28"
+ }
+}

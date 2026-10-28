@@ -1,0 +1,84 @@
+{
+ "feed": "s143_double",
+ "status": "degraded",
+ "summary": "Feed s143_double is degraded: VLAN 20 missing (50% of packets untagged) and IDS port overloaded by microbursts to 1.53 Gbps (153% of 1 Gbps capacity) across 5 intervals.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream TAP/SPAN trunk is stripping 802.1Q tags or not forwarding VLAN 20; 50% of packets arrive untagged so required VLAN 20 is invisible at the IDS.",
+   "impact_on_tool": "IDS has no visibility into VLAN 20, missing lateral movement, segmentation violations and VLAN-based correlation; detection coverage effectively halved for required VLANs [10,20].",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Preserve and forward 802.1Q tags for VLANs 10 and 20 through the packet broker to restore full segmentation visibility for the IDS."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    15,
+    18,
+    21,
+    23,
+    25,
+    27,
+    29,
+    31,
+    34,
+    35,
+    36,
+    38
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate burst rate of 1.53 Gbps in 1 ms exceeds the single 1 Gbps IDS port capacity (153% of capacity, 5 intervals over 80% threshold); packet broker is not load-balancing or shaping bursts.",
+   "impact_on_tool": "IDS ingress buffers overrun and silently drop packets during bursts, breaking TCP reassembly and causing missed signatures and blind spots for burst-borne attacks despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "additional_ports": 1
+    },
+    "why": "Distribute traffic with flow-aware 5-tuple hashing across 2+ IDS ports to keep per-port utilization below 80% and absorb 1.53 Gbps microbursts without drops."
+   },
+   "evidence_frames": [
+    1,
+    417,
+    649,
+    966,
+    1256
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2914,
+  "tokens_out": 2519,
+  "cost_usd": 0.01435,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-28"
+ }
+}

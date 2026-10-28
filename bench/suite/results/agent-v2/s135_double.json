@@ -1,0 +1,75 @@
+{
+ "feed": "s135_double",
+ "status": "degraded",
+ "summary": "Feed s135_double to APM is degraded: 24.2% duplicates and 2.3% TCP packet loss detected. Duplicates waste APM capacity and skew metrics; drops cause incomplete transactions.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Same packets delivered twice to the tool, most likely from aggregating two SPAN/mirror feeds or a TAP/SPAN overlap without broker deduplication, or a loop in the packet broker aggregation. 658 of 2714 packets (24.2%) exceed 5% threshold.",
+   "impact_on_tool": "APM will count duplicate transactions, inflate latency/throughput metrics, create false retransmission signals, and waste 24% of its 10Gbps processing capacity on redundant data.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "dedup_window_ms": 10,
+     "location": "packet_broker_egress_to_tool"
+    },
+    "why": "Enable packet-broker deduplication at egress to APM to suppress identical packets arriving within a short window before delivery, eliminating double-counting without losing unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Packet broker or SPAN buffer overflow/congestion causing intermittent drops. TCP sequence gaps show 57 of 2511 TCP packets (2.3%) missing, above 1% threshold, while tool itself is not overloaded, pointing to loss in the visibility fabric before the tool.",
+   "impact_on_tool": "APM sees incomplete flows and missing segments, leading to broken transaction traces, inaccurate latency/error rates, and missed application performance degradations due to 2.3% data loss.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "add_tool_capacity_or_filter": true
+    },
+    "why": "Distribute traffic across additional APM instances/ports or filter/slice unwanted traffic at the broker to reduce oversubscription and buffer drops; APM does not need full payload so slicing is also an option to lower bandwidth while preserving headers."
+   },
+   "evidence_frames": [
+    168,
+    169,
+    201,
+    203,
+    303,
+    304,
+    327,
+    329,
+    330,
+    333,
+    494,
+    495,
+    536,
+    538,
+    548,
+    556,
+    597,
+    598,
+    715,
+    717
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2874,
+  "tokens_out": 2499,
+  "cost_usd": 0.01421,
+  "seconds": 12.4,
+  "recorded_at": "2026-10-28"
+ }
+}

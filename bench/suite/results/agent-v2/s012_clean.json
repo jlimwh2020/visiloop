@@ -1,0 +1,23 @@
+{
+ "feed": "s012_clean",
+ "status": "healthy",
+ "summary": "Feed s012_clean is healthy: NDR receives complete, correct bidirectional traffic with no drops, duplicates, overload, VLAN stripping, or excessive encryption. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2690,
+  "tokens_out": 945,
+  "cost_usd": 0.00738,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-28"
+ }
+}

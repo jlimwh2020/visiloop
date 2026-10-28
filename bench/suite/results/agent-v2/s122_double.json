@@ -1,0 +1,101 @@
+{
+ "feed": "s122_double",
+ "status": "degraded",
+ "summary": "Feed s122_double to NDR is degraded: 50% of packets missing required VLAN 20 (tags stripped) and 93.5% encrypted traffic exceeds NDR 90% tolerance, reducing detection coverage despite no duplicates, drops, overload or one-way issues.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is stripping 802.1Q tags or not forwarding trunk VLAN 20; 50% of packets arrive untagged and VLAN 20 is completely absent while NDR requires VLANs 10 and 20.",
+   "impact_on_tool": "NDR loses visibility into VLAN 20 segment - misses lateral movement and segmentation violations, correlation by VLAN fails, detection coverage halved for that zone.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "missing_vlan": 20,
+     "preserve_dot1q": true
+    },
+    "why": "Configure packet broker ingress and egress to preserve 802.1Q tags and explicitly forward VLANs 10 and 20 to this NDR tool port so required segmentation context is restored."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    15,
+    18,
+    21,
+    22,
+    23,
+    25,
+    26,
+    28,
+    29,
+    32,
+    35,
+    38,
+    39
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94% of bytes are TLS/encrypted, above the NDR's 90% tolerance; traffic is almost entirely opaque without a decryption point before the tool.",
+   "impact_on_tool": "NDR needs full payload for deep inspection and behavioral detection; with 93.5% encrypted, payload analysis, JA3, and threat detection are severely limited leading to missed encrypted C2/exfiltration.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "observed_encrypted_share": 0.935,
+     "max_tolerated_share": 0.9,
+     "decryption_point": "packet_broker_or_ssl_visibility"
+    },
+    "why": "Advise selective TLS decryption or mirror decrypted traffic via packet broker SSL visibility solution; alternatively feed metadata-enriched decrypted copy to NDR while keeping privacy/compliance controls."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    15,
+    18,
+    20,
+    21,
+    22,
+    23,
+    25,
+    26,
+    28,
+    29,
+    32,
+    35,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2943,
+  "tokens_out": 1981,
+  "cost_usd": 0.0121,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

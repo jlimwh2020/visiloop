@@ -1,0 +1,60 @@
+{
+ "feed": "s084_single",
+ "status": "degraded",
+ "summary": "Feed s084_single is degraded: 77.2% of TCP sessions are one-way (139/180), IDS requires bidirectional traffic for stateful detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is delivering only one direction per flow - likely a single-direction SPAN/TAP or asymmetric routing without bidirectional aggregation, so the return direction is sent elsewhere or dropped before the IDS.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and signature matching; with only one side it cannot track handshakes, reassemble streams, or detect exploits/C2 responses, causing missed detections and incomplete alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_flow_5tuple": true
+    },
+    "why": "Aggregate both directions of each 5-tuple flow to the same IDS tool port so stateful inspection sees complete sessions."
+   },
+   "evidence_frames": [
+    35,
+    43,
+    82,
+    91,
+    102,
+    109,
+    116,
+    124,
+    126,
+    159,
+    167,
+    173,
+    180,
+    197,
+    204,
+    207,
+    233,
+    243,
+    251,
+    260
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2812,
+  "tokens_out": 1928,
+  "cost_usd": 0.01171,
+  "seconds": 9.4,
+  "recorded_at": "2026-10-28"
+ }
+}

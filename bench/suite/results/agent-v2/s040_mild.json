@@ -1,0 +1,23 @@
+{
+ "feed": "s040_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s040_mild. Tool receives complete, correct traffic with no packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2709,
+  "tokens_out": 727,
+  "cost_usd": 0.00648,
+  "seconds": 6.3,
+  "recorded_at": "2026-10-28"
+ }
+}

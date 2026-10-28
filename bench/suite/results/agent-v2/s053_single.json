@@ -1,0 +1,61 @@
+{
+ "feed": "s053_single",
+ "status": "degraded",
+ "summary": "APM feed s053_single is degraded due to 5.4% packet loss (144 of 2645 TCP packets, threshold 1%) - other visibility checks (duplicates, one-way, VLAN, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream capture/forwarding loss before the tool - likely SPAN port oversubscription or packet broker buffer exhaustion under bursts. 5.44% TCP gaps exceeds 1% threshold while tool_overload is healthy, so loss is in SPAN/broker fabric, not APM overload.",
+   "impact_on_tool": "APM requires both directions but not full payload; missing segments cause incomplete transaction reconstruction, inaccurate latency/response-time calculations, missed errors and reduced application performance detection coverage.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 512,
+     "preserve_headers": true,
+     "alternative": "replace_span_with_tap if SPAN is in use"
+    },
+    "why": "APM needs_full_payload=false so payload can be truncated after L4 headers. Slicing sharply reduces bandwidth to fit the 10G tool port and prevents broker buffer drops while preserving APM flow metrics. If source is SPAN, replace SPAN with passive TAP for lossless capture as long-term fix."
+   },
+   "evidence_frames": [
+    31,
+    36,
+    214,
+    216,
+    224,
+    225,
+    338,
+    340,
+    349,
+    350,
+    406,
+    407,
+    439,
+    440,
+    468,
+    469,
+    507,
+    509,
+    582,
+    587
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2828,
+  "tokens_out": 3030,
+  "cost_usd": 0.01641,
+  "seconds": 15.6,
+  "recorded_at": "2026-10-28"
+ }
+}

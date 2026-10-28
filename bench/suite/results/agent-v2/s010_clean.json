@@ -1,0 +1,23 @@
+{
+ "feed": "s010_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s010_clean: no duplicates, no one-way traffic, no packet drops, no tool overload, VLANs 10 and 20 present, and encrypted share within tolerance. Tool receives complete, correct traffic.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2704,
+  "tokens_out": 632,
+  "cost_usd": 0.00607,
+  "seconds": 5.8,
+  "recorded_at": "2026-10-28"
+ }
+}

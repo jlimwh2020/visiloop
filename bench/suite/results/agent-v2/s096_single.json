@@ -1,0 +1,60 @@
+{
+ "feed": "s096_single",
+ "status": "degraded",
+ "summary": "Feed s096_single is degraded: 82.5% of bytes are encrypted, exceeding the IDS tolerance of 60%. Payload inspection is blinded, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "83% of bytes are TLS-encrypted (vs 60% IDS tolerance) with no decryption stage before the IDS, so payloads remain opaque to inspection.",
+   "impact_on_tool": "IDS needs full payload for signature/anomaly detection; encrypted traffic bypasses inspection, causing missed intrusions and severely reduced detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "target_encrypted_share": 0.6,
+     "location": "packet_broker_before_ids"
+    },
+    "why": "Adding SSL visibility/decryption (or selective TLS offload) before the IDS will restore cleartext payload and bring encrypted share below the 60% threshold the IDS can tolerate."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    17,
+    20,
+    22,
+    23,
+    24,
+    26,
+    28,
+    33,
+    54,
+    56,
+    57,
+    58
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2812,
+  "tokens_out": 1718,
+  "cost_usd": 0.01082,
+  "seconds": 9.6,
+  "recorded_at": "2026-10-28"
+ }
+}

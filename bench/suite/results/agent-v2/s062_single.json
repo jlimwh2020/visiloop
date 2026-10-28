@@ -1,0 +1,39 @@
+{
+ "feed": "s062_single",
+ "status": "degraded",
+ "summary": "Feed s062_single to APM is degraded: 27.1% duplicate packets (1150/4238) exceeds 5% threshold. All other visibility checks (one-way, drops, VLANs, encryption, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packets are being delivered twice, most likely from aggregating the same traffic from two SPAN/mirror sources or dual TAP feeds through the packet broker without deduplication enabled. Broker is forwarding identical copies via overlapping paths.",
+   "impact_on_tool": "APM will double-count transactions and inflate throughput/latency metrics, skewing response-time calculations and application performance baselines, wasting CPU/storage and potentially triggering false performance alerts.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet-broker hardware deduplication within a short time window to drop identical copies before delivery, restoring accurate transaction counts and preserving APM capacity without losing unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2756,
+  "tokens_out": 1461,
+  "cost_usd": 0.00965,
+  "seconds": 8.4,
+  "recorded_at": "2026-10-28"
+ }
+}

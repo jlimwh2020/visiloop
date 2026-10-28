@@ -1,0 +1,43 @@
+{
+ "feed": "s094_single",
+ "status": "degraded",
+ "summary": "IDS feed s094_single is degraded due to severe tool overload: 4.70 Gbps bursts on a 1 Gbps IDS port (470% capacity). All other visibility checks (duplicates, encryption, VLANs, one-way, drops) are healthy, but overload will cause packet drops and missed detections without broker remediation.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering full unfiltered traffic bursts peaking at 4.70 Gbps to a single 1 Gbps IDS port with no load balancing or aggregation. 2 intervals exceeded the 80% overload threshold, indicating sustained oversubscription at the broker egress.",
+   "impact_on_tool": "IDS cannot ingest 470% of its line rate - it will drop packets randomly under load, miss exploit payloads and C2 callbacks, create incomplete flows and false negatives, and lose detection coverage despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple hash",
+     "tool_group_size": 5,
+     "per_tool_capacity_gbps": 1
+    },
+    "why": "Distribute 4.7 Gbps bursts across ~5x 1 Gbps IDS members via 5-tuple load balancing to keep each tool under 80% utilization, preserving full payload and bidirectional visibility without drops."
+   },
+   "evidence_frames": [
+    1,
+    1208
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2780,
+  "tokens_out": 1609,
+  "cost_usd": 0.01031,
+  "seconds": 9.8,
+  "recorded_at": "2026-10-28"
+ }
+}

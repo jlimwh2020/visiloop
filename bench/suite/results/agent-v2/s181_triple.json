@@ -1,0 +1,123 @@
+{
+ "feed": "s181_triple",
+ "status": "degraded",
+ "summary": "Feed s181_triple to IDS is degraded: 3 faults found. Peak bursts hit 2.74 Gbps on a 1 Gbps port (274% overload), 46.7% of TCP sessions are one-way (91/195), and 70.7% of bytes are encrypted exceeding the IDS 60% tolerance. IDS is dropping traffic during bursts and blind to nearly half of sessions.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering bursty traffic peaking at 2.74 Gbps to a single 1 Gbps IDS port with no load balancing or burst buffering. 3 intervals exceeded 80% capacity threshold, indicating sustained microbursts and oversubscription.",
+   "impact_on_tool": "IDS port drops packets during bursts, causing missed signatures, incomplete flow reassembly, and blind spots for detection exactly when traffic spikes.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "tool_group": "IDS_cluster",
+     "ports_needed": 3,
+     "target_utilization": 0.8
+    },
+    "why": "Distribute traffic across 3x1G IDS ports/instances via 5-tuple hashing to keep per-port utilization under 80% and absorb 2.74 Gbps bursts without drops; IDS needs full payload so slicing is not an option."
+   },
+   "evidence_frames": [
+    1,
+    782,
+    1697
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions is reaching the IDS - likely asymmetric routing with single-sided TAP/SPAN capture or packet broker not aggregating both directions (client->server and server->client) to the same tool port.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly and stateful inspection. With 46.7% one-way sessions, it cannot reconstruct streams, misses request/response correlation, and fails to detect attacks that span both directions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "hash": "5-tuple",
+     "ensure_affinity": true
+    },
+    "why": "Configure packet broker to aggregate complementary directions and hash both sides of the same 5-tuple to the same IDS tool port to restore bidirectional visibility."
+   },
+   "evidence_frames": [
+    31,
+    40,
+    47,
+    54,
+    78,
+    87,
+    112,
+    151,
+    156,
+    186,
+    212,
+    237,
+    245,
+    302,
+    328,
+    336,
+    407,
+    467,
+    475,
+    481
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "71% of bytes are encrypted (TLS/QUIC) vs IDS tolerance of 60%. No inline or out-of-band decryption is being applied before the IDS, so payload is opaque.",
+   "impact_on_tool": "IDS needs full payload for signature matching. With 70.7% encrypted, it is blind to most application content and can only do metadata/heuristics, sharply reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker_or_dedicated_decryption",
+     "protocols": [
+      "TLS_1.2",
+      "TLS_1.3"
+     ],
+     "policy": "decrypt_selectively_and_forward_cleartext_to_IDS",
+     "target_encrypted_share_below": 0.6
+    },
+    "why": "IDS cannot inspect encrypted payloads; selective decryption before the IDS will bring visible cleartext share back under the 60% threshold and restore signature efficacy while respecting privacy policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    16,
+    18,
+    19,
+    20,
+    21,
+    23,
+    26,
+    34,
+    42,
+    56,
+    63,
+    65
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3032,
+  "tokens_out": 2299,
+  "cost_usd": 0.01356,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

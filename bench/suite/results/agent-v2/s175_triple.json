@@ -1,0 +1,94 @@
+{
+ "feed": "s175_triple",
+ "status": "degraded",
+ "summary": "NDR feed s175_triple is degraded with 3 faults: tool overload (34.02 Gbps burst on 10 Gbps port, 340% capacity), 8.5% duplicates, and 94.4% encrypted share exceeding 90% NDR tolerance. No packet drops, one-way, or VLAN issues detected.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "1ms microburst peaked at 34.02 Gbps on a 10 Gbps NDR port (340% of capacity, 1 overloaded interval). Packet broker is aggregating too much traffic onto a single tool port without load balancing, causing drops at the NDR NIC even though broker shows no drops.",
+   "impact_on_tool": "NDR will drop packets at ingress during bursts, causing incomplete flow reassembly and missed detections. NDR needs both directions and full payload, so any tool-side loss creates blind spots.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple hash",
+     "target_ports": 4,
+     "port_speed_gbps": 10
+    },
+    "why": "Distribute 34 Gbps bursts across multiple 10G NDR ports to keep per-port utilization <80% and prevent tool-side drops"
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "8.5% duplicates (706 of 8354 packets, threshold 5%) indicates same packets arriving via multiple SPAN/mirror paths or overlapping TAP aggregation without broker deduplication.",
+   "impact_on_tool": "Wastes ~8.5% of NDR processing and 10G bandwidth on redundant packets, inflates flow counts, skews NDR analytics, and worsens the overload condition.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet-broker dedup"
+    },
+    "why": "Remove duplicates at packet broker before delivery to free NDR capacity and correct analytics"
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.4% of bytes are encrypted vs NDR tolerance of 90%. Traffic is predominantly TLS without visibility-layer decryption, leaving only headers for inspection.",
+   "impact_on_tool": "NDR needs full payload for deep inspection; with 94% encrypted it is blind to payload content, severely limiting detection of malware, C2 and exfiltration inside encrypted sessions.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.9445,
+     "tolerance": 0.9,
+     "solution": "out-of-band SSL visibility appliance or selective decryption policy"
+    },
+    "why": "NDR cannot inspect encrypted payload at this share; decrypt relevant TLS at visibility layer or tune NDR to focus on metadata/JA3/JA4 and encrypted-traffic analytics"
+   },
+   "evidence_frames": [
+    3,
+    5,
+    7,
+    8,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    28,
+    29,
+    30
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2958,
+  "tokens_out": 3144,
+  "cost_usd": 0.01706,
+  "seconds": 15.1,
+  "recorded_at": "2026-10-28"
+ }
+}

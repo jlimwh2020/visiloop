@@ -1,0 +1,120 @@
+{
+ "feed": "s176_triple",
+ "status": "degraded",
+ "summary": "Feed s176_triple is degraded with 3 high-severity faults: required VLAN 20 missing (48% untagged), 6.0% TCP packet drops, and NDR port overload at 12.81 Gbps (128% of 10 Gbps capacity). NDR has incomplete payload and segmentation visibility.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen and 48% of packets are untagged, indicating VLAN tags are being stripped upstream - likely packet broker configured to strip 802.1Q or SPAN/TAP not forwarding tagged traffic for VLAN 20.",
+   "impact_on_tool": "NDR loses segmentation context for VLAN 20; cannot correlate detections to correct tenant/segment and will miss lateral movement or policy violations isolated to that VLAN. Violates tool profile requiring VLANs [10,20].",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "restore_vlan_ids": [
+      20
+     ],
+     "preserve_dot1q": true,
+     "location": "packet_broker_ingress"
+    },
+    "why": "Preserve and forward 802.1Q tags for VLANs 10 and 20 through TAP/SPAN and packet broker to NDR so it can enforce segmentation-aware detection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    21,
+    23,
+    24,
+    27,
+    29,
+    31,
+    32,
+    34,
+    35,
+    37,
+    40
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "6.0% of TCP packets (505/8429) show gaps/retransmission holes consistent with buffer drops upstream - classic SPAN oversubscription or packet broker egress queue drops under burst, not normal network loss.",
+   "impact_on_tool": "NDR cannot reassemble full TCP streams due to missing payload; needs_full_payload=true is violated, causing missed signatures, broken flow reassembly, and false negatives for IDS/NDR detections.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace": "SPAN",
+     "with": "passive_TAP",
+     "tap_aggregation": true
+    },
+    "why": "Passive TAP delivers lossless, line-rate copy without SPAN buffer limitations; eliminates the 6% capture loss and ensures complete payload delivery to NDR."
+   },
+   "evidence_frames": [
+    31,
+    33,
+    59,
+    61,
+    68,
+    69,
+    90,
+    92,
+    145,
+    146,
+    203,
+    206,
+    219,
+    222,
+    233,
+    234,
+    254,
+    255,
+    276,
+    277
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak burst of 12.81 Gbps in 1ms interval exceeds the NDR's 10 Gbps port capacity by 28% (128% utilization) across 2 intervals - feed is bursting beyond single-tool capacity.",
+   "impact_on_tool": "NDR ingress drops packets during bursts due to port oversubscription; even if upstream is lossless, tool itself discards traffic, creating blind spots exactly during high-volume (often attack-relevant) periods.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "peak_gbps": 12.81,
+     "method": "flow_hash_load_balance",
+     "shards": 2
+    },
+    "why": "Distribute traffic via packet broker load-balancing across 2x10G NDR ports or add aggregation/load-balancer to absorb 12.81 Gbps bursts without drops."
+   },
+   "evidence_frames": [
+    1,
+    3511
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3031,
+  "tokens_out": 2744,
+  "cost_usd": 0.01545,
+  "seconds": 16.3,
+  "recorded_at": "2026-10-28"
+ }
+}

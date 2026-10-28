@@ -1,0 +1,100 @@
+{
+ "feed": "s131_double",
+ "status": "degraded",
+ "summary": "Feed s131_double to IDS is degraded: 100% of packets missing required VLANs 10,20 (tags stripped) and 79.7% encrypted traffic exceeds 60% IDS tolerance, limiting payload inspection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP egress is stripping 802.1Q tags - 100% of packets arrive untagged so required VLANs 10 and 20 are not delivered. Typically caused by broker egress port set to access/untagged mode or SPAN stripping tags.",
+   "impact_on_tool": "IDS cannot segment or correlate traffic by VLAN 10/20, misses VLAN-based policy violations and lateral movement, reducing detection coverage for segmented assets.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Restore and preserve 802.1Q tags through the packet broker to the IDS so VLAN-aware rules and segmentation monitoring work."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "79.7% of bytes are encrypted (TLS), above the IDS 60% tolerance. Traffic is increasingly encrypted without a decryption/visibility point before the IDS.",
+   "impact_on_tool": "IDS requires full payload for signature matching but is blind to encrypted payloads; detection falls back to metadata only, missing exploits and C2 in encrypted flows.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "suggest_decryption": true,
+     "location": "before_ids",
+     "encrypted_share": 0.7971
+    },
+    "why": "IDS cannot inspect encrypted payloads; advise decrypting relevant TLS flows via a visibility/decryption zone or forwarding to a tool with SSL inspection, or tuning to focus on decryptable traffic."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    16,
+    18,
+    19,
+    20,
+    21,
+    23,
+    28,
+    47,
+    49,
+    50,
+    51,
+    52
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2949,
+  "tokens_out": 2528,
+  "cost_usd": 0.01443,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

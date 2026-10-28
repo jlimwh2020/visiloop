@@ -1,0 +1,57 @@
+{
+ "feed": "s103_single",
+ "status": "degraded",
+ "summary": "Feed s103_single is degraded due to high encrypted traffic share (94.6% vs 90% NDR tolerance) limiting payload inspection. All other checks (duplicates, one-way, drops, overload, VLAN) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.6% of bytes are encrypted (TLS/encrypted flows), exceeding the NDR's 90% tolerance. Traffic is delivered without broker-level decryption or selective forwarding from a decryption zone, so the NDR receives mostly opaque payloads.",
+   "impact_on_tool": "NDR needs full payload for signature and behavioral detection; with ~95% encryption it is blind to most L7 content, reducing detection coverage for C2, exfiltration and lateral movement and increasing false negatives.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "NDR cannot analyze encrypted payloads natively. Decrypt relevant TLS at the packet broker/decryption zone or selectively forward decrypted traffic to the NDR, while respecting privacy/policy, to restore payload visibility within the 90% tolerance."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    26,
+    27,
+    30,
+    31,
+    32,
+    34
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2812,
+  "tokens_out": 1573,
+  "cost_usd": 0.0102,
+  "seconds": 9.9,
+  "recorded_at": "2026-10-28"
+ }
+}

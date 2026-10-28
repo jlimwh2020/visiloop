@@ -1,0 +1,97 @@
+{
+ "feed": "s140_double",
+ "status": "degraded",
+ "summary": "Feed s140_double to APM is degraded: 21.2% one-way TCP sessions and 5.6% packet loss detected. APM requires bidirectional visibility and will have incomplete transaction timing and missing data.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "28 of 132 TCP sessions (21.2%) show only one direction, exceeding 10% threshold. Most likely asymmetric routing with packet broker not aggregating both directions to same tool port, or SPAN/TAP only covering one side of the path. Traffic from client->server and server->client is being split or one side is not captured.",
+   "impact_on_tool": "APM needs_both_directions=true. One-way flows prevent transaction response-time calculation, TCP handshake analysis, and application latency breakdown - APM will report incomplete or failed transactions and miss performance issues.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "use_flow_affinity": true
+    },
+    "why": "Aggregate both directions of each flow to the same APM tool port via packet broker flow-aware aggregation to restore bidirectional visibility required for APM."
+   },
+   "evidence_frames": [
+    29,
+    126,
+    151,
+    261,
+    301,
+    340,
+    354,
+    379,
+    400,
+    421,
+    564,
+    643,
+    680,
+    699,
+    757,
+    921,
+    937,
+    970,
+    1211,
+    1293
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "96 of 1713 TCP packets (5.6%) show gaps/retransmissions indicating capture loss upstream of tool, exceeding 1% threshold. Tool overload is healthy, so loss is not at APM ingress. Most likely SPAN port buffer exhaustion/oversubscription on source switch or packet broker ingress drops due to burst microbursts.",
+   "impact_on_tool": "APM will see incomplete flows, retransmission noise, and inaccurate latency/error counts. Even though APM needs_full_payload=false, missing packets break TCP sequence reconstruction and transaction correlation, degrading detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_source": "SPAN/mirror",
+     "replacement": "passive TAP",
+     "target_feed": "s140_double"
+    },
+    "why": "TAP provides lossless, full-duplex capture without SPAN buffer drops or switch CPU contention, eliminating the 5.6% loss before the packet broker. If TAP not immediately possible, add packet broker buffering/filtering to reduce SPAN oversubscription."
+   },
+   "evidence_frames": [
+    11,
+    13,
+    14,
+    16,
+    18,
+    32,
+    102,
+    105,
+    122,
+    124,
+    224,
+    225,
+    227,
+    229,
+    289,
+    290,
+    324,
+    325,
+    327,
+    434
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2946,
+  "tokens_out": 2001,
+  "cost_usd": 0.01219,
+  "seconds": 9.8,
+  "recorded_at": "2026-10-28"
+ }
+}

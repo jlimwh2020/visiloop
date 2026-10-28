@@ -1,0 +1,116 @@
+{
+ "feed": "s174_triple",
+ "status": "degraded",
+ "summary": "Feed s174_triple is degraded: NDR receives incomplete/incorrect traffic - 19.5% duplicates, VLAN 20 missing (49% untagged), and 3.8% TCP packet loss causing gaps in flows.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Traffic is being duplicated before the NDR - likely two SPAN/TAP feeds carrying the same packets aggregated without deduplication, or both sides of a link forwarded separately to the same tool port. 541 of 2768 packets (19.5%) are duplicates, well above 5% threshold.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate packets, inflates flow counts and alerts, skews deduplication/analytics and can mask true anomalies.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 50,
+     "mode": "5tuple_plus_seq"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets within a short window before delivery to NDR, preserving single copy for analysis."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "VLAN tags are being stripped in the visibility path. Required VLAN 20 not seen and 49% of packets are untagged, indicating SPAN or packet broker trunk is configured to strip 802.1Q or not forwarding VLAN 20.",
+   "impact_on_tool": "NDR requires VLANs 10 and 20 for segmentation and detection coverage. Without VLAN 20 visibility, lateral movement and tenant-specific attacks in that VLAN are invisible and correlation by VLAN fails.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "forward_untagged": false
+    },
+    "why": "Configure TAP/SPAN and packet broker to preserve 802.1Q tags and explicitly forward VLANs 10 and 20 to the NDR tool port."
+   },
+   "evidence_frames": [
+    2,
+    3,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    15,
+    18,
+    21,
+    22,
+    23,
+    24,
+    27,
+    31,
+    34,
+    35,
+    37,
+    38
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is dropping packets under load before they reach the NDR. 100 of 2666 TCP packets (3.8%) show gaps/retransmissions indicating missing data, above 1% threshold, while tool overload is healthy so drops are upstream of the tool.",
+   "impact_on_tool": "NDR needs full payload and both directions; missing packets break TCP reassembly, cause incomplete flows, missed payload inspection and allow evasions to go undetected.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "group": "ndr_pool",
+     "check_span_oversubscription": true
+    },
+    "why": "Reduce loss by load-balancing across multiple NDR tool ports or broker egresses with flow-aware hashing, and verify SPAN/TAP is not oversubscribed - replace SPAN with TAP if drops persist."
+   },
+   "evidence_frames": [
+    248,
+    249,
+    438,
+    439,
+    463,
+    465,
+    481,
+    482,
+    484,
+    495,
+    496,
+    543,
+    545,
+    547,
+    550,
+    640,
+    642,
+    657,
+    660,
+    661
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3016,
+  "tokens_out": 2454,
+  "cost_usd": 0.0142,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-28"
+ }
+}

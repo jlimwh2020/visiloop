@@ -1,0 +1,61 @@
+{
+ "feed": "s067_single",
+ "status": "degraded",
+ "summary": "Feed s067_single to NDR is degraded due to high encrypted traffic share (92.6% vs 90% tolerance). No duplicates, drops, overload, one-way, or VLAN issues detected. Decryption visibility needed to restore NDR detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93% of bytes are TLS-encrypted, exceeding the NDR's 90% tolerance. Traffic is likely traversing a TLS inspection bypass or direct internet edge without broker-based decryption, so payload is opaque to the tool.",
+   "impact_on_tool": "NDR requires full payload for deep packet inspection, JA3/JA3S, and anomaly detection. With 92.6% encrypted, signatures, payload analytics, and lateral movement detection are blinded, significantly reducing detection coverage despite healthy delivery (no drops/overload).",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decryption_location": "packet_broker_or_dedicated_TLS_visibility",
+     "selective_decrypt": true,
+     "preserve_privacy_exclusions": true
+    },
+    "why": "NDR needs cleartext payload and tolerates max 90% encrypted; current 92.6% exceeds it. Adding selective TLS decryption (or forwarding session keys / integrating with existing TLS visibility appliance) at the packet broker will restore payload visibility without overloading the 10G NDR port."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    16,
+    18,
+    19,
+    20,
+    21,
+    23,
+    24,
+    26,
+    27,
+    30,
+    33,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2823,
+  "tokens_out": 1398,
+  "cost_usd": 0.00947,
+  "seconds": 8.2,
+  "recorded_at": "2026-10-28"
+ }
+}

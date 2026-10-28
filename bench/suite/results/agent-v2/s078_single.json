@@ -1,0 +1,60 @@
+{
+ "feed": "s078_single",
+ "status": "degraded",
+ "summary": "Feed s078_single is degraded due to high encrypted traffic share (93.1% vs 90% NDR tolerance). All other visibility checks (duplicates, one-way, drops, overload, VLAN) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Traffic mix is dominated by TLS-encrypted flows (93% of bytes). No decryption/SSL visibility is performed before the packet broker forwards to the NDR, so payloads arrive opaque.",
+   "impact_on_tool": "NDR needs full payload for deep inspection and behavioral detection. With 93% encrypted bytes above its 90% tolerance, it can only use metadata/flow heuristics and misses threats hidden inside encryption (malware, C2, exfiltration), reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decryption_point": "packet_broker",
+     "policy": "decrypt_authorized_TLS_selectively"
+    },
+    "why": "Decrypting authorized TLS at the visibility layer (or via dedicated decryption zone) before the NDR restores cleartext payload for inspection where policy allows, bringing encrypted share below 90% tolerance and restoring NDR detection efficacy without violating privacy/policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    29,
+    30,
+    33,
+    34,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2817,
+  "tokens_out": 1718,
+  "cost_usd": 0.01082,
+  "seconds": 8.6,
+  "recorded_at": "2026-10-28"
+ }
+}

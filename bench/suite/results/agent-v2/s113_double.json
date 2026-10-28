@@ -1,0 +1,88 @@
+{
+ "feed": "s113_double",
+ "status": "degraded",
+ "summary": "Feed s113_double to SIEM is degraded: 50% of packets missing required VLAN 20 (stripped/untagged) and microbursts peak at 1.62 Gbps exceeding the 1 Gbps SIEM port (162% capacity).",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream trunk is stripping 802.1Q tags or not forwarding VLAN 20 - 50% of packets arrive untagged and VLAN 20 is completely absent despite SIEM requiring VLANs 10 and 20.",
+   "impact_on_tool": "SIEM loses segmentation context for VLAN 20; correlation, filtering and detection rules keyed to VLAN 20 fail and ~50% of traffic cannot be correctly attributed.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "audit_trunk_and_broker_vlan_config": true
+    },
+    "why": "Preserve/restore 802.1Q tags through the packet broker and ensure trunk forwards VLANs 10 and 20 so SIEM receives correctly tagged traffic."
+   },
+   "evidence_frames": [
+    2,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    20,
+    21,
+    22,
+    24,
+    27,
+    30,
+    33,
+    34,
+    35,
+    37,
+    38,
+    41
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic microbursts peak at 1.62 Gbps in 1ms intervals, exceeding the SIEM's 1 Gbps capture port by 62% across 6 intervals - aggregate rate too high for single port.",
+   "impact_on_tool": "SIEM ingress buffers overflow and drops packets during bursts, causing missed events, incomplete flows and gaps in detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 1.624,
+     "suggested_ports": 2,
+     "alternative": "filter or slice as SIEM needs_full_payload is false"
+    },
+    "why": "Distribute load across 2x1G ports (or add filtering/slicing) to keep per-port utilization below 80% and prevent burst drops; SIEM tolerates slicing/filtering since full payload not required."
+   },
+   "evidence_frames": [
+    1,
+    415,
+    835,
+    1241,
+    1679,
+    2101
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2915,
+  "tokens_out": 1888,
+  "cost_usd": 0.01167,
+  "seconds": 11.2,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "feed": "s104_single",
+ "status": "degraded",
+ "summary": "Feed s104_single is degraded due to tool overload: 14.46 Gbps microbursts exceed the 10 Gbps NDR port (145% capacity, 2 intervals overloaded). All other checks (duplicates, VLANs, encryption, one-way, drops) are healthy, but bursts will cause packet loss and missed detections.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating more traffic than a single 10 Gbps tool port can handle. 1ms microbursts peak at 14.46 Gbps (metric 1.446 vs 0.8 threshold, 145% of port capacity) across 2 intervals, causing egress buffer overflow and tail drops at the broker-to-tool handoff.",
+   "impact_on_tool": "NDR requires both directions and full payload for flow reassembly and detection. Random drops during bursts break session reconstruction, cause incomplete flows and missed payload inspection, leading to false negatives and gaps in SIEM/NDR coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow-aware",
+     "hash": "5-tuple",
+     "current_port_gbps": 10,
+     "peak_burst_gbps": 14.46,
+     "suggested_ports": 2,
+     "total_capacity_gbps": 20
+    },
+    "why": "Distribute traffic across 2x10 Gbps NDR ports/instances with 5-tuple flow hashing to keep both directions of each flow together. Keeps per-port utilization below 80% even during 14.46 Gbps bursts, preserving full payload and bidirectional visibility without drops; slicing or filtering would degrade NDR detection which needs full payload."
+   },
+   "evidence_frames": [
+    1,
+    3049
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2784,
+  "tokens_out": 2121,
+  "cost_usd": 0.01249,
+  "seconds": 16.8,
+  "recorded_at": "2026-10-28"
+ }
+}

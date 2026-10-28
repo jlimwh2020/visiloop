@@ -1,0 +1,79 @@
+{
+ "feed": "s155_double",
+ "status": "degraded",
+ "summary": "NDR feed s155_double is degraded: 19.0% one-way TCP sessions (92/485) breaks bidirectional analysis and 20.24 Gbps microburst exceeds 10 Gbps NDR port (202% capacity) causing drops.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction for ~19% of TCP sessions. Both directions likely arrive on separate TAP/SPAN inputs but are not aggregated to the same tool port, or asymmetric routing is tapped on only one side, so the NDR sees half-sessions.",
+   "impact_on_tool": "NDR needs both directions to reassemble TCP, track state, and detect C2/lateral movement. One-way flows cause missed detections, broken session reconstruction, and false positives for scan/anomaly models.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "hash_mode": "bidirectional_5tuple"
+    },
+    "why": "Aggregate complementary directions at the packet broker and hash both sides of a flow to the same NDR port to restore complete bidirectional visibility required by NDR."
+   },
+   "evidence_frames": [
+    41,
+    131,
+    224,
+    246,
+    286,
+    648,
+    669,
+    695,
+    852,
+    949,
+    1041,
+    1089,
+    1108,
+    1127,
+    1260,
+    1321,
+    1362,
+    1402,
+    1456,
+    1457
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "1 ms microburst peaked at 20.24 Gbps on a 10 Gbps NDR port (202% of capacity). Aggregated feed bursts exceed single tool port line rate, causing buffer overrun and drops before the NDR can process.",
+   "impact_on_tool": "NDR with full-payload requirement will drop packets under overload, creating blind spots, missed IDS signatures, and incomplete flow records during peak bursts.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "required_capacity_gbps": 21,
+     "hash": "bidirectional_5tuple",
+     "suggested_ports": 3
+    },
+    "why": "Load-balance the feed across 2-3x 10G NDR ports (or upgrade to 25/40G) with bidirectional hash to absorb 20+ Gbps bursts without drops while preserving full payload; add selective filtering only if extra ports unavailable."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2901,
+  "tokens_out": 2223,
+  "cost_usd": 0.01307,
+  "seconds": 12.4,
+  "recorded_at": "2026-10-28"
+ }
+}

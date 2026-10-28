@@ -1,0 +1,79 @@
+{
+ "feed": "s121_double",
+ "status": "degraded",
+ "summary": "Feed s121_double is degraded: 27.7% duplicate packets and 100% VLAN stripping (required VLANs 10, 20 missing) impair NDR visibility. No drops, one-way, overload or encryption issues detected.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating overlapping capture points (e.g., SPAN from two switches or both sides of a TAP) without deduplication. 646 of 2333 packets (27.7%) are exact duplicates, well above 5% threshold, classic double-feed aggregation.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate flows, inflates connection counts and alerts, skews analytics/detection models, and risks missing real threats due to processing overhead despite needing full payload and bidirectional flows.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "5-tuple-hash-with-timestamp"
+    },
+    "why": "Enable packet-broker deduplication to suppress identical packets arriving within milliseconds from overlapping TAP/SPAN sources before delivery to 10G NDR port."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is stripping 802.1Q tags on ingress/egress (vlan popping / 'strip q-tag' enabled). 100% of packets are untagged while NDR requires VLANs 10 and 20 for segmentation.",
+   "impact_on_tool": "NDR cannot attribute traffic to correct tenant/segment (VLAN 10, 20), breaks VLAN-based detection policies and forensics, and loses coverage for lateral movement between VLANs.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "strip": false
+    },
+    "why": "Configure packet broker to preserve and forward 802.1Q tags for VLANs 10 and 20 end-to-end to the NDR so segmentation context is retained."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2890,
+  "tokens_out": 1781,
+  "cost_usd": 0.01118,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

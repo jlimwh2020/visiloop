@@ -1,0 +1,101 @@
+{
+ "feed": "s145_double",
+ "status": "degraded",
+ "summary": "Feed s145_double to IDS is degraded: 2 faults detected. Required VLANs 10,20 are completely absent (100% untagged) and 2.3% TCP packet loss observed, both reduce IDS detection coverage for full-payload, bi-directional analysis.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Upstream TAP/SPAN or packet broker is stripping 802.1Q tags or forwarding only access/native VLAN. All packets arrive untagged so required VLANs 10 and 20 are never seen, likely due to broker port set to strip tags or SPAN not configured as 802.1Q trunk.",
+   "impact_on_tool": "IDS requires VLANs 10,20 for segmentation-aware detection. Without tags it cannot apply VLAN-specific policies, correlate lateral movement between VLANs, or detect VLAN-hopping/segmentation bypass - complete blind spot for those segments.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough-trunk"
+    },
+    "why": "Configure packet broker ingress/egress to preserve 802.1Q and forward trunk with VLANs 10,20 intact to IDS so it receives correct tenant/segment context."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "SPAN/mirror oversubscription or packet broker buffer exhaustion causing intermittent drops. 50 of 2201 TCP packets (2.27% > 1% threshold) show gaps/retransmissions indicating missing data in transit to tool, not tool overload (tool_overload healthy).",
+   "impact_on_tool": "IDS needs full payload and both directions for stream reassembly and signature matching. Missing segments cause broken flows, failed reassembly, and missed exploits/malware signatures - increases false negatives.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_source": "SPAN",
+     "tap_type": "passive_fiber_or_aggregation_tap",
+     "ensure_lossless": true
+    },
+    "why": "Replace lossy SPAN/mirror with passive TAP (or TAP + packet broker with sufficient buffer) to provide lossless, line-rate copy and eliminate drops before IDS."
+   },
+   "evidence_frames": [
+    82,
+    83,
+    88,
+    89,
+    122,
+    123,
+    153,
+    154,
+    168,
+    169,
+    212,
+    213,
+    222,
+    225,
+    341,
+    342,
+    359,
+    362,
+    416,
+    417
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2940,
+  "tokens_out": 2148,
+  "cost_usd": 0.0128,
+  "seconds": 10.3,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,106 @@
+{
+ "feed": "s112_double",
+ "status": "degraded",
+ "summary": "Feed s112_double to NDR is degraded: VLAN 20 is missing (50% packets untagged) and 93.99% encrypted traffic exceeds NDR 90% tolerance. No duplicates, drops, overload or one-way traffic issues detected.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN is stripping 802.1Q tags or trunk allowed-VLAN list is incomplete. 50% of packets arrive untagged and required VLAN 20 is never observed, indicating VLAN preservation is disabled on the broker egress to the NDR.",
+   "impact_on_tool": "NDR requires VLANs 10 and 20 for segmentation-aware detection. Missing VLAN 20 blinds the NDR to ~50% of traffic, breaks VLAN-based policies and misses lateral movement and east-west attacks in VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_vlan_tags": true,
+     "ensure_trunk_allows": [
+      20
+     ]
+    },
+    "why": "Restore 802.1Q tag preservation on TAP/SPAN and packet broker egress so VLAN 20 is forwarded intact to the NDR and detection coverage is complete."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    8,
+    9,
+    11,
+    12,
+    13,
+    15,
+    16,
+    18,
+    19,
+    21,
+    23,
+    27,
+    30,
+    32,
+    34,
+    36,
+    39,
+    40
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Traffic mix is 93.99% encrypted bytes, exceeding the NDR's 90% tolerance. No broker-side TLS decryption or selective forwarding is in place, so payload remains opaque to the tool.",
+   "impact_on_tool": "NDR needs full payload for deep packet inspection and behavioral analysis. With 94% encrypted, payload inspection, file extraction and content-based detection are ineffective, reducing coverage for encrypted C2, exfiltration and malware.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_at": "packet_broker",
+     "protocols": [
+      "TLS 1.2",
+      "TLS 1.3"
+     ],
+     "forward_decrypted_to_tool": true
+    },
+    "why": "NDR cannot analyze encrypted payload at this share; provide broker-based TLS inspection or key sharing / metadata enrichment to bring visible payload below 90% threshold and restore detection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    15,
+    16,
+    18,
+    19,
+    21,
+    23,
+    27,
+    36,
+    38,
+    39,
+    40
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2948,
+  "tokens_out": 2533,
+  "cost_usd": 0.01445,
+  "seconds": 10.1,
+  "recorded_at": "2026-10-28"
+ }
+}

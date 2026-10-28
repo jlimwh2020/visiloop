@@ -1,0 +1,75 @@
+{
+ "feed": "s159_double",
+ "status": "degraded",
+ "summary": "Feed s159_double to NDR is degraded: 26.3% duplicate packets (high) will skew NDR analytics, and encrypted traffic at 91.7% slightly exceeds the NDR's 90% tolerance, limiting payload inspection. No drops, overload, one-way, or VLAN issues detected.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Duplicate delivery from aggregated SPAN/mirror sessions or dual TAP feeds combined on packet broker without deduplication - same packets arriving via two paths and forwarded twice to tool port. 1085 of 4127 packets (26.3%) are identical, well above 5% threshold.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate processing, inflates flow/connection counts, distorts behavioral analytics and can cause false positives or missed detections due to skewed state tracking.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 5,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet broker deduplication on this feed to drop identical packets within a short time window before delivery to the NDR, restoring accurate traffic counts without losing unique flows."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "92% of bytes are encrypted (TLS), just above the NDR's 90% tolerance. Traffic mix is predominantly encrypted with little cleartext payload available for deep inspection.",
+   "impact_on_tool": "NDR requires full payload for detection; with 91.7% encrypted it is largely blind to payload-based threats and must rely on metadata/flow analysis only, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "selective_tls_decryption",
+     "location": "packet_broker"
+    },
+    "why": "NDR cannot inspect encrypted payloads natively. Advise enabling selective TLS decryption via SSL visibility appliance or packet broker decryption, or supplement with decrypted feed/metadata enrichment; do not filter encrypted traffic as NDR still needs flow metadata."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    17,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30,
+    31,
+    34
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2873,
+  "tokens_out": 1910,
+  "cost_usd": 0.01171,
+  "seconds": 9.0,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,119 @@
+{
+ "feed": "s166_triple",
+ "status": "degraded",
+ "summary": "IDS s166_triple has degraded visibility: 63% of TCP sessions are one-way (needs both directions), microbursts to 2.06 Gbps overload the 1 Gbps tool port (206% capacity), and 66.9% encrypted traffic exceeds 60% tolerance for payload inspection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction of bidirectional flows. 104 of 165 TCP sessions (63.0%) are unidirectional, well above 10% threshold. Most likely SPAN/mirror configured for TX or RX only, or only one leg of an asymmetric routed path is tapped without bidirectional aggregation at the broker.",
+   "impact_on_tool": "IDS requires both directions for TCP reassembly, state tracking and signature matching. With only one side, it misses handshakes, cannot track sessions, and fails to detect attacks that span request/response, causing major detection gaps and false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "mode": "bidirectional_aggregation",
+     "combine_directions": true,
+     "use_broker_aggregation_group": true
+    },
+    "why": "Aggregate both directions (e.g., TAP A + TAP B or TX+RX) into a single coherent feed at the packet broker so the IDS sees complete bidirectional sessions for accurate stateful detection."
+   },
+   "evidence_frames": [
+    1,
+    41,
+    44,
+    72,
+    79,
+    125,
+    150,
+    157,
+    165,
+    189,
+    203,
+    235,
+    284,
+    292,
+    319,
+    322,
+    338,
+    350,
+    361,
+    379
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic bursts peak at 2.06 Gbps in 1ms intervals vs 1 Gbps IDS port capacity (206% overload, 2 overloaded intervals). Broker is forwarding full aggregated traffic out a single 1G tool port with no load-balancing, policing or burst buffering.",
+   "impact_on_tool": "IDS ingress buffers overflow and drops packets during bursts. Even without broker drops yet, the tool itself will drop, causing missed signatures, incomplete flows, and blind spots exactly during high-volume events when detection is most critical.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 3,
+     "target_per_port_gbps": 1,
+     "burst_buffer": true
+    },
+    "why": "Distribute traffic across multiple 1G IDS ports/instances with 5-tuple hashing to keep per-port rate under 80% and absorb microbursts, preventing tool-side drops while preserving flow coherence."
+   },
+   "evidence_frames": [
+    1,
+    775
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "66.9% of bytes are encrypted (TLS) exceeding the IDS tolerance of 60%. Traffic is sent to the IDS still encrypted with no upstream decryption or selective bypass, so payload is opaque.",
+   "impact_on_tool": "IDS needs full payload for deep packet inspection and signatures. With two-thirds encrypted, it can only do metadata/heuristics, sharply reducing detection coverage for payload-based exploits, malware and C2 inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "before_ids",
+     "method": "out-of-band TLS decryption",
+     "selective_decrypt": true,
+     "bypass_pinned_or_privacy_traffic": true
+    },
+    "why": "Decrypt relevant TLS centrally before the IDS (or feed decrypted copy) and bypass undecryptable privacy traffic, bringing encrypted share below 60% so IDS can inspect cleartext payloads it was designed to analyze."
+   },
+   "evidence_frames": [
+    25,
+    27,
+    28,
+    29,
+    30,
+    32,
+    33,
+    35,
+    36,
+    39,
+    43,
+    57,
+    59,
+    60,
+    61,
+    62,
+    64,
+    65,
+    67,
+    70
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3031,
+  "tokens_out": 2385,
+  "cost_usd": 0.01392,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-28"
+ }
+}

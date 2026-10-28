@@ -1,0 +1,121 @@
+{
+ "feed": "s164_triple",
+ "status": "degraded",
+ "summary": "Feed s164_triple is degraded: 3 faults found. VLANs 10,20 stripped (100% untagged), IDS port overloaded by 3.53 Gbps bursts on 1 Gbps port (353% capacity), and 75.7% encrypted traffic exceeds IDS 60% tolerance, limiting payload inspection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/trunk is stripping 802.1Q tags before delivery. All packets arrived untagged yet IDS requires VLANs 10 and 20, indicating broker VLAN handling set to strip or access-port SPAN not forwarding trunk tags.",
+   "impact_on_tool": "IDS cannot classify or apply VLAN-aware policies for VLAN 10 and 20; traffic appears as single flat network, causing missed detections and incorrect segmentation for those tenants.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "tap_trunk_mode": true
+    },
+    "why": "Restore and preserve 802.1Q tags for VLANs 10,20 through the TAP/SPAN and packet broker so IDS receives correctly tagged traffic for policy enforcement."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Bursty aggregate traffic (3.53 Gbps peak in 1ms) is being sent to a single 1 Gbps IDS port without load balancing or shaping. Broker is not distributing load across multiple tool ports.",
+   "impact_on_tool": "IDS ingress buffer overrun and packet drops during bursts; IDS misses flows and signatures, creating detection gaps despite needing both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_port_gbps": 1,
+     "peak_gbps": 3.527,
+     "method": "5-tuple hash across 4x1G or 10G upgrade",
+     "overloaded_intervals": 2
+    },
+    "why": "Distribute traffic with packet-broker load balancing (or upgrade tool port to 10G) to keep per-port utilization below 80% and prevent burst drops."
+   },
+   "evidence_frames": [
+    1,
+    957
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "75.7% of bytes are TLS/encrypted, above the IDS 60% tolerance. No upstream SSL visibility/decryption is applied, so broker forwards opaque payloads the IDS cannot inspect.",
+   "impact_on_tool": "IDS requires full payload inspection but cannot analyze encrypted payloads, reducing detection coverage to metadata only and missing encrypted exploits/C2.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.7571,
+     "threshold": 0.6,
+     "decrypt_location": "out-of-band visibility tier"
+    },
+    "why": "Add selective TLS decryption at the packet broker/SSL visibility appliance or feed decrypted copy plus metadata to IDS to restore payload visibility within tolerance."
+   },
+   "evidence_frames": [
+    32,
+    34,
+    35,
+    36,
+    37,
+    39,
+    40,
+    42,
+    45,
+    48,
+    50,
+    51,
+    52,
+    53,
+    55,
+    56,
+    59,
+    62,
+    64,
+    65
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3036,
+  "tokens_out": 2300,
+  "cost_usd": 0.01357,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-28"
+ }
+}

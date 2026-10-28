@@ -1,0 +1,57 @@
+{
+ "feed": "s098_single",
+ "status": "degraded",
+ "summary": "IDS feed s098_single is degraded: 86.5% of bytes are encrypted vs 60% IDS tolerance, blinding payload inspection. All other checks (duplicates, one-way, drops, overload, VLAN) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "86.5% of traffic is TLS-encrypted and delivered to IDS without prior decryption. IDS needs full payload for signature matching but modern TLS 1.3/PFS is opaque without keys or intercept, so payload is not inspectable.",
+   "impact_on_tool": "IDS is blind to ~86% of payloads - cannot match signatures for exploits, malware, C2 or lateral movement. Detection coverage severely reduced despite healthy delivery (no drops/overload/one-way issues).",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "IDS requires cleartext payload; decrypt via packet broker integrated TLS decryption (key sharing or active proxy) or selectively forward only decryptable traffic to this IDS and send encrypted flows to a tool that tolerates encryption. Without decryption, IDS cannot improve coverage."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    10,
+    11,
+    15,
+    16,
+    18,
+    19,
+    20,
+    22,
+    25,
+    30,
+    32,
+    33,
+    34,
+    35,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2807,
+  "tokens_out": 1529,
+  "cost_usd": 0.01001,
+  "seconds": 8.9,
+  "recorded_at": "2026-10-28"
+ }
+}

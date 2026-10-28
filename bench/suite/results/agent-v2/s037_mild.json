@@ -1,0 +1,23 @@
+{
+ "feed": "s037_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR on s037_mild: bidirectional traffic present, no duplicates, no packet drops, no tool overload, no VLAN stripping, and encrypted share within tolerance. Tool is receiving complete, correct traffic; no packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2702,
+  "tokens_out": 840,
+  "cost_usd": 0.00695,
+  "seconds": 4.7,
+  "recorded_at": "2026-10-28"
+ }
+}

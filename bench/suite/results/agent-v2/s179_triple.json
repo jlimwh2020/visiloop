@@ -1,0 +1,138 @@
+{
+ "feed": "s179_triple",
+ "status": "degraded",
+ "summary": "Feed s179_triple to NDR is degraded: 40.4% one-way TCP sessions, VLAN 20 completely missing (38% untagged), and encrypted share 90.9% exceeds 90% tolerance. No duplicates, drops, or overload detected.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is delivering only one direction of many flows. Likely asymmetric routing with separate TAP/SPAN sources not aggregated, or a SPAN session configured for tx or rx only, so client->server and server->client are split across different broker ports and not hashed to this NDR port.",
+   "impact_on_tool": "NDR requires both directions (needs_both_directions=true) for TCP reassembly, session tracking and detection. With 78/193 sessions one-way, stateful analysis, IDS signatures and anomaly detection will miss half the conversation and generate false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "hash_by": "5-tuple",
+     "ensure_bidirectional_delivery": true
+    },
+    "why": "Aggregate both directions of each 5-tuple to the same NDR tool port at the packet broker to restore full bidirectional visibility required for NDR."
+   },
+   "evidence_frames": [
+    79,
+    107,
+    124,
+    134,
+    136,
+    164,
+    189,
+    213,
+    219,
+    243,
+    250,
+    258,
+    348,
+    442,
+    495,
+    519,
+    528,
+    585,
+    623,
+    682
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 is not seen and 38% of packets are untagged. Most likely VLAN tags are being stripped by a SPAN/mirror port, intermediate switch, or packet broker ingress filter stripping 802.1Q, or the trunk feeding the broker is not forwarding VLAN 20.",
+   "impact_on_tool": "NDR is configured to monitor VLANs 10 and 20. Complete loss of VLAN 20 creates a blind spot; attacks/lateral movement on that segment will not be inspected. Untagged packets also break VLAN-aware policies and filtering.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true,
+     "ensure_trunk_forwards_vlan": 20
+    },
+    "why": "Configure TAP/trunk and packet broker to preserve 802.1Q tags and explicitly forward VLANs 10 and 20 to this NDR feed so coverage matches tool profile."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    8,
+    9,
+    12,
+    15,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    28,
+    31,
+    34,
+    35,
+    36,
+    38,
+    42
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "91% of bytes are encrypted, just over the NDR's 90% tolerance. Traffic is predominantly TLS/encrypted and is being delivered without prior decryption or selective forwarding, leaving little cleartext payload for inspection.",
+   "impact_on_tool": "NDR needs full payload (needs_full_payload=true) for deep inspection. At 90.9% encrypted, detection coverage is reduced to metadata only; payload signatures, JA3, and content analysis will be ineffective for most flows.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.9091,
+     "max_tolerated": 0.9,
+     "suggestion": "offload TLS decryption or add selective decrypt/mirror"
+    },
+    "why": "NDR cannot inspect encrypted payload natively. Decrypt relevant TLS at a dedicated decryption zone/packet broker with keys/HSM or forward copies to a decryption appliance before the NDR, or tune to send only decryptable/interesting traffic to stay under tolerance."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    12,
+    15,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    28,
+    31,
+    33,
+    34,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3075,
+  "tokens_out": 2577,
+  "cost_usd": 0.0148,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

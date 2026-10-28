@@ -1,0 +1,60 @@
+{
+ "feed": "s065_single",
+ "status": "degraded",
+ "summary": "Feed s065_single is degraded: IDS receives predominantly one-way traffic (105/137 TCP sessions, 76.6% unidirectional) and cannot perform stateful inspection. All other checks (duplicates, packet drops, VLANs, encrypted share, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction of each flow to the IDS port. Likely only one SPAN/mirror direction or one leg of a tap/bond is mapped to s065_single without aggregating the complementary direction. Asymmetric routing or separate ingress ports for client->server and server->client are not combined with flow affinity to the same tool port, causing 76.6% of sessions to appear unidirectional (threshold 10%).",
+   "impact_on_tool": "IDS requires both directions and full payload for TCP reassembly and signature matching. With only one side visible, it cannot reconstruct streams, correlate request/response, validate handshakes, or detect multi-packet exploits, resulting in severely degraded detection coverage and high false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "flow_affinity": true
+    },
+    "why": "Aggregate both directions of each flow onto the same IDS tool port with flow affinity so the IDS sees complete bidirectional sessions required for stateful analysis."
+   },
+   "evidence_frames": [
+    18,
+    20,
+    27,
+    42,
+    49,
+    57,
+    61,
+    75,
+    83,
+    95,
+    100,
+    138,
+    161,
+    170,
+    178,
+    179,
+    193,
+    200,
+    204,
+    231
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2822,
+  "tokens_out": 2131,
+  "cost_usd": 0.01258,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "feed": "s029_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s029_mild. IDS receives complete, correct bidirectional traffic with full payload, no packet drops, duplicates, VLAN issues, or overload, and encrypted share within tolerance.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2700,
+  "tokens_out": 791,
+  "cost_usd": 0.00674,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s063_single",
+ "status": "degraded",
+ "summary": "Feed s063_single to APM is degraded due to 6.9% packet loss (117 of 1697 TCP packets) exceeding 1% threshold. All other checks (duplicates, one-way traffic, VLAN, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror or packet broker ingress oversubscription and buffer exhaustion under load. SPAN ports are lossy and drop packets when aggregate ingress exceeds SPAN capacity, causing TCP sequence gaps seen across many flows.",
+   "impact_on_tool": "APM requires complete bidirectional flows for transaction timing; missing segments cause incomplete transactions, inaccurate latency/response-time calculations, false retransmission counts, and missed application performance degradations.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_type": "passive_aggregation_tap",
+     "ensure_lossless_broker_buffer": true
+    },
+    "why": "Passive TAP provides lossless line-rate copy without SPAN buffer drops, eliminating the 6.9% loss and restoring complete TCP streams needed for accurate APM metrics."
+   },
+   "evidence_frames": [
+    27,
+    28,
+    45,
+    47,
+    96,
+    97,
+    124,
+    127,
+    175,
+    177,
+    179,
+    181,
+    211,
+    212,
+    240,
+    244,
+    352,
+    355,
+    366,
+    367
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2825,
+  "tokens_out": 1916,
+  "cost_usd": 0.01167,
+  "seconds": 9.4,
+  "recorded_at": "2026-10-28"
+ }
+}

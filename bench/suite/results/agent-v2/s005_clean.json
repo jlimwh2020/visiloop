@@ -1,0 +1,23 @@
+{
+ "feed": "s005_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s005_clean: no duplicates, packet drops, tool overload, one-way traffic, missing VLANs, or excessive encryption detected. SIEM is tolerant (needs_both_directions=false, needs_full_payload=false, no required VLANs) and its requirements are satisfied. No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2696,
+  "tokens_out": 1034,
+  "cost_usd": 0.00776,
+  "seconds": 7.4,
+  "recorded_at": "2026-10-28"
+ }
+}
