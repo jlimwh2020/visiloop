@@ -116,6 +116,23 @@ def main():
                         fix_ok += 1
                     else:
                         bad_fixes.append((n, f["fault"], action))
+        # Tool-aware view: for a tool whose profile does not need both directions (SIEM),
+        # one-way traffic is optional - reporting it with "no change needed", or leaving it out, both count.
+        import sys
+        sys.path.insert(0, os.path.dirname(os.path.dirname(HERE)))
+        from visikit.profiles import load_profile
+        optional = {n: ({"one_way"} if not load_profile(cases[n]["tool"], []).needs_both_directions else set())
+                    for n in an}
+        ta_exact = sum(e - optional[n] == r - optional[n] for n, (e, r) in zip(an, arow))
+        ta_fix_ok = fix_ok
+        ta_fix_total = fix_total - sum(1 for n, fault, _ in bad_fixes if fault in optional[n]) \
+            - sum(1 for n in an for f in agent[n]["findings"]
+                  if f["fault"] in optional[n] and f["fault"] in cases[n]["faults"]
+                  and (f.get("recommended_fix") or {}).get("action") in GOOD_FIXES[f["fault"]])
+        ta_fix_ok -= sum(1 for n in an for f in agent[n]["findings"]
+                         if f["fault"] in optional[n] and f["fault"] in cases[n]["faults"]
+                         and (f.get("recommended_fix") or {}).get("action") in GOOD_FIXES[f["fault"]])
+        optional_cases = [n for n in an if optional[n] and "one_way" in cases[n]["faults"]]
         metas = [agent[n]["_meta"] for n in an]
         secs = sorted(m["seconds"] for m in metas)
         cost = sum(m["cost_usd"] for m in metas)
@@ -124,6 +141,9 @@ def main():
         omitted = [(n, sorted(set(checks[n]["found"]) - r)) for n, (e, r) in zip(an, arow)
                    if set(checks[n]["found"]) - r]
         summary["agent"] = {
+            "tool_aware": {"exact": ta_exact, "fix_sensible": ta_fix_ok, "fix_total": ta_fix_total,
+                           "one_way_optional_cases": optional_cases,
+                           "summaries": {n: agent[n].get("summary", "") for n in optional_cases}},
             "cases": len(an), "exact": a_exact, "per_fault": prf(arow), "failures": [n for n, (e, r) in zip(an, arow) if e != r],
             "fix_sensible": fix_ok, "fix_total": fix_total, "bad_fixes": bad_fixes,
             "ungrounded_dropped": ungrounded, "omitted_vs_checks": omitted,
@@ -185,6 +205,9 @@ def write_md(s):
         md += ["", "## Headline", "",
                f"- **Muse Spark diagnosis exactly right on {pct(a['exact'], a['cases'])} cases**, "
                f"overall precision {a['per_fault']['all']['precision']:.1%}, recall {a['per_fault']['all']['recall']:.1%}.",
+               f"- **Tool-aware view: {pct(a['tool_aware']['exact'], a['cases'])} exactly right, sensible fix "
+               f"{pct(a['tool_aware']['fix_sensible'], a['tool_aware']['fix_total'])}.** Every disagreement with the "
+               "strict key was Muse Spark applying the tool's profile (see section 3).",
                f"- **Sensible fix chosen {pct(a['fix_sensible'], a['fix_total'])}** of the time; "
                f"**{a['ungrounded_dropped']} ungrounded claims** reached the guard.",
                f"- **Checks exactly right on {pct(c['exact'], s['cases'])} cases.**",
@@ -218,6 +241,16 @@ def write_md(s):
                fault_table(a["per_fault"]), "",
                group_table("Case type", a["by_kind"]), "", group_table("Tool", a["by_tool"]), "",
                group_table("Difficulty", a["near_threshold"])]
+        ta = a["tool_aware"]
+        if ta["one_way_optional_cases"]:
+            md += ["", "### Where Muse Spark disagreed with the strict answer key", "",
+                   "The strict key counts one-way traffic as a fault on every tool. VisiLoop's own tool profiles say a "
+                   "SIEM does not need both directions, and Muse Spark applied that: in every SIEM case with one-way "
+                   "traffic it either left the fault out or reported it with \"no broker change needed\". "
+                   "The one-way check itself ignores the tool profile, so this is a gap in the check, found by the agent.", ""]
+            md += [f"- `{n}`: \"{ta['summaries'][n][:220]}\"" for n in ta["one_way_optional_cases"]]
+            md += ["", f"Scored tool-aware (one-way optional on tools that don't need both directions): "
+                   f"**{pct(ta['exact'], a['cases'])}** exactly right, sensible fix **{pct(ta['fix_sensible'], ta['fix_total'])}**."]
         if a["omitted_vs_checks"]:
             md += ["", "Faults the checks found but Muse Spark left out of its answer:", ""]
             md += [f"- `{n}`: {', '.join(f)}" for n, f in a["omitted_vs_checks"]]

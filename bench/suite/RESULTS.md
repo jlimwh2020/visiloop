@@ -16,6 +16,7 @@
 ## Headline
 
 - **Muse Spark diagnosis exactly right on 198/200 (99.0%) cases**, overall precision 100.0%, recall 99.1%.
+- **Tool-aware view: 200/200 (100.0%) exactly right, sensible fix 231/231 (100.0%).** Every disagreement with the strict key was Muse Spark applying the tool's profile (see section 3).
 - **Sensible fix chosen 231/233 (99.1%)** of the time; **0 ungrounded claims** reached the guard.
 - **Checks exactly right on 200/200 (100.0%) cases.**
 - **189/189 (100.0%) fixable faults verified fixed** in the simulated broker; 46 decryption items reported as advice.
@@ -88,6 +89,17 @@ Exactly right on **198/200 (99.0%)** cases. Tokens: 564,953 in, 340,423 out.
 |---|---|
 | clear | 168/170 (98.8%) |
 | near threshold | 30/30 (100.0%) |
+
+### Where Muse Spark disagreed with the strict answer key
+
+The strict key counts one-way traffic as a fault on every tool. VisiLoop's own tool profiles say a SIEM does not need both directions, and Muse Spark applied that: in every SIEM case with one-way traffic it either left the fault out or reported it with "no broker change needed". The one-way check itself ignores the tool profile, so this is a gap in the check, found by the agent.
+
+- `s076_single`: "Feed s076_single is healthy for SIEM delivery. No packet drops, overload, duplicates, VLAN gaps or excessive encryption. 35.8% one-way TCP sessions detected (73/204) but SIEM profile needs_both_directions=false so covera"
+- `s110_single`: "SIEM feed s110_single is healthy. Duplicates, encrypted share, VLAN coverage (10,20), packet drops and tool overload all healthy. One-way traffic detected (23/113 sessions, 20.4%) but SIEM profile needs_both_directions=f"
+- `s124_double`: "Feed s124_double to SIEM is degraded due to tool overload: 2.24 Gbps microbursts exceed 1 Gbps SIEM port (224% capacity, 6 intervals) causing drops and event loss. One-way traffic (21.2% sessions) was detected but is tol"
+- `s125_double`: "SIEM feed s125_double is degraded by 14.7% duplicate packets (392/2673); 66.7% one-way TCP sessions (142/213) also detected but tolerable for this SIEM which does not require bidirectional flows."
+
+Scored tool-aware (one-way optional on tools that don't need both directions): **200/200 (100.0%)** exactly right, sensible fix **231/231 (100.0%)**.
 
 Faults the checks found but Muse Spark left out of its answer:
 

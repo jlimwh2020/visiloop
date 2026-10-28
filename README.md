@@ -69,6 +69,24 @@ Measured on 13 synthetic test cases: 6 single-fault, 3 mild (below threshold, mu
 Example: a 6.51 Gbps burst against a 1 Gbps IDS port. VisiLoop calculates a 13-port load-balanced tool group
 with symmetric hashing (every port's peak at or below 0.70 Gbps), or one 10 Gbps port as the alternative.
 
+### Benchmark suite: 200 cases (28 Oct 2026)
+
+A larger, generated suite across IDS, NDR, APM and SIEM tools: healthy feeds, below-threshold noise that must not
+alarm, one to three faults per case, 30 near-threshold cases, and tool-awareness traps. The answer key is computed
+from the generated packets, independently of VisiLoop's checks. Full details: [bench/suite/RESULTS.md](bench/suite/RESULTS.md).
+
+| What | Result |
+|---|---|
+| Muse Spark diagnosis | **198/200** exactly right on the strict key; **200/200** tool-aware. Precision **100%**, recall **99.1%** |
+| Fix choice | **231/233** sensible (**231/231** tool-aware), **0** ungrounded claims |
+| Fault checks | **200/200** cases exactly right, **235/235** faults found, **0** false alarms |
+| Fixes proven by simulation | **189/189** fixable faults verified fixed, every faulty case healthy afterwards |
+| Cost and speed | **US$2.15** for 200 diagnoses (about US$0.01 each), median **9.8 s** |
+
+The only disagreements were four SIEM cases with one-way traffic. VisiLoop's SIEM profile says the tool does not
+need both directions, and Muse Spark applied that, finding a gap in our own one-way check, which ignores the
+tool profile.
+
 ## Quick start
 
 Requirements: Python 3.11+, [Wireshark](https://www.wireshark.org/) with TShark, and optionally Suricata

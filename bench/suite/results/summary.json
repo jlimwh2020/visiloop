@@ -123,6 +123,23 @@
   }
  },
  "agent": {
+  "tool_aware": {
+   "exact": 200,
+   "fix_sensible": 231,
+   "fix_total": 231,
+   "one_way_optional_cases": [
+    "s076_single",
+    "s110_single",
+    "s124_double",
+    "s125_double"
+   ],
+   "summaries": {
+    "s076_single": "Feed s076_single is healthy for SIEM delivery. No packet drops, overload, duplicates, VLAN gaps or excessive encryption. 35.8% one-way TCP sessions detected (73/204) but SIEM profile needs_both_directions=false so coverage remains adequate.",
+    "s110_single": "SIEM feed s110_single is healthy. Duplicates, encrypted share, VLAN coverage (10,20), packet drops and tool overload all healthy. One-way traffic detected (23/113 sessions, 20.4%) but SIEM profile needs_both_directions=false so bidirectional flows are not required and no packet broker change is needed.",
+    "s124_double": "Feed s124_double to SIEM is degraded due to tool overload: 2.24 Gbps microbursts exceed 1 Gbps SIEM port (224% capacity, 6 intervals) causing drops and event loss. One-way traffic (21.2% sessions) was detected but is tolerable for SIEM (needs_both_directions=false). No duplicates, VLAN gaps, drops, or encryption issues.",
+    "s125_double": "SIEM feed s125_double is degraded by 14.7% duplicate packets (392/2673); 66.7% one-way TCP sessions (142/213) also detected but tolerable for this SIEM which does not require bidirectional flows."
+   }
+  },
   "cases": 200,
   "exact": 198,
   "per_fault": {
