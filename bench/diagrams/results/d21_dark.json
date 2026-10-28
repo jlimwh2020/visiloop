@@ -1,0 +1,718 @@
+{
+ "name": "d21_dark",
+ "style": "dark",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    205,
+    736,
+    306,
+    785
+   ],
+   [
+    451,
+    611,
+    628,
+    662
+   ],
+   [
+    42,
+    612,
+    154,
+    661
+   ],
+   [
+    79,
+    257,
+    168,
+    309
+   ],
+   [
+    670,
+    611,
+    814,
+    661
+   ],
+   [
+    336,
+    612,
+    410,
+    661
+   ],
+   [
+    195,
+    367,
+    279,
+    417
+   ],
+   [
+    217,
+    612,
+    294,
+    661
+   ],
+   [
+    28,
+    734,
+    163,
+    786
+   ],
+   [
+    51,
+    136,
+    196,
+    185
+   ],
+   [
+    402,
+    489,
+    538,
+    538
+   ],
+   [
+    182,
+    489,
+    291,
+    538
+   ],
+   [
+    85,
+    28,
+    162,
+    77
+   ],
+   [
+    44,
+    845,
+    148,
+    898
+   ]
+  ],
+  "ellipse": [
+   [
+    85,
+    27,
+    162,
+    77
+   ]
+  ],
+  "rectangle": [
+   [
+    205,
+    736,
+    306,
+    785
+   ],
+   [
+    451,
+    611,
+    628,
+    662
+   ],
+   [
+    42,
+    612,
+    154,
+    661
+   ],
+   [
+    79,
+    257,
+    168,
+    309
+   ],
+   [
+    670,
+    611,
+    814,
+    661
+   ],
+   [
+    28,
+    734,
+    163,
+    786
+   ],
+   [
+    195,
+    367,
+    279,
+    417
+   ],
+   [
+    51,
+    136,
+    196,
+    185
+   ],
+   [
+    402,
+    489,
+    538,
+    538
+   ],
+   [
+    182,
+    489,
+    291,
+    538
+   ],
+   [
+    44,
+    845,
+    148,
+    897
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "ISP",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "WAN Router R1",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 4,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 6,
+      "label": "DC Core 2",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "Forensics Recorder FORENSICS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "SIEM (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "Server Switch SRV-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 12,
+      "label": "VDI Farm",
+      "type": "zone"
+     },
+     {
+      "box": 13,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "100G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 11,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 12,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 5,
+      "to": 10,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 3,
+      "kind": "tap",
+      "mirrors": "bidirectional",
+      "direction": "both",
+      "feeds": 5
+     }
+    ],
+    "boxes": [
+     [
+      85,
+      28,
+      162,
+      77
+     ],
+     [
+      51,
+      136,
+      196,
+      185
+     ],
+     [
+      79,
+      257,
+      168,
+      309
+     ],
+     [
+      195,
+      367,
+      279,
+      417
+     ],
+     [
+      182,
+      489,
+      291,
+      538
+     ],
+     [
+      402,
+      489,
+      538,
+      538
+     ],
+     [
+      42,
+      612,
+      154,
+      661
+     ],
+     [
+      217,
+      612,
+      294,
+      661
+     ],
+     [
+      336,
+      612,
+      410,
+      661
+     ],
+     [
+      451,
+      611,
+      628,
+      662
+     ],
+     [
+      670,
+      611,
+      814,
+      661
+     ],
+     [
+      28,
+      734,
+      163,
+      786
+     ],
+     [
+      205,
+      736,
+      306,
+      785
+     ],
+     [
+      44,
+      845,
+      148,
+      898
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1427,
+     "tokens_out": 4196
+    }
+   },
+   "seconds": 9.5
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "ISP",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "WAN Router R1",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 4,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 6,
+      "label": "DC Core 2",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "Forensics Recorder FORENSICS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "SIEM (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "Server Switch SRV-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 12,
+      "label": "VDI Farm",
+      "type": "zone"
+     },
+     {
+      "box": 13,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "100G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 12,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 11,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 5,
+      "to": 10,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 3,
+      "kind": "tap",
+      "mirrors": "bidirectional",
+      "direction": "both",
+      "feeds": 5
+     }
+    ],
+    "boxes": [
+     [
+      85,
+      28,
+      162,
+      77
+     ],
+     [
+      51,
+      136,
+      196,
+      185
+     ],
+     [
+      79,
+      257,
+      168,
+      309
+     ],
+     [
+      195,
+      367,
+      279,
+      417
+     ],
+     [
+      182,
+      489,
+      291,
+      538
+     ],
+     [
+      402,
+      489,
+      538,
+      538
+     ],
+     [
+      42,
+      612,
+      154,
+      661
+     ],
+     [
+      217,
+      612,
+      294,
+      661
+     ],
+     [
+      336,
+      612,
+      410,
+      661
+     ],
+     [
+      451,
+      611,
+      628,
+      662
+     ],
+     [
+      670,
+      611,
+      814,
+      661
+     ],
+     [
+      28,
+      734,
+      163,
+      786
+     ],
+     [
+      205,
+      736,
+      306,
+      785
+     ],
+     [
+      44,
+      845,
+      148,
+      898
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1427,
+     "tokens_out": 2900
+    }
+   },
+   "seconds": 7.0
+  }
+ },
+ "sam_seconds": 9.0,
+ "cost_usd": 0.05623,
+ "recorded_at": "2026-10-28"
+}

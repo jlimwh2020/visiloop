@@ -1,0 +1,764 @@
+{
+ "name": "d20_organic",
+ "style": "organic",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    826,
+    247,
+    899,
+    297
+   ],
+   [
+    332,
+    348,
+    464,
+    400
+   ],
+   [
+    458,
+    449,
+    548,
+    499
+   ],
+   [
+    641,
+    401,
+    777,
+    450
+   ],
+   [
+    824,
+    467,
+    1001,
+    516
+   ],
+   [
+    560,
+    775,
+    649,
+    827
+   ],
+   [
+    28,
+    561,
+    149,
+    610
+   ],
+   [
+    214,
+    489,
+    353,
+    538
+   ],
+   [
+    186,
+    182,
+    320,
+    232
+   ],
+   [
+    69,
+    28,
+    173,
+    80
+   ],
+   [
+    526,
+    557,
+    622,
+    609
+   ],
+   [
+    578,
+    975,
+    702,
+    1028
+   ],
+   [
+    502,
+    215,
+    658,
+    284
+   ]
+  ],
+  "ellipse": [
+   [
+    591,
+    1174,
+    712,
+    1223
+   ]
+  ],
+  "rectangle": [
+   [
+    332,
+    348,
+    463,
+    401
+   ],
+   [
+    827,
+    247,
+    899,
+    297
+   ],
+   [
+    458,
+    449,
+    548,
+    499
+   ],
+   [
+    641,
+    401,
+    777,
+    450
+   ],
+   [
+    824,
+    467,
+    1001,
+    516
+   ],
+   [
+    560,
+    775,
+    649,
+    827
+   ],
+   [
+    28,
+    561,
+    149,
+    610
+   ],
+   [
+    214,
+    489,
+    353,
+    538
+   ],
+   [
+    186,
+    183,
+    320,
+    232
+   ],
+   [
+    69,
+    28,
+    173,
+    80
+   ],
+   [
+    526,
+    557,
+    622,
+    610
+   ],
+   [
+    578,
+    975,
+    702,
+    1028
+   ],
+   [
+    502,
+    215,
+    658,
+    284
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     },
+     {
+      "box": 1,
+      "label": "DMZ Switch 1",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "SPAN port on CORE-SW-01 [RX+TX]",
+      "type": "span"
+     },
+     {
+      "box": 3,
+      "label": "NDR",
+      "type": "security_tool"
+     },
+     {
+      "box": 4,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 6,
+      "label": "SPAN-2",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "Floor 2 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 10,
+      "label": "Branch VPN",
+      "type": "zone"
+     },
+     {
+      "box": 11,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 12,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 13,
+      "label": "Internet",
+      "type": "internet"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 8,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 11,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 2,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 2,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 8,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 9,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 3,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 5,
+      "to": 7,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 2,
+      "kind": "span",
+      "mirrors": "Core Switch CORE-SW-01",
+      "direction": "both",
+      "feeds": 5
+     },
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "Floor 2 Switch",
+      "direction": "both",
+      "feeds": 5
+     },
+     {
+      "box": 9,
+      "kind": "tap",
+      "mirrors": "Core Switch CORE-SW-01 <-> Firewall FW-01",
+      "direction": "both",
+      "feeds": 5
+     }
+    ],
+    "boxes": [
+     [
+      69,
+      28,
+      173,
+      80
+     ],
+     [
+      186,
+      182,
+      320,
+      232
+     ],
+     [
+      502,
+      215,
+      658,
+      284
+     ],
+     [
+      826,
+      247,
+      899,
+      297
+     ],
+     [
+      332,
+      348,
+      464,
+      400
+     ],
+     [
+      641,
+      401,
+      777,
+      450
+     ],
+     [
+      458,
+      449,
+      548,
+      499
+     ],
+     [
+      824,
+      467,
+      1001,
+      516
+     ],
+     [
+      214,
+      489,
+      353,
+      538
+     ],
+     [
+      526,
+      557,
+      622,
+      609
+     ],
+     [
+      28,
+      561,
+      149,
+      610
+     ],
+     [
+      560,
+      775,
+      649,
+      827
+     ],
+     [
+      578,
+      975,
+      702,
+      1028
+     ],
+     [
+      591,
+      1174,
+      712,
+      1223
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 2106,
+     "tokens_out": 3570
+    }
+   },
+   "seconds": 7.9
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     },
+     {
+      "box": 1,
+      "label": "DMZ Switch 1",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "SPAN port on CORE-SW-01 [RX+TX]",
+      "type": "span"
+     },
+     {
+      "box": 3,
+      "label": "NDR",
+      "type": "security_tool"
+     },
+     {
+      "box": 4,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 6,
+      "label": "SPAN-2",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "Floor 2 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 10,
+      "label": "Branch VPN",
+      "type": "zone"
+     },
+     {
+      "box": 11,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 12,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 13,
+      "label": "Internet",
+      "type": "internet"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 8,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 11,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 3,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 5,
+      "to": 7,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 2,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 9,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 4,
+      "to": 2,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 8,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 2,
+      "kind": "span",
+      "mirrors": "Core Switch CORE-SW-01 [RX+TX]",
+      "direction": "both",
+      "feeds": 5
+     },
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "Floor 2 Switch",
+      "direction": "both",
+      "feeds": 5
+     },
+     {
+      "box": 9,
+      "kind": "tap",
+      "mirrors": "Core Switch CORE-SW-01 to Firewall FW-01 10G link",
+      "direction": "both",
+      "feeds": 5
+     }
+    ],
+    "boxes": [
+     [
+      69,
+      28,
+      173,
+      80
+     ],
+     [
+      186,
+      182,
+      320,
+      232
+     ],
+     [
+      502,
+      215,
+      658,
+      284
+     ],
+     [
+      826,
+      247,
+      899,
+      297
+     ],
+     [
+      332,
+      348,
+      464,
+      400
+     ],
+     [
+      641,
+      401,
+      777,
+      450
+     ],
+     [
+      458,
+      449,
+      548,
+      499
+     ],
+     [
+      824,
+      467,
+      1001,
+      516
+     ],
+     [
+      214,
+      489,
+      353,
+      538
+     ],
+     [
+      526,
+      557,
+      622,
+      609
+     ],
+     [
+      28,
+      561,
+      149,
+      610
+     ],
+     [
+      560,
+      775,
+      649,
+      827
+     ],
+     [
+      578,
+      975,
+      702,
+      1028
+     ],
+     [
+      591,
+      1174,
+      712,
+      1223
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 2106,
+     "tokens_out": 4066
+    }
+   },
+   "seconds": 10.0
+  }
+ },
+ "sam_seconds": 8.7,
+ "cost_usd": 0.06022,
+ "recorded_at": "2026-10-28"
+}

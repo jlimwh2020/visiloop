@@ -1,0 +1,626 @@
+{
+ "name": "d02_clean_tb",
+ "style": "clean_tb",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    260,
+    603,
+    409,
+    654
+   ],
+   [
+    103,
+    370,
+    235,
+    422
+   ],
+   [
+    554,
+    852,
+    691,
+    901
+   ],
+   [
+    102,
+    260,
+    236,
+    311
+   ],
+   [
+    28,
+    852,
+    158,
+    901
+   ],
+   [
+    101,
+    494,
+    237,
+    544
+   ],
+   [
+    69,
+    602,
+    218,
+    654
+   ],
+   [
+    107,
+    136,
+    231,
+    187
+   ],
+   [
+    261,
+    726,
+    408,
+    778
+   ],
+   [
+    200,
+    850,
+    293,
+    902
+   ],
+   [
+    335,
+    851,
+    512,
+    901
+   ],
+   [
+    68,
+    27,
+    269,
+    77
+   ]
+  ],
+  "ellipse": [
+   [
+    69,
+    28,
+    269,
+    77
+   ]
+  ],
+  "rectangle": [
+   [
+    260,
+    603,
+    409,
+    654
+   ],
+   [
+    103,
+    370,
+    235,
+    422
+   ],
+   [
+    554,
+    852,
+    691,
+    901
+   ],
+   [
+    28,
+    852,
+    158,
+    901
+   ],
+   [
+    103,
+    260,
+    236,
+    311
+   ],
+   [
+    101,
+    494,
+    237,
+    543
+   ],
+   [
+    69,
+    602,
+    218,
+    654
+   ],
+   [
+    107,
+    136,
+    231,
+    187
+   ],
+   [
+    261,
+    726,
+    408,
+    778
+   ],
+   [
+    200,
+    850,
+    293,
+    902
+   ],
+   [
+    336,
+    852,
+    512,
+    901
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 6,
+      "label": "Mirror port (Floor 1 Switch)",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "Visibility Fabric VF-1",
+      "type": "packet_broker"
+     },
+     {
+      "box": 8,
+      "label": "IPS (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "SIEM SIEM-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "DLP (primary)",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 8,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 10,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 11,
+      "speed": "1G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "Floor 1 Switch",
+      "direction": "rx_only",
+      "feeds": 7
+     }
+    ],
+    "boxes": [
+     [
+      68,
+      27,
+      269,
+      77
+     ],
+     [
+      107,
+      136,
+      231,
+      187
+     ],
+     [
+      102,
+      260,
+      236,
+      311
+     ],
+     [
+      103,
+      370,
+      235,
+      422
+     ],
+     [
+      101,
+      494,
+      237,
+      544
+     ],
+     [
+      69,
+      602,
+      218,
+      654
+     ],
+     [
+      260,
+      603,
+      409,
+      654
+     ],
+     [
+      261,
+      726,
+      408,
+      778
+     ],
+     [
+      28,
+      852,
+      158,
+      901
+     ],
+     [
+      200,
+      850,
+      293,
+      902
+     ],
+     [
+      335,
+      851,
+      512,
+      901
+     ],
+     [
+      554,
+      852,
+      691,
+      901
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1291,
+     "tokens_out": 3406
+    }
+   },
+   "seconds": 10.0
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 6,
+      "label": "Mirror port (Floor 1 Switch)",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "Visibility Fabric VF-1",
+      "type": "packet_broker"
+     },
+     {
+      "box": 8,
+      "label": "IPS (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "SIEM SIEM-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "DLP (primary)",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 8,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 10,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 11,
+      "speed": "1G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "Floor 1 Switch",
+      "direction": "rx_only",
+      "feeds": 7
+     }
+    ],
+    "boxes": [
+     [
+      68,
+      27,
+      269,
+      77
+     ],
+     [
+      107,
+      136,
+      231,
+      187
+     ],
+     [
+      102,
+      260,
+      236,
+      311
+     ],
+     [
+      103,
+      370,
+      235,
+      422
+     ],
+     [
+      101,
+      494,
+      237,
+      544
+     ],
+     [
+      69,
+      602,
+      218,
+      654
+     ],
+     [
+      260,
+      603,
+      409,
+      654
+     ],
+     [
+      261,
+      726,
+      408,
+      778
+     ],
+     [
+      28,
+      852,
+      158,
+      901
+     ],
+     [
+      200,
+      850,
+      293,
+      902
+     ],
+     [
+      335,
+      851,
+      512,
+      901
+     ],
+     [
+      554,
+      852,
+      691,
+      901
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1291,
+     "tokens_out": 3513
+    }
+   },
+   "seconds": 8.5
+  }
+ },
+ "sam_seconds": 14.3,
+ "cost_usd": 0.05513,
+ "recorded_at": "2026-10-28"
+}

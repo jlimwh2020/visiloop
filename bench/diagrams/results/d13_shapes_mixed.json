@@ -1,0 +1,586 @@
+{
+ "name": "d13_shapes_mixed",
+ "style": "shapes_mixed",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    527,
+    920,
+    624,
+    969
+   ],
+   [
+    309,
+    300,
+    391,
+    349
+   ],
+   [
+    394,
+    909,
+    484,
+    980
+   ],
+   [
+    261,
+    624,
+    379,
+    681
+   ],
+   [
+    490,
+    421,
+    575,
+    471
+   ],
+   [
+    30,
+    499,
+    259,
+    601
+   ],
+   [
+    281,
+    421,
+    418,
+    470
+   ],
+   [
+    515,
+    300,
+    675,
+    349
+   ]
+  ],
+  "ellipse": [
+   [
+    425,
+    28,
+    520,
+    77
+   ]
+  ],
+  "rectangle": [
+   [
+    261,
+    624,
+    379,
+    681
+   ],
+   [
+    309,
+    300,
+    391,
+    349
+   ],
+   [
+    30,
+    499,
+    259,
+    601
+   ],
+   [
+    490,
+    421,
+    575,
+    471
+   ],
+   [
+    281,
+    421,
+    418,
+    470
+   ]
+  ],
+  "hexagon": [
+   [
+    30,
+    499,
+    259,
+    601
+   ],
+   [
+    495,
+    149,
+    696,
+    228
+   ],
+   [
+    398,
+    753,
+    615,
+    837
+   ],
+   [
+    249,
+    149,
+    451,
+    228
+   ]
+  ],
+  "cylinder": [
+   [
+    527,
+    921,
+    623,
+    969
+   ],
+   [
+    394,
+    909,
+    484,
+    980
+   ]
+  ],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 3,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Mirror port (Core-1)",
+      "type": "span"
+     },
+     {
+      "box": 6,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     },
+     {
+      "box": 7,
+      "label": "APM APM-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "Sandbox",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "speed": "40G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 2,
+      "to": 7,
+      "speed": "bidirectional",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 7,
+      "speed": "mirror (RX only)",
+      "kind": "mirror"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 2,
+      "kind": "tap",
+      "mirrors": "Core-2",
+      "direction": "both",
+      "feeds": 7
+     },
+     {
+      "box": 5,
+      "kind": "span",
+      "mirrors": "Core-1",
+      "direction": "rx_only",
+      "feeds": 7
+     }
+    ],
+    "boxes": [
+     [
+      425,
+      28,
+      520,
+      77
+     ],
+     [
+      309,
+      300,
+      391,
+      349
+     ],
+     [
+      515,
+      300,
+      675,
+      349
+     ],
+     [
+      281,
+      421,
+      418,
+      470
+     ],
+     [
+      490,
+      421,
+      575,
+      471
+     ],
+     [
+      30,
+      499,
+      259,
+      601
+     ],
+     [
+      261,
+      624,
+      379,
+      681
+     ],
+     [
+      394,
+      909,
+      484,
+      980
+     ],
+     [
+      527,
+      920,
+      624,
+      969
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1370,
+     "tokens_out": 16298
+    }
+   },
+   "seconds": 47.9
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "Perimeter FW PFW-2",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 5,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Mirror port (Core-1)",
+      "type": "span"
+     },
+     {
+      "box": 8,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     },
+     {
+      "box": 9,
+      "label": "Packet Broker NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 10,
+      "label": "APM APM-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "Sandbox",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 0,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "40G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 7,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 4,
+      "to": 9,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 9,
+      "to": 10,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 9,
+      "to": 11,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 4,
+      "kind": "tap",
+      "mirrors": "bidirectional",
+      "direction": "both",
+      "feeds": 9
+     },
+     {
+      "box": 7,
+      "kind": "span",
+      "mirrors": "mirror (RX only)",
+      "direction": "rx_only",
+      "feeds": 9
+     },
+     {
+      "box": 5,
+      "kind": "span",
+      "mirrors": "SPAN-2 - mirror: inbound only",
+      "direction": "rx_only",
+      "feeds": 9
+     }
+    ],
+    "boxes": [
+     [
+      425,
+      28,
+      520,
+      77
+     ],
+     [
+      249,
+      149,
+      451,
+      228
+     ],
+     [
+      495,
+      149,
+      696,
+      228
+     ],
+     [
+      309,
+      300,
+      391,
+      349
+     ],
+     [
+      515,
+      300,
+      675,
+      349
+     ],
+     [
+      281,
+      421,
+      418,
+      470
+     ],
+     [
+      490,
+      421,
+      575,
+      471
+     ],
+     [
+      30,
+      499,
+      259,
+      601
+     ],
+     [
+      261,
+      624,
+      379,
+      681
+     ],
+     [
+      398,
+      753,
+      615,
+      837
+     ],
+     [
+      394,
+      909,
+      484,
+      980
+     ],
+     [
+      527,
+      920,
+      624,
+      969
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1415,
+     "tokens_out": 8794
+    }
+   },
+   "seconds": 26.6
+  }
+ },
+ "sam_seconds": 9.1,
+ "cost_usd": 0.13262,
+ "recorded_at": "2026-10-28"
+}

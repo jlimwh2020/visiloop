@@ -1,0 +1,752 @@
+{
+ "name": "d19_organic",
+ "style": "organic",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    28,
+    162,
+    192,
+    211
+   ],
+   [
+    921,
+    739,
+    1001,
+    788
+   ],
+   [
+    560,
+    457,
+    657,
+    510
+   ],
+   [
+    404,
+    466,
+    513,
+    515
+   ],
+   [
+    829,
+    28,
+    902,
+    77
+   ],
+   [
+    1111,
+    844,
+    1230,
+    893
+   ],
+   [
+    405,
+    946,
+    550,
+    996
+   ],
+   [
+    262,
+    247,
+    399,
+    296
+   ],
+   [
+    701,
+    601,
+    786,
+    650
+   ],
+   [
+    433,
+    81,
+    579,
+    131
+   ],
+   [
+    510,
+    730,
+    654,
+    779
+   ],
+   [
+    640,
+    222,
+    787,
+    274
+   ],
+   [
+    824,
+    387,
+    937,
+    439
+   ]
+  ],
+  "ellipse": [
+   [
+    323,
+    1150,
+    418,
+    1198
+   ]
+  ],
+  "rectangle": [
+   [
+    28,
+    162,
+    191,
+    211
+   ],
+   [
+    921,
+    739,
+    1001,
+    788
+   ],
+   [
+    560,
+    457,
+    657,
+    509
+   ],
+   [
+    404,
+    466,
+    513,
+    515
+   ],
+   [
+    828,
+    28,
+    902,
+    77
+   ],
+   [
+    1111,
+    844,
+    1230,
+    893
+   ],
+   [
+    262,
+    247,
+    399,
+    296
+   ],
+   [
+    701,
+    601,
+    786,
+    650
+   ],
+   [
+    433,
+    81,
+    579,
+    131
+   ],
+   [
+    510,
+    730,
+    654,
+    779
+   ],
+   [
+    640,
+    222,
+    787,
+    274
+   ],
+   [
+    824,
+    387,
+    937,
+    439
+   ],
+   [
+    404,
+    947,
+    550,
+    996
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "IPS",
+      "type": "security_tool"
+     },
+     {
+      "box": 1,
+      "label": "SPAN session 1",
+      "type": "span"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "Visibility Fabric VF-1",
+      "type": "packet_broker"
+     },
+     {
+      "box": 4,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Mirror port (Core-2)",
+      "type": "span"
+     },
+     {
+      "box": 6,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 8,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 10,
+      "label": "Leaf-2",
+      "type": "switch"
+     },
+     {
+      "box": 11,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 12,
+      "label": "WAN Router R1",
+      "type": "router"
+     },
+     {
+      "box": 13,
+      "label": "WAN",
+      "type": "internet"
+     }
+    ],
+    "links": [
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 8,
+      "speed": "40G",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 12,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 0,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 3,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 3,
+      "speed": "",
+      "kind": "mirror"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 1,
+      "kind": "span",
+      "mirrors": "mirror: outbound only",
+      "direction": "tx_only",
+      "feeds": 3
+     },
+     {
+      "box": 5,
+      "kind": "span",
+      "mirrors": "TX only",
+      "direction": "tx_only",
+      "feeds": 3
+     },
+     {
+      "box": 7,
+      "kind": "tap",
+      "mirrors": "RX+TX",
+      "direction": "both",
+      "feeds": 3
+     }
+    ],
+    "boxes": [
+     [
+      829,
+      28,
+      902,
+      77
+     ],
+     [
+      433,
+      81,
+      579,
+      131
+     ],
+     [
+      28,
+      162,
+      192,
+      211
+     ],
+     [
+      640,
+      222,
+      787,
+      274
+     ],
+     [
+      262,
+      247,
+      399,
+      296
+     ],
+     [
+      824,
+      387,
+      937,
+      439
+     ],
+     [
+      404,
+      466,
+      513,
+      515
+     ],
+     [
+      560,
+      457,
+      657,
+      510
+     ],
+     [
+      701,
+      601,
+      786,
+      650
+     ],
+     [
+      510,
+      730,
+      654,
+      779
+     ],
+     [
+      921,
+      739,
+      1001,
+      788
+     ],
+     [
+      1111,
+      844,
+      1230,
+      893
+     ],
+     [
+      405,
+      946,
+      550,
+      996
+     ],
+     [
+      323,
+      1150,
+      418,
+      1198
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 2334,
+     "tokens_out": 3876
+    }
+   },
+   "seconds": 9.0
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "IPS",
+      "type": "security_tool"
+     },
+     {
+      "box": 1,
+      "label": "SPAN session 1",
+      "type": "span"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "Visibility Fabric VF-1",
+      "type": "packet_broker"
+     },
+     {
+      "box": 4,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Mirror port (Core-2)",
+      "type": "span"
+     },
+     {
+      "box": 6,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 8,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 10,
+      "label": "Leaf-2",
+      "type": "switch"
+     },
+     {
+      "box": 11,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 12,
+      "label": "WAN Router R1",
+      "type": "router"
+     },
+     {
+      "box": 13,
+      "label": "WAN",
+      "type": "internet"
+     }
+    ],
+    "links": [
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 8,
+      "speed": "40G",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 12,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 0,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 3,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 3,
+      "speed": "",
+      "kind": "mirror"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 1,
+      "kind": "span",
+      "mirrors": "outbound only",
+      "direction": "tx_only",
+      "feeds": 3
+     },
+     {
+      "box": 5,
+      "kind": "span",
+      "mirrors": "TX only",
+      "direction": "tx_only",
+      "feeds": 3
+     },
+     {
+      "box": 7,
+      "kind": "tap",
+      "mirrors": "RX+TX",
+      "direction": "both",
+      "feeds": 3
+     }
+    ],
+    "boxes": [
+     [
+      829,
+      28,
+      902,
+      77
+     ],
+     [
+      433,
+      81,
+      579,
+      131
+     ],
+     [
+      28,
+      162,
+      192,
+      211
+     ],
+     [
+      640,
+      222,
+      787,
+      274
+     ],
+     [
+      262,
+      247,
+      399,
+      296
+     ],
+     [
+      824,
+      387,
+      937,
+      439
+     ],
+     [
+      404,
+      466,
+      513,
+      515
+     ],
+     [
+      560,
+      457,
+      657,
+      510
+     ],
+     [
+      701,
+      601,
+      786,
+      650
+     ],
+     [
+      510,
+      730,
+      654,
+      779
+     ],
+     [
+      921,
+      739,
+      1001,
+      788
+     ],
+     [
+      1111,
+      844,
+      1230,
+      893
+     ],
+     [
+      405,
+      946,
+      550,
+      996
+     ],
+     [
+      323,
+      1150,
+      418,
+      1198
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 2334,
+     "tokens_out": 3773
+    }
+   },
+   "seconds": 8.5
+  }
+ },
+ "sam_seconds": 10.0,
+ "cost_usd": 0.06084,
+ "recorded_at": "2026-10-28"
+}

@@ -1,0 +1,533 @@
+{
+ "name": "d30_whiteboard",
+ "style": "whiteboard",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    254,
+    786,
+    434,
+    838
+   ],
+   [
+    360,
+    898,
+    423,
+    947
+   ],
+   [
+    157,
+    336,
+    296,
+    388
+   ],
+   [
+    259,
+    905,
+    326,
+    955
+   ],
+   [
+    182,
+    562,
+    256,
+    608
+   ],
+   [
+    122,
+    660,
+    260,
+    725
+   ],
+   [
+    296,
+    659,
+    401,
+    721
+   ],
+   [
+    162,
+    227,
+    298,
+    280
+   ],
+   [
+    161,
+    431,
+    284,
+    497
+   ]
+  ],
+  "ellipse": [
+   [
+    190,
+    132,
+    278,
+    184
+   ]
+  ],
+  "rectangle": [
+   [
+    157,
+    336,
+    296,
+    387
+   ],
+   [
+    182,
+    562,
+    256,
+    608
+   ],
+   [
+    122,
+    660,
+    260,
+    725
+   ],
+   [
+    296,
+    659,
+    401,
+    721
+   ],
+   [
+    161,
+    431,
+    284,
+    497
+   ],
+   [
+    86,
+    99,
+    464,
+    994
+   ],
+   [
+    162,
+    227,
+    297,
+    280
+   ],
+   [
+    254,
+    786,
+    434,
+    838
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "WAN Router R1",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Server Zone (File, Web, App)",
+      "type": "zone"
+     },
+     {
+      "box": 6,
+      "label": "Mirror port (Leaf-1)",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "Network Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 8,
+      "label": "IPS",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 8,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "RX+TX",
+      "direction": "both",
+      "feeds": 7
+     }
+    ],
+    "boxes": [
+     [
+      190,
+      132,
+      278,
+      184
+     ],
+     [
+      162,
+      227,
+      298,
+      280
+     ],
+     [
+      157,
+      336,
+      296,
+      388
+     ],
+     [
+      161,
+      431,
+      284,
+      497
+     ],
+     [
+      182,
+      562,
+      256,
+      608
+     ],
+     [
+      122,
+      660,
+      260,
+      725
+     ],
+     [
+      296,
+      659,
+      401,
+      721
+     ],
+     [
+      254,
+      786,
+      434,
+      838
+     ],
+     [
+      259,
+      905,
+      326,
+      955
+     ],
+     [
+      360,
+      898,
+      423,
+      947
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1177,
+     "tokens_out": 2466
+    }
+   },
+   "seconds": 8.4
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "",
+      "type": "other"
+     },
+     {
+      "box": 1,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 2,
+      "label": "WAN Router R1",
+      "type": "router"
+     },
+     {
+      "box": 3,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 4,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Server Zone (File, Web, App)",
+      "type": "zone"
+     },
+     {
+      "box": 7,
+      "label": "Mirror port (Leaf-1)",
+      "type": "span"
+     },
+     {
+      "box": 8,
+      "label": "Network Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 9,
+      "label": "IPS",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 6,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 7,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 8,
+      "speed": "RX+TX",
+      "kind": "mirror"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 7,
+      "kind": "span",
+      "mirrors": "Leaf-1",
+      "direction": "both",
+      "feeds": 8
+     }
+    ],
+    "boxes": [
+     [
+      86,
+      99,
+      464,
+      994
+     ],
+     [
+      190,
+      132,
+      278,
+      184
+     ],
+     [
+      162,
+      227,
+      298,
+      280
+     ],
+     [
+      157,
+      336,
+      296,
+      388
+     ],
+     [
+      161,
+      431,
+      284,
+      497
+     ],
+     [
+      182,
+      562,
+      256,
+      608
+     ],
+     [
+      122,
+      660,
+      260,
+      725
+     ],
+     [
+      296,
+      659,
+      401,
+      721
+     ],
+     [
+      254,
+      786,
+      434,
+      838
+     ],
+     [
+      259,
+      905,
+      326,
+      955
+     ],
+     [
+      360,
+      898,
+      423,
+      947
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1192,
+     "tokens_out": 3861
+    }
+   },
+   "seconds": 10.5
+  }
+ },
+ "sam_seconds": 14.5,
+ "cost_usd": 0.05235,
+ "recorded_at": "2026-10-28"
+}

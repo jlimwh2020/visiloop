@@ -1,0 +1,822 @@
+{
+ "name": "d07_clean_lr",
+ "style": "clean_lr",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    808,
+    105,
+    899,
+    148
+   ],
+   [
+    1426,
+    64,
+    1498,
+    110
+   ],
+   [
+    1430,
+    308,
+    1494,
+    351
+   ],
+   [
+    1349,
+    147,
+    1574,
+    190
+   ],
+   [
+    25,
+    149,
+    204,
+    193
+   ],
+   [
+    436,
+    149,
+    533,
+    193
+   ],
+   [
+    611,
+    256,
+    732,
+    302
+   ],
+   [
+    1430,
+    228,
+    1495,
+    271
+   ],
+   [
+    786,
+    269,
+    919,
+    315
+   ],
+   [
+    280,
+    189,
+    359,
+    235
+   ],
+   [
+    280,
+    107,
+    359,
+    152
+   ],
+   [
+    799,
+    25,
+    907,
+    68
+   ],
+   [
+    1089,
+    187,
+    1270,
+    230
+   ],
+   [
+    610,
+    55,
+    733,
+    99
+   ],
+   [
+    608,
+    148,
+    734,
+    194
+   ],
+   [
+    787,
+    186,
+    919,
+    232
+   ]
+  ],
+  "ellipse": [
+   [
+    25,
+    149,
+    203,
+    193
+   ]
+  ],
+  "rectangle": [
+   [
+    808,
+    105,
+    899,
+    148
+   ],
+   [
+    1426,
+    64,
+    1499,
+    110
+   ],
+   [
+    1430,
+    308,
+    1495,
+    351
+   ],
+   [
+    1350,
+    147,
+    1574,
+    190
+   ],
+   [
+    436,
+    149,
+    533,
+    193
+   ],
+   [
+    1430,
+    228,
+    1495,
+    271
+   ],
+   [
+    611,
+    256,
+    732,
+    302
+   ],
+   [
+    786,
+    269,
+    919,
+    315
+   ],
+   [
+    280,
+    189,
+    359,
+    235
+   ],
+   [
+    280,
+    107,
+    359,
+    152
+   ],
+   [
+    799,
+    25,
+    907,
+    68
+   ],
+   [
+    1089,
+    187,
+    1270,
+    230
+   ],
+   [
+    610,
+    55,
+    733,
+    99
+   ],
+   [
+    609,
+    148,
+    734,
+    194
+   ],
+   [
+    787,
+    186,
+    919,
+    231
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Branch VPN",
+      "type": "other"
+     },
+     {
+      "box": 1,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "IDS IDS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 3,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 4,
+      "label": "VDI Farm",
+      "type": "zone"
+     },
+     {
+      "box": 5,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 6,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Access Switch ACC-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "Forensics Recorder (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "Firewall FW-02",
+      "type": "firewall"
+     },
+     {
+      "box": 10,
+      "label": "SPAN port on ACC-SW-02",
+      "type": "span"
+     },
+     {
+      "box": 11,
+      "label": "Network Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 12,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 13,
+      "label": "Server Switch SRV-SW-03",
+      "type": "switch"
+     },
+     {
+      "box": 14,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 15,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 5,
+      "to": 3,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 6,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 1,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 0,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 13,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 13,
+      "to": 14,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 10,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 11,
+      "to": 2,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 8,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 15,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 10,
+      "kind": "span",
+      "mirrors": "Access Switch ACC-SW-02",
+      "direction": "rx_only",
+      "feeds": 11
+     }
+    ],
+    "boxes": [
+     [
+      799,
+      25,
+      907,
+      68
+     ],
+     [
+      610,
+      55,
+      733,
+      99
+     ],
+     [
+      1426,
+      64,
+      1498,
+      110
+     ],
+     [
+      280,
+      107,
+      359,
+      152
+     ],
+     [
+      808,
+      105,
+      899,
+      148
+     ],
+     [
+      25,
+      149,
+      204,
+      193
+     ],
+     [
+      436,
+      149,
+      533,
+      193
+     ],
+     [
+      608,
+      148,
+      734,
+      194
+     ],
+     [
+      1349,
+      147,
+      1574,
+      190
+     ],
+     [
+      280,
+      189,
+      359,
+      235
+     ],
+     [
+      787,
+      186,
+      919,
+      232
+     ],
+     [
+      1089,
+      187,
+      1270,
+      230
+     ],
+     [
+      1430,
+      228,
+      1495,
+      271
+     ],
+     [
+      611,
+      256,
+      732,
+      302
+     ],
+     [
+      786,
+      269,
+      919,
+      315
+     ],
+     [
+      1430,
+      308,
+      1494,
+      351
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1289,
+     "tokens_out": 3261
+    }
+   },
+   "seconds": 9.4
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Branch VPN",
+      "type": "other"
+     },
+     {
+      "box": 1,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "IDS IDS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 3,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 4,
+      "label": "VDI Farm",
+      "type": "zone"
+     },
+     {
+      "box": 5,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 6,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Access Switch ACC-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "Forensics Recorder (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "Firewall FW-02",
+      "type": "firewall"
+     },
+     {
+      "box": 10,
+      "label": "SPAN port on ACC-SW-02",
+      "type": "span"
+     },
+     {
+      "box": 11,
+      "label": "Network Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 12,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 13,
+      "label": "Server Switch SRV-SW-03",
+      "type": "switch"
+     },
+     {
+      "box": 14,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 15,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 5,
+      "to": 3,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 6,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 1,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 0,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 13,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 13,
+      "to": 14,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 10,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 11,
+      "to": 2,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 8,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 15,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 10,
+      "kind": "span",
+      "mirrors": "mirror: inbound only",
+      "direction": "rx_only",
+      "feeds": 11
+     }
+    ],
+    "boxes": [
+     [
+      799,
+      25,
+      907,
+      68
+     ],
+     [
+      610,
+      55,
+      733,
+      99
+     ],
+     [
+      1426,
+      64,
+      1498,
+      110
+     ],
+     [
+      280,
+      107,
+      359,
+      152
+     ],
+     [
+      808,
+      105,
+      899,
+      148
+     ],
+     [
+      25,
+      149,
+      204,
+      193
+     ],
+     [
+      436,
+      149,
+      533,
+      193
+     ],
+     [
+      608,
+      148,
+      734,
+      194
+     ],
+     [
+      1349,
+      147,
+      1574,
+      190
+     ],
+     [
+      280,
+      189,
+      359,
+      235
+     ],
+     [
+      787,
+      186,
+      919,
+      232
+     ],
+     [
+      1089,
+      187,
+      1270,
+      230
+     ],
+     [
+      1430,
+      228,
+      1495,
+      271
+     ],
+     [
+      611,
+      256,
+      732,
+      302
+     ],
+     [
+      786,
+      269,
+      919,
+      315
+     ],
+     [
+      1430,
+      308,
+      1494,
+      351
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1289,
+     "tokens_out": 3722
+    }
+   },
+   "seconds": 10.0
+  }
+ },
+ "sam_seconds": 9.9,
+ "cost_usd": 0.0554,
+ "recorded_at": "2026-10-28"
+}

@@ -1,0 +1,1000 @@
+{
+ "name": "d05_clean_lr",
+ "style": "clean_lr",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    1039,
+    19,
+    1142,
+    54
+   ],
+   [
+    540,
+    286,
+    607,
+    322
+   ],
+   [
+    1038,
+    146,
+    1142,
+    181
+   ],
+   [
+    1255,
+    274,
+    1396,
+    307
+   ],
+   [
+    1491,
+    367,
+    1547,
+    403
+   ],
+   [
+    1457,
+    242,
+    1580,
+    276
+   ],
+   [
+    18,
+    243,
+    159,
+    277
+   ],
+   [
+    458,
+    211,
+    521,
+    246
+   ],
+   [
+    1493,
+    305,
+    1544,
+    338
+   ],
+   [
+    789,
+    210,
+    884,
+    246
+   ],
+   [
+    789,
+    147,
+    885,
+    180
+   ],
+   [
+    198,
+    242,
+    284,
+    278
+   ],
+   [
+    1494,
+    180,
+    1544,
+    213
+   ],
+   [
+    912,
+    273,
+    1015,
+    308
+   ],
+   [
+    665,
+    211,
+    741,
+    245
+   ],
+   [
+    782,
+    46,
+    892,
+    80
+   ],
+   [
+    1050,
+    210,
+    1132,
+    246
+   ],
+   [
+    337,
+    276,
+    440,
+    310
+   ],
+   [
+    1034,
+    83,
+    1147,
+    117
+   ]
+  ],
+  "ellipse": [
+   [
+    19,
+    243,
+    158,
+    277
+   ]
+  ],
+  "rectangle": [
+   [
+    1039,
+    19,
+    1142,
+    54
+   ],
+   [
+    540,
+    286,
+    607,
+    322
+   ],
+   [
+    1039,
+    146,
+    1142,
+    181
+   ],
+   [
+    1255,
+    274,
+    1396,
+    307
+   ],
+   [
+    1491,
+    367,
+    1546,
+    402
+   ],
+   [
+    1457,
+    242,
+    1580,
+    276
+   ],
+   [
+    458,
+    211,
+    520,
+    246
+   ],
+   [
+    789,
+    210,
+    884,
+    246
+   ],
+   [
+    337,
+    276,
+    439,
+    310
+   ],
+   [
+    790,
+    147,
+    885,
+    180
+   ],
+   [
+    665,
+    211,
+    741,
+    245
+   ],
+   [
+    1493,
+    305,
+    1544,
+    338
+   ],
+   [
+    198,
+    242,
+    284,
+    278
+   ],
+   [
+    783,
+    47,
+    892,
+    80
+   ],
+   [
+    1494,
+    180,
+    1544,
+    213
+   ],
+   [
+    912,
+    273,
+    1015,
+    308
+   ],
+   [
+    1050,
+    210,
+    1132,
+    246
+   ],
+   [
+    1034,
+    83,
+    1147,
+    117
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 1,
+      "label": "Distribution SW 1",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "DMZ Switch 2",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Mirror port (DMZ Switch 2)",
+      "type": "span"
+     },
+     {
+      "box": 5,
+      "label": "APM",
+      "type": "security_tool"
+     },
+     {
+      "box": 6,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 7,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "Server Switch SRV-SW-03",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 11,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 12,
+      "label": "NGFW-EDGE-2",
+      "type": "firewall"
+     },
+     {
+      "box": 13,
+      "label": "SPAN session 2 [RX only]",
+      "type": "span"
+     },
+     {
+      "box": 14,
+      "label": "Network Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 15,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 16,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 17,
+      "label": "NDR",
+      "type": "security_tool"
+     },
+     {
+      "box": 18,
+      "label": "IPS IPS-01",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 6,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 16,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 16,
+      "to": 7,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 0,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 14,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 13,
+      "to": 14,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 16,
+      "to": 14,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 14,
+      "to": 5,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 14,
+      "to": 15,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 14,
+      "to": 17,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 14,
+      "to": 18,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 4,
+      "kind": "span",
+      "mirrors": "DMZ Switch 2",
+      "direction": "both",
+      "feeds": 14
+     },
+     {
+      "box": 13,
+      "kind": "span",
+      "mirrors": "DC Core 1",
+      "direction": "rx_only",
+      "feeds": 14
+     },
+     {
+      "box": 16,
+      "kind": "tap",
+      "mirrors": "NGFW-EDGE-2 <-> DC Core 1",
+      "direction": "both",
+      "feeds": 14
+     }
+    ],
+    "boxes": [
+     [
+      1039,
+      19,
+      1142,
+      54
+     ],
+     [
+      782,
+      46,
+      892,
+      80
+     ],
+     [
+      1034,
+      83,
+      1147,
+      117
+     ],
+     [
+      789,
+      147,
+      885,
+      180
+     ],
+     [
+      1038,
+      146,
+      1142,
+      181
+     ],
+     [
+      1494,
+      180,
+      1544,
+      213
+     ],
+     [
+      458,
+      211,
+      521,
+      246
+     ],
+     [
+      665,
+      211,
+      741,
+      245
+     ],
+     [
+      789,
+      210,
+      884,
+      246
+     ],
+     [
+      1050,
+      210,
+      1132,
+      246
+     ],
+     [
+      18,
+      243,
+      159,
+      277
+     ],
+     [
+      198,
+      242,
+      284,
+      278
+     ],
+     [
+      337,
+      276,
+      440,
+      310
+     ],
+     [
+      912,
+      273,
+      1015,
+      308
+     ],
+     [
+      1255,
+      274,
+      1396,
+      307
+     ],
+     [
+      1457,
+      242,
+      1580,
+      276
+     ],
+     [
+      540,
+      286,
+      607,
+      322
+     ],
+     [
+      1493,
+      305,
+      1544,
+      338
+     ],
+     [
+      1491,
+      367,
+      1547,
+      403
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1386,
+     "tokens_out": 4003
+    }
+   },
+   "seconds": 11.7
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 1,
+      "label": "Distribution SW 1",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "DMZ Switch 2",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Mirror port (DMZ Switch 2)",
+      "type": "span"
+     },
+     {
+      "box": 5,
+      "label": "APM",
+      "type": "security_tool"
+     },
+     {
+      "box": 6,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 7,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "Server Switch SRV-SW-03",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 11,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 12,
+      "label": "NGFW-EDGE-2",
+      "type": "firewall"
+     },
+     {
+      "box": 13,
+      "label": "SPAN session 2 [RX only]",
+      "type": "span"
+     },
+     {
+      "box": 14,
+      "label": "Network Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 15,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 16,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 17,
+      "label": "NDR",
+      "type": "security_tool"
+     },
+     {
+      "box": 18,
+      "label": "IPS IPS-01",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 6,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 16,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 16,
+      "to": 7,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 0,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 7,
+      "to": 13,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 4,
+      "to": 14,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 13,
+      "to": 14,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 16,
+      "to": 14,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 14,
+      "to": 5,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 14,
+      "to": 15,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 14,
+      "to": 17,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 14,
+      "to": 18,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 4,
+      "kind": "span",
+      "mirrors": "DMZ Switch 2",
+      "direction": "both",
+      "feeds": 14
+     },
+     {
+      "box": 13,
+      "kind": "span",
+      "mirrors": "DC Core 1",
+      "direction": "rx_only",
+      "feeds": 14
+     },
+     {
+      "box": 16,
+      "kind": "tap",
+      "mirrors": "NGFW-EDGE-2 <-> DC Core 1",
+      "direction": "both",
+      "feeds": 14
+     }
+    ],
+    "boxes": [
+     [
+      1039,
+      19,
+      1142,
+      54
+     ],
+     [
+      782,
+      46,
+      892,
+      80
+     ],
+     [
+      1034,
+      83,
+      1147,
+      117
+     ],
+     [
+      789,
+      147,
+      885,
+      180
+     ],
+     [
+      1038,
+      146,
+      1142,
+      181
+     ],
+     [
+      1494,
+      180,
+      1544,
+      213
+     ],
+     [
+      458,
+      211,
+      521,
+      246
+     ],
+     [
+      665,
+      211,
+      741,
+      245
+     ],
+     [
+      789,
+      210,
+      884,
+      246
+     ],
+     [
+      1050,
+      210,
+      1132,
+      246
+     ],
+     [
+      18,
+      243,
+      159,
+      277
+     ],
+     [
+      198,
+      242,
+      284,
+      278
+     ],
+     [
+      337,
+      276,
+      440,
+      310
+     ],
+     [
+      912,
+      273,
+      1015,
+      308
+     ],
+     [
+      1255,
+      274,
+      1396,
+      307
+     ],
+     [
+      1457,
+      242,
+      1580,
+      276
+     ],
+     [
+      540,
+      286,
+      607,
+      322
+     ],
+     [
+      1493,
+      305,
+      1544,
+      338
+     ],
+     [
+      1491,
+      367,
+      1547,
+      403
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1386,
+     "tokens_out": 5472
+    }
+   },
+   "seconds": 13.1
+  }
+ },
+ "sam_seconds": 11.4,
+ "cost_usd": 0.06623,
+ "recorded_at": "2026-10-28"
+}

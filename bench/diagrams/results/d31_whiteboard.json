@@ -1,0 +1,652 @@
+{
+ "name": "d31_whiteboard",
+ "style": "whiteboard",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    434,
+    382,
+    520,
+    445
+   ],
+   [
+    311,
+    735,
+    424,
+    783
+   ],
+   [
+    258,
+    503,
+    382,
+    566
+   ],
+   [
+    642,
+    766,
+    711,
+    812
+   ],
+   [
+    416,
+    511,
+    536,
+    575
+   ],
+   [
+    278,
+    379,
+    393,
+    442
+   ],
+   [
+    118,
+    497,
+    227,
+    557
+   ],
+   [
+    457,
+    742,
+    608,
+    809
+   ],
+   [
+    491,
+    640,
+    576,
+    685
+   ],
+   [
+    332,
+    263,
+    471,
+    311
+   ],
+   [
+    131,
+    614,
+    224,
+    659
+   ]
+  ],
+  "ellipse": [
+   [
+    296,
+    131,
+    509,
+    192
+   ]
+  ],
+  "rectangle": [
+   [
+    311,
+    735,
+    424,
+    783
+   ],
+   [
+    258,
+    503,
+    382,
+    566
+   ],
+   [
+    642,
+    766,
+    711,
+    812
+   ],
+   [
+    332,
+    263,
+    471,
+    311
+   ],
+   [
+    416,
+    511,
+    536,
+    575
+   ],
+   [
+    278,
+    379,
+    393,
+    441
+   ],
+   [
+    118,
+    497,
+    227,
+    557
+   ],
+   [
+    457,
+    742,
+    607,
+    809
+   ],
+   [
+    491,
+    640,
+    576,
+    685
+   ],
+   [
+    132,
+    614,
+    223,
+    659
+   ],
+   [
+    434,
+    382,
+    520,
+    445
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 3,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 4,
+      "label": "Access Switch ACC-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Mirror port (CORE-SW-01)",
+      "type": "span"
+     },
+     {
+      "box": 6,
+      "label": "Core Switch CORE-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 8,
+      "label": "NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 9,
+      "label": "IPS (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "Forensics Recorder FORENSICS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "unknown",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 8,
+      "speed": "unknown",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "unknown",
+      "kind": "mirror"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 8,
+      "to": 11,
+      "speed": "1G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 3,
+      "kind": "tap",
+      "mirrors": "TX only",
+      "direction": "tx_only",
+      "feeds": 8
+     },
+     {
+      "box": 5,
+      "kind": "span",
+      "mirrors": "RX only",
+      "direction": "rx_only",
+      "feeds": 8
+     }
+    ],
+    "boxes": [
+     [
+      296,
+      131,
+      509,
+      192
+     ],
+     [
+      332,
+      263,
+      471,
+      311
+     ],
+     [
+      278,
+      379,
+      393,
+      442
+     ],
+     [
+      434,
+      382,
+      520,
+      445
+     ],
+     [
+      118,
+      497,
+      227,
+      557
+     ],
+     [
+      258,
+      503,
+      382,
+      566
+     ],
+     [
+      416,
+      511,
+      536,
+      575
+     ],
+     [
+      131,
+      614,
+      224,
+      659
+     ],
+     [
+      491,
+      640,
+      576,
+      685
+     ],
+     [
+      311,
+      735,
+      424,
+      783
+     ],
+     [
+      457,
+      742,
+      608,
+      809
+     ],
+     [
+      642,
+      766,
+      711,
+      812
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1463,
+     "tokens_out": 3773
+    }
+   },
+   "seconds": 11.3
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 3,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 4,
+      "label": "Access Switch ACC-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Mirror port (CORE-SW-01)",
+      "type": "span"
+     },
+     {
+      "box": 6,
+      "label": "Core Switch CORE-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 8,
+      "label": "NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 9,
+      "label": "IPS (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 10,
+      "label": "Forensics Recorder FORENSICS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 5,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 3,
+      "to": 8,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 8,
+      "to": 11,
+      "speed": "1G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 3,
+      "kind": "tap",
+      "mirrors": "10G link NGFW-EDGE-1 to Core Switch CORE-SW-02",
+      "direction": "tx_only",
+      "feeds": 8
+     },
+     {
+      "box": 5,
+      "kind": "span",
+      "mirrors": "Core Switch CORE-SW-01",
+      "direction": "rx_only",
+      "feeds": 8
+     }
+    ],
+    "boxes": [
+     [
+      296,
+      131,
+      509,
+      192
+     ],
+     [
+      332,
+      263,
+      471,
+      311
+     ],
+     [
+      278,
+      379,
+      393,
+      442
+     ],
+     [
+      434,
+      382,
+      520,
+      445
+     ],
+     [
+      118,
+      497,
+      227,
+      557
+     ],
+     [
+      258,
+      503,
+      382,
+      566
+     ],
+     [
+      416,
+      511,
+      536,
+      575
+     ],
+     [
+      131,
+      614,
+      224,
+      659
+     ],
+     [
+      491,
+      640,
+      576,
+      685
+     ],
+     [
+      311,
+      735,
+      424,
+      783
+     ],
+     [
+      457,
+      742,
+      608,
+      809
+     ],
+     [
+      642,
+      766,
+      711,
+      812
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1463,
+     "tokens_out": 4264
+    }
+   },
+   "seconds": 14.0
+  }
+ },
+ "sam_seconds": 17.9,
+ "cost_usd": 0.06031,
+ "recorded_at": "2026-10-28"
+}
