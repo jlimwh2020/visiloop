@@ -183,6 +183,9 @@ if inv:
         st.image(diagram, caption="Customer network diagram", width="stretch")
     with c2:
         st.metric("Devices found by SAM 3.1", len(inv["boxes"]))
+        for u in inv.get("untagged", []):
+            st.warning(f"'{u['label']}' is on the diagram but SAM 3.1 did not locate it, "
+                       "so findings cannot be pinned on it.")
         st.markdown("**Capture points read by Muse Spark**")
         labels = {d["box"]: d["label"] for d in inv["devices"]}
         st.dataframe([{"Capture point": labels.get(c["box"], c["box"]), "Type": c.get("kind", "").upper(),

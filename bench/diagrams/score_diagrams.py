@@ -111,6 +111,12 @@ def score(d, inv):
     broker_ok = all(m.get(i) is not None and (by_box.get(m[i]) or {}).get("type") == "packet_broker" for i in broker)
     tools_ok = all(m.get(idx[t["id"]]) is not None and (by_box.get(m[idx[t["id"]]]) or {}).get("type") == "security_tool"
                    for t in d["tools"])
+    # SAM misses that Muse Spark flagged as "on the diagram but untagged"
+    untagged = [u.get("label", "") for u in inv.get("untagged", [])]
+    missed = [x for i, x in enumerate(devs) if i not in m]
+    r["missed"] = len(missed)
+    r["missed_flagged"] = sum(any(label_ok(x["label"], u) for u in untagged) for x in missed)
+    r["untagged_false"] = sum(not any(label_ok(x["label"], u) for x in missed) for u in untagged)
     r["pin_ready"] = broker_ok and tools_ok and r["cap_dir_ok"] == r["caps"] and r["cap_kind_ok"] == r["caps"]
     r["matched"] = m
     return r
@@ -139,9 +145,9 @@ def main():
                 recs[n] = json.load(f)
     if not recs:
         raise SystemExit("No results yet: run python bench/diagrams/run_diagrams.py")
-    variants = list(next(iter(recs.values()))["variants"])
+    variants = [v for v in ("baseline", "extended", "improved") if all(v in r["variants"] for r in recs.values())]
     keys = ["devices", "sam_found", "sam_boxes", "sam_extra", "read", "label_ok", "type_ok", "caps", "cap_found",
-            "cap_kind_ok", "cap_dir_ok", "tools", "tool_speed_ok"]
+            "cap_kind_ok", "cap_dir_ok", "tools", "tool_speed_ok", "missed", "missed_flagged", "untagged_false"]
     scored = {v: {n: score(truth[n], recs[n]["variants"][v]["inventory"]) for n in recs} for v in variants}
     os.makedirs(os.path.join(RES, "overlays"), exist_ok=True)
     for n in recs:
@@ -164,12 +170,13 @@ def main():
                                   "by_style": {s: totals(rs) for s, rs in by_style.items()},
                                   "prompts": recs[next(iter(recs))]["variants"][v]["prompts"]}
     # direction mistakes, by wording and placement
+    last = variants[-1]
     misses = []
-    for n, r in scored["baseline"].items():
+    for n, r in scored[last].items():
         for c in r["cap_detail"]:
             if c["read"] != c["truth"]:
                 misses.append({"diagram": n, **c})
-    summary["baseline_capture_point_misses"] = misses
+    summary["capture_point_misses"] = {"variant": last, "misses": misses}
     summary["read_seconds_median"] = statistics.median(rec["variants"]["baseline"]["seconds"] for rec in recs.values())
     with open(os.path.join(RES, "summary.json"), "w") as f:
         json.dump(summary, f, indent=1)
@@ -197,6 +204,8 @@ def write_md(s, truth):
                f"| Capture points: kind correct | {pct(a['cap_kind_ok'], a['caps'])} |",
                f"| Capture points: mirror direction correct | {pct(a['cap_dir_ok'], a['caps'])} |",
                f"| Tool port speeds correct | {pct(a['tool_speed_ok'], a['tools'])} |",
+               *([f"| SAM misses flagged by Muse Spark as untagged | {pct(a['missed_flagged'], a['missed'])}"
+                  f" ({a['untagged_false']} false flags) |"] if v == "improved" else []),
                f"| **Diagrams ready to pin findings on** | **{pct(a['pin_ready'], a['n'])}** |", "",
                "| Style | SAM found | Labels | Types | Direction | Ready to pin |", "|---|---|---|---|---|---|"]
         for style, t in data["by_style"].items():
@@ -204,10 +213,11 @@ def write_md(s, truth):
                       f"{pct(t['label_ok'], t['sam_found'])} | {pct(t['type_ok'], t['sam_found'])} | "
                       f"{pct(t['cap_dir_ok'], t['caps'])} | {pct(t['pin_ready'], t['n'])} |")
         md.append("")
-    if s["baseline_capture_point_misses"]:
-        md += ["## Capture points read wrongly or missed (baseline)", "",
+    cm = s["capture_point_misses"]
+    if cm["misses"]:
+        md += [f"## Capture points read wrongly or missed ({cm['variant']})", "",
                "| Diagram | Capture point | Truth | Written as | Where | Muse Spark read |", "|---|---|---|---|---|---|"]
-        for m in s["baseline_capture_point_misses"]:
+        for m in cm["misses"]:
             read = m["read"] or ("not found by SAM" if not m["sam_found"] else "not listed as a capture point")
             md.append(f"| {m['diagram']} | {m['label']} | {m['truth']} | \"{m['wording']}\" | {m['written_on']} | {read} |")
         md.append("")
