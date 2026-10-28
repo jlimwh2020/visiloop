@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 bench/cases/
 bench/out/
+bench/suite/cases/

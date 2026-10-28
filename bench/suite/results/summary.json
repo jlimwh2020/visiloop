@@ -1,0 +1,125 @@
+{
+ "cases": 200,
+ "kinds": {
+  "clean": [
+   20,
+   20
+  ],
+  "double": [
+   50,
+   50
+  ],
+  "mild": [
+   30,
+   30
+  ],
+  "single": [
+   60,
+   60
+  ],
+  "tool_aware": [
+   15,
+   15
+  ],
+  "triple": [
+   25,
+   25
+  ]
+ },
+ "checks": {
+  "exact": 200,
+  "per_fault": {
+   "duplicates": {
+    "tp": 35,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "one_way": {
+    "tp": 32,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "packet_drops": {
+    "tp": 29,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "tool_overload": {
+    "tp": 49,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "encrypted_share": {
+    "tp": 46,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "missing_vlan": {
+    "tp": 44,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "all": {
+    "tp": 235,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   }
+  },
+  "failures": [],
+  "by_tool": {
+   "APM": [
+    33,
+    33
+   ],
+   "IDS": [
+    71,
+    71
+   ],
+   "NDR": [
+    64,
+    64
+   ],
+   "SIEM": [
+    32,
+    32
+   ]
+  },
+  "near_threshold": {
+   "clear": [
+    170,
+    170
+   ],
+   "near threshold": [
+    30,
+    30
+   ]
+  }
+ },
+ "loop": {
+  "fixes_verified": 189,
+  "fixable": 189,
+  "advice": 46,
+  "cases_with_faults": 135,
+  "healthy_after": 135,
+  "still_broken": {},
+  "load_balance_ports": {
+   "min": 2,
+   "max": 11,
+   "median": 4
+  }
+ }
+}
