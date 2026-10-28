@@ -1,0 +1,82 @@
+{
+ "feed": "s130_double",
+ "status": "degraded",
+ "summary": "Feed s130_double is degraded: 11.9% TCP packet drops (186/1557 packets) correlated with 1.42 Gbps microbursts exceeding the 1 Gbps SIEM port (142% capacity, 5 intervals). Overload is causing buffer tail-drops and incomplete SIEM ingestion.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Microburst buffer overflow: 1.42 Gbps peaks exceed the 1 Gbps SIEM ingress and packet broker buffers, causing tail drops. 186 of 1557 TCP packets (11.9%) show missing data/gaps, directly correlated with overloaded 1ms intervals.",
+   "impact_on_tool": "SIEM receives incomplete TCP flows and events; reassembly and correlation fail, creating forensic gaps, missed detections and false negatives for coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "horizontal",
+     "add_tool_ports": 1,
+     "group": "s130_double"
+    },
+    "why": "Distribute s130_double across 2x1G SIEM inputs or broker load-balance group to absorb 1.42 Gbps bursts below 1 Gbps per port and eliminate buffer drops. Safe for this SIEM as needs_both_directions=false, no flow affinity required."
+   },
+   "evidence_frames": [
+    9,
+    10,
+    50,
+    51,
+    52,
+    54,
+    56,
+    63,
+    64,
+    96,
+    97,
+    103,
+    106,
+    108,
+    109,
+    128,
+    130,
+    132,
+    133,
+    135
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Feed aggregation delivers 1.42 Gbps peak in 1ms burst vs 1 Gbps SIEM port capacity (142% of line rate, 5 overloaded intervals). Single 1G tool port is undersized for the burst profile.",
+   "impact_on_tool": "SIEM NIC discards excess traffic during bursts before ingestion; events lost, ingestion queues overflow, alerts delayed or missing, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "trim_to_bytes": 512,
+     "preserve_headers": true
+    },
+    "why": "SIEM has needs_full_payload=false, so truncating payload after ~512 bytes preserves headers/metadata for detection while cutting burst bandwidth well below 1 Gbps. Alternatively add load-balance port if full payload retention required."
+   },
+   "evidence_frames": [
+    1,
+    409,
+    823,
+    1144,
+    1388
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2918,
+  "tokens_out": 3082,
+  "cost_usd": 0.01675,
+  "seconds": 16.9,
+  "recorded_at": "2026-10-28"
+ }
+}

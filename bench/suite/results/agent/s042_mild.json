@@ -1,0 +1,23 @@
+{
+ "feed": "s042_mild",
+ "status": "healthy",
+ "summary": "Feed s042_mild to SIEM is healthy - all visibility checks passed. No duplicates, drops, overload, one-way, VLAN gaps, or encryption issues detected. Traffic is complete and correct for SIEM requirements (VLANs 10,20 present, single-direction sufficient).",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2698,
+  "tokens_out": 743,
+  "cost_usd": 0.00653,
+  "seconds": 5.6,
+  "recorded_at": "2026-10-28"
+ }
+}

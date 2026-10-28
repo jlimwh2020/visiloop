@@ -1,0 +1,119 @@
+{
+ "feed": "s180_triple",
+ "status": "degraded",
+ "summary": "Feed s180_triple to 10 Gbps NDR is degraded: microbursts to 16.73 Gbps (167% of port capacity) are overloading the tool and causing 3.3% TCP packet loss, plus 94.3% encrypted traffic exceeds the NDR's 90% tolerance limiting payload inspection.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "NDR 10 Gbps ingress port is oversubscribed by microbursts peaking at 16.73 Gbps (167% of capacity) in 2 intervals. Packet broker is delivering aggregate traffic without load-balancing across multiple tool ports, causing buffer exhaustion and tail drops.",
+   "impact_on_tool": "NDR drops packets under burst, loses flows and state, misses detections and generates incomplete session records; effective coverage drops sharply during peaks.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "ports": 2,
+     "hash": "5-tuple",
+     "capacity_gbps": 10
+    },
+    "why": "Distribute traffic across 2+ NDR ports/instances with 5-tuple hashing to keep per-port peak <80% (8 Gbps) and eliminate burst drops. Fixes overload and will also resolve correlated packet loss."
+   },
+   "evidence_frames": [
+    1,
+    3816
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "273 of 8227 TCP packets (3.3%, threshold 1%) show gaps/retransmissions indicating missing data in the broker-to-tool path. Correlated with tool overload bursts, indicating drops at the overloaded 10G tool port/broker egress buffers, not normal network loss.",
+   "impact_on_tool": "NDR cannot reassemble TCP streams with full payload (needs_full_payload=true), causing failed application decoding, missed IDS signatures, and blind spots for lateral movement/exfiltration.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "resolve_overload": true,
+     "check_broker_buffers": true
+    },
+    "why": "Packet loss is symptomatic of the same overload; load-balancing to multiple 10G tool ports and verifying broker egress queue drops will bring loss below 1% and restore complete TCP reassembly."
+   },
+   "evidence_frames": [
+    113,
+    114,
+    241,
+    243,
+    381,
+    385,
+    388,
+    419,
+    421,
+    466,
+    476,
+    528,
+    530,
+    641,
+    646,
+    730,
+    732,
+    829,
+    831,
+    888
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.27% of bytes are encrypted (TLS) vs NDR tolerance of 90%. NDR requires full payload inspection but traffic is opaque without decryption, common when broker forwards internet/TLS-heavy segments directly.",
+   "impact_on_tool": "NDR is blind to 94% of payloads, can only do metadata/flow analysis; cannot detect payload-based threats, malware C2, or data exfiltration inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "protocols": [
+      "TLS 1.2",
+      "TLS 1.3"
+     ],
+     "location": "packet_broker_or_out_of_band",
+     "selective_decrypt": true
+    },
+    "why": "Add selective TLS decryption (or forward relevant TLS to a decryption zone) before the NDR, or tune NDR to focus on metadata for encrypted flows while decrypting high-risk categories to restore payload visibility without exceeding 90% encrypted threshold."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    20,
+    21,
+    22,
+    23,
+    26,
+    27,
+    28,
+    31,
+    32,
+    33
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3037,
+  "tokens_out": 2981,
+  "cost_usd": 0.01647,
+  "seconds": 15.7,
+  "recorded_at": "2026-10-28"
+ }
+}

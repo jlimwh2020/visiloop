@@ -1,0 +1,81 @@
+{
+ "feed": "s155_double",
+ "status": "degraded",
+ "summary": "Feed s155_double is degraded: NDR sees 19.0% one-way TCP sessions (92/485) and suffers microburst overload to 20.24 Gbps on a 10 Gbps port (202% capacity). Both prevent complete bidirectional session reconstruction and cause detection gaps.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is not aggregating both directions of the same flow to the same NDR port. Likely asymmetric routing with RX/TX arriving on different TAPs/SPANs and forwarded to different tools, or a SPAN configured for one direction only, so only one side of the conversation reaches this NDR.",
+   "impact_on_tool": "NDR requires both directions (needs_both_directions=true) for TCP reassembly, state tracking and detection. With 19% one-way sessions it cannot reconstruct flows, misses lateral movement/C2/exfiltration, and generates incomplete flow records.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "hash": "5-tuple",
+     "aggregate_rx_tx": true
+    },
+    "why": "Aggregate RX and TX of each 5-tuple to the same NDR tool port at the packet broker to restore full bidirectional visibility required for NDR detection."
+   },
+   "evidence_frames": [
+    41,
+    131,
+    224,
+    246,
+    286,
+    648,
+    669,
+    695,
+    852,
+    949,
+    1041,
+    1089,
+    1108,
+    1127,
+    1260,
+    1321,
+    1362,
+    1402,
+    1456,
+    1457
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst of 20.24 Gbps in 1ms exceeds the 10 Gbps NDR port capacity by 2x. Packet broker is sending too much aggregate traffic to a single tool port without load balancing or filtering, causing buffer overrun and drops during bursts.",
+   "impact_on_tool": "NDR port is oversubscribed (202% of capacity). Even with needs_full_payload=true, the tool will drop packets randomly during bursts, creating blind spots, missed alerts, and incomplete forensic capture. Sustained overload degrades NDR performance.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "required_capacity_gbps": 21,
+     "hash": "5-tuple",
+     "tool_group": "ndr_cluster",
+     "min_tool_ports": 3
+    },
+    "why": "Distribute traffic across 2-3 NDR ports (or higher-speed port) with flow-aware 5-tuple hashing to keep per-port load <80% and preserve full payload for NDR analysis; do not slice as NDR needs full payload."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2910,
+  "tokens_out": 2141,
+  "cost_usd": 0.01274,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-28"
+ }
+}

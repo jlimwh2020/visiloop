@@ -1,0 +1,71 @@
+{
+ "feed": "s151_double",
+ "status": "degraded",
+ "summary": "NDR feed s151_double is degraded: 8.9% duplicate packets (168/1885) and 2.0% TCP packet loss (36/1845) detected. No one-way, VLAN, encryption or tool overload issues. Deduplication and lossless capture fixes needed to restore full detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets delivered twice - likely two SPAN/mirror sources carrying the same flows aggregated without deduplication, or packet broker forwarding the same traffic via dual paths to the NDR port.",
+   "impact_on_tool": "NDR wastes CPU/storage on 8.9% duplicate traffic, inflates flow/byte counts, misinterprets duplicates as retransmissions and degrades detection/analytics accuracy.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10
+    },
+    "why": "Enable packet-broker deduplication window to drop identical packets arriving within milliseconds before delivery to NDR, removing duplicate load while preserving unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream loss before the NDR - SPAN/mirror buffer overflow or packet broker egress oversubscription dropping packets (tool_overload is healthy, so loss is not at NDR ingress).",
+   "impact_on_tool": "NDR with needs_full_payload=true and needs_both_directions=true cannot reassemble TCP streams with gaps; causes missed payload inspection, broken file extraction and missed detections.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Replace lossy SPAN/mirror with passive TAP and ensure packet broker has adequate buffering/bandwidth for lossless delivery; TAP does not drop under load like SPAN buffers do."
+   },
+   "evidence_frames": [
+    43,
+    44,
+    58,
+    59,
+    70,
+    71,
+    316,
+    317,
+    614,
+    615,
+    675,
+    678,
+    689,
+    692,
+    729,
+    730,
+    837,
+    838,
+    960,
+    964
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2885,
+  "tokens_out": 2394,
+  "cost_usd": 0.01378,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-28"
+ }
+}

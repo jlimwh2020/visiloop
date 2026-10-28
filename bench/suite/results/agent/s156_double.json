@@ -1,0 +1,81 @@
+{
+ "feed": "s156_double",
+ "status": "degraded",
+ "summary": "Feed s156_double to IDS is degraded: 9.1% duplicate packets (218/2404) and missing VLAN 20 with 50% untagged traffic reduces detection coverage and violates required VLANs [10,20].",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating overlapping SPAN/TAP sources without deduplication - same packets arriving via two paths and forwarded twice to IDS port.",
+   "impact_on_tool": "IDS wastes CPU/memory processing duplicates, inflates flow counts, risks false positives and state-table confusion, reducing effective detection capacity despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 5,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Enable broker-level deduplication to drop identical packets within short window before delivery to IDS, restoring correct traffic volume without altering payload."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "VLAN tags stripped upstream - SPAN or packet broker trunk configured to strip 802.1Q or not forwarding VLAN 20, resulting in 50% untagged packets and VLAN 20 never seen.",
+   "impact_on_tool": "IDS is blind to all traffic on required VLAN 20, missing attacks/lateral movement in that segment and violating tool profile requirement for VLANs 10 and 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true,
+     "ensure_trunk_includes": [
+      20
+     ]
+    },
+    "why": "Configure TAP/SPAN and packet broker to preserve 802.1Q tags and ensure trunk/broker policy forwards VLAN 20 to this IDS feed for complete coverage."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    11,
+    12,
+    13,
+    14,
+    15,
+    18,
+    19,
+    20,
+    22,
+    24,
+    25,
+    26,
+    31,
+    32,
+    33,
+    38,
+    41
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2882,
+  "tokens_out": 2066,
+  "cost_usd": 0.01238,
+  "seconds": 11.8,
+  "recorded_at": "2026-10-28"
+ }
+}

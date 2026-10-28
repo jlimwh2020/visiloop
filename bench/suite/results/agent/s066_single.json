@@ -1,0 +1,60 @@
+{
+ "feed": "s066_single",
+ "status": "degraded",
+ "summary": "Feed s066_single is degraded: 58.0% of TCP sessions (69/119) are one-way, violating APM requirement for bidirectional visibility. All other checks (duplicates, encryption, VLANs, drops, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / TAP/SPAN is forwarding only one direction to the APM. 69 of 119 TCP sessions show only one direction (58.0% vs 10% threshold), indicating asymmetric routing with single-sided SPAN or broker not aggregating both sides of the flow to the same tool port.",
+   "impact_on_tool": "APM needs_both_directions=true to correlate request/response and measure latency/transaction time. With 58% one-way flows it sees incomplete transactions, cannot calculate response times accurately, and will miss performance anomalies and generate false incomplete-flow alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "feed": "s066_single",
+     "ensure_bidirectional": true
+    },
+    "why": "Aggregate both directions of each session to the same APM tool port so the APM receives complete client-server exchanges for accurate timing and transaction reconstruction."
+   },
+   "evidence_frames": [
+    17,
+    23,
+    32,
+    42,
+    65,
+    89,
+    96,
+    138,
+    163,
+    219,
+    227,
+    281,
+    293,
+    297,
+    308,
+    315,
+    338,
+    346,
+    356,
+    387
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2816,
+  "tokens_out": 1985,
+  "cost_usd": 0.01196,
+  "seconds": 9.8,
+  "recorded_at": "2026-10-28"
+ }
+}

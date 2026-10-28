@@ -1,0 +1,96 @@
+{
+ "feed": "s134_double",
+ "status": "degraded",
+ "summary": "Feed s134_double is degraded: IDS shows 25.0% one-way TCP sessions and 6.8% packet drops, both exceed thresholds and will reduce IDS detection coverage.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is delivering only one direction of bidirectional flows - 25 of 100 TCP sessions are unidirectional (25.0% > 10% threshold). Likely single-sided SPAN/TAP or asymmetric routing without aggregation at the broker, so return traffic is sent to a different tool port or dropped.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and stateful signatures. One-way visibility breaks handshake/stream reconstruction, causes false negatives and missed intrusions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_flow_affinity": true
+    },
+    "why": "Aggregate both directions of each session to the same IDS tool port to restore full bidirectional flows required for stateful detection."
+   },
+   "evidence_frames": [
+    1,
+    175,
+    195,
+    220,
+    244,
+    257,
+    306,
+    331,
+    385,
+    408,
+    416,
+    527,
+    583,
+    735,
+    829,
+    914,
+    922,
+    932,
+    954,
+    1041
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror source is dropping packets under load - 87 of 1280 TCP packets show missing data (6.8% > 1% threshold). Tool overload check is healthy, so loss is upstream of the tool, typical of SPAN oversubscription/buffer exhaustion, not IDS overload.",
+   "impact_on_tool": "IDS with needs_full_payload=true misses payload segments, breaking signature matching, file reassembly and allowing evasion via dropped packets.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_source": "SPAN/mirror",
+     "with": "passive_TAP"
+    },
+    "why": "Passive TAP delivers complete traffic without SPAN buffer drops, eliminating the 6.8% loss before the packet broker and IDS."
+   },
+   "evidence_frames": [
+    16,
+    17,
+    79,
+    80,
+    111,
+    112,
+    136,
+    137,
+    188,
+    189,
+    210,
+    211,
+    231,
+    234,
+    256,
+    259,
+    316,
+    317,
+    321,
+    322
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2945,
+  "tokens_out": 2425,
+  "cost_usd": 0.01399,
+  "seconds": 12.3,
+  "recorded_at": "2026-10-28"
+ }
+}

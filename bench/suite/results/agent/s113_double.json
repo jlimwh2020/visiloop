@@ -1,0 +1,87 @@
+{
+ "feed": "s113_double",
+ "status": "degraded",
+ "summary": "Feed s113_double is degraded: VLAN 20 missing (50% untagged) and SIEM port overloaded by bursts to 1.62 Gbps (162% of 1 Gbps capacity). Both cause visibility gaps for SIEM detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker is stripping or not forwarding VLAN 20 - 50% of packets arrive untagged and VLAN 20 is never observed, likely due to VLAN pruning/filter on broker or trunk port set to strip 802.1Q tags.",
+   "impact_on_tool": "SIEM loses segmentation context for VLAN 20; zone/tenant-based correlation and detection rules for VLAN 20 fail, creating blind spot for half the traffic.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "forward_vlans": [
+      10,
+      20
+     ],
+     "preserve_vlan_tags": true,
+     "ensure_trunk_includes": 20
+    },
+    "why": "Preserve 802.1Q tags and ensure both required VLANs 10 and 20 are forwarded to SIEM to restore complete segmentation visibility."
+   },
+   "evidence_frames": [
+    2,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    20,
+    21,
+    22,
+    24,
+    27,
+    30,
+    33,
+    34,
+    35,
+    37,
+    38,
+    41
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregated feed bursts to 1.62 Gbps in 1ms intervals exceed the 1 Gbps SIEM port capacity (162% utilization, 6 overloaded intervals). Broker is feeding more traffic than single port can handle without load balancing or rate control.",
+   "impact_on_tool": "SIEM ingress drops packets during bursts, causing missed events, incomplete flow records, and gaps in detection/logging coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_ports": 2,
+     "hash": "5-tuple",
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute traffic across 2x1G ports (or upgrade to 10G) to keep per-port utilization below 80% threshold and prevent burst-induced drops; alternatively apply filter/slice since SIEM needs_full_payload=false."
+   },
+   "evidence_frames": [
+    1,
+    415,
+    835,
+    1241,
+    1679,
+    2101
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2914,
+  "tokens_out": 2122,
+  "cost_usd": 0.01266,
+  "seconds": 10.6,
+  "recorded_at": "2026-10-28"
+ }
+}

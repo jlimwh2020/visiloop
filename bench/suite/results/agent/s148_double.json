@@ -1,0 +1,78 @@
+{
+ "feed": "s148_double",
+ "status": "degraded",
+ "summary": "Feed s148_double is degraded: NDR port overloaded by 24.66 Gbps bursts (247% of 10 Gbps capacity) causing 2.5% TCP packet loss. Duplicates, VLANs, encryption share and directionality are healthy, but overload-induced drops break NDR full-payload analysis.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak burst of 24.66 Gbps in 1 ms interval exceeds the NDR's 10 Gbps port capacity by 247% (metric 2.466 vs 0.8 threshold). Packet broker forwards aggregate traffic to single tool port without load balancing, causing buffer overrun and ingress drops.",
+   "impact_on_tool": "NDR drops packets at ingress, misses flows and payload segments, degrades detection coverage and causes false negatives; violates NDR requirement for complete bidirectional full-payload visibility.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 3,
+     "capacity_gbps": 10
+    },
+    "why": "Distribute bursts across 3x10G tool ports with flow-aware 5-tuple hashing to keep per-port utilization <80% while preserving both directions per flow for NDR stateful analysis."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "200 of 8061 TCP packets (2.48% vs 1% threshold) show gaps/retransmissions indicating loss in SPAN/mirror or packet broker buffers, exacerbated by the 24.66 Gbps overload bursts.",
+   "impact_on_tool": "NDR receives incomplete TCP streams, breaks stream reassembly and signature matching requiring full payload, reducing detection fidelity and increasing missed detections.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "aggregation uplink",
+     "tap_type": "passive"
+    },
+    "why": "Replace lossy SPAN/mirror with passive TAP for lossless line-rate copy to eliminate SPAN buffer drops; combined with load balancing ensures complete packets reach NDR without loss."
+   },
+   "evidence_frames": [
+    87,
+    88,
+    263,
+    266,
+    390,
+    392,
+    417,
+    418,
+    520,
+    524,
+    594,
+    595,
+    647,
+    648,
+    810,
+    815,
+    1056,
+    1057,
+    1115,
+    1116
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2913,
+  "tokens_out": 2873,
+  "cost_usd": 0.01585,
+  "seconds": 15.7,
+  "recorded_at": "2026-10-28"
+ }
+}

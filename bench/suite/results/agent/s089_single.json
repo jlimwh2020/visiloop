@@ -1,0 +1,57 @@
+{
+ "feed": "s089_single",
+ "status": "degraded",
+ "summary": "SIEM feed s089_single is degraded due to 8.9% packet loss (212 of 2371 TCP packets, threshold 1%) indicating upstream SPAN/mirror drops; all other checks (duplicates, encryption, VLANs, one-way, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror source is oversubscribed and dropping packets before the packet broker. 8.9% of TCP packets show gaps/retransmission holes consistent with SPAN buffer overflow under burst load, not tool ingress overload (tool_overload healthy, SIEM 1G port not overloaded).",
+   "impact_on_tool": "SIEM receives incomplete flows with missing segments; ~9% data loss degrades correlation, alert fidelity and detection coverage even though SIEM does not require full payload or bidirectional flows.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "TAP provides lossless line-rate copy and eliminates SPAN buffer drops that are causing the 8.9% loss, ensuring complete traffic delivery to the SIEM without mirror-port contention."
+   },
+   "evidence_frames": [
+    35,
+    36,
+    45,
+    47,
+    48,
+    63,
+    64,
+    65,
+    67,
+    77,
+    78,
+    79,
+    80,
+    82,
+    87,
+    90,
+    160,
+    161,
+    237,
+    238
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2828,
+  "tokens_out": 2161,
+  "cost_usd": 0.01272,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

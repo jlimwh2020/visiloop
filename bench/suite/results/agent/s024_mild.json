@@ -1,0 +1,23 @@
+{
+ "feed": "s024_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed s024_mild. No duplicates, packet drops, tool overload, missing VLANs, one-way traffic, or excessive encryption detected. Traffic is complete and correct for SIEM requirements (VLANs 10,20, 1Gbps, single-direction/metadata tolerant).",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2709,
+  "tokens_out": 889,
+  "cost_usd": 0.00716,
+  "seconds": 6.6,
+  "recorded_at": "2026-10-28"
+ }
+}

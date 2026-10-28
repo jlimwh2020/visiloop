@@ -1,0 +1,39 @@
+{
+ "feed": "s109_single",
+ "status": "degraded",
+ "summary": "Feed s109_single to IDS is degraded due to 27.9% duplicate packets (1014/3631). All other visibility checks (one-way, drops, overload, VLANs, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Traffic is aggregated from multiple SPAN/mirror sources or dual TAPs without broker deduplication. The same packet is forwarded twice (e.g., ingress + egress SPAN on same VLAN) and delivered to the IDS tool port.",
+   "impact_on_tool": "IDS requires full payload and both directions for stateful inspection. 27.9% duplicates waste ~28% of the 1 Gbps tool capacity, causes incorrect TCP reassembly, duplicate alerts, and reduces effective detection coverage for unique traffic.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication with a short time window to drop identical packets before delivery, eliminating duplicates while preserving complete unique traffic for IDS detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2762,
+  "tokens_out": 1493,
+  "cost_usd": 0.0098,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,86 @@
+{
+ "feed": "s147_double",
+ "status": "degraded",
+ "summary": "Feed s147_double to IDS is degraded: tool port overloaded by ~196% microbursts (1.96 Gbps vs 1 Gbps) and encrypted traffic share (63.7%) exceeds IDS tolerance (60%), reducing inspection coverage.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering bursty aggregated traffic to a single 1 Gbps IDS port without load balancing or shaping. 1ms peaks hit 1.96 Gbps (196% of port capacity) across 8 intervals, indicating microbursts that exceed line rate.",
+   "impact_on_tool": "IDS ingress buffer overruns and silently drops packets during bursts; IDS misses flows/signatures, creates detection gaps and incomplete session reassembly despite needing both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_ports": 3,
+     "hash": "bidirectional 5-tuple",
+     "target_utilization": 0.8
+    },
+    "why": "Distribute traffic across 2-3 IDS ports/instances with flow-aware hashing to keep per-port peak <0.8 Gbps and preserve bidirectional flow symmetry required by IDS."
+   },
+   "evidence_frames": [
+    1,
+    457,
+    966,
+    1345,
+    1640,
+    1975,
+    2238,
+    2632
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "63.7% of bytes are encrypted (TLS) vs 60% IDS tolerance. Traffic mix has shifted to mostly encrypted, and no upstream decryption/visibility is applied before the IDS.",
+   "impact_on_tool": "IDS requires full payload for signature matching but cannot inspect encrypted payloads; ~64% of traffic is opaque, significantly reducing detection coverage for threats inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "selective TLS decryption",
+     "policy": "decrypt relevant categories, bypass trusted privacy-sensitive flows"
+    },
+    "why": "IDS cannot detect inside encryption. Adding selective decryption at the packet broker / SSL visibility layer before the IDS will restore payload visibility while staying within privacy policy, or alternatively filter known-trusted encrypted flows to bring share below 60%."
+   },
+   "evidence_frames": [
+    47,
+    49,
+    50,
+    51,
+    52,
+    54,
+    57,
+    60,
+    62,
+    64,
+    65,
+    66,
+    68,
+    69,
+    71,
+    74,
+    126,
+    128,
+    129,
+    130
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2927,
+  "tokens_out": 2109,
+  "cost_usd": 0.01262,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

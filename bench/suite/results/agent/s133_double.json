@@ -1,0 +1,85 @@
+{
+ "feed": "s133_double",
+ "status": "degraded",
+ "summary": "Feed s133_double is degraded: 100% of packets are untagged (required VLANs 10, 20 missing) and IDS port is severely overloaded with 2.79 Gbps bursts vs 1 Gbps capacity (279% overload).",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker is stripping 802.1Q tags before delivery - 100% of frames arrive untagged so required VLANs 10 and 20 are never seen. Typically caused by broker ingress set to 'strip tags' or SPAN/monitor port configured as access instead of trunk passthrough.",
+   "impact_on_tool": "IDS loses VLAN segmentation context it requires for VLANs 10 and 20 - cannot apply VLAN-aware policies, correlate assets, or detect cross-VLAN lateral movement, creating complete blind spot for those segments.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough_trunk"
+    },
+    "why": "Preserve 802.1Q tags end-to-end from TAP/SPAN through broker to IDS so required VLANs are visible for detection and policy enforcement."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate traffic is bursting to 2.79 Gbps in 1ms intervals and being forwarded to a single 1 Gbps IDS port (279% of capacity, 3 overloaded intervals). Broker has no load-balancing, filtering, or burst buffering, so microbursts overwhelm the tool.",
+   "impact_on_tool": "IDS with 1 Gbps port will drop packets, fail flow reassembly and miss signatures despite needing full payload and both directions - overload directly causes detection gaps and evasion.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple_flow_hash",
+     "peak_gbps": 2.79,
+     "port_capacity_gbps": 1,
+     "add_tool_ports": 2
+    },
+    "why": "Distribute flows across 2-3 IDS ports/instances with flow-aware hashing to keep each port <80% utilization while preserving bidirectional flow integrity required by IDS."
+   },
+   "evidence_frames": [
+    1,
+    693,
+    1428
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2912,
+  "tokens_out": 2236,
+  "cost_usd": 0.01314,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

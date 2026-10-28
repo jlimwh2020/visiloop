@@ -1,0 +1,23 @@
+{
+ "feed": "s030_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s030_mild. Tool receives complete bidirectional traffic with full payload, no packet drops, duplicates, VLAN stripping, or overload. Encrypted share within 60% tolerance and 1 Gbps port capacity not exceeded.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2694,
+  "tokens_out": 783,
+  "cost_usd": 0.0067,
+  "seconds": 5.4,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s053_single",
+ "status": "degraded",
+ "summary": "Feed s053_single to APM is degraded due to 5.4% packet loss (144/2645 TCP packets with gaps). All other visibility checks (duplicates, one-way, VLAN, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream capture loss - SPAN port buffer overflow or packet broker egress oversubscription dropping packets before they reach the APM. 5.44% exceeds 1% threshold, indicating sustained buffer exhaustion, not random loss.",
+   "impact_on_tool": "APM will see incomplete TCP streams, inaccurate transaction latency/apdex, missed flows and broken correlation - requires both directions and headers but is receiving gapped data.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 256,
+     "preserve_headers": true
+    },
+    "why": "APM needs_full_payload=false per profile, so slicing to headers + first bytes preserves flow/latency metadata while sharply reducing bandwidth and broker/SPAN buffer pressure to eliminate drops. If SPAN is the source, also plan replace_span_with_tap for lossless capture."
+   },
+   "evidence_frames": [
+    31,
+    36,
+    214,
+    216,
+    224,
+    225,
+    338,
+    340,
+    349,
+    350,
+    406,
+    407,
+    439,
+    440,
+    468,
+    469,
+    507,
+    509,
+    582,
+    587
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2832,
+  "tokens_out": 2021,
+  "cost_usd": 0.01213,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,61 @@
+{
+ "feed": "s084_single",
+ "status": "degraded",
+ "summary": "APM feed s084_single is degraded: 30.4% of TCP sessions (31/102) are one-way, exceeding 10% threshold. APM requires both directions for request/response correlation. All other checks (duplicates, drops, VLANs, encryption, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/TAP is delivering only one direction of traffic to the tool. Feed name 's084_single' suggests a single capture point or SPAN without aggregation, or asymmetric routing where return path is on a different link not aggregated to this tool port. 31 of 102 sessions show only client->server or server->client.",
+   "impact_on_tool": "APM needs both directions to measure transaction latency, response time, and TCP handshake/termination. With 30% one-way, APM cannot correlate requests with responses, will miscalculate or miss application performance metrics, produce incomplete flows and false gaps.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "mode": "bidirectional",
+     "aggregate_both_directions_to_tool": true,
+     "ensure_symmetric_delivery": true
+    },
+    "why": "Aggregating both forward and reverse directions of each flow to the same APM tool port ensures complete TCP sessions for accurate latency and transaction reconstruction."
+   },
+   "evidence_frames": [
+    41,
+    95,
+    221,
+    247,
+    303,
+    359,
+    386,
+    408,
+    422,
+    436,
+    479,
+    486,
+    494,
+    510,
+    520,
+    577,
+    589,
+    642,
+    769,
+    776
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2825,
+  "tokens_out": 1642,
+  "cost_usd": 0.01051,
+  "seconds": 9.2,
+  "recorded_at": "2026-10-28"
+ }
+}

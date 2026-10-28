@@ -1,0 +1,23 @@
+{
+ "feed": "s186_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s186_tool_aware. Traffic is complete and correct with no duplicates, drops, one-way flows, VLAN stripping, encryption issues, or tool overload.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2701,
+  "tokens_out": 716,
+  "cost_usd": 0.00642,
+  "seconds": 6.7,
+  "recorded_at": "2026-10-28"
+ }
+}

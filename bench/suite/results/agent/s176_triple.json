@@ -1,0 +1,121 @@
+{
+ "feed": "s176_triple",
+ "status": "degraded",
+ "summary": "Feed s176_triple is degraded with 3 faults: VLAN 20 completely missing (49% untagged), 5.1% TCP packet drops, and microbursts to 3.71 Gbps overloading the 1 Gbps SIEM port. Immediate broker fixes needed to restore complete visibility.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream switch is stripping 802.1Q tags or trunk is misconfigured: required VLAN 20 is 0% present and 49% of packets arrive untagged. Likely broker ingress/egress set to access mode or 'strip VLAN' enabled instead of trunk retain-tag.",
+   "impact_on_tool": "SIEM has zero visibility into VLAN 20 segment and cannot filter/correlate by VLAN 10/20 as required. 49% untagged traffic breaks VLAN-based detection rules and tenant separation, creating blind spot for lateral movement in VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "retain_dot1q": true,
+     "trunk_mode": true
+    },
+    "why": "Configure broker and source trunk to retain 802.1Q tags and forward VLANs 10 and 20 to SIEM so required segmentation is preserved for detection."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    7,
+    9,
+    10,
+    13,
+    16,
+    19,
+    20,
+    21,
+    23,
+    24,
+    26,
+    29,
+    32,
+    35,
+    36,
+    37,
+    39
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "5.1% of TCP packets (148/2896) show gaps/retransmissions indicating capture loss before the SIEM, consistent with SPAN/mirror buffer overflow during bursts rather than SIEM processing. Correlates with 3.71 Gbps bursts exceeding port capacity.",
+   "impact_on_tool": "SIEM receives incomplete TCP streams and flows; even though it doesn't need full payload, missing packets break stream reassembly and event correlation, causing missed alerts and incomplete forensic records.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace": "SPAN/mirror with passive TAP",
+     "location": "source uplink carrying VLANs 10/20"
+    },
+    "why": "TAP provides lossless, line-rate copy without SPAN buffer drops, eliminating the 5% capture loss that SPAN incurs under burst load."
+   },
+   "evidence_frames": [
+    4,
+    8,
+    40,
+    44,
+    52,
+    53,
+    68,
+    70,
+    92,
+    93,
+    107,
+    108,
+    146,
+    148,
+    161,
+    164,
+    179,
+    180,
+    222,
+    225
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregated feed bursts to 3.71 Gbps in 1ms intervals vs 1 Gbps SIEM port (371% of capacity, 3 overloaded intervals). Single 1G tool port is undersized for the aggregated traffic volume.",
+   "impact_on_tool": "SIEM NIC buffers overrun and drops traffic indiscriminately during bursts, directly causing the observed packet drops and creating periodic complete blindness to attacks during peak bursts.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple hash",
+     "target_capacity_gbps": 4,
+     "ports_needed": 4,
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute 3.7 Gbps bursts across 4x1G or upgrade to 10G tool ports via broker load-balancing so SIEM can ingest peak rate without drops; SIEM tolerates sampling/filtering but currently needs capacity."
+   },
+   "evidence_frames": [
+    1,
+    1040,
+    2003
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3046,
+  "tokens_out": 2646,
+  "cost_usd": 0.01505,
+  "seconds": 14.0,
+  "recorded_at": "2026-10-28"
+ }
+}

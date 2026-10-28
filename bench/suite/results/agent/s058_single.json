@@ -1,0 +1,57 @@
+{
+ "feed": "s058_single",
+ "status": "degraded",
+ "summary": "Feed s058_single is degraded: 5.2% packet drops (147/2843 TCP packets, threshold 1%) detected. All other checks (duplicates, encrypted_share, missing_vlan, one_way, tool_overload) are healthy, so NDR directionality, VLANs and capacity are OK but loss impairs detection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream SPAN/mirror or packet broker buffer oversubscription is dropping packets before the NDR. 5.17% TCP gaps with tool_overload healthy indicates loss in the visibility fabric (SPAN port congestion/broker egress drop), not NDR overload. SPAN copies are best-effort and drop under load.",
+   "impact_on_tool": "NDR requires both directions and full payload for TCP reassembly and threat detection. 5.2% missing segments breaks stream reassembly, causes incomplete flows, missed signatures/anomalies and significantly reduced detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Hardware TAP provides lossless line-rate copy unlike SPAN which drops when buffers oversubscribe. Replacing SPAN with TAP (and ensuring packet broker has sufficient buffer/bandwidth) eliminates the 5%+ loss and restores complete traffic to the NDR."
+   },
+   "evidence_frames": [
+    31,
+    34,
+    36,
+    37,
+    50,
+    55,
+    120,
+    123,
+    304,
+    307,
+    335,
+    338,
+    370,
+    371,
+    485,
+    486,
+    501,
+    502,
+    516,
+    517
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2827,
+  "tokens_out": 2341,
+  "cost_usd": 0.01348,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-28"
+ }
+}

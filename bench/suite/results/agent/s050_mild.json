@@ -1,0 +1,23 @@
+{
+ "feed": "s050_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed s050_mild. No duplicates, drops, overload, one-way, missing VLANs, or excessive encryption detected. Tool receives complete, correct traffic per its profile (1 Gbps, VLANs 10,20).",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2707,
+  "tokens_out": 934,
+  "cost_usd": 0.00735,
+  "seconds": 6.6,
+  "recorded_at": "2026-10-28"
+ }
+}

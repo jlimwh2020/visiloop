@@ -13,6 +13,14 @@
 
 **What this shows, and what it doesn't.** The checks are deterministic, and the suite leaves a no-label zone around each threshold, so a perfect check score mainly proves the checks are correct and robust across tools, traffic mixes and fault combinations. The harder test is Muse Spark: it must call the right checks, report every fault and no others, and pick a sensible fix. All traffic is synthetic; real captures are the next step.
 
+## Headline
+
+- **Muse Spark diagnosis exactly right on 198/200 (99.0%) cases**, overall precision 100.0%, recall 99.1%.
+- **Sensible fix chosen 231/233 (99.1%)** of the time; **0 ungrounded claims** reached the guard.
+- **Checks exactly right on 200/200 (100.0%) cases.**
+- **189/189 (100.0%) fixable faults verified fixed** in the simulated broker; 46 decryption items reported as advice.
+- **US$2.15 for all 200 diagnoses** (US$0.0108 each), median 9.8 s, 95th percentile 15.3 s.
+
 ## 1. Checks (deterministic, free)
 
 Exactly right on **200/200 (100.0%)** cases.
@@ -46,9 +54,50 @@ Exactly right on **200/200 (100.0%)** cases.
 - Cases healthy after the fixes: **135/135 (100.0%)** of cases with faults
 - Load-balanced tool groups sized from 2 to 11 ports (median 4)
 
-## 3. Muse Spark diagnosis
+## 3. Muse Spark diagnosis (muse-spark-1.2, recorded 2026-10-28)
 
-Not run yet: `python bench/suite/run_suite_agent.py`
+Exactly right on **198/200 (99.0%)** cases. Tokens: 564,953 in, 340,423 out.
+
+| Fault | Found | Missed | False alarms | Precision | Recall |
+|---|---|---|---|---|---|
+| duplicates | 35 | 0 | 0 | 100.0% | 100.0% |
+| one_way | 30 | 2 | 0 | 100.0% | 93.8% |
+| packet_drops | 29 | 0 | 0 | 100.0% | 100.0% |
+| tool_overload | 49 | 0 | 0 | 100.0% | 100.0% |
+| encrypted_share | 46 | 0 | 0 | 100.0% | 100.0% |
+| missing_vlan | 44 | 0 | 0 | 100.0% | 100.0% |
+| **All faults** | 233 | 2 | 0 | 100.0% | 99.1% |
+
+| Case type | Exactly right |
+|---|---|
+| clean | 20/20 (100.0%) |
+| double | 49/50 (98.0%) |
+| mild | 30/30 (100.0%) |
+| single | 59/60 (98.3%) |
+| tool_aware | 15/15 (100.0%) |
+| triple | 25/25 (100.0%) |
+
+| Tool | Exactly right |
+|---|---|
+| APM | 33/33 (100.0%) |
+| IDS | 71/71 (100.0%) |
+| NDR | 64/64 (100.0%) |
+| SIEM | 30/32 (93.8%) |
+
+| Difficulty | Exactly right |
+|---|---|
+| clear | 168/170 (98.8%) |
+| near threshold | 30/30 (100.0%) |
+
+Faults the checks found but Muse Spark left out of its answer:
+
+- `s110_single`: one_way
+- `s124_double`: one_way
+
+Fix choices outside the accepted set:
+
+- `s076_single` one_way: `none`
+- `s125_double` one_way: `none`
 
 ## Reproduce
 

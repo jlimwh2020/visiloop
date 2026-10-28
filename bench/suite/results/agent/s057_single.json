@@ -1,0 +1,60 @@
+{
+ "feed": "s057_single",
+ "status": "degraded",
+ "summary": "NDR feed s057_single shows 2.4% packet loss (38/1553 TCP packets) exceeding 1% threshold. All other visibility checks healthy. Loss breaks TCP reassembly and reduces NDR detection coverage.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Packet broker egress or SPAN source dropping packets under load: microbursts/oversubscription exceeding buffer or 10G tool port capacity, evidenced by gaps in TCP sequence numbers and retransmissions. Tool overload check is healthy so drops are occurring upstream of tool ingress policing, likely broker buffer exhaustion or SPAN oversubscription.",
+   "impact_on_tool": "NDR requires complete bidirectional traffic with full payload for flow reassembly and payload inspection. Missing segments cause incomplete flows, failed TCP reassembly, missed detections/false negatives and reduced detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow-aware 5-tuple hash",
+     "add_tool_port_gbps": 10
+    },
+    "why": "Distribute feed across additional NDR ports / load-balanced tool group to eliminate egress drops and microburst loss while preserving full payload and both directions required for NDR. If source is SPAN, also replace_span_with_tap for lossless capture."
+   },
+   "evidence_frames": [
+    71,
+    72,
+    101,
+    103,
+    110,
+    111,
+    272,
+    273,
+    745,
+    746,
+    775,
+    776,
+    811,
+    812,
+    901,
+    902,
+    951,
+    952,
+    998,
+    1003
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2820,
+  "tokens_out": 2044,
+  "cost_usd": 0.01221,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-28"
+ }
+}

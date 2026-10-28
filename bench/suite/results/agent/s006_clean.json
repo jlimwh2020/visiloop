@@ -1,0 +1,23 @@
+{
+ "feed": "s006_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS on s006_clean: bidirectional traffic present, no duplicates, no packet drops, no tool overload, no missing VLANs, and encrypted share within tolerance (max 0.6). Tool receives complete, correct traffic with full payload at 1 Gbps. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2692,
+  "tokens_out": 973,
+  "cost_usd": 0.0075,
+  "seconds": 6.8,
+  "recorded_at": "2026-10-28"
+ }
+}

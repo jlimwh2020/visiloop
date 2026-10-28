@@ -1,0 +1,89 @@
+{
+ "feed": "s126_double",
+ "status": "degraded",
+ "summary": "Feed s126_double is degraded: IDS is overloaded by 1.47 Gbps microbursts vs 1 Gbps port (147% capacity, 9 intervals) and required VLANs 10,20 are completely missing (100% untagged), causing packet loss and VLAN blind spots.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP is stripping 802.1Q tags before delivery - 100% of packets arrived untagged so required VLANs 10 and 20 are not seen. Typically caused by broker egress port in access/untag mode or SPAN stripping tags.",
+   "impact_on_tool": "IDS cannot identify or apply VLAN-aware detection for VLANs 10 and 20; all traffic appears as untagged, creating complete blind spot for those segments and missed intrusions.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true
+    },
+    "why": "Restore and preserve 802.1Q tags end-to-end through TAP/SPAN and packet broker so IDS receives VLAN 10,20 correctly for segmentation and detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate/burst throughput exceeds IDS ingress capacity: peaks of 1.47 Gbps in 1ms bursts vs 1 Gbps port (147% utilization, 9 overloaded intervals, threshold 80%). Broker is sending more than single tool port can handle.",
+   "impact_on_tool": "IDS will drop packets at ingress during bursts, breaking its needs_full_payload and needs_both_directions requirements; results in missed signatures, truncated flows, and attacker evasion.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "mode": "flow_hash_5tuple",
+     "add_tool_ports": 1
+    },
+    "why": "Distribute traffic across 2+ IDS ports/instances via packet broker flow-based load balancing to keep per-port utilization below 80% and eliminate burst drops while preserving full payload and bidirectional flows."
+   },
+   "evidence_frames": [
+    186,
+    449,
+    717,
+    1019,
+    1411,
+    1762,
+    2096,
+    2387,
+    2721
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2930,
+  "tokens_out": 2282,
+  "cost_usd": 0.01336,
+  "seconds": 11.0,
+  "recorded_at": "2026-10-28"
+ }
+}

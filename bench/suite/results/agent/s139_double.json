@@ -1,0 +1,83 @@
+{
+ "feed": "s139_double",
+ "status": "degraded",
+ "summary": "Feed s139_double to IDS is degraded: 6.5% TCP packet loss and severe tool overload (3.34 Gbps bursts vs 1 Gbps port, 334% capacity). Loss correlates with overload bursts causing broker/egress drops. IDS will miss attacks due to incomplete flows.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "122 of 1880 TCP packets (6.49%) show gaps/retransmissions indicating buffer drops. Correlates directly with 3.34 Gbps bursts exceeding the 1 Gbps IDS port - packet broker egress queues overflow and tail-drop under sustained overload, not random link errors.",
+   "impact_on_tool": "IDS cannot reassemble TCP streams or perform full payload inspection (required by profile). Results in missed signatures, broken flow state, false negatives and evasion opportunity for attackers.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "horizontal_scale",
+     "hash": "5-tuple",
+     "target_per_port_gbps": 1,
+     "suggested_ports": 4
+    },
+    "why": "Scale egress capacity to eliminate drops. Distributing flows 5-tuple hashed across 3-4x 1Gbps IDS ports keeps per-port rate <80% and preserves both directions and full payload required by IDS."
+   },
+   "evidence_frames": [
+    27,
+    28,
+    41,
+    44,
+    53,
+    56,
+    78,
+    80,
+    99,
+    100,
+    118,
+    119,
+    136,
+    138,
+    221,
+    223,
+    233,
+    235,
+    298,
+    300
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak burst 3.34 Gbps in 1ms vs 1 Gbps IDS port (334% of capacity, 3 overloaded intervals). Aggregation of multiple source links to single 1G tool port without load balancing. SPAN/broker is oversubscribed.",
+   "impact_on_tool": "IDS NIC discards excess traffic indiscriminately. Even if broker forwards, tool cannot process line rate - detection engine drops packets, loses visibility during bursts when attacks are most likely to be hidden.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_capacity_gbps": 1,
+     "suggested_ports": 4,
+     "hash": "5-tuple",
+     "preserve_flow_order": true
+    },
+    "why": "IDS needs both directions and full payload, so slicing/filtering would hurt coverage. Load balancing across a 4-port IDS cluster or 4x 1G tool ports with flow-aware hashing keeps each port under 0.8 Gbps threshold while retaining complete sessions."
+   },
+   "evidence_frames": [
+    1,
+    937,
+    1735
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2901,
+  "tokens_out": 2395,
+  "cost_usd": 0.01381,
+  "seconds": 14.3,
+  "recorded_at": "2026-10-28"
+ }
+}

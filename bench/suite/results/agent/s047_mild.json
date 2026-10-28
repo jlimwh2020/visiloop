@@ -1,0 +1,23 @@
+{
+ "feed": "s047_mild",
+ "status": "healthy",
+ "summary": "Feed s047_mild is healthy: IDS receives complete bidirectional traffic with full payload, required VLANs 10 and 20 present, encrypted share within 60% tolerance, and no packet drops, duplicates, or tool overload detected.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2694,
+  "tokens_out": 969,
+  "cost_usd": 0.00749,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-28"
+ }
+}

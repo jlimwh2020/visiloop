@@ -1,0 +1,61 @@
+{
+ "feed": "s064_single",
+ "status": "degraded",
+ "summary": "Feed s064_single to IDS is degraded: 86.6% of bytes are encrypted vs 60% IDS tolerance. All other visibility checks (duplicates, one-way, drops, overload, VLAN) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "86.6% of traffic by bytes is TLS/encrypted, exceeding the IDS tolerance of 60%. Without decryption before the packet broker, the IDS receives ciphertext and cannot inspect payloads it needs for signature matching.",
+   "impact_on_tool": "IDS requires full payload inspection but is blind to encrypted content; detection coverage is severely reduced and attacks inside TLS (exploit, C2, data exfiltration) will be missed, effectively bypassing IDS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "current_share": 0.8656,
+     "threshold": 0.6,
+     "approach": "decrypt_once_at_packet_broker"
+    },
+    "why": "IDS cannot analyze encrypted payloads. Decrypting a copy (e.g., via inline TLS inspection proxy or packet broker with keys) and feeding cleartext to the IDS restores payload visibility. If decryption is not possible, acknowledge IDS will be limited to metadata/anomaly detection only."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    20,
+    22,
+    23,
+    24,
+    26,
+    29,
+    30,
+    32,
+    35,
+    38,
+    40
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2820,
+  "tokens_out": 1689,
+  "cost_usd": 0.0107,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

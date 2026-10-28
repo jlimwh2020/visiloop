@@ -1,0 +1,78 @@
+{
+ "feed": "s117_double",
+ "status": "degraded",
+ "summary": "Feed s117_double to IDS is degraded: 9.2% duplicate packets exceeds 5% threshold and 67.8% encrypted bytes exceeds 60% IDS tolerance. No drops, overload, VLAN gaps or one-way traffic detected.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating the same traffic from multiple SPAN/mirror sources or redundant TAP paths without deduplication, resulting in 331 of 3605 packets (9.2%) being duplicates.",
+   "impact_on_tool": "IDS wastes CPU and storage re-processing duplicates, inflates flow counts and can confuse TCP reassembly/state tracking, reducing detection accuracy and causing false positives.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable broker-level deduplication to drop duplicate packets within a short time window before delivery to the 1 Gbps IDS port."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "68% of bytes are encrypted (TLS), exceeding the IDS tolerance of 60%. Traffic is delivered as ciphertext without decryption.",
+   "impact_on_tool": "IDS requires full payload inspection (needs_full_payload=true) but is blind to encrypted payloads, so signatures and anomaly detection cannot fire on majority of traffic, creating a major coverage gap.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "ssl_visibility_appliance",
+     "protocols": [
+      "TLS"
+     ],
+     "selective_decrypt": true
+    },
+    "why": "Decrypt relevant TLS flows via a dedicated SSL visibility appliance/proxy or provide session keys to the IDS to restore payload visibility within tolerance."
+   },
+   "evidence_frames": [
+    24,
+    26,
+    27,
+    28,
+    29,
+    32,
+    33,
+    35,
+    39,
+    40,
+    45,
+    47,
+    48,
+    50,
+    51,
+    52,
+    55,
+    56,
+    57,
+    59
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2882,
+  "tokens_out": 2248,
+  "cost_usd": 0.01316,
+  "seconds": 12.7,
+  "recorded_at": "2026-10-28"
+ }
+}

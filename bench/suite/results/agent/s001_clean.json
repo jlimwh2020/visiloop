@@ -1,0 +1,23 @@
+{
+ "feed": "s001_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s001_clean. Tool receives complete, correct bidirectional traffic with full payload, required VLANs 10/20 present, no duplicates, drops, overload, or excessive encryption. No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2696,
+  "tokens_out": 746,
+  "cost_usd": 0.00654,
+  "seconds": 11.8,
+  "recorded_at": "2026-10-28"
+ }
+}

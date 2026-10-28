@@ -1,0 +1,116 @@
+{
+ "feed": "s166_triple",
+ "status": "degraded",
+ "summary": "Feed s166_triple to IDS is degraded: 48.6% one-way TCP sessions (needs both directions), microbursts to 1.80 Gbps overload 1 Gbps port, and 66.6% encrypted traffic exceeds 60% tolerance. Duplicates, VLANs and drops are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN is delivering only one direction for ~half of TCP sessions. Likely SPAN configured to mirror TX or RX only, or TAPs on asymmetric paths not aggregated together, so return traffic never reaches IDS.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly, stream tracking and signature matching. With 54/111 sessions one-way, IDS will miss handshakes, fail to detect attacks and generate false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_coverage": true,
+     "aggregate_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS port so bidirectional sessions are complete for stateful inspection."
+   },
+   "evidence_frames": [
+    17,
+    55,
+    76,
+    79,
+    126,
+    136,
+    178,
+    189,
+    217,
+    225,
+    236,
+    294,
+    304,
+    326,
+    333,
+    359,
+    382,
+    392,
+    400,
+    438
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic microbursts peak at 1.80 Gbps in 1ms intervals vs 1 Gbps IDS port capacity (180% overload, 2 intervals). Packet broker is sending line-rate bursts without load-balancing or shaping.",
+   "impact_on_tool": "IDS NIC will drop packets during bursts, causing missed flows, incomplete sessions and blind spots for detection. Sustained overload degrades IDS performance and APM/NDR accuracy.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 1.801,
+     "strategy": "hash_based_load_balance_across_multiple_tool_ports"
+    },
+    "why": "Distribute traffic across multiple 1 Gbps tool ports or a higher-capacity IDS cluster to keep per-port utilization below 80% and prevent burst drops; slicing not viable as IDS needs full payload."
+   },
+   "evidence_frames": [
+    1,
+    572
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "66.6% of bytes are encrypted (TLS) exceeding IDS tolerance of 60%. Traffic is increasingly opaque without decryption at the visibility layer.",
+   "impact_on_tool": "IDS needs full payload for inspection but cannot analyze encrypted payloads, reducing detection coverage to metadata only and missing payload-based exploits.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.6658,
+     "threshold": 0.6,
+     "advice": "offload_decryption_or_add_ssl_visibility"
+    },
+    "why": "Provide decrypted traffic to IDS via centralized SSL visibility appliance or selective decryption policy; alternatively filter known trusted encrypted flows if decryption not possible."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    21,
+    25,
+    57,
+    61,
+    64,
+    65,
+    66,
+    68,
+    70,
+    71,
+    74,
+    78
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3031,
+  "tokens_out": 2146,
+  "cost_usd": 0.01291,
+  "seconds": 13.0,
+  "recorded_at": "2026-10-28"
+ }
+}

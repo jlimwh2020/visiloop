@@ -1,0 +1,43 @@
+{
+ "feed": "s068_single",
+ "status": "degraded",
+ "summary": "APM feed s068_single is overloaded: 25.49 Gbps microburst exceeds 10 Gbps tool port (255% capacity). All other checks (duplicates, encryption, VLANs, one-way, drops) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker forwards full aggregate traffic to a single 10 Gbps APM port without load-balancing, filtering or slicing. A 1 ms burst peaked at 25.49 Gbps (2.55x port capacity, threshold 0.8), so egress queues overrun and the tool port is oversubscribed.",
+   "impact_on_tool": "APM will randomly drop packets during bursts, causing missed transactions, inaccurate latency/Apdex, incomplete distributed traces and gaps in detection coverage despite needing both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple hash",
+     "tool_ports": 3,
+     "port_speed_gbps": 10,
+     "alternative": "filter or slice headers as APM needs_full_payload=false"
+    },
+    "why": "Distribute 25+ Gbps aggregate across 3x10G APM ports (or 2x10G with filtering/slicing) to keep per-port utilization below 80% threshold and prevent burst drops while preserving flow symmetry for APM."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2775,
+  "tokens_out": 1994,
+  "cost_usd": 0.01194,
+  "seconds": 11.0,
+  "recorded_at": "2026-10-28"
+ }
+}

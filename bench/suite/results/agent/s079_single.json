@@ -1,0 +1,61 @@
+{
+ "feed": "s079_single",
+ "status": "degraded",
+ "summary": "Feed s079_single is degraded: 36.3% of TCP sessions (74/204) are one-way, breaking IDS stateful inspection. No duplicates, drops, overload, VLAN or encryption issues detected.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding only one direction for 36.3% of TCP sessions. Traffic likely traverses asymmetric paths captured on separate TAP/SPAN ports that are not aggregated to this single IDS feed, or a flow-hash load-balancer is splitting client->server and server->client to different tool ports. IDS therefore sees SYN/data one way without return traffic.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP state tracking, stream reassembly and signature matching. One-way flows prevent handshake validation, payload reassembly and bidirectional signature detection, causing missed exploits, C2 and incomplete session logging.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_bidirectional_flow": true,
+     "feed": "s079_single"
+    },
+    "why": "Aggregate both directions of each session to the same IDS tool port using symmetric flow hashing so the IDS receives complete bidirectional sessions for stateful detection."
+   },
+   "evidence_frames": [
+    1,
+    23,
+    27,
+    37,
+    44,
+    64,
+    117,
+    124,
+    129,
+    164,
+    204,
+    215,
+    222,
+    243,
+    295,
+    316,
+    375,
+    383,
+    404,
+    441
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2807,
+  "tokens_out": 1720,
+  "cost_usd": 0.01082,
+  "seconds": 9.3,
+  "recorded_at": "2026-10-28"
+ }
+}

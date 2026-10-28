@@ -1,0 +1,43 @@
+{
+ "feed": "s070_single",
+ "status": "degraded",
+ "summary": "SIEM feed s070_single is overloaded: 1ms bursts peak at 3.73 Gbps vs 1 Gbps port (373% capacity, 3 intervals). All other checks (duplicates, encryption, VLANs, one-way, drops) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering unshaped bursts peaking at 3.73 Gbps to a 1 Gbps SIEM port, exceeding line rate by ~273%. No slicing, filtering, or load-balancing is applied to fit the tool's capacity.",
+   "impact_on_tool": "SIEM will drop packets during bursts, causing missed events, incomplete flow/metadata, and gaps in detection coverage and correlation.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 256,
+     "preserve_headers": true
+    },
+    "why": "SIEM needs_full_payload=false per profile, so slicing to headers/metadata preserves detection value while cutting bandwidth to fit 1 Gbps port. If still over threshold, add filtering of irrelevant traffic or load-balance across multiple SIEM receivers."
+   },
+   "evidence_frames": [
+    1,
+    858,
+    1853
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2791,
+  "tokens_out": 2077,
+  "cost_usd": 0.01232,
+  "seconds": 11.2,
+  "recorded_at": "2026-10-28"
+ }
+}

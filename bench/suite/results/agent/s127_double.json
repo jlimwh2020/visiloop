@@ -1,0 +1,82 @@
+{
+ "feed": "s127_double",
+ "status": "degraded",
+ "summary": "APM feed s127_double is degraded: VLAN 20 completely missing (50% untagged) and tool port severely overloaded by 30.64 Gbps microburst on 10 Gbps port (306% capacity).",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream trunk is stripping 802.1Q tags or pruning VLAN 20. 50% of packets arrive untagged and required VLAN 20 is never seen, while VLAN 10 is present, indicating tag stripping or VLAN filter misconfiguration on broker ingress/egress.",
+   "impact_on_tool": "APM has zero visibility into VLAN 20 application traffic and incomplete tagging for 50% of flows. Transaction tracing, segmentation by VLAN, and per-VLAN latency/error baselines will be blind/inaccurate for VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "forward_vlans": [
+      10,
+      20
+     ],
+     "ensure_dot1q_passthrough": true
+    },
+    "why": "Preserve 802.1Q tags through the packet broker and explicitly forward both required VLANs 10 and 20 to the APM so it can correctly classify and monitor all application segments."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    11,
+    12,
+    14,
+    16,
+    18,
+    19,
+    22,
+    23,
+    24,
+    26,
+    27,
+    28,
+    31,
+    34,
+    36,
+    37
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps APM port is fed an aggregate that microbursts to 30.64 Gbps in 1ms (306% of capacity, >80% threshold). Broker is sending full feed to one tool port with no load balancing or burst buffering, exceeding line rate.",
+   "impact_on_tool": "APM will drop packets randomly during bursts due to port overrun/buffer exhaustion. Results in incomplete flows, missed transactions, inaccurate latency and error rates, and degraded detection of performance anomalies.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "tool_ports": 4,
+     "target_utilization": 0.7
+    },
+    "why": "Distribute traffic across multiple APM tool ports/instances via hash-based load balancing to keep each port under ~70-80% of 10 Gbps even during 30+ Gbps bursts, preventing drops while preserving both directions per flow for APM."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2897,
+  "tokens_out": 2358,
+  "cost_usd": 0.01364,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-28"
+ }
+}

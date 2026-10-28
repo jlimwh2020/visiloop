@@ -1,0 +1,60 @@
+{
+ "feed": "s065_single",
+ "status": "degraded",
+ "summary": "Feed s065_single is degraded: 76.6% of TCP sessions (105/137) are one-way, IDS requires bidirectional traffic for stateful analysis. All other checks (duplicates, encryption, VLANs, drops, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/TAP is forwarding only one direction of traffic - likely only one side of a bidirectional link is tapped, SPAN is configured as tx-only/rx-only, or asymmetric routing is sending return path via different link not aggregated to this IDS port. 105 of 137 sessions show single direction.",
+   "impact_on_tool": "IDS needs both directions (needs_both_directions=true) for TCP stream reassembly, handshake validation, and signature matching. With 76.6% one-way sessions the IDS cannot track state, will miss exploits that span request/response, fail to detect C2, and generates incomplete flow logs.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_bidirectional_feed": true
+    },
+    "why": "Aggregate both directions (client->server and server->client) from both sides of the tap/SPAN at the packet broker and deliver as single bidirectional feed to IDS port so TCP sessions are complete for stateful detection."
+   },
+   "evidence_frames": [
+    18,
+    20,
+    27,
+    42,
+    49,
+    57,
+    61,
+    75,
+    83,
+    95,
+    100,
+    138,
+    161,
+    170,
+    178,
+    179,
+    193,
+    200,
+    204,
+    231
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2822,
+  "tokens_out": 1518,
+  "cost_usd": 0.00998,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-28"
+ }
+}

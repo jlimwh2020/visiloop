@@ -1,0 +1,39 @@
+{
+ "feed": "s080_single",
+ "status": "degraded",
+ "summary": "Feed s080_single to NDR is degraded due to duplicate packets (8.9% - 178 of 1990 packets) exceeding 5% threshold. No packet drops, one-way traffic, VLAN, encryption, or overload issues detected. Traffic is otherwise complete for NDR requirements.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding the same packets twice to the NDR, most likely due to aggregating overlapping SPAN/TAP sources without deduplication enabled (e.g., same traffic seen on two switch SPANs or dual TAP feeds merged).",
+   "impact_on_tool": "NDR wastes cycles and storage processing 8.9% duplicate packets, inflates flow/connection counts, skews behavioral analytics and can cause false-positive detections while reducing effective 10Gbps capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet deduplication on the packet broker for feed s080_single to drop duplicate packets within a short time window before delivery to the NDR, restoring accurate flow analysis without losing unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2755,
+  "tokens_out": 1500,
+  "cost_usd": 0.00982,
+  "seconds": 8.8,
+  "recorded_at": "2026-10-28"
+ }
+}

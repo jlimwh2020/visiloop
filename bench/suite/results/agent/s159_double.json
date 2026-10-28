@@ -1,0 +1,75 @@
+{
+ "feed": "s159_double",
+ "status": "degraded",
+ "summary": "Feed s159_double is degraded: 26.3% duplicates (1085/4127 packets) exceeds 5% threshold and 91.7% encrypted bytes exceeds NDR 90% tolerance. Duplication corrupts NDR analysis; encryption limits payload inspection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Traffic is being delivered twice - classic double-feed from aggregating two SPAN/TAP sources covering the same link or a packet broker aggregation loop without deduplication. 1085 of 4127 packets (26.29%) are exact duplicates.",
+   "impact_on_tool": "NDR wastes 10G capacity processing duplicates, inflates flow/connection counts, breaks TCP reassembly and sequence tracking, causes false anomaly alerts and can exhaust state tables leading to missed detections.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "location": "packet_broker_egress"
+    },
+    "why": "Enable hardware deduplication on the packet broker egress to s159_double to drop identical packets within a short time window before delivery, restoring correct packet counts and TCP state for the NDR."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "91.7% of bytes are encrypted (TLS), just above the NDR's 90% tolerance. Feed is almost entirely opaque without decryption - expected for modern traffic but exceeds what this NDR can handle without help.",
+   "impact_on_tool": "NDR needs full payload for signature and anomaly detection; at 92% encrypted it is largely blind to payloads and limited to metadata/JA3/flow analysis, reducing detection coverage for exploits and C2.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "selective_tls_decryption_at_broker",
+     "share_keys_or_enable_ssl_visibility": true
+    },
+    "why": "Advise enabling selective TLS decryption / SSL visibility appliance before the packet broker or forwarding session keys so the NDR receives decrypted payload where policy allows; otherwise retune NDR to encrypted-traffic analytics and accept reduced payload detection."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    17,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30,
+    31,
+    34
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2873,
+  "tokens_out": 2010,
+  "cost_usd": 0.01213,
+  "seconds": 11.0,
+  "recorded_at": "2026-10-28"
+ }
+}

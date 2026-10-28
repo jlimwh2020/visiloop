@@ -1,0 +1,57 @@
+{
+ "feed": "s088_single",
+ "status": "degraded",
+ "summary": "NDR feed s088_single shows 2.3% TCP packet loss (42/1854 packets) exceeding 1% threshold; all other visibility checks (duplicates, encryption, VLANs, one-way, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Capture path is dropping packets before the NDR - most likely SPAN/mirror port oversubscription or packet broker buffer exhaustion under burst load, evidenced by gaps in TCP sequence numbers (2.27% missing data). SPAN ports are known to drop when ingress exceeds egress capacity.",
+   "impact_on_tool": "NDR cannot reliably reassemble TCP sessions or perform full payload analysis; 2.3% loss breaks flow records and signature matching, reducing detection coverage for lateral movement and exfiltration and increasing false negatives.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Replace lossy SPAN/mirror with passive TAP (or TAP aggregation) to provide lossless, line-rate copy to the packet broker and eliminate buffer drops; if TAP already in use, add packet broker filtering/load-balancing or increase egress capacity."
+   },
+   "evidence_frames": [
+    74,
+    76,
+    87,
+    88,
+    432,
+    433,
+    448,
+    449,
+    531,
+    533,
+    617,
+    620,
+    692,
+    694,
+    904,
+    906,
+    919,
+    921,
+    1156,
+    1157
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2832,
+  "tokens_out": 1759,
+  "cost_usd": 0.01102,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

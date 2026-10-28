@@ -1,0 +1,61 @@
+{
+ "feed": "s051_single",
+ "status": "degraded",
+ "summary": "NDR feed s051_single is degraded: 32.2% of TCP sessions (68/211) are one-way, exceeding 10% threshold. NDR requires bidirectional traffic for session reassembly. All other visibility checks (duplicates, drops, overload, VLAN, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN is delivering only one direction for many flows. Most likely cause is SPAN configured to mirror Tx or Rx only, single-sided TAP placement on asymmetric routed path, or broker not aggregating both directions of a flow to the same NDR tool port.",
+   "impact_on_tool": "NDR needs_both_directions=true and needs_full_payload=true. With 32.2% one-way sessions it cannot reassemble TCP, track state, or correlate request/response, causing missed detections, broken flow records, and reduced detection coverage.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "flow_affinity": "5-tuple",
+     "deliver_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregate both directions of each session to the same 10G NDR port with flow-aware affinity so the NDR sees complete bidirectional sessions. If current source is SPAN, replace with TAP-based aggregation to avoid SPAN directional/mirroring gaps."
+   },
+   "evidence_frames": [
+    1,
+    8,
+    44,
+    51,
+    58,
+    133,
+    140,
+    193,
+    200,
+    371,
+    446,
+    533,
+    563,
+    614,
+    649,
+    656,
+    680,
+    749,
+    785,
+    859
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2825,
+  "tokens_out": 1822,
+  "cost_usd": 0.01127,
+  "seconds": 10.6,
+  "recorded_at": "2026-10-28"
+ }
+}

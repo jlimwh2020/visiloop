@@ -1,0 +1,83 @@
+{
+ "feed": "s152_double",
+ "status": "degraded",
+ "summary": "IDS feed s152_double is degraded: 8.5% TCP packet drops and sustained tool overload (1.46 Gbps bursts vs 1 Gbps port, 146% capacity) causing incomplete traffic delivery and missed detections.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN aggregation dropping under load: 155 of 1828 TCP packets (8.48% vs 1% threshold) show missing data/gaps, correlated with microbursts that exceed the 1 Gbps IDS port capacity.",
+   "impact_on_tool": "IDS needs full payload and both directions for TCP stream reassembly and signature matching; gaps cause failed reassembly, evasion of detection, and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "outputs": 2,
+     "capacity_gbps": 1
+    },
+    "why": "Distribute traffic across 2 IDS ports/instances with flow-aware hashing to keep per-port utilization below 80% and eliminate broker-level drops while preserving flow symmetry required by IDS."
+   },
+   "evidence_frames": [
+    33,
+    34,
+    52,
+    53,
+    67,
+    68,
+    79,
+    81,
+    82,
+    130,
+    131,
+    160,
+    161,
+    162,
+    190,
+    193,
+    208,
+    210,
+    238,
+    244
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 1 Gbps IDS port oversubscribed by packet broker: peak 1.46 Gbps in 1 ms burst (146% of capacity) across 5 overloaded intervals with no load balancing or filtering.",
+   "impact_on_tool": "IDS NIC buffers overflow during bursts, dropping traffic exactly when inspection is most needed; results in blind spots and degraded detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "tool_group": "ids_pool",
+     "members": 2
+    },
+    "why": "Hash-based load balancing preserves bidirectional flow affinity required by IDS and keeps each 1 Gbps tool port under 80% threshold, preventing burst drops."
+   },
+   "evidence_frames": [
+    1,
+    280,
+    542,
+    935,
+    1317
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2907,
+  "tokens_out": 2673,
+  "cost_usd": 0.01499,
+  "seconds": 15.1,
+  "recorded_at": "2026-10-28"
+ }
+}

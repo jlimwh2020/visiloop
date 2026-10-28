@@ -1,0 +1,23 @@
+{
+ "feed": "s194_tool_aware",
+ "status": "healthy",
+ "summary": "Feed s194_tool_aware to SIEM is healthy. All 6 visibility checks (duplicates, encrypted_share, missing_vlan, one_way, packet_drops, tool_overload) returned healthy. Traffic meets SIEM requirements (single direction sufficient, truncated payload acceptable, no VLAN requirements) with no drops, duplicates, or overload. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2696,
+  "tokens_out": 1004,
+  "cost_usd": 0.00764,
+  "seconds": 5.8,
+  "recorded_at": "2026-10-28"
+ }
+}

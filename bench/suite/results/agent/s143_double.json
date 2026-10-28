@@ -1,0 +1,88 @@
+{
+ "feed": "s143_double",
+ "status": "degraded",
+ "summary": "Feed s143_double to IDS is degraded: 50% of packets are untagged and required VLAN 20 is completely missing, plus IDS port is overloaded by microbursts to 1.53 Gbps on a 1 Gbps port (153% capacity). IDS has incomplete visibility and will drop traffic during bursts.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream trunk is stripping 802.1Q tags or not forwarding VLAN 20. IDS requires VLANs 10 and 20 but 50% of packets arrive untagged and VLAN 20 is never observed, indicating tag stripping or VLAN pruning on the broker/switch.",
+   "impact_on_tool": "IDS is blind to VLAN 20 and to half of all traffic; signatures, anomaly detection and correlation for that segment never fire, creating a major detection coverage gap.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true,
+     "ensure_trunk_forwards": [
+      20
+     ]
+    },
+    "why": "Restore and preserve 802.1Q tags end-to-end so the IDS receives both required VLANs 10 and 20 for complete coverage"
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    15,
+    18,
+    21,
+    23,
+    25,
+    27,
+    29,
+    31,
+    34,
+    35,
+    36,
+    38
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic microbursts peak at 1.53 Gbps in 1ms intervals, exceeding the 1 Gbps IDS port by 53% across 5 intervals. No load-balancing or buffering in front of the tool to absorb bursts.",
+   "impact_on_tool": "IDS ingress buffers overflow and drops packets during bursts; TCP reassembly breaks, IDS signatures miss attacks, and stateful detection degrades or fails open under load.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "target_ports": 2,
+     "per_port_capacity_gbps": 1
+    },
+    "why": "Distribute traffic across 2x 1 Gbps IDS ports/instances via packet broker load-balancing to keep per-port utilization below 80% and prevent burst drops"
+   },
+   "evidence_frames": [
+    1,
+    417,
+    649,
+    966,
+    1256
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2915,
+  "tokens_out": 2498,
+  "cost_usd": 0.01426,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-28"
+ }
+}

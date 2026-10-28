@@ -1,0 +1,57 @@
+{
+ "feed": "s076_single",
+ "status": "degraded",
+ "summary": "Feed s076_single is healthy for SIEM delivery. No packet drops, overload, duplicates, VLAN gaps or excessive encryption. 35.8% one-way TCP sessions detected (73/204) but SIEM profile needs_both_directions=false so coverage remains adequate.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "low",
+   "root_cause": "73 of 204 TCP sessions (35.8%) show only one direction, exceeding 10% threshold. Most likely only one direction is being delivered to the tool port \u2014 e.g., SPAN configured RX-only, only one side of a duplex TAP connected, packet broker splitting directions across different tool ports without aggregation, or asymmetric routing with single-path tap.",
+   "impact_on_tool": "SIEM has needs_both_directions=false and needs_full_payload=false, so it can generate events from unidirectional flows. Missing return traffic does not break ingestion but reduces full session context for correlation/stateful analytics.",
+   "recommended_fix": {
+    "action": "none",
+    "params": {},
+    "why": "No immediate broker change required per SIEM profile tolerance for one-way traffic. If richer session context is desired, optionally configure packet broker to aggregate both directions of each flow to the same SIEM port."
+   },
+   "evidence_frames": [
+    14,
+    64,
+    72,
+    197,
+    252,
+    261,
+    328,
+    341,
+    405,
+    425,
+    434,
+    504,
+    622,
+    646,
+    670,
+    680,
+    694,
+    742,
+    765,
+    772
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2822,
+  "tokens_out": 3462,
+  "cost_usd": 0.01824,
+  "seconds": 17.7,
+  "recorded_at": "2026-10-28"
+ }
+}

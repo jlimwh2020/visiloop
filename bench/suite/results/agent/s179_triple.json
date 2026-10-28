@@ -1,0 +1,137 @@
+{
+ "feed": "s179_triple",
+ "status": "degraded",
+ "summary": "Feed s179_triple is degraded with 3 high-severity faults: 86% encrypted traffic exceeds IDS tolerance (60%), required VLAN 20 missing with 36% untagged, and 44% of TCP sessions are one-way. IDS requires both directions and full payload for stateful inspection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "86% of bytes are encrypted (TLS) vs 60% IDS tolerance. Traffic is not being decrypted before the IDS - likely no SSL visibility/decryption appliance in the packet broker path or decryption policy not enabled for this feed.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection; encrypted payloads are opaque so IDS cannot inspect content, allowing threats inside TLS to bypass detection and inflating false negatives.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker_or_ssl_visibility",
+     "policy": "decrypt_relevant_TLS_selectively"
+    },
+    "why": "IDS cannot analyze encrypted payloads; selective decryption before the IDS restores visibility while respecting privacy/policy, bringing encrypted share below 60% threshold."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    24,
+    43,
+    45,
+    46,
+    47,
+    48,
+    50,
+    51,
+    54,
+    57
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen and 36% of packets are untagged. Packet broker is likely stripping 802.1Q tags on ingress/egress, or SPAN/trunk is not forwarding VLAN 20, or VLAN filter is dropping it before the IDS port.",
+   "impact_on_tool": "IDS is blind to VLAN 20 segment which it is required to monitor; untagged packets lose tenant/segment context, breaking VLAN-aware policies and detection coverage for that network zone.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "restore_vlan": 20
+    },
+    "why": "Restore and preserve VLAN tags end-to-end from TAP/SPAN through packet broker to IDS so required VLAN 20 is delivered and segmentation context is retained."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    20,
+    25,
+    26,
+    28,
+    30,
+    31,
+    34,
+    39,
+    43,
+    46,
+    47
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "44% of TCP sessions (48/109) show only one direction, well above 10% threshold. Indicates asymmetric routing with capture on only one path, or packet broker not aggregating both directions to the same IDS port, or SPAN missing the return path.",
+   "impact_on_tool": "IDS requires both directions for TCP reassembly and stateful inspection; one-way traffic breaks stream reconstruction, prevents detection of handshakes, exploits, and response-based signatures, severely reducing detection accuracy.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_bidirectional_delivery": true,
+     "affinity_by_flow": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port to restore full bidirectional sessions needed for stateful IDS analysis."
+   },
+   "evidence_frames": [
+    19,
+    104,
+    141,
+    156,
+    175,
+    213,
+    233,
+    294,
+    302,
+    309,
+    319,
+    401,
+    429,
+    457,
+    496,
+    520,
+    538,
+    565,
+    572,
+    580
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3072,
+  "tokens_out": 2130,
+  "cost_usd": 0.01289,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "feed": "s081_single",
+ "status": "degraded",
+ "summary": "SIEM feed s081_single shows 2.7% TCP packet drops (41/1511 packets with gaps) exceeding 1% threshold; all other visibility checks (duplicates, encryption, VLANs, one-way, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "SPAN/mirror or packet broker ingress dropping under load: TCP sequence gaps across many flows indicate buffer/oversubscription drops before the SIEM, not tool-side overload (tool_overload healthy).",
+   "impact_on_tool": "SIEM receives incomplete TCP streams - 2.7% missing data breaks event reconstruction and correlation, causing missed or incomplete alerts even though SIEM does not require full payload or bidirectional flows.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Hardware TAP provides lossless line-rate copy unlike SPAN which drops when oversubscribed; replacing SPAN with TAP (and ensuring broker capacity) eliminates the sequence gaps and restores complete traffic to the SIEM."
+   },
+   "evidence_frames": [
+    162,
+    163,
+    164,
+    166,
+    274,
+    275,
+    287,
+    288,
+    483,
+    484,
+    501,
+    502,
+    703,
+    704,
+    762,
+    764,
+    865,
+    866,
+    867,
+    974
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2819,
+  "tokens_out": 1873,
+  "cost_usd": 0.01148,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-28"
+ }
+}

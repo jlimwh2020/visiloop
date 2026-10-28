@@ -1,0 +1,101 @@
+{
+ "feed": "s160_double",
+ "status": "degraded",
+ "summary": "Feed s160_double is degraded with 2 high-severity faults: 100% of packets missing required VLAN tags (10, 20) and 24.8% of TCP sessions are one-way (38/153). NDR requires both directions and VLAN context for full detection coverage.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker egress (or SPAN trunk) is stripping 802.1Q tags. 100% of packets arrived untagged while NDR requires VLANs 10 and 20, indicating broker port configured to remove tags, access-mode instead of trunk, or VLAN stripping policy enabled.",
+   "impact_on_tool": "NDR loses network segmentation context for VLANs 10 and 20. Cannot apply VLAN-aware detection policies, correlate assets by segment, or detect lateral movement/VLAN hopping. Coverage for those segments is effectively blind.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "retain_tags_on_egress"
+    },
+    "why": "Configure packet broker and SPAN/TAP trunk ports to preserve 802.1Q tags on egress to the NDR tool port. Disable 'strip VLAN' and ensure trunk allows VLANs 10,20 so NDR receives tagged traffic as required."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of bidirectional flows is delivered to the NDR. 38 of 153 TCP sessions (24.8% > 10% threshold) show single direction, typical of TAP/SPAN covering only one side of an asymmetric path or packet broker not aggregating RX/TX pair to the same tool port / splitting directions via hash.",
+   "impact_on_tool": "NDR requires both directions (needs_both_directions=true) for TCP reassembly, session state tracking and behavioral detection. One-way traffic breaks flow reconstruction, causes missed detections, incomplete metadata, and false positives for the 24.8% affected sessions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "symmetric_hash": true,
+     "combine_rx_tx": true
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow to the same NDR tool port using flow-aware/symmetric aggregation. Ensure TAPs on both sides of the conversation are combined, so client->server and server->client for the same session egress together."
+   },
+   "evidence_frames": [
+    73,
+    90,
+    105,
+    146,
+    200,
+    211,
+    236,
+    306,
+    331,
+    366,
+    386,
+    394,
+    403,
+    437,
+    558,
+    619,
+    882,
+    909,
+    1023,
+    1031
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2952,
+  "tokens_out": 2340,
+  "cost_usd": 0.01364,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-28"
+ }
+}

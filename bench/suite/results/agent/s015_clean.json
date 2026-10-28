@@ -1,0 +1,23 @@
+{
+ "feed": "s015_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM on s015_clean. Tool receives complete bidirectional traffic with required VLANs 10,20, no duplicates, drops, overload, or encryption issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2695,
+  "tokens_out": 914,
+  "cost_usd": 0.00725,
+  "seconds": 7.1,
+  "recorded_at": "2026-10-28"
+ }
+}

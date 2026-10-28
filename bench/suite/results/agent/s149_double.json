@@ -1,0 +1,82 @@
+{
+ "feed": "s149_double",
+ "status": "degraded",
+ "summary": "Feed s149_double to IDS is degraded: 78.2% of TCP sessions are one-way (154/197) and burst throughput hits 1.43 Gbps vs 1 Gbps IDS port (143% capacity). IDS requires bidirectional, full-payload visibility.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "78.2% of TCP sessions show traffic in only one direction, indicating asymmetric routing or visibility architecture only tapping one side of the path. Packet broker is not aggregating both directions of each flow to the same IDS tool port (e.g., only one SPAN direction or one leg of a bonded link is fed).",
+   "impact_on_tool": "IDS needs both directions to reassemble TCP streams and track state. With one-way traffic it cannot correlate request/response, misses multi-stage attacks, fails to detect callbacks/exfiltration, and wastes state table on half-open sessions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "mode": "bidirectional_aggregation",
+     "hash": "5-tuple",
+     "ensure_both_directions_to_same_tool": true
+    },
+    "why": "Aggregate both directions of each session via packet broker flow-hash so the IDS sees client-to-server and server-to-client together for complete stream reassembly."
+   },
+   "evidence_frames": [
+    1,
+    8,
+    13,
+    17,
+    18,
+    41,
+    48,
+    50,
+    78,
+    85,
+    113,
+    133,
+    136,
+    161,
+    168,
+    176,
+    183,
+    188,
+    200,
+    207
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak burst measured at 1.43 Gbps in 1ms interval exceeds the IDS 1 Gbps tool port by 43% (2 overloaded intervals). Feed is bursting above line-rate of the tool port, likely due to microbursts from aggregation without load balancing or rate control.",
+   "impact_on_tool": "IDS will drop packets during bursts due to port oversubscription. Even without drops logged yet, any burst over 100% causes blind spots, missed signatures, and incomplete flow records. IDS requires full payload so truncation is not an option.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "flow_hash_load_balance",
+     "current_port_gbps": 1,
+     "peak_gbps": 1.43,
+     "add_tool_ports": 1,
+     "hash": "5-tuple"
+    },
+    "why": "Distribute flows across 2x 1 Gbps IDS ports/instances via flow-aware load balancing to keep per-port utilization below 80% and preserve full payload for detection. Do not slice as IDS needs full payload."
+   },
+   "evidence_frames": [
+    1,
+    815
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2904,
+  "tokens_out": 2046,
+  "cost_usd": 0.01233,
+  "seconds": 12.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,59 @@
+{
+ "feed": "s075_single",
+ "status": "degraded",
+ "summary": "APM feed s075_single is degraded: 17.1% of TCP sessions (18/105) are one-way, exceeding 10% threshold. APM requires bidirectional traffic and will see incomplete transactions. All other checks (duplicates, drops, overload, VLAN, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Bidirectional aggregation failure: only one direction of TCP sessions is reaching the APM port. Most likely asymmetric routing with separate TAP/SPAN inputs not aggregated, or packet broker forwarding each direction to different tool ports without flow-aware aggregation. 18 of 105 sessions affected (17.1%).",
+   "impact_on_tool": "APM needs_both_directions=true to correlate request/response for latency, transaction completion and dependency mapping. One-way flows appear as incomplete transactions, causing inaccurate response-time calculations, false errors, and missed application performance traces.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_mode": "5-tuple_bidirectional",
+     "deliver_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregate both directions of each flow to the same APM tool port using bidirectional 5-tuple hashing so the APM sees complete request/response pairs and can correctly measure performance."
+   },
+   "evidence_frames": [
+    49,
+    266,
+    287,
+    309,
+    337,
+    483,
+    506,
+    516,
+    603,
+    720,
+    768,
+    1002,
+    1026,
+    1045,
+    1072,
+    1097,
+    1170,
+    1239
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2825,
+  "tokens_out": 2027,
+  "cost_usd": 0.01215,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-28"
+ }
+}

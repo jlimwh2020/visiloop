@@ -1,0 +1,107 @@
+{
+ "feed": "s112_double",
+ "status": "degraded",
+ "summary": "Feed s112_double is degraded: VLAN 20 is completely absent (50% packets untagged) and 93.9% encrypted traffic exceeds NDR 90% tolerance. Bidirectional flow, deduplication, drops and tool load are healthy, but VLAN gap and encryption blindness limit NDR detection coverage.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP is stripping 802.1Q tags or VLAN 20 is not forwarded to this NDR tool port. 50% untagged packets with 0 packets of VLAN 20 seen indicates trunk not preserved or broker VLAN filter/policy dropping VLAN 20, not a sampling artifact.",
+   "impact_on_tool": "NDR has zero visibility into required VLAN 20, losing ~50% of expected traffic. Detections for lateral movement, east-west and segment-specific threats on VLAN 20 will not fire.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "forward_untagged_as_is": false
+    },
+    "why": "NDR requires both VLAN 10 and 20 with tags preserved. Configure broker ingress to preserve 802.1Q and explicitly forward VLAN 20 trunk to this tool port; disable tag stripping."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    8,
+    9,
+    11,
+    12,
+    13,
+    15,
+    16,
+    18,
+    19,
+    21,
+    23,
+    27,
+    30,
+    32,
+    34,
+    36,
+    39,
+    40
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94% of bytes are encrypted (TLS), above the NDR's 90% tolerance. Traffic is predominantly TLS 1.2/1.3 without broker-side decryption or key sharing, so payload is opaque to the NDR.",
+   "impact_on_tool": "NDR is limited to metadata/flow analysis and cannot inspect payloads for malware, C2, or exfiltration. Detection efficacy drops sharply as most sessions are opaque.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "decrypt_or_key_forward",
+     "protocols": [
+      "TLS"
+     ],
+     "selective_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Decrypt at the packet broker (or forward session keys) and send cleartext copy to NDR, or deploy NDR with integrated TLS visibility. Selective decryption for VLANs 10/20 preserves privacy while restoring payload inspection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    15,
+    16,
+    18,
+    19,
+    21,
+    23,
+    27,
+    36,
+    38,
+    39,
+    40
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2939,
+  "tokens_out": 2188,
+  "cost_usd": 0.01297,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-28"
+ }
+}

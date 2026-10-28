@@ -1,0 +1,98 @@
+{
+ "feed": "s118_double",
+ "status": "degraded",
+ "summary": "Feed s118_double to NDR is degraded: 21.6% of TCP sessions are one-way (exceeds 10% threshold) and 90.7% of bytes are encrypted (exceeds 90% tolerance). No duplicates, drops, overload, or VLAN gaps detected.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN is delivering only one direction for ~1 in 5 TCP sessions. Most likely asymmetric routing where RX and TX traverse different links and only one link is tapped, or two SPAN/TAP feeds are not aggregated to the same NDR tool port, so the NDR sees SYN without SYN-ACK/data return.",
+   "impact_on_tool": "NDR requires both directions (needs_both_directions=true) to reconstruct TCP state, track sessions, and detect intrusions. With 27/125 sessions one-way, flow reassembly fails, detections are missed, and one-way flows create false positives/noise.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "use_flow_aware_aggregation": true,
+     "hash": "5-tuple"
+    },
+    "why": "Aggregate RX and TX from both sides of asymmetric paths onto the same NDR tool port with flow-aware hashing so each bidirectional session is delivered complete to the NDR."
+   },
+   "evidence_frames": [
+    47,
+    192,
+    206,
+    213,
+    221,
+    244,
+    264,
+    271,
+    272,
+    301,
+    347,
+    509,
+    584,
+    607,
+    820,
+    978,
+    985,
+    1028,
+    1050,
+    1058
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "91% of bytes are TLS/encrypted, just over the NDR's 90% tolerance. Traffic is not being decrypted before the NDR, so payload inspection is blind. This is expected on modern networks but exceeds what this NDR can handle without help.",
+   "impact_on_tool": "NDR needs full payload (needs_full_payload=true) for deep packet inspection and threat detection. With 90.7% encrypted, payload-based detections, JA3, and C2/beacon analysis are severely limited and coverage drops.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "out_of_band_decryption",
+     "location": "packet_broker_or_dedicated_decryption",
+     "policy": "decrypt_selectively_with_privacy_bypass"
+    },
+    "why": "NDR cannot inspect encrypted payload natively; add a packet-broker-integrated SSL visibility / decryption zone to selectively decrypt relevant traffic and re-encrypt to tool, or feed decrypted copy to NDR while respecting privacy/policy bypasses."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    20,
+    21,
+    22,
+    23,
+    25,
+    26,
+    28,
+    29,
+    32,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2940,
+  "tokens_out": 1996,
+  "cost_usd": 0.01216,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-28"
+ }
+}

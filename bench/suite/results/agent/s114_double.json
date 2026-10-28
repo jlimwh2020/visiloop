@@ -1,0 +1,96 @@
+{
+ "feed": "s114_double",
+ "status": "degraded",
+ "summary": "Feed s114_double to IDS is degraded: 79.5% encrypted traffic exceeds IDS 60% tolerance and 2.4% TCP packet drops indicate incomplete streams. IDS cannot inspect most payloads and misses TCP segments, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "79.5% of bytes are encrypted (TLS), exceeding the IDS tolerance of 60%. Traffic is sent to the IDS without prior decryption - packet broker has no decrypt/forward-cleartext policy for this feed.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection but is blind to encrypted payloads; ~79% of traffic cannot be inspected, causing missed malware, exploit and C2 detection inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker",
+     "forward_cleartext_to_ids": true
+    },
+    "why": "Decrypting at the packet broker (or forwarding a decrypted copy from TLS intercept) restores payload visibility and brings encrypted share below the IDS 60% threshold without violating its need for full payload."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    16,
+    18,
+    19,
+    20,
+    21,
+    23,
+    24,
+    27,
+    47,
+    49,
+    50,
+    51
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "2.4% of TCP packets (60 of 2501) show gaps indicating missing data en route to tool. Tool overload is healthy and no duplicates, so drops likely from SPAN/broker buffer exhaustion or burst oversubscription feeding the 1 Gbps IDS port.",
+   "impact_on_tool": "IDS TCP reassembly is incomplete; truncated streams cause missed signatures, broken flow reconstruction and potential evasion, leading to false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_port_speed_gbps": 1,
+     "method": "hash_based_flow_load_balance"
+    },
+    "why": "Load-balancing flows across multiple IDS instances/egress ports reduces per-port burst load and buffer drops, ensuring complete TCP streams arrive without exceeding the 1 Gbps tool capacity; also review SPAN vs TAP and broker drop counters."
+   },
+   "evidence_frames": [
+    108,
+    110,
+    188,
+    191,
+    360,
+    361,
+    436,
+    437,
+    590,
+    592,
+    771,
+    773,
+    783,
+    784,
+    808,
+    810,
+    881,
+    883,
+    1040,
+    1041
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2937,
+  "tokens_out": 2417,
+  "cost_usd": 0.01394,
+  "seconds": 12.9,
+  "recorded_at": "2026-10-28"
+ }
+}

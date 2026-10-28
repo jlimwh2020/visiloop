@@ -1,0 +1,57 @@
+{
+ "feed": "s102_single",
+ "status": "degraded",
+ "summary": "Feed s102_single is degraded due to high encrypted share (93.7% vs 90% NDR tolerance) limiting payload inspection. All other checks (duplicates, missing VLAN, one-way, packet drops, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Traffic is 93.7% encrypted bytes, exceeding the NDR's 90% tolerance. Packet broker is forwarding TLS sessions as-is with no decryption or key forwarding, so payload remains opaque to the tool.",
+   "impact_on_tool": "NDR requires full payload for signature and behavioral detection. With ~94% of bytes encrypted, the NDR is blind to most payloads, significantly reducing detection coverage and increasing missed threats.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "Selective TLS decryption or key forwarding at the packet broker will restore cleartext payload to the NDR, bringing encrypted share below 90% and improving detection coverage without changing TAP/SPAN."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    21,
+    22,
+    23,
+    24,
+    26,
+    27,
+    30,
+    33,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2817,
+  "tokens_out": 1867,
+  "cost_usd": 0.01146,
+  "seconds": 9.6,
+  "recorded_at": "2026-10-28"
+ }
+}

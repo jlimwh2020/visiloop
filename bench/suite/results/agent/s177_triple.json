@@ -1,0 +1,95 @@
+{
+ "feed": "s177_triple",
+ "status": "degraded",
+ "summary": "Feed s177_triple is degraded: 7.4% duplicates, 5.1% TCP packet drops/gaps, and 16.51 Gbps microbursts overloading the 10 Gbps NDR port (165% capacity). Deduplication and load-balancing at the packet broker are required to restore complete traffic to the NDR.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Duplicate packets from overlapping SPAN/TAP aggregation without broker deduplication. 632 of 8555 packets (7.4%) exceed 5% threshold, typical when same traffic is fed from multiple SPANs or both sides of a TAP without dedup window.",
+   "impact_on_tool": "Wastes NDR processing and 10G bandwidth, inflates flow counts and skews NDR analytics/correlation, can cause false-positive detections and reduces effective detection capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication (packet-hash window ~10ms) before the NDR to strip duplicates while preserving one copy of each flow for full detection coverage."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Broker/tool buffer drops causing TCP gaps - 430 of 8507 TCP packets (5.1%) show missing data. Correlates directly with tool overload bursts to 16.51 Gbps on a 10 Gbps port, indicating drops at broker egress/tool ingress due to oversubscription, not just SPAN.",
+   "impact_on_tool": "NDR cannot reassemble TCP streams and misses payload - breaks signature matching, file extraction, and behavioral detection. NDR needs_full_payload=true and needs_both_directions=true, so any gap creates blind spots.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "add_tool_ports": 1,
+     "aggregate_burst_capacity_gbps": 20
+    },
+    "why": "Load-balance the feed across 2x10G NDR ports (5-tuple hashing to keep flows intact) to absorb 16.5 Gbps bursts and eliminate buffer drops; same fix resolves tool_overload."
+   },
+   "evidence_frames": [
+    75,
+    77,
+    91,
+    93,
+    95,
+    101,
+    108,
+    112,
+    114,
+    115,
+    137,
+    138,
+    140,
+    145,
+    175,
+    176,
+    215,
+    217,
+    222,
+    224
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps NDR port is oversubscribed by aggregated feed. Measured peak 16.51 Gbps in 1ms burst = 165% of port capacity (threshold 80%), with 2 overloaded intervals. No load-balancing or rate-shaping at broker.",
+   "impact_on_tool": "NDR ingress drops during bursts, exactly matching the 5.1% TCP gaps observed. Results in systematic missed detections during peak traffic - NDR is blind when it is most needed.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "add_tool_ports": 1,
+     "target_utilization": 0.6
+    },
+    "why": "Distribute s177_triple across multiple NDR tool ports via broker load-balancing (or add 10G capacity / 2-port LAG) with 5-tuple flow affinity to keep both directions together and keep peak utilization <80%."
+   },
+   "evidence_frames": [
+    1,
+    4498
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2975,
+  "tokens_out": 3715,
+  "cost_usd": 0.01951,
+  "seconds": 18.2,
+  "recorded_at": "2026-10-28"
+ }
+}

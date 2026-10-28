@@ -1,0 +1,116 @@
+{
+ "feed": "s178_triple",
+ "status": "degraded",
+ "summary": "Feed s178_triple is degraded: 3 faults detected for NDR - 17.4% one-way TCP sessions (needs both directions), 24.39 Gbps microburst overloading 10 Gbps port (244% capacity), and 93.9% encrypted share exceeding 90% tolerance. Requires bidirectional aggregation, load balancing, and decryption/mirroring strategy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93.9% of bytes are encrypted vs 90% NDR tolerance. Modern TLS-everywhere environment renders payload opaque; NDR cannot perform deep packet inspection without decryption or TLS metadata enrichment.",
+   "impact_on_tool": "NDR detection coverage reduced: payload signatures, exploit detection, and data exfiltration analysis fail on encrypted flows, leaving only flow/metadata analysis.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "current_share": 0.9391,
+     "threshold": 0.9,
+     "strategy": "decrypt_or_enrich_with_tls_metadata"
+    },
+    "why": "NDR needs_full_payload=true but payload is opaque. Decrypt at packet broker via key sharing or forward copy to decryption zone, or at minimum enrich with JA3/SNI/cert metadata to restore detection without breaking privacy policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    8,
+    10,
+    11,
+    13,
+    14,
+    15,
+    17,
+    18,
+    19,
+    22,
+    25,
+    26,
+    29,
+    33,
+    36,
+    38
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "17.4% of TCP sessions (82 of 470) show only one direction, above 10% threshold. Indicates asymmetric routing or packet broker forwarding only one side of flow (e.g., client->server without return path) - incomplete bidirectional aggregation.",
+   "impact_on_tool": "NDR needs_both_directions=true to reconstruct TCP state and track handshakes. One-way flows break session reassembly, cause missed C2/lateral movement detections and false scan alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash": "5-tuple_symmetric"
+    },
+    "why": "Configure packet broker to aggregate both directions of each 5-tuple to same NDR port using symmetric hashing, ensuring complete session visibility for stateful NDR analysis."
+   },
+   "evidence_frames": [
+    65,
+    74,
+    130,
+    357,
+    364,
+    405,
+    556,
+    698,
+    713,
+    714,
+    773,
+    813,
+    1043,
+    1117,
+    1132,
+    1325,
+    1400,
+    1461,
+    1508,
+    1666
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak microburst of 24.39 Gbps in 1ms interval vs 10 Gbps NDR port (244% of capacity, 1 overloaded interval). Aggregated feed bursts exceed single tool port buffers, causing NIC-level drops.",
+   "impact_on_tool": "NDR will silently drop packets during bursts - exactly when high-volume attacks, exfiltration or DDoS occur - creating blind spots and degrading detection fidelity despite broker showing no drops.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "peak_gbps": 24.39,
+     "ports_needed": 3,
+     "hash": "5-tuple"
+    },
+    "why": "NDR needs full payload so slicing/filtering would hurt coverage. Load-balance across 3x10G ports (or 2x25G) with flow-aware hashing to absorb 24+ Gbps bursts without loss."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3043,
+  "tokens_out": 3306,
+  "cost_usd": 0.01785,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-28"
+ }
+}

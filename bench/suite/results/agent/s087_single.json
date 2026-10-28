@@ -1,0 +1,60 @@
+{
+ "feed": "s087_single",
+ "status": "degraded",
+ "summary": "Feed s087_single is degraded: 66.6% encrypted traffic exceeds IDS tolerance of 60% (1 fault). No duplicates, drops, overload, one-way, or VLAN issues detected.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "67% of bytes are encrypted (TLS) exceeding the IDS 60% tolerance. Packet broker is forwarding encrypted sessions as-is with no decryption/visibility layer, so payload remains opaque.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection. With 66.6% encrypted, most sessions cannot be inspected, blinding detection for exploits, malware and C2 and increasing false negatives.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "max_encrypted_share": 0.6,
+     "current_share": 0.6663
+    },
+    "why": "Selective TLS decryption at the packet broker/proxy (or forwarding already-decrypted traffic from a TLS-intercept) will bring encrypted share below 60% and restore full-payload visibility the IDS requires."
+   },
+   "evidence_frames": [
+    3,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    19,
+    20,
+    21,
+    22,
+    24,
+    25,
+    27,
+    28,
+    31,
+    34,
+    36,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2824,
+  "tokens_out": 1634,
+  "cost_usd": 0.01047,
+  "seconds": 9.1,
+  "recorded_at": "2026-10-28"
+ }
+}

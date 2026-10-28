@@ -1,0 +1,75 @@
+{
+ "feed": "s153_double",
+ "status": "degraded",
+ "summary": "Feed s153_double to IDS is degraded: 23.2% duplicate packets and 44.0% one-way TCP sessions. IDS requires bidirectional, deduplicated traffic for stateful inspection - both faults severely reduce detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding duplicate copies of same packets to the IDS - typically caused by aggregating two SPAN/mirror sessions or dual TAP feeds covering same link without deduplication, or a loop in aggregation. 452 of 1949 packets (23.2%) are duplicates vs 5% threshold.",
+   "impact_on_tool": "IDS wastes 1G capacity processing duplicates, inflates flow counts, causes signature engine to see retransmits/phantom packets, increases false positives and risks missing real threats due to processing overhead.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "header_hash"
+    },
+    "why": "Enable packet-broker deduplication on the feed to drop identical packets within a short time window before delivery to IDS, restoring accurate packet counts and freeing IDS resources for real traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions is reaching the IDS - 51 of 116 sessions (44.0%) are one-way. Indicates asymmetric routing with TAP/SPAN on single side, or broker load-balancing / filtering that splits client->server and server->client to different tools without symmetric aggregation.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and signature matching. With one-way visibility it cannot reconstruct streams, misses exploits that span request/response, fails to detect C2 and exfiltration, and generates incomplete session logs.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash": "5-tuple-symmetric"
+    },
+    "why": "Configure packet broker to aggregate both directions of each 5-tuple to this same IDS port using symmetric hashing, ensuring complete bidirectional flows for stateful detection."
+   },
+   "evidence_frames": [
+    4,
+    17,
+    98,
+    171,
+    258,
+    280,
+    284,
+    320,
+    342,
+    371,
+    390,
+    454,
+    485,
+    489,
+    530,
+    546,
+    559,
+    641,
+    651,
+    677
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2877,
+  "tokens_out": 2021,
+  "cost_usd": 0.01219,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,95 @@
+{
+ "feed": "s173_triple",
+ "status": "degraded",
+ "summary": "Feed s173_triple is degraded: NDR port overloaded by 12.94 Gbps microbursts (129% of 10G), 11% duplicates, and 93.3% encrypted traffic exceeds 90% tolerance. No packet drops, one-way, or VLAN issues detected.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 12.94 Gbps in 1 ms burst vs 10 Gbps NDR port (129% capacity, 2 overloaded intervals). Caused by aggregated SPAN/TAP feeds microbursting without shaping or load balancing to the tool port.",
+   "impact_on_tool": "NDR ingress buffers overrun and drops packets at line rate, causing incomplete flows, broken session reassembly, and missed detections.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "ports": 2,
+     "hash": "5-tuple",
+     "per_port_capacity_gbps": 10,
+     "threshold_gbps": 8
+    },
+    "why": "Spread bursty traffic across 2+ 10G tool ports via packet broker load balancing to keep per-port utilization below 80% and prevent burst drops"
+   },
+   "evidence_frames": [
+    1,
+    2783
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "11.0% duplicates (876 of 7992 packets, threshold 5%) indicates overlapping SPAN sessions or duplicate TAP feeds aggregated on the packet broker without deduplication.",
+   "impact_on_tool": "Wastes NDR processing and storage, inflates flow counts and alerts, skews analytics and can cause false positives while reducing effective detection capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "packet_hash"
+    },
+    "why": "Enable broker-level deduplication to remove identical packets within a short window before delivery, restoring correct traffic counts"
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93.3% of bytes are encrypted vs NDR tolerance of 90%, meaning almost all payload is TLS/encrypted and delivered opaque to the NDR which needs full payload.",
+   "impact_on_tool": "NDR is blind to payload content and limited to metadata/flow analysis, significantly reducing detection coverage for threats inside encrypted sessions.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "solution": "ssl_visibility_appliance",
+     "policy": "selective_decrypt_with_privacy_bypass"
+    },
+    "why": "Decrypt relevant TLS via visibility fabric or provide session keys to NDR to restore payload inspection while respecting privacy/compliance policy"
+   },
+   "evidence_frames": [
+    2,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    16,
+    19,
+    20,
+    22,
+    23,
+    24,
+    25,
+    27,
+    28,
+    30,
+    31,
+    34
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2972,
+  "tokens_out": 2469,
+  "cost_usd": 0.01421,
+  "seconds": 12.3,
+  "recorded_at": "2026-10-28"
+ }
+}

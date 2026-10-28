@@ -1,0 +1,39 @@
+{
+ "feed": "s095_single",
+ "status": "degraded",
+ "summary": "Feed s095_single to SIEM is degraded due to 19.3% duplicate packets (611/3161). All other visibility checks healthy: no one-way traffic, no packet drops, no tool overload, VLANs 10,20 present, and encrypted share within tolerance.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating the same traffic from two sources (e.g., dual SPANs or both sides of a TAP pair) without deduplication, so identical packets are forwarded twice to the SIEM feed.",
+   "impact_on_tool": "SIEM wastes EPS/license and storage on 19% duplicate events, inflates correlation counts and can cause false positives or missed detections due to noisy event volume; no payload or directionality impact as SIEM does not require both directions or full payload.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "hash"
+    },
+    "why": "Enable packet-broker deduplication on s095_single to drop identical packets within a short time window before delivery, restoring correct event counts and freeing SIEM capacity without losing coverage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2764,
+  "tokens_out": 1410,
+  "cost_usd": 0.00945,
+  "seconds": 8.1,
+  "recorded_at": "2026-10-28"
+ }
+}

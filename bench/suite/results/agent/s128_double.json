@@ -1,0 +1,107 @@
+{
+ "feed": "s128_double",
+ "status": "degraded",
+ "summary": "Feed s128_double is degraded: 2 faults found. VLAN 20 missing (50% untagged, high severity) and encrypted share 94.7% exceeds NDR 90% tolerance (medium). No duplicates, packet drops, tool overload, or one-way traffic issues.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP trunk is stripping 802.1Q tags or not forwarding VLAN 20 tagged. 50% of packets arrive untagged and VLAN 20 is never observed, despite NDR requiring VLANs 10 and 20.",
+   "impact_on_tool": "NDR loses VLAN-aware segmentation and correlation for VLAN 20; cannot apply VLAN-specific detection policies and misses lateral movement or policy violations confined to VLAN 20 - effectively 50% visibility loss.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "ensure_trunk_forwards": [
+      20
+     ]
+    },
+    "why": "Preserving/restoring 802.1Q tags on the packet broker ingress/trunk and ensuring VLAN 20 is forwarded tagged restores NDR's required VLAN visibility and segmentation."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    21,
+    22,
+    23,
+    25,
+    26,
+    28,
+    29,
+    32,
+    35,
+    37,
+    39
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Traffic mix is ~94.7% encrypted (TLS), exceeding the NDR's 90% tolerance. NDR needs full payload but receives opaque encrypted payloads with no upstream decryption.",
+   "impact_on_tool": "NDR cannot perform deep packet inspection, signature matching, or payload analytics on encrypted flows; detection degrades to metadata/flow analysis only, increasing false negatives for payload-based threats.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "target_encrypted_share_below": 0.9,
+     "location": "before_ndr",
+     "options": [
+      "ssl_visibility_appliance",
+      "selective_decryption",
+      "forward_decrypted_copy"
+     ]
+    },
+    "why": "Decrypting relevant TLS (or providing a decrypted copy) upstream of the NDR restores full-payload inspection capability that this NDR requires, bringing encrypted share back within tolerance."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    20,
+    21,
+    22,
+    23,
+    25,
+    26,
+    28,
+    29,
+    32,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2945,
+  "tokens_out": 2195,
+  "cost_usd": 0.01301,
+  "seconds": 12.2,
+  "recorded_at": "2026-10-28"
+ }
+}

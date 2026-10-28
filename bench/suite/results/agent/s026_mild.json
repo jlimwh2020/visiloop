@@ -1,0 +1,23 @@
+{
+ "feed": "s026_mild",
+ "status": "healthy",
+ "summary": "Feed s026_mild to NDR is healthy: all visibility checks passed (no duplicates, no one-way traffic, no drops, no overload, no missing VLANs, encrypted share within tolerance). Tool receives complete bidirectional full-payload traffic at 10Gbps as required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2702,
+  "tokens_out": 877,
+  "cost_usd": 0.0071,
+  "seconds": 5.8,
+  "recorded_at": "2026-10-28"
+ }
+}

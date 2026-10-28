@@ -1,0 +1,80 @@
+{
+ "feed": "s121_double",
+ "status": "degraded",
+ "summary": "Feed s121_double is degraded: 27.7% duplicate packets and 100% missing VLAN tags (required VLANs 10, 20 not seen). NDR receives untagged duplicates, wasting capacity and losing VLAN-aware detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding the same packets twice without deduplication - typical when aggregating SPANs/TAPs from both sides of a link or aggregating two SPAN sessions covering same traffic and sending to one NDR port. 646 of 2333 packets (27.7%) exceed 5% threshold.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicates, skews flow counts and TCP reassembly, inflates alerts and can cause missed detections due to processing overhead despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "enabled": true,
+     "window_ms": 10,
+     "mode": "hash"
+    },
+    "why": "Enable packet broker deduplication to drop identical packets within dedup window before delivery to NDR, restoring correct traffic counts without losing coverage."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "VLAN tags are being stripped upstream - SPAN configured with 'vlan stripping' or packet broker set to strip 802.1Q on ingress/egress. 100% of packets are untagged so required VLANs 10 and 20 are invisible to tool.",
+   "impact_on_tool": "NDR requires VLANs 10, 20 for segmentation and detection coverage; without tags it cannot apply VLAN-aware policies, correlate lateral movement, or detect VLAN-hopping/mis-segmentation.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "retain_8021q"
+    },
+    "why": "Configure TAP/SPAN and packet broker to preserve and forward 802.1Q tags for VLANs 10,20 to the NDR so it regains VLAN visibility."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2890,
+  "tokens_out": 2038,
+  "cost_usd": 0.01227,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

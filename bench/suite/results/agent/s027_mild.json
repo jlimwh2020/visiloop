@@ -1,0 +1,23 @@
+{
+ "feed": "s027_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s027_mild. Tool receives complete bidirectional traffic with required VLANs 10,20, no packet drops, duplicates, or overload, and encrypted share within tolerance.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2707,
+  "tokens_out": 821,
+  "cost_usd": 0.00687,
+  "seconds": 6.4,
+  "recorded_at": "2026-10-28"
+ }
+}

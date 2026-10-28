@@ -1,0 +1,101 @@
+{
+ "feed": "s137_double",
+ "status": "degraded",
+ "summary": "Feed s137_double is degraded: 2 faults detected. Required VLANs 10,20 are missing (100% untagged) and encrypted share 94.7% exceeds NDR tolerance of 90%, limiting payload inspection and VLAN-aware detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP path is stripping 802.1Q tags (VLAN pop/strip enabled) or forwarding only native VLAN as untagged, so required VLANs 10 and 20 never arrive at the NDR despite being required by tool profile.",
+   "impact_on_tool": "NDR cannot segment, filter or correlate traffic by VLAN/tenant; all VLAN-specific detections and policies for VLANs 10,20 fail, creating complete blind spots for segmentation violations and lateral movement.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "strip_tags": false
+    },
+    "why": "Preserve 802.1Q tags end-to-end from TAP through packet broker to NDR so VLANs 10,20 are visible for correct classification and detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.7% of bytes are encrypted (TLS) with no prior decryption; traffic mix inherently exceeds the NDR's 90% encrypted tolerance and the NDR needs full payload.",
+   "impact_on_tool": "NDR with needs_full_payload=true is blind to payload content and must rely on metadata/flow analysis only, significantly reducing detection coverage for encrypted C2, exfiltration and exploit payloads.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "before_tool",
+     "method": "out_of_band_ssl_visibility",
+     "max_encrypted_share": 0.9
+    },
+    "why": "Provide cleartext copy via dedicated SSL visibility/decryption appliance before the packet broker forwards to NDR, or explicitly tune NDR to metadata-only detection if decryption is not permitted."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    26,
+    29,
+    36,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2941,
+  "tokens_out": 2506,
+  "cost_usd": 0.01433,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-28"
+ }
+}

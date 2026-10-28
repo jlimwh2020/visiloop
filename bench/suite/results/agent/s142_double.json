@@ -1,0 +1,79 @@
+{
+ "feed": "s142_double",
+ "status": "degraded",
+ "summary": "Feed s142_double is degraded: NDR 10G port is severely overloaded by microbursts to 29.95 Gbps (299% capacity) risking drops, and 94.3% encrypted traffic exceeds 90% tolerance limiting payload inspection.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating multiple sources onto a single 10 Gbps NDR port without load balancing. 1ms microbursts peak at 29.95 Gbps (299% of port capacity, 2.995x vs 0.8 threshold), overwhelming ingress buffers.",
+   "impact_on_tool": "NDR drops packets during bursts, causing incomplete flows and missed signatures/behavioral detections. NDR needs both directions and full payload, so drops create blind spots and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "ports": 3,
+     "hash": "5-tuple",
+     "target_utilization": 0.7
+    },
+    "why": "Distribute traffic flow-aware across 3x10G NDR cluster members to keep per-port peaks <80% and preserve bidirectional flow integrity, eliminating burst drops."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.35% of bytes are encrypted (TLS) vs 90% NDR tolerance. Traffic arrives encrypted at the packet broker with no prior decryption point in the visibility path.",
+   "impact_on_tool": "NDR requires full payload for detection but is blind to 94% of payloads; limited to metadata/JA3/handshake analysis, missing exploits, C2 and exfiltration inside encrypted streams.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "before packet broker",
+     "method": "out-of-band TLS 1.2/1.3 decryption",
+     "policy": "selective decrypt with privacy bypass, send decrypted copy to NDR"
+    },
+    "why": "Restores cleartext payload visibility for NDR analysis while maintaining compliance via selective decryption; addresses root cause that broker cannot inspect encrypted bytes."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    13,
+    14,
+    15,
+    16,
+    17,
+    19,
+    21,
+    24,
+    25,
+    26,
+    30,
+    31,
+    33
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2906,
+  "tokens_out": 2082,
+  "cost_usd": 0.01248,
+  "seconds": 12.5,
+  "recorded_at": "2026-10-28"
+ }
+}

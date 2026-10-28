@@ -1,0 +1,82 @@
+{
+ "feed": "s138_double",
+ "status": "degraded",
+ "summary": "Feed s138_double is degraded: NDR port overloaded by 1ms microbursts to 13.49 Gbps (135% of 10 Gbps) and encrypted share at 94.2% exceeds 90% tolerance, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microbursts peaking at 13.49 Gbps exceed the single 10 Gbps NDR port capacity (135% utilization) in 2 intervals. Packet broker is aggregating traffic to one tool port without load balancing or burst buffering.",
+   "impact_on_tool": "NDR will drop packets at ingress during bursts, causing incomplete flows, missed detections, and degraded stateful analysis and forensics.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "tool_ports": 2,
+     "hash": "symmetric"
+    },
+    "why": "Distribute traffic across 2+ NDR ports/instances with flow-aware hashing to keep per-port utilization below 80% and absorb 1ms bursts without drops."
+   },
+   "evidence_frames": [
+    1,
+    3089
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.2% of bytes are encrypted (TLS), above the NDR's 90% tolerance. Traffic is opaque to payload inspection without broker-assisted decryption.",
+   "impact_on_tool": "NDR needs full payload for deep inspection; at 94% encrypted, payload-based detection is blind and limited to metadata/flow analysis only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "selective_decryption",
+     "protocols": [
+      "TLS"
+     ]
+    },
+    "why": "Decrypt selectively at the packet broker or export enriched metadata (SNI, JA3, decrypted flow) to restore NDR visibility while respecting privacy policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    7,
+    8,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    19,
+    21,
+    24,
+    25,
+    27,
+    30,
+    35,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2900,
+  "tokens_out": 1986,
+  "cost_usd": 0.01207,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-28"
+ }
+}

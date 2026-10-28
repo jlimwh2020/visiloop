@@ -1,0 +1,43 @@
+{
+ "feed": "s091_single",
+ "status": "degraded",
+ "summary": "Feed s091_single is degraded: IDS port (1 Gbps) is severely overloaded by 4.04 Gbps microbursts (404% of capacity). All other visibility checks (duplicates, encryption, VLAN, one-way, drops) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding the full aggregated traffic out a single 1 Gbps IDS port with no load-balancing, filtering, or burst mitigation. 1ms microbursts peak at 4.04 Gbps, exceeding port buffers and the 80% (0.8 Gbps) safe threshold across 2 intervals.",
+   "impact_on_tool": "IDS NIC and capture buffers drop packets randomly under overload. With needs_full_payload=true and needs_both_directions=true, drops cause missed signatures, broken flow reassembly, and blind spots for detection, sharply reducing IDS coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "bidirectional_5tuple",
+     "target_ports": 5,
+     "per_port_capacity_gbps": 1
+    },
+    "why": "Distribute 4+ Gbps bursts across 4-5 IDS ports/instances via bidirectional 5-tuple hashing so each port stays below 80% utilization, preserving full payload and both directions for stateful IDS inspection without drops. Alternative is filtered feed or higher-speed port if scaling IDS is not possible."
+   },
+   "evidence_frames": [
+    1,
+    1118
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2769,
+  "tokens_out": 1664,
+  "cost_usd": 0.01053,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

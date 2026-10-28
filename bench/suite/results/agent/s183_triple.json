@@ -1,0 +1,111 @@
+{
+ "feed": "s183_triple",
+ "status": "degraded",
+ "summary": "Feed s183_triple is degraded: 23.3% one-way TCP sessions breaks NDR bidirectional analysis, 9.4% duplicate packets waste capacity, and 91% encrypted bytes exceeds 90% NDR tolerance.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "42 of 180 TCP sessions (23.3%) show only one direction, well above 10% threshold. Most likely asymmetric routing where only one side of the conversation is tapped/mirrored, or packet broker is not aggregating both directions of a flow to the same NDR tool port.",
+   "impact_on_tool": "NDR requires both directions for TCP reassembly, session state tracking and anomaly detection. One-way visibility causes missed detections, incomplete flows, and false positives for scan/connection failures.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "flow_affinity": true
+    },
+    "why": "Aggregate both directions of each flow in the packet broker and pin symmetric flows to this NDR port to restore full bidirectional visibility."
+   },
+   "evidence_frames": [
+    40,
+    96,
+    121,
+    169,
+    197,
+    227,
+    295,
+    319,
+    638,
+    647,
+    833,
+    841,
+    883,
+    978,
+    1066,
+    1078,
+    1086,
+    1108,
+    1173,
+    1390
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "260 of 2755 packets (9.4%) are duplicates, above 5% threshold. Typical cause is overlapping SPAN/mirror sources or TAP aggregation without deduplication in the packet broker feeding the same packet twice to the tool.",
+   "impact_on_tool": "Duplicates inflate NDR flow/packet counters, waste 10G tool capacity and storage, skew analytics and can trigger false duplicate-ACK/retransmission alerts.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets within a short window before delivery to NDR, preserving correct counts without losing unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "91.4% of bytes are encrypted, just above the NDR's 90% tolerance. Traffic is predominantly TLS/encrypted with no decryption visibility, so payload inspection is opaque.",
+   "impact_on_tool": "NDR needs full payload for deep packet inspection and threat detection. With >90% encrypted, detection coverage is severely reduced to metadata only, missing payload-based exploits and C2.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "strategy": "selective_decryption",
+     "preserve_privacy": true
+    },
+    "why": "NDR cannot inspect encrypted payload at this share. Advise selective TLS decryption via packet broker / out-of-band decrypt or forwarding decrypted copy from proxy, while respecting privacy policy."
+   },
+   "evidence_frames": [
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    13,
+    16,
+    21,
+    23,
+    24,
+    25,
+    26,
+    28,
+    29,
+    30,
+    32,
+    33,
+    38,
+    42
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3005,
+  "tokens_out": 2458,
+  "cost_usd": 0.0142,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-28"
+ }
+}

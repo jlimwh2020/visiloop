@@ -1,0 +1,83 @@
+{
+ "feed": "s116_double",
+ "status": "degraded",
+ "summary": "Feed s116_double to IDS is degraded: 2 faults found - 82.3% encrypted traffic exceeds 60% IDS tolerance and microbursts to 1.56 Gbps overload the 1 Gbps IDS port (156% capacity, 4 intervals).",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "82.3% of bytes are encrypted (TLS/HTTPS) vs IDS tolerance of 60%. Traffic is forwarded encrypted without broker-based decryption or keys, so IDS sees only headers.",
+   "impact_on_tool": "IDS requires full payload inspection and is blind to ~82% of traffic; signatures and anomaly detection cannot fire on encrypted payloads, severely reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "decrypt_at_packet_broker_or_proxy",
+     "share": 0.8231,
+     "threshold": 0.6
+    },
+    "why": "IDS cannot analyze encrypted payloads. Decrypt relevant TLS flows (with keys or via SSL visibility appliance/proxy) before the IDS and re-encrypt or filter as policy requires, to restore payload visibility within tolerance."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    12,
+    13,
+    14,
+    16,
+    18,
+    19,
+    22,
+    25,
+    47,
+    49,
+    50,
+    51,
+    52,
+    54
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 1.56 Gbps in 1ms bursts vs 1 Gbps IDS port (156% of capacity, 4 overloaded intervals). Packet broker is sending line-rate bursts to a single 1G tool port without load balancing or shaping.",
+   "impact_on_tool": "IDS port buffer overrun causes indiscriminate packet drops during bursts; even though average may look okay, burst drops create gaps in flows and missed detections, especially since IDS needs both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 1.559,
+     "hash": "5-tuple",
+     "add_tool_ports": 1
+    },
+    "why": "Distribute traffic across 2+ IDS ports/instances with 5-tuple hashing to keep per-port peaks <80% (0.8 Gbps) and preserve both directions per flow to same tool, preventing burst drops without slicing payload."
+   },
+   "evidence_frames": [
+    1,
+    410,
+    637,
+    992
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2910,
+  "tokens_out": 1927,
+  "cost_usd": 0.01183,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

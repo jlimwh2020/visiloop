@@ -1,0 +1,60 @@
+{
+ "feed": "s101_single",
+ "status": "degraded",
+ "summary": "Feed s101_single is degraded due to excessive encryption: 86.6% of bytes are encrypted vs 60% IDS tolerance, blinding payload inspection. All other checks (duplicates, missing VLAN, one-way traffic, packet drops, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Traffic is dominated by TLS/encrypted flows (86.6% encrypted bytes) with no upstream decryption. IDS receives ciphertext instead of cleartext payload, likely because feed is tapped before or without an SSL visibility/decryption zone.",
+   "impact_on_tool": "This IDS requires full payload for signature and anomaly detection and tolerates ~60% encrypted. At 86.6% encrypted, most sessions are opaque, so IDS cannot match payload signatures and will miss intrusions, malware and C2 over TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "packet_broker",
+     "method": "decrypt_once_and_forward_cleartext_copy"
+    },
+    "why": "Decrypting relevant TLS centrally (packet broker SSL decryption or dedicated decryption appliance) and forwarding a cleartext copy to the IDS restores payload visibility while keeping the encrypted share below the 60% tolerance, without affecting other healthy checks."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    28,
+    33,
+    34,
+    35,
+    36,
+    38,
+    41,
+    44,
+    46,
+    47,
+    48,
+    49,
+    51
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2812,
+  "tokens_out": 1622,
+  "cost_usd": 0.01041,
+  "seconds": 9.4,
+  "recorded_at": "2026-10-28"
+ }
+}

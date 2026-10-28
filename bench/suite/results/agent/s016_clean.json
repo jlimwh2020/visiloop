@@ -1,0 +1,23 @@
+{
+ "feed": "s016_clean",
+ "status": "healthy",
+ "summary": "Feed s016_clean to SIEM is healthy: all visibility checks passed. No duplicates, one-way flows, drops, overload, or missing VLANs (10, 20 present). Encrypted share within tolerance for SIEM (needs_both_directions=false, needs_full_payload=false). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2701,
+  "tokens_out": 942,
+  "cost_usd": 0.00738,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-28"
+ }
+}

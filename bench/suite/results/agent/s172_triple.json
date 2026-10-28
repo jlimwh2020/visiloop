@@ -1,0 +1,98 @@
+{
+ "feed": "s172_triple",
+ "status": "degraded",
+ "summary": "IDS feed s172_triple is degraded: 3.09 Gbps microbursts overload 1 Gbps IDS port (309%), 80% traffic encrypted exceeds 60% tolerance, and 8.6% duplicates waste inspection capacity.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microbursts peak at 3.09 Gbps vs 1 Gbps IDS port capacity (309% in 5 intervals). Average rate hides 1ms bursts that overflow the tool NIC/buffers, so broker shows no drops but tool drops traffic locally.",
+   "impact_on_tool": "IDS drops packets at ingress during bursts, creating blind spots and breaking stateful detection/stream reassembly; attacks in bursts are missed.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_group": "ids_cluster",
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute bursts across multiple IDS members or a higher-capacity cluster to keep per-tool rate <80% of 1 Gbps and preserve full payload inspection this IDS requires."
+   },
+   "evidence_frames": [
+    1,
+    624,
+    1112,
+    1672,
+    2438
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "80% of bytes are encrypted (TLS) vs IDS tolerance of 60%. Traffic is opaque without decryption - likely TLS 1.3 everywhere with no broker-side SSL visibility configured.",
+   "impact_on_tool": "IDS can only do metadata/heuristics on 80% of traffic; payload signatures, exploit and C2 detection are blind, sharply reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "out-of-band",
+     "method": "packet_broker_ssl_visibility",
+     "policy": "decrypt_selective_with_privacy_bypass"
+    },
+    "why": "Decrypt relevant TLS at packet broker/visibility tier and feed cleartext to IDS (with privacy bypass for sensitive categories) to restore payload inspection while respecting IDS full-payload requirement."
+   },
+   "evidence_frames": [
+    2,
+    3,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    19,
+    20,
+    21,
+    22,
+    25,
+    28,
+    35,
+    37,
+    38,
+    39
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "8.6% duplicates (282/3282 packets) indicates overlapping SPAN/mirror sources or aggregation of both sides of a TAP without deduplication in the packet broker.",
+   "impact_on_tool": "IDS wastes CPU doing duplicate signature matching and state tracking, inflates alerts/events, and reduces headroom already constrained by overload.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to drop identical packets arriving within milliseconds before delivery, freeing IDS capacity for unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2966,
+  "tokens_out": 2324,
+  "cost_usd": 0.01358,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-28"
+ }
+}

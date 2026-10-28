@@ -1,0 +1,39 @@
+{
+ "feed": "s073_single",
+ "status": "degraded",
+ "summary": "Feed s073_single to SIEM is degraded: 9.8% duplicate packets (348/3564) exceeds 5% threshold. All other visibility checks healthy - no drops, no one-way, no missing VLANs (10,20 present), no tool overload, and encrypted share within tolerance.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating overlapping SPAN/mirror sources or TAP aggregation without deduplication, forwarding the same packet via multiple paths to the SIEM tool port. 9.76% duplicates indicates duplicate feed aggregation.",
+   "impact_on_tool": "SIEM wastes storage/license on duplicate events, skews event counts and correlation/analytics, and increases ingest load without adding detection value. SIEM does not need full payload or bidirectional flow, so duplicates provide no benefit.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "hash"
+    },
+    "why": "Enable packet-broker deduplication (hash-based, ~10ms window) on the aggregate to strip duplicates before delivery to SIEM, restoring accurate counts and saving license/storage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2761,
+  "tokens_out": 1400,
+  "cost_usd": 0.0094,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-28"
+ }
+}

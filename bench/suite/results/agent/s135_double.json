@@ -1,0 +1,75 @@
+{
+ "feed": "s135_double",
+ "status": "degraded",
+ "summary": "APM feed s135_double is degraded: 24.2% duplicates (658/2714) and 2.3% TCP sequence gaps (57/2511) indicate aggregation without deduplication and broker/SPAN egress drops.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Traffic aggregated from two ingress sources (e.g., SPAN + TAP or dual SPANs covering same link) to single APM port without deduplication - same packets delivered twice within milliseconds, 24.2% exceeds 5% threshold.",
+   "impact_on_tool": "APM wastes ~24% of 10G capacity on duplicates, inflates transaction counts, skews latency/response-time calculations and can trigger false performance alerts.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "key": "5-tuple+seq-ack"
+    },
+    "why": "Enable packet-broker deduplication window before delivery to APM to suppress identical packets arriving via parallel paths while preserving unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Packet broker egress oversubscription/buffer exhaustion or SPAN buffer drops causing TCP sequence gaps - 2.3% exceeds 1% threshold despite tool not overloaded, indicating drops in TAP/SPAN or broker forwarding to 10G APM port.",
+   "impact_on_tool": "APM sees incomplete flows with missing segments, causing incomplete transaction reconstruction, inaccurate latency and false retransmission/loss detection.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "add_tool_port": true
+    },
+    "why": "Distribute load across additional APM ports or filter/slice unwanted traffic at broker to eliminate egress policing drops and deliver complete TCP streams; APM does not need full payload so slicing is also viable."
+   },
+   "evidence_frames": [
+    168,
+    169,
+    201,
+    203,
+    303,
+    304,
+    327,
+    329,
+    330,
+    333,
+    494,
+    495,
+    536,
+    538,
+    548,
+    556,
+    597,
+    598,
+    715,
+    717
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2880,
+  "tokens_out": 2442,
+  "cost_usd": 0.01398,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-28"
+ }
+}

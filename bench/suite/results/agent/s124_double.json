@@ -1,0 +1,47 @@
+{
+ "feed": "s124_double",
+ "status": "degraded",
+ "summary": "Feed s124_double to SIEM is degraded due to tool overload: 2.24 Gbps microbursts exceed 1 Gbps SIEM port (224% capacity, 6 intervals) causing drops and event loss. One-way traffic (21.2% sessions) was detected but is tolerable for SIEM (needs_both_directions=false). No duplicates, VLAN gaps, drops, or encryption issues.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregated traffic bursts to 2.24 Gbps exceed the SIEM's 1 Gbps ingress port. Packet broker forwards without load-balancing, filtering, or slicing, so egress buffers overflow during 1ms microbursts (6 intervals over threshold).",
+   "impact_on_tool": "SIEM drops packets during bursts and misses events/logs, creating blind spots for correlation and detection. At 224% of port capacity, >50% of traffic in burst windows is lost before ingestion.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple-hash",
+     "tool_ports": 3,
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute bursts across multiple SIEM ingest ports (or upgrade to 10G) to keep per-port load <80% of capacity. SIEM needs_full_payload=false so slicing/filtering is also viable, but load-balancing preserves complete event fidelity without loss."
+   },
+   "evidence_frames": [
+    1,
+    568,
+    1017,
+    1428,
+    2087,
+    2524
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2929,
+  "tokens_out": 3144,
+  "cost_usd": 0.01702,
+  "seconds": 17.3,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "feed": "s052_single",
+ "status": "degraded",
+ "summary": "Feed s052_single to SIEM is degraded due to 2.1% packet drops (52 of 2419 TCP packets with missing data, threshold 1%) - all other checks (duplicates, encrypted share, VLAN, one-way, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream SPAN/mirror port oversubscription or packet broker buffer exhaustion causing tail drops under burst. Evidenced by TCP sequence gaps across 52 packets; SPAN copies are best-effort and drop when source exceeds destination/broker capacity, unlike passive TAP.",
+   "impact_on_tool": "SIEM receives incomplete flows with gaps in TCP streams; event correlation, session reassembly and detection coverage will be degraded with missed alerts and incomplete forensic timelines, even though SIEM does not require full payload or bidirectional traffic.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Passive TAP provides lossless, line-rate copy eliminating SPAN oversubscription drops. Ensures complete traffic reaches packet broker and 1G SIEM port. If TAP already present, verify broker buffer/capacity and add filtering to prevent downstream drops."
+   },
+   "evidence_frames": [
+    23,
+    25,
+    106,
+    108,
+    329,
+    462,
+    464,
+    483,
+    486,
+    573,
+    574,
+    629,
+    630,
+    953,
+    954,
+    977,
+    979,
+    1009,
+    1010,
+    1047
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2817,
+  "tokens_out": 2446,
+  "cost_usd": 0.01392,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-28"
+ }
+}

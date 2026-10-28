@@ -1,0 +1,64 @@
+{
+ "feed": "s086_single",
+ "status": "degraded",
+ "summary": "Feed s086_single is degraded: required VLAN 20 is missing (50% of packets untagged) causing NDR blind spot. All other visibility checks (duplicates, encryption, one-way, drops, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream SPAN/trunk is stripping 802.1Q tags or not forwarding VLAN 20 - 50% of packets arrive untagged and VLAN 20 is never seen despite NDR requiring VLANs 10 and 20. Most likely broker VLAN handling set to strip/remove tags or trunk pruning missing VLAN 20.",
+   "impact_on_tool": "NDR is blind to all traffic on VLAN 20 and cannot correctly segment/attribute the 50% untagged traffic, reducing detection coverage by ~50% and missing lateral movement or VLAN-specific attacks.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "trunk_ports": "ensure VLANs 10,20 forwarded"
+    },
+    "why": "Preserving 802.1Q tags and ensuring trunk/broker forwards both required VLANs restores complete VLAN visibility the NDR needs for accurate detection and segmentation."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    15,
+    18,
+    21,
+    24,
+    25,
+    26,
+    28,
+    31,
+    34,
+    37,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2823,
+  "tokens_out": 1413,
+  "cost_usd": 0.00953,
+  "seconds": 8.1,
+  "recorded_at": "2026-10-28"
+ }
+}

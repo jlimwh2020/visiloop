@@ -1,0 +1,72 @@
+{
+ "feed": "s125_double",
+ "status": "degraded",
+ "summary": "SIEM feed s125_double is degraded by 14.7% duplicate packets (392/2673); 66.7% one-way TCP sessions (142/213) also detected but tolerable for this SIEM which does not require bidirectional flows.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is delivering the same packets twice, typically from overlapping SPAN/mirror sessions or dual TAP feeds aggregated without deduplication enabled.",
+   "impact_on_tool": "SIEM wastes EPS, license and storage on duplicates, inflates event counts and can skew correlation/analytics without improving detection coverage.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop the 14.7% duplicates before delivery while preserving one correct copy for the SIEM."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions reaches the tool, likely due to asymmetric routing with single-sided SPAN/TAP or broker not aggregating both directions to the same egress port.",
+   "impact_on_tool": "Low impact for this SIEM (needs_both_directions=false) which can operate on single-direction metadata/flows; no major detection loss for SIEM use case, but indicates incomplete bidirectional visibility if feed is reused for NDR/IDS.",
+   "recommended_fix": {
+    "action": "none",
+    "params": {},
+    "why": "No broker change required for SIEM as configured; if bidirectional analysis is later needed, use aggregate to ensure both directions of each flow are delivered to the same tool port."
+   },
+   "evidence_frames": [
+    42,
+    53,
+    54,
+    69,
+    94,
+    176,
+    185,
+    196,
+    206,
+    214,
+    244,
+    250,
+    288,
+    307,
+    330,
+    359,
+    373,
+    386,
+    404,
+    405
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2882,
+  "tokens_out": 3277,
+  "cost_usd": 0.01753,
+  "seconds": 16.4,
+  "recorded_at": "2026-10-28"
+ }
+}

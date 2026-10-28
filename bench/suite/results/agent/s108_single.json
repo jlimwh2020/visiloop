@@ -1,0 +1,61 @@
+{
+ "feed": "s108_single",
+ "status": "degraded",
+ "summary": "Feed s108_single is degraded: NDR requires bidirectional traffic but 22.9% of TCP sessions (24/105) are one-way, exceeding 10% threshold. Other checks (duplicates, drops, overload, VLAN, encryption) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is delivering only one direction for ~23% of sessions. Most likely cause is single-sided TAP/SPAN or asymmetric routing where forward and reverse paths are not both aggregated to this NDR port, or broker hashing is splitting directions across different tool ports.",
+   "impact_on_tool": "NDR needs both directions for stateful TCP reassembly and detection. With 22.9% one-way sessions it cannot reconstruct flows, misses handshakes, C2, lateral movement and exfiltration, causing false negatives and incomplete incident timeline.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "feed": "s108_single",
+     "ensure_bidirectional_aggregation": true,
+     "hash_mode": "symmetric_5tuple_to_single_tool_port"
+    },
+    "why": "NDR requires both directions on same tool port for session reconstruction. Aggregating forward+reverse with symmetric hashing ensures complete flows reach this NDR and restores detection coverage."
+   },
+   "evidence_frames": [
+    20,
+    29,
+    171,
+    175,
+    179,
+    209,
+    241,
+    347,
+    559,
+    617,
+    642,
+    652,
+    692,
+    751,
+    779,
+    804,
+    840,
+    1014,
+    1050,
+    1105
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2829,
+  "tokens_out": 2132,
+  "cost_usd": 0.0126,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-28"
+ }
+}

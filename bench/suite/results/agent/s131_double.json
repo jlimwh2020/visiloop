@@ -1,0 +1,102 @@
+{
+ "feed": "s131_double",
+ "status": "degraded",
+ "summary": "Feed s131_double is degraded: 100% of packets are untagged so required VLANs 10,20 are missing, and 93.1% encrypted share exceeds NDR 90% tolerance, reducing payload visibility.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "VLAN tags are stripped upstream - 100% of packets arrived untagged despite NDR requiring VLANs 10 and 20. Most likely the SPAN/mirror source or packet broker is configured to strip 802.1Q headers or the trunk is not forwarding those VLANs to the tool port.",
+   "impact_on_tool": "NDR loses segment/tenant context for VLANs 10 and 20, cannot apply VLAN-aware policies and misses detection coverage on those segments despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "trunk_tool_port": true
+    },
+    "why": "Preserve 802.1Q tags end-to-end from TAP through packet broker to NDR so required VLANs are visible for detection and filtering."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93.1% of bytes are encrypted (threshold 90%), indicating predominantly TLS traffic forwarded without decryption. No broker-side TLS visibility is in place.",
+   "impact_on_tool": "NDR needs full payload for deep inspection; with >93% encrypted, payload-based detection and anomaly analysis are blind to malicious content inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker",
+     "method": "selective_tls_decryption",
+     "target_encrypted_share_below": 0.9,
+     "forward_cleartext_to_tool": true
+    },
+    "why": "Decrypt selectively at the packet broker/TLS visibility appliance and forward cleartext copy to the NDR to restore payload visibility while respecting privacy/compliance policy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    14,
+    18,
+    23,
+    25,
+    26,
+    27,
+    28,
+    30,
+    33,
+    36,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2952,
+  "tokens_out": 2150,
+  "cost_usd": 0.01283,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-28"
+ }
+}

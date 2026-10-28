@@ -1,0 +1,23 @@
+{
+ "feed": "s188_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed s188_tool_aware. Traffic is complete and correct for this tool's requirements (single-direction, header-only tolerant) - no packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2696,
+  "tokens_out": 819,
+  "cost_usd": 0.00685,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-28"
+ }
+}

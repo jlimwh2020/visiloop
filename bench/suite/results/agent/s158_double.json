@@ -1,0 +1,101 @@
+{
+ "feed": "s158_double",
+ "status": "degraded",
+ "summary": "Feed s158_double to IDS is degraded: VLAN 20 traffic is missing (50% untagged) and encrypted share at 66% exceeds IDS tolerance of 60%, reducing payload visibility for signature detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is stripping 802.1Q tags or not trunking VLAN 20 - 50% of packets arrive untagged and VLAN 20 is never observed despite IDS requiring VLANs 10 and 20.",
+   "impact_on_tool": "IDS is blind to VLAN 20 segment; misses lateral movement, segmentation violations and attacks scoped to that VLAN, halving effective coverage.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true,
+     "ensure_trunk": "VLAN 20"
+    },
+    "why": "Restore and preserve VLAN tags through the broker so IDS receives correctly tagged traffic for VLAN 20 and can apply VLAN-aware policies."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    20,
+    21,
+    22,
+    24,
+    25,
+    27,
+    30,
+    33,
+    36,
+    37,
+    38,
+    40
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "66% of bytes are TLS/encrypted, above the 60% this IDS can tolerate with full-payload inspection. Likely growth in encrypted east-west or internet traffic without broker-side decryption.",
+   "impact_on_tool": "IDS requires full payload for signature matching; encrypted payloads cannot be inspected, so detection coverage drops and malicious payloads hide in TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "threshold": 0.6,
+     "current_share": 0.6601,
+     "suggestion": "offload selective TLS decryption to packet broker or add NDR with JA3/metadata analysis"
+    },
+    "why": "Decrypt relevant TLS centrally or supplement with metadata-based detection to bring inspectable traffic back within IDS effective range without overloading the 1Gbps tool port."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    19,
+    20,
+    21,
+    22,
+    24,
+    25,
+    27,
+    30,
+    33,
+    35,
+    36,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2944,
+  "tokens_out": 1827,
+  "cost_usd": 0.01144,
+  "seconds": 9.2,
+  "recorded_at": "2026-10-28"
+ }
+}

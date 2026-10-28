@@ -1,0 +1,23 @@
+{
+ "feed": "s017_clean",
+ "status": "healthy",
+ "summary": "Feed s017_clean is healthy: All visibility checks (duplicates, encryption, VLAN, one-way, drops, overload) passed. NDR receives complete bidirectional traffic with full payload within 10Gbps capacity. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2694,
+  "tokens_out": 819,
+  "cost_usd": 0.00685,
+  "seconds": 6.1,
+  "recorded_at": "2026-10-28"
+ }
+}

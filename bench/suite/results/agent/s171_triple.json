@@ -1,0 +1,136 @@
+{
+ "feed": "s171_triple",
+ "status": "degraded",
+ "summary": "Feed s171_triple is degraded: 3 faults found. IDS requires both directions, full payload, and VLANs 10,20. Detected 76.3% one-way sessions, 100% untagged (VLANs 10,20 missing), and 75.1% encrypted traffic exceeding 60% tolerance. No duplicates, drops, or overload detected.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN is stripping 802.1Q tags upstream - 100% of packets are untagged while VLANs 10 and 20 are required. Likely broker port set to strip tags or mirror taken from untagged access port.",
+   "impact_on_tool": "IDS cannot apply VLAN-aware policies or segment detection for VLANs 10 and 20; traffic from those segments is invisible or misclassified, creating complete coverage gap for those VLANs.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true
+    },
+    "why": "Restore and preserve 802.1Q tags for VLANs 10 and 20 through the packet broker to the IDS so it can filter and detect per-segment as required."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of 87 of 114 TCP sessions (76.3%) reaches the IDS. Indicates asymmetric routing with unaggregated TAPs or SPAN configured for single direction, or broker hashing directions to different tool ports without aggregation.",
+   "impact_on_tool": "IDS needs both directions for stateful TCP reassembly and signature matching. One-way visibility causes missed handshakes, broken flow reconstruction, false negatives and inability to detect bidirectional attacks.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_bidirectional": true
+    },
+    "why": "Aggregate both directions of each session at the packet broker and deliver the complete bidirectional flow to the same IDS tool port to restore stateful inspection."
+   },
+   "evidence_frames": [
+    48,
+    55,
+    71,
+    82,
+    88,
+    97,
+    104,
+    114,
+    137,
+    149,
+    166,
+    200,
+    203,
+    219,
+    226,
+    242,
+    259,
+    272,
+    279,
+    287
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "75.1% of bytes are encrypted (TLS/encrypted), exceeding IDS tolerance of 60%. Traffic is predominantly encrypted and delivered as ciphertext with no upstream decryption.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection but is blind to encrypted payloads; detection reduces to metadata only, significantly lowering detection coverage for this IDS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.7515,
+     "threshold": 0.6,
+     "location": "packet_broker"
+    },
+    "why": "Advise decrypting relevant TLS at packet broker / dedicated decryption zone or selectively filtering/bypassing trusted encrypted flows so IDS receives inspectable payload within its tolerance."
+   },
+   "evidence_frames": [
+    6,
+    8,
+    9,
+    10,
+    11,
+    13,
+    14,
+    16,
+    19,
+    22,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30,
+    33,
+    36,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3073,
+  "tokens_out": 2199,
+  "cost_usd": 0.01319,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

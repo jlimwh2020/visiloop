@@ -1,0 +1,100 @@
+{
+ "feed": "s145_double",
+ "status": "degraded",
+ "summary": "IDS feed s145_double is degraded: 100% of packets are untagged (required VLANs 10, 20 missing) and 2.3% TCP packet drops detected. VLAN stripping breaks segmentation visibility and drops prevent full stream reassembly.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/mirror is stripping 802.1Q tags - 100% of packets seen untagged so required VLANs 10 and 20 never arrive at the IDS. Common when broker is set to strip tags or SPAN is configured on access ports without trunk encapsulation.",
+   "impact_on_tool": "IDS cannot filter, correlate or detect lateral movement by VLAN/tenant; segmentation policy violations and VLAN-hopping attacks for VLANs 10,20 will be missed and SIEM context is incomplete.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "forward_vlans": [
+      10,
+      20
+     ],
+     "strip": false
+    },
+    "why": "Preserve and forward 802.1Q tags for VLANs 10,20 from TAP/SPAN through packet broker to IDS so tool receives correct tenant segmentation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "SPAN/mirror oversubscription or packet broker buffer overflow causing ~2.3% missing TCP segments (50/2201 packets with gaps). Tool overload is healthy, so drops occur before the tool - typical SPAN buffer drops under burst.",
+   "impact_on_tool": "IDS with needs_full_payload=true and needs_both_directions=true cannot reassemble TCP streams; signatures miss payload, file extraction fails, and attackers can evade detection via dropped segments.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_type": "passive",
+     "aggregate_via_broker": true
+    },
+    "why": "Replace lossy SPAN/mirror with passive TAP and broker aggregation to eliminate switch SPAN buffer drops and deliver complete, ordered packets within 1Gbps tool capacity."
+   },
+   "evidence_frames": [
+    82,
+    83,
+    88,
+    89,
+    122,
+    123,
+    153,
+    154,
+    168,
+    169,
+    212,
+    213,
+    222,
+    225,
+    341,
+    342,
+    359,
+    362,
+    416,
+    417
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2949,
+  "tokens_out": 2777,
+  "cost_usd": 0.01549,
+  "seconds": 14.0,
+  "recorded_at": "2026-10-28"
+ }
+}

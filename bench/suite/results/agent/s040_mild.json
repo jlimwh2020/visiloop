@@ -1,0 +1,23 @@
+{
+ "feed": "s040_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s040_mild: no duplicates, no one-way flows, no packet drops, no tool overload, VLANs 10,20 present, encrypted share within tolerance (max 0.9). NDR receives complete bidirectional full-payload traffic at 10Gbps.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2708,
+  "tokens_out": 993,
+  "cost_usd": 0.00761,
+  "seconds": 6.8,
+  "recorded_at": "2026-10-28"
+ }
+}

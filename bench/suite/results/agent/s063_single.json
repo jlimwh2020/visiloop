@@ -1,0 +1,57 @@
+{
+ "feed": "s063_single",
+ "status": "degraded",
+ "summary": "Feed s063_single is degraded: 6.9% packet loss (117/1697 TCP packets with gaps) exceeds 1% threshold. APM will see incomplete transactions. Other visibility checks (duplicates, one-way, VLANs, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream capture is dropping packets before the APM - 6.9% TCP gaps indicate SPAN/mirror port oversubscription or packet broker buffer exhaustion under burst. Tool overload check is healthy, so loss is at the SPAN/broker ingress, not the 10G tool port itself.",
+   "impact_on_tool": "APM requires both directions and will see incomplete flows, missing segments and retransmissions. Results in inaccurate latency/response-time calculations, broken transaction correlation, and missed application performance degradations.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "SPAN ports drop packets when oversubscribed or congested; a passive TAP provides lossless, line-rate copy to the packet broker, eliminating the 6.9% ingress loss and restoring complete TCP streams for APM without needing payload slicing/filtering yet."
+   },
+   "evidence_frames": [
+    27,
+    28,
+    45,
+    47,
+    96,
+    97,
+    124,
+    127,
+    175,
+    177,
+    179,
+    181,
+    211,
+    212,
+    240,
+    244,
+    352,
+    355,
+    366,
+    367
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2826,
+  "tokens_out": 2121,
+  "cost_usd": 0.01255,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-28"
+ }
+}

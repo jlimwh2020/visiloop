@@ -1,0 +1,23 @@
+{
+ "feed": "s005_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s005_clean. SIEM is receiving complete, correct traffic with no duplicates, drops, overload, one-way, VLAN or encryption issues detected.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2690,
+  "tokens_out": 742,
+  "cost_usd": 0.00652,
+  "seconds": 5.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,123 @@
+{
+ "feed": "s170_triple",
+ "status": "degraded",
+ "summary": "Feed s170_triple is degraded: 3 faults confirmed. 100% of packets are untagged (VLANs 10,20 missing), microbursts hit 2.77 Gbps on a 1 Gbps IDS port (277% overload), and 65.5% of bytes are encrypted exceeding the IDS 60% tolerance.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker egress (or SPAN) is stripping 802.1Q tags - 100% of packets arrived untagged despite IDS requiring VLANs 10 and 20, indicating 'vlan strip' enabled on broker output or SPAN trunk not forwarding tags.",
+   "impact_on_tool": "IDS cannot segment, filter or correlate by VLAN 10/20; blind to VLAN-hopping, lateral movement and policy violations tied to those segments, reducing detection coverage for those zones to zero.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "egress_mode": "passthrough"
+    },
+    "why": "Restore 802.1Q headers through the broker to the IDS so it can see and enforce policies on VLANs 10 and 20."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Bursty aggregated traffic peaks at 2.77 Gbps in 1ms intervals vs 1 Gbps IDS port (277% of capacity, 4 overloaded intervals). Single 1G egress with no load-balancing or shaping cannot absorb microbursts.",
+   "impact_on_tool": "IDS ingress buffers overrun and silently drop packets during bursts; IDS misses attacks that coincide with bursts and loses state for flow reassembly despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "port_speed_gbps": 1,
+     "suggested_ports": 3,
+     "burst_mitigation": true
+    },
+    "why": "Distribute traffic across 3x1G IDS cluster (or upgrade to 10G) with 5-tuple hashing to keep per-port utilization <80% and preserve flow integrity for IDS stateful inspection."
+   },
+   "evidence_frames": [
+    1,
+    708,
+    1363,
+    1931
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "65.5% of bytes are encrypted vs 60% IDS tolerance, indicating growth in TLS traffic forwarded without selective decryption or filtering at the packet broker.",
+   "impact_on_tool": "IDS requires full payload inspection but cannot inspect encrypted payloads; detection degrades to metadata only for majority of traffic, missing exploits and C2 in encrypted flows.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "out-of-band decryption zone before IDS",
+     "method": "passive TLS decryption with key escrow on packet broker",
+     "policy": "selectively decrypt VLANs 10,20 / required protocols only"
+    },
+    "why": "Offload decryption before the IDS to restore payload visibility while respecting privacy and IDS full-payload requirement; do not use slicing or filtering which would further blind the IDS."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    26,
+    29,
+    30,
+    33,
+    35,
+    40,
+    41,
+    43,
+    44,
+    47,
+    50,
+    52,
+    54
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3043,
+  "tokens_out": 2906,
+  "cost_usd": 0.01615,
+  "seconds": 13.0,
+  "recorded_at": "2026-10-28"
+ }
+}

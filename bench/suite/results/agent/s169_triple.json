@@ -1,0 +1,134 @@
+{
+ "feed": "s169_triple",
+ "status": "degraded",
+ "summary": "Feed s169_triple to NDR is degraded: 41.2% of TCP sessions are one-way, 4.2% TCP packets show drops, and 90.2% of bytes are encrypted just over the 90% tolerance. NDR requires both directions and full payload - one-way and drops break flow reassembly and detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/TAP is only delivering one direction for many flows - likely SPAN/mirror configured on a single direction or asymmetric routing where A->B and B->A take different paths and only one path is tapped without aggregation at the broker.",
+   "impact_on_tool": "NDR needs both directions (needs_both_directions=true). With 47 of 114 sessions one-way, TCP reassembly, request/response correlation, and anomaly detection fail - misses lateral movement, C2, and data exfiltration.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "source_taps": [
+      "both_fabric_directions_or_both_span_directions"
+     ]
+    },
+    "why": "Aggregate both directions of each flow at the packet broker so the NDR sees complete bidirectional sessions required for stateful analysis."
+   },
+   "evidence_frames": [
+    22,
+    26,
+    37,
+    61,
+    71,
+    99,
+    107,
+    132,
+    188,
+    209,
+    241,
+    248,
+    324,
+    348,
+    447,
+    454,
+    494,
+    538,
+    545,
+    631
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror buffer oversubscription or congested packet broker link dropping packets before the tool - 56 of 1334 TCP packets show gaps/retransmissions (4.2% vs 1% threshold) while tool itself is not overloaded, so loss is in the visibility fabric.",
+   "impact_on_tool": "NDR needs full payload and complete streams. Missing segments cause TCP reassembly failures, broken file extraction, and missed IDS signatures - high false-negative risk.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace": "SPAN/mirror with physical TAP",
+     "add_packet_broker_buffering": true
+    },
+    "why": "TAPs do not drop under load like SPAN buffers do; replacing SPAN with TAP eliminates fabric-induced drops and ensures complete packets to the NDR. If aggregate rate >10Gbps, add load_balance to NDR cluster."
+   },
+   "evidence_frames": [
+    32,
+    90,
+    91,
+    201,
+    202,
+    223,
+    224,
+    234,
+    235,
+    264,
+    265,
+    336,
+    339,
+    396,
+    397,
+    398,
+    399,
+    421,
+    423,
+    490
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "90.2% of bytes are TLS/encrypted, just above the NDR's 90% tolerance. Traffic is largely opaque without decryption - expected for modern networks but limits deep packet inspection.",
+   "impact_on_tool": "NDR needs full payload for detection; with almost all traffic encrypted it is blind to payload, can only do metadata/JA3/flow analysis and will miss payload-based threats.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "evaluate": "broker-based TLS decryption or feed decrypted copy via key escrow",
+     "selective_decrypt": "high-risk categories only"
+    },
+    "why": "Decrypting at the packet broker (with proper privacy controls) restores payload visibility for the NDR without breaking end-to-end encryption elsewhere."
+   },
+   "evidence_frames": [
+    6,
+    8,
+    9,
+    10,
+    11,
+    13,
+    14,
+    16,
+    17,
+    20,
+    24,
+    39,
+    46,
+    48,
+    49,
+    50,
+    51,
+    53,
+    54,
+    56
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3077,
+  "tokens_out": 2471,
+  "cost_usd": 0.01435,
+  "seconds": 13.0,
+  "recorded_at": "2026-10-28"
+ }
+}

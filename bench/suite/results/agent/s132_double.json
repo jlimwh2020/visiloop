@@ -1,0 +1,88 @@
+{
+ "feed": "s132_double",
+ "status": "degraded",
+ "summary": "Feed s132_double is degraded: 100% of packets are untagged (required VLANs 10, 20 missing) and SIEM 1 Gbps port is overloaded by 1.70 Gbps bursts (170% capacity, 7 intervals).",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker is stripping 802.1Q tags or TAP/SPAN source is access-port/untagged. All packets seen are untagged while SIEM requires VLANs 10 and 20 for tenant/context separation, so 100% miss rate.",
+   "impact_on_tool": "SIEM cannot filter, correlate, or report by VLAN/tenant; detection coverage for VLAN 10, 20 is blind and compliance/context is lost.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "strip": false
+    },
+    "why": "Restore and preserve 802.1Q tags end-to-end from TAP through packet broker to SIEM so VLAN 10,20 are visible for filtering and correlation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microbursts peak at 1.70 Gbps in 1 ms intervals vs 1 Gbps SIEM port capacity (170% of line rate). Sustained burst rate exceeds tool NIC/buffer, seen in 7 overloaded intervals.",
+   "impact_on_tool": "SIEM NIC drops packets during bursts, causing missed events, incomplete flows, and gaps in detection/correlation despite SIEM not needing full payload or both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "5-tuple_hash",
+     "additional_ports": 1,
+     "target_capacity_gbps": 2
+    },
+    "why": "Distribute bursts across 2x1G or 10G SIEM inputs or add load-balanced tool group to absorb 1.7 Gbps peaks and prevent tail drops; alternatively filter to required VLANs/flows to reduce load."
+   },
+   "evidence_frames": [
+    1,
+    301,
+    740,
+    1125,
+    1549,
+    1924,
+    2385
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2925,
+  "tokens_out": 1984,
+  "cost_usd": 0.01209,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "feed": "s004_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM on s004_clean: bidirectional traffic intact, required VLANs 10,20 present, no packet drops, duplicates, tool overload, or encryption issues. Feed delivers complete, correct traffic for APM detection.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2701,
+  "tokens_out": 890,
+  "cost_usd": 0.00716,
+  "seconds": 6.3,
+  "recorded_at": "2026-10-28"
+ }
+}

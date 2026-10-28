@@ -1,0 +1,97 @@
+{
+ "feed": "s140_double",
+ "status": "degraded",
+ "summary": "Feed s140_double to APM is degraded: 21.2% one-way TCP sessions and 5.6% packet loss detected. Both faults are high severity and will impair APM transaction latency and response-time calculations.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "28 of 132 TCP sessions (21.2%) show traffic in only one direction. Most likely the capture is single-sided - SPAN/TAP only mirroring Tx or Rx, or packet broker not aggregating both directions of the flow to the same tool port, or asymmetric routing with capture on only one path.",
+   "impact_on_tool": "APM requires both directions to correlate requests/responses and calculate latency. With 21% one-way sessions it will miss transactions, report incomplete flows, and produce inaccurate response-time metrics.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_delivery": true,
+     "aggregate_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregating both directions ensures the APM sees client request and server response together for correct transaction correlation."
+   },
+   "evidence_frames": [
+    29,
+    126,
+    151,
+    261,
+    301,
+    340,
+    354,
+    379,
+    400,
+    421,
+    564,
+    643,
+    680,
+    699,
+    757,
+    921,
+    937,
+    970,
+    1211,
+    1293
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "96 of 1713 TCP packets (5.6%) show gaps/retransmissions indicating missing data in transit. Classic SPAN oversubscription/buffer exhaustion or packet broker congestion dropping packets under load. Tool overload check is healthy, so loss is upstream of the tool.",
+   "impact_on_tool": "Even though APM does not require full payload, 5.6% missing packets causes incomplete flow records, false retransmission/loss alarms, and skewed latency calculations, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_source": "SPAN",
+     "with": "passive TAP",
+     "feed": "s140_double"
+    },
+    "why": "Passive TAP provides lossless, line-rate copy unlike SPAN which drops when oversubscribed or buffers fill, eliminating the 5.6% gaps."
+   },
+   "evidence_frames": [
+    11,
+    13,
+    14,
+    16,
+    18,
+    32,
+    102,
+    105,
+    122,
+    124,
+    224,
+    225,
+    227,
+    229,
+    289,
+    290,
+    324,
+    325,
+    327,
+    434
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2947,
+  "tokens_out": 2115,
+  "cost_usd": 0.01267,
+  "seconds": 10.3,
+  "recorded_at": "2026-10-28"
+ }
+}

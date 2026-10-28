@@ -1,0 +1,64 @@
+{
+ "feed": "s083_single",
+ "status": "degraded",
+ "summary": "Feed s083_single is degraded: 100% of packets are untagged and required VLANs 10, 20 are missing, stripping segmentation context needed by IDS.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN configuration is stripping 802.1Q tags before delivery to the IDS tool port. All sampled frames arrive untagged, so VLANs 10 and 20 are never seen despite being required for this IDS.",
+   "impact_on_tool": "IDS loses VLAN segmentation context and cannot apply VLAN-aware signatures/policies for VLANs 10 and 20; misses VLAN-hopping, lateral movement and segmentation-bypass detection, reducing detection coverage to effectively blind on those segments.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough"
+    },
+    "why": "Preserve 802.1Q tags for VLANs 10 and 20 through the packet broker to the IDS so the tool can correctly classify traffic by segment and apply VLAN-specific detection."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2824,
+  "tokens_out": 1499,
+  "cost_usd": 0.0099,
+  "seconds": 8.1,
+  "recorded_at": "2026-10-28"
+ }
+}

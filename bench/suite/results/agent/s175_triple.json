@@ -1,0 +1,94 @@
+{
+ "feed": "s175_triple",
+ "status": "degraded",
+ "summary": "Feed s175_triple to 10Gbps NDR is degraded: 230% microburst overload (22.97 Gbps), 17% duplicates, and 93% encrypted bytes exceed 90% tolerance. Tool is dropping bursts and blind to payloads.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is feeding aggregated bursts up to 22.97 Gbps into a single 10 Gbps NDR port (230% of capacity, 2 overloaded 1ms intervals). No load balancing or burst shaping is configured, so tool ingress buffers overflow.",
+   "impact_on_tool": "NDR drops packets during bursts, breaking TCP reassembly and flow tracking; creates blind spots where attacks in burst windows are missed and detection coverage is incomplete.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_ports": 3,
+     "hash": "5-tuple",
+     "capacity_gbps": 10
+    },
+    "why": "Distribute traffic across 3x10G NDR ports/instances with 5-tuple hashing to absorb 23 Gbps peaks and keep per-port utilization <80%, preventing burst drops while preserving flow symmetry for NDR."
+   },
+   "evidence_frames": [
+    1,
+    5699
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "17% duplicate packets (1796/10569) indicates overlapping SPAN/TAP sources aggregated without deduplication - same flow mirrored from multiple points and forwarded to one tool port.",
+   "impact_on_tool": "NDR wastes ~17% CPU/storage reprocessing identical packets, inflates flow counts and alerts, skews analytics and reduces effective detection capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 5,
+     "method": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication (hash-based, 5ms window) before delivery to remove identical packets from overlapping feeds while preserving unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "93% of bytes are encrypted vs NDR tolerance of 90% - traffic mix is predominantly TLS/encrypted with no decrypted mirror being supplied to the tool.",
+   "impact_on_tool": "NDR limited to metadata/JA3 and flow analysis; cannot inspect payloads for IDS signatures, malware, or C2, severely reducing detection coverage despite needing full payload.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "out_of_band_decryption",
+     "location": "packet_broker_mirror"
+    },
+    "why": "Provide selective out-of-band TLS decryption/mirror (or feed from TLS-intercept proxy) for relevant VLANs so NDR receives cleartext payload where policy allows, restoring payload-based detection."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    13,
+    14,
+    15,
+    19,
+    20,
+    22,
+    24,
+    25,
+    27,
+    28,
+    30,
+    35,
+    36
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2968,
+  "tokens_out": 2484,
+  "cost_usd": 0.01427,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-28"
+ }
+}

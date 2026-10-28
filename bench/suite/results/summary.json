@@ -121,5 +121,155 @@
    "max": 11,
    "median": 4
   }
+ },
+ "agent": {
+  "cases": 200,
+  "exact": 198,
+  "per_fault": {
+   "duplicates": {
+    "tp": 35,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "one_way": {
+    "tp": 30,
+    "fp": 0,
+    "fn": 2,
+    "precision": 1.0,
+    "recall": 0.938
+   },
+   "packet_drops": {
+    "tp": 29,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "tool_overload": {
+    "tp": 49,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "encrypted_share": {
+    "tp": 46,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "missing_vlan": {
+    "tp": 44,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "all": {
+    "tp": 233,
+    "fp": 0,
+    "fn": 2,
+    "precision": 1.0,
+    "recall": 0.991
+   }
+  },
+  "failures": [
+   "s110_single",
+   "s124_double"
+  ],
+  "fix_sensible": 231,
+  "fix_total": 233,
+  "bad_fixes": [
+   [
+    "s076_single",
+    "one_way",
+    "none"
+   ],
+   [
+    "s125_double",
+    "one_way",
+    "none"
+   ]
+  ],
+  "ungrounded_dropped": 0,
+  "omitted_vs_checks": [
+   [
+    "s110_single",
+    [
+     "one_way"
+    ]
+   ],
+   [
+    "s124_double",
+    [
+     "one_way"
+    ]
+   ]
+  ],
+  "by_kind": {
+   "clean": [
+    20,
+    20
+   ],
+   "double": [
+    49,
+    50
+   ],
+   "mild": [
+    30,
+    30
+   ],
+   "single": [
+    59,
+    60
+   ],
+   "tool_aware": [
+    15,
+    15
+   ],
+   "triple": [
+    25,
+    25
+   ]
+  },
+  "by_tool": {
+   "APM": [
+    33,
+    33
+   ],
+   "IDS": [
+    71,
+    71
+   ],
+   "NDR": [
+    64,
+    64
+   ],
+   "SIEM": [
+    30,
+    32
+   ]
+  },
+  "near_threshold": {
+   "clear": [
+    168,
+    170
+   ],
+   "near threshold": [
+    30,
+    30
+   ]
+  },
+  "cost_usd": 2.153,
+  "cost_per_case": 0.0108,
+  "seconds_median": 9.8,
+  "seconds_p95": 15.3,
+  "tokens_in": 564953,
+  "tokens_out": 340423,
+  "model": "muse-spark-1.2",
+  "recorded": "2026-10-28"
  }
 }

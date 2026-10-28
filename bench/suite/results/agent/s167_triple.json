@@ -1,0 +1,142 @@
+{
+ "feed": "s167_triple",
+ "status": "degraded",
+ "summary": "Feed s167_triple is degraded: 100% of packets missing required VLANs 10,20, 7.7% TCP packet loss (223/2899), and 94.5% encrypted traffic exceeds NDR 90% tolerance. NDR will have incomplete flows and blind spots without broker fixes.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is stripping 802.1Q tags - 100% of packets are untagged while NDR requires VLANs 10 and 20. Most likely broker egress policy set to 'strip VLAN' or SPAN trunk not preserving tags.",
+   "impact_on_tool": "NDR loses segmentation context for VLANs 10,20; cannot attribute traffic to correct tenant/zone, breaks detection policies and lateral-movement correlation that rely on VLAN ID.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "location": "packet_broker_egress"
+    },
+    "why": "Restore and forward 802.1Q tags for VLANs 10,20 to the NDR tool port so it can correctly classify and detect across segments."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "7.7% TCP gaps (223 of 2899 packets) indicates packet broker buffer/SPAN oversubscription drops under burst, not tool overload (tool_overload healthy). Feed likely exceeds single 10G tool port or SPAN buffer capacity.",
+   "impact_on_tool": "NDR receives incomplete TCP streams, fails to reassemble flows and extract full payload (needs_full_payload=true), causing missed detections, broken session analysis and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow_hash_5tuple",
+     "tool_ports": 2,
+     "capacity_gbps": 10
+    },
+    "why": "Distribute traffic across multiple NDR tool ports / broker egresses with flow-aware hashing to eliminate buffer drops; if SPAN is in use, replace SPAN with passive TAP at the same time to avoid SPAN drop behavior."
+   },
+   "evidence_frames": [
+    24,
+    25,
+    68,
+    69,
+    94,
+    95,
+    96,
+    172,
+    175,
+    316,
+    317,
+    345,
+    346,
+    394,
+    397,
+    401,
+    402,
+    414,
+    418,
+    469
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "94.45% of bytes are encrypted vs NDR tolerance of 90%. Traffic is predominantly TLS/encrypted with no decryption before the tool, leaving NDR with metadata only.",
+   "impact_on_tool": "NDR needs full payload for deep inspection; with 94% encrypted it is effectively blind to payload-based threats (C2, exfiltration, exploit) and limited to JA3/flow metadata.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "out_of_band_decryption",
+     "protocols": [
+      "TLS1.2",
+      "TLS1.3"
+     ],
+     "preserve_privacy": true
+    },
+    "why": "Decrypt relevant TLS at packet broker (or forward keys/log via key escrow) and re-encrypt to NDR, or selectively bypass trusted encrypted flows, to bring visible payload share within NDR tolerance without violating privacy."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    6,
+    8,
+    9,
+    10,
+    11,
+    13,
+    14,
+    16,
+    18,
+    20,
+    21,
+    22,
+    25,
+    27,
+    28,
+    29,
+    30,
+    31
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3084,
+  "tokens_out": 3391,
+  "cost_usd": 0.01827,
+  "seconds": 18.4,
+  "recorded_at": "2026-10-28"
+ }
+}

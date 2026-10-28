@@ -1,0 +1,111 @@
+{
+ "feed": "s163_triple",
+ "status": "degraded",
+ "summary": "Feed s163_triple is degraded for IDS: 38.3% one-way TCP sessions, 5.1% TCP packet drops, and 7.5% duplicates. IDS requires both directions and full payload - missing directions and gaps prevent stream reassembly and signature matching.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions is reaching the IDS (59/154 sessions one-way, 38.3%). Most likely asymmetric routing with separate SPAN/monitor sessions not aggregated, or packet broker policy forwarding only one side of the flow to this tool port.",
+   "impact_on_tool": "IDS needs both directions to reassemble TCP streams and correlate request/response. One-way traffic causes missed detections, broken state tracking, and high false negatives for IDS signatures.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash": "5-tuple"
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port so bidirectional sessions are complete for reassembly."
+   },
+   "evidence_frames": [
+    17,
+    40,
+    49,
+    57,
+    114,
+    123,
+    146,
+    182,
+    255,
+    264,
+    274,
+    301,
+    308,
+    317,
+    366,
+    388,
+    436,
+    482,
+    517,
+    524
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "5.1% of TCP packets show gaps/retransmissions indicating missing data (100/1957). With tool not overloaded, drops are upstream - typically SPAN oversubscription/truncation or packet broker buffer drops under burst.",
+   "impact_on_tool": "IDS requires full payload; gaps prevent payload inspection, file extraction and signature matching, allowing evasions and missed exploits.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_type": "passive",
+     "broker_buffer_tuning": true
+    },
+    "why": "Replace lossy SPAN with passive TAP and ensure broker has sufficient buffering/bandwidth to deliver lossless, complete packets to the 1Gbps IDS port."
+   },
+   "evidence_frames": [
+    19,
+    51,
+    136,
+    139,
+    164,
+    165,
+    232,
+    234,
+    236,
+    237,
+    303,
+    353,
+    354,
+    375,
+    376,
+    456,
+    458,
+    462,
+    466,
+    467
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "7.5% duplicate packets (152/2036) indicates overlapping SPAN sources or dual-sided TAP aggregation without deduplication at the packet broker.",
+   "impact_on_tool": "Duplicates waste IDS processing capacity on 1Gbps port, inflate session counts, distort analytics and can cause false positives or signature misfires.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_broker"
+    },
+    "why": "Enable broker-level deduplication to strip duplicates before delivery while preserving one complete copy of each packet."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3005,
+  "tokens_out": 2067,
+  "cost_usd": 0.01254,
+  "seconds": 12.3,
+  "recorded_at": "2026-10-28"
+ }
+}

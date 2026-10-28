@@ -1,0 +1,23 @@
+{
+ "feed": "s110_single",
+ "status": "healthy",
+ "summary": "SIEM feed s110_single is healthy. Duplicates, encrypted share, VLAN coverage (10,20), packet drops and tool overload all healthy. One-way traffic detected (23/113 sessions, 20.4%) but SIEM profile needs_both_directions=false so bidirectional flows are not required and no packet broker change is needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2826,
+  "tokens_out": 1843,
+  "cost_usd": 0.01137,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-28"
+ }
+}

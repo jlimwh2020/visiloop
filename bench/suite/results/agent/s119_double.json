@@ -1,0 +1,75 @@
+{
+ "feed": "s119_double",
+ "status": "degraded",
+ "summary": "Feed s119_double is degraded: 21.5% duplicate packets and 61.9% one-way TCP sessions prevent IDS from seeing complete bidirectional traffic. Tool needs both directions and full payload for stateful inspection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Same packets delivered twice (21.5% duplicates, 330/1538). Classic cause is aggregating two SPAN/mirror ports covering the same link or overlapping TAP+SPAN feeds on the packet broker without deduplication enabled.",
+   "impact_on_tool": "IDS wastes cycles processing duplicates, inflates connection state and event counts, causes false positives and risks missing real attacks due to resource exhaustion and incorrect TCP reassembly.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 50,
+     "method": "header_hash"
+    },
+    "why": "Enable packet broker deduplication to drop identical packets seen within short window before delivery to 1G IDS port, restoring single copy of each packet."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "61.9% of TCP sessions (65/105) show only one direction. IDS requires both directions but broker is forwarding only RX or TX - likely single-direction SPAN, asymmetric routing with capture on only one path, or directions load-balanced to different tools.",
+   "impact_on_tool": "IDS cannot reassemble TCP streams or track state, so signatures requiring request+response, handshake validation, and flow tracking fail - major detection blind spot.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "aggregate_mode": "5-tuple_to_single_tool_port"
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow to the same IDS tool port so bidirectional sessions are delivered intact for stateful inspection."
+   },
+   "evidence_frames": [
+    4,
+    53,
+    64,
+    80,
+    89,
+    144,
+    158,
+    187,
+    197,
+    214,
+    225,
+    237,
+    311,
+    325,
+    365,
+    390,
+    400,
+    414,
+    450,
+    461
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2880,
+  "tokens_out": 1747,
+  "cost_usd": 0.01102,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-28"
+ }
+}

@@ -1,0 +1,91 @@
+{
+ "feed": "s154_double",
+ "status": "degraded",
+ "summary": "Feed s154_double to IDS is degraded: 50% of traffic missing required VLAN 20 tags and traffic bursts to 1.66 Gbps exceed the 1 Gbps IDS port (166% capacity). IDS has blind spot on VLAN 20 and will drop packets during bursts.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN/TAP trunk is stripping 802.1Q tags or not forwarding VLAN 20. 50% of packets are untagged and VLAN 20 is completely absent despite IDS requiring VLANs 10 and 20, indicating a broker VLAN filter / trunk pruning or SPAN that removes tags.",
+   "impact_on_tool": "IDS is blind to all traffic on VLAN 20 (50% of expected coverage). VLAN-aware signatures, segmentation policies and lateral-movement detection for VLAN 20 will not fire.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true,
+     "trunk_ports": "enable VLAN 20"
+    },
+    "why": "Restore and preserve 802.1Q tags for VLANs 10 and 20 through the packet broker to the IDS so VLAN-based detection and required coverage is restored."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    14,
+    17,
+    19,
+    22,
+    23,
+    24,
+    26,
+    27,
+    29,
+    32,
+    35,
+    37,
+    40,
+    41
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate traffic bursts exceed single tool port capacity. Peak 1.66 Gbps in 1ms bursts vs 1 Gbps IDS port (166% load, 10 overloaded intervals) with no load balancing or rate control on the packet broker.",
+   "impact_on_tool": "IDS will drop packets during bursts due to port oversubscription. With needs_full_payload=true and needs_both_directions=true, drops break TCP reassembly and flow reconstruction, causing missed exploits and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "hash_5tuple",
+     "tool_ports": 2,
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute bursts across 2+ IDS ports or upgrade to higher-speed port to keep peak below 80% utilization and prevent packet drops while preserving full payload for IDS analysis."
+   },
+   "evidence_frames": [
+    1,
+    229,
+    530,
+    919,
+    1357,
+    1698,
+    2015,
+    2295,
+    2717,
+    3122
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "packet_drops",
+   "tool_overload"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2925,
+  "tokens_out": 1866,
+  "cost_usd": 0.01159,
+  "seconds": 11.2,
+  "recorded_at": "2026-10-28"
+ }
+}
