@@ -474,9 +474,187 @@
     }
    },
    "seconds": 5.4
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 3,
+      "label": "Access Switch ACC-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "SPAN port on CORE-SW-01",
+      "type": "span"
+     },
+     {
+      "box": 5,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 6,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 7,
+      "label": "APM",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "NDR",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 6,
+      "to": 8,
+      "speed": "1G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 4,
+      "kind": "span",
+      "mirrors": "A+B",
+      "direction": "both",
+      "feeds": 6
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      114,
+      28,
+      229,
+      77
+     ],
+     [
+      131,
+      136,
+      213,
+      187
+     ],
+     [
+      114,
+      246,
+      229,
+      298
+     ],
+     [
+      28,
+      371,
+      147,
+      422
+     ],
+     [
+      190,
+      370,
+      324,
+      422
+     ],
+     [
+      35,
+      495,
+      141,
+      543
+     ],
+     [
+      196,
+      494,
+      317,
+      543
+     ],
+     [
+      163,
+      616,
+      236,
+      665
+     ],
+     [
+      278,
+      616,
+      351,
+      665
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 728,
+     "tokens_out": 2238
+    }
+   },
+   "seconds": 6.7
   }
  },
  "sam_seconds": 8.0,
- "cost_usd": 0.04301,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.05343,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01042
 }

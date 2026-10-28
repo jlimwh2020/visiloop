@@ -626,9 +626,245 @@
     }
    },
    "seconds": 9.2
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "Perimeter FW PFW-2",
+      "type": "firewall"
+     },
+     {
+      "box": 4,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 5,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Mirror port (DC Core 1) [mirror (RX only)]",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "Leaf1",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 9,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "Sandbox SANDBOX-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "DLP",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "unknown",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "unknown",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "unknown",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 7,
+      "speed": "unknown",
+      "kind": "production"
+     },
+     {
+      "from": 7,
+      "to": 9,
+      "speed": "unknown",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 8,
+      "speed": "unknown",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 8,
+      "speed": "unknown",
+      "kind": "mirror"
+     },
+     {
+      "from": 8,
+      "to": 10,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 8,
+      "to": 11,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 4,
+      "kind": "tap",
+      "mirrors": "both directions",
+      "direction": "both",
+      "feeds": 8
+     },
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "mirror (RX only)",
+      "direction": "rx_only",
+      "feeds": 8
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      71,
+      22,
+      141,
+      57
+     ],
+     [
+      63,
+      95,
+      156,
+      135
+     ],
+     [
+      16,
+      184,
+      116,
+      225
+     ],
+     [
+      114,
+      236,
+      214,
+      276
+     ],
+     [
+      40,
+      297,
+      102,
+      334
+     ],
+     [
+      129,
+      377,
+      211,
+      414
+     ],
+     [
+      112,
+      461,
+      237,
+      515
+     ],
+     [
+      265,
+      464,
+      323,
+      500
+     ],
+     [
+      75,
+      556,
+      141,
+      593
+     ],
+     [
+      254,
+      545,
+      341,
+      585
+     ],
+     [
+      114,
+      638,
+      214,
+      679
+     ],
+     [
+      33,
+      645,
+      86,
+      681
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 749,
+     "tokens_out": 4001
+    }
+   },
+   "seconds": 11.3
   }
  },
  "sam_seconds": 10.0,
- "cost_usd": 0.04816,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.0661,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01794
 }

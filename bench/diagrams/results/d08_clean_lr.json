@@ -1,0 +1,989 @@
+{
+ "name": "d08_clean_lr",
+ "style": "clean_lr",
+ "sam": {
+  "rounded rectangle box": [
+   [
+    1092,
+    29,
+    1256,
+    78
+   ],
+   [
+    619,
+    122,
+    696,
+    171
+   ],
+   [
+    1138,
+    350,
+    1211,
+    399
+   ],
+   [
+    28,
+    85,
+    149,
+    134
+   ],
+   [
+    1130,
+    257,
+    1219,
+    309
+   ],
+   [
+    234,
+    84,
+    368,
+    135
+   ],
+   [
+    427,
+    140,
+    510,
+    189
+   ],
+   [
+    884,
+    212,
+    988,
+    263
+   ],
+   [
+    603,
+    304,
+    712,
+    355
+   ],
+   [
+    618,
+    213,
+    697,
+    262
+   ],
+   [
+    867,
+    305,
+    1004,
+    354
+   ],
+   [
+    614,
+    30,
+    700,
+    79
+   ],
+   [
+    876,
+    121,
+    996,
+    170
+   ],
+   [
+    868,
+    28,
+    1004,
+    79
+   ]
+  ],
+  "ellipse": [
+   [
+    28,
+    85,
+    149,
+    134
+   ]
+  ],
+  "rectangle": [
+   [
+    1092,
+    29,
+    1256,
+    78
+   ],
+   [
+    603,
+    304,
+    712,
+    355
+   ],
+   [
+    619,
+    122,
+    696,
+    171
+   ],
+   [
+    1138,
+    351,
+    1211,
+    399
+   ],
+   [
+    1130,
+    257,
+    1219,
+    309
+   ],
+   [
+    235,
+    84,
+    368,
+    135
+   ],
+   [
+    427,
+    140,
+    510,
+    189
+   ],
+   [
+    884,
+    212,
+    988,
+    263
+   ],
+   [
+    618,
+    213,
+    697,
+    262
+   ],
+   [
+    867,
+    305,
+    1004,
+    354
+   ],
+   [
+    614,
+    30,
+    700,
+    79
+   ],
+   [
+    876,
+    121,
+    996,
+    170
+   ],
+   [
+    868,
+    28,
+    1004,
+    79
+   ]
+  ],
+  "hexagon": [],
+  "cylinder": [],
+  "octagon": [],
+  "trapezoid": [],
+  "parallelogram": [],
+  "circle": []
+ },
+ "variants": {
+  "baseline": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 1,
+      "label": "Server Switch SRV-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "Internet",
+      "type": "internet"
+     },
+     {
+      "box": 4,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 5,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 8,
+      "label": "Leaf-3",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "NDR NDR-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "SPAN port on Core-1",
+      "type": "span"
+     },
+     {
+      "box": 12,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 13,
+      "label": "DLP",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 0,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 0,
+      "speed": "100G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 6,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 12,
+      "to": 10,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 11,
+      "kind": "span",
+      "mirrors": "both directions",
+      "direction": "both",
+      "feeds": 12
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      614,
+      30,
+      700,
+      79
+     ],
+     [
+      868,
+      28,
+      1004,
+      79
+     ],
+     [
+      1092,
+      29,
+      1256,
+      78
+     ],
+     [
+      28,
+      85,
+      149,
+      134
+     ],
+     [
+      234,
+      84,
+      368,
+      135
+     ],
+     [
+      427,
+      140,
+      510,
+      189
+     ],
+     [
+      619,
+      122,
+      696,
+      171
+     ],
+     [
+      876,
+      121,
+      996,
+      170
+     ],
+     [
+      618,
+      213,
+      697,
+      262
+     ],
+     [
+      884,
+      212,
+      988,
+      263
+     ],
+     [
+      1130,
+      257,
+      1219,
+      309
+     ],
+     [
+      603,
+      304,
+      712,
+      355
+     ],
+     [
+      867,
+      305,
+      1004,
+      354
+     ],
+     [
+      1138,
+      350,
+      1211,
+      399
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1174,
+     "tokens_out": 2678
+    }
+   },
+   "seconds": 8.2
+  },
+  "extended": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "rectangle",
+    "hexagon",
+    "cylinder",
+    "octagon",
+    "trapezoid",
+    "parallelogram",
+    "circle"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 1,
+      "label": "Server Switch SRV-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "Internet",
+      "type": "internet"
+     },
+     {
+      "box": 4,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 5,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 8,
+      "label": "Leaf-3",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "NDR NDR-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "SPAN port on Core-1",
+      "type": "span"
+     },
+     {
+      "box": 12,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 13,
+      "label": "DLP",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 0,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 0,
+      "speed": "100G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 6,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 11,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 12,
+      "to": 10,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 11,
+      "kind": "span",
+      "mirrors": "Core-1",
+      "direction": "both",
+      "feeds": 12
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      614,
+      30,
+      700,
+      79
+     ],
+     [
+      868,
+      28,
+      1004,
+      79
+     ],
+     [
+      1092,
+      29,
+      1256,
+      78
+     ],
+     [
+      28,
+      85,
+      149,
+      134
+     ],
+     [
+      234,
+      84,
+      368,
+      135
+     ],
+     [
+      427,
+      140,
+      510,
+      189
+     ],
+     [
+      619,
+      122,
+      696,
+      171
+     ],
+     [
+      876,
+      121,
+      996,
+      170
+     ],
+     [
+      618,
+      213,
+      697,
+      262
+     ],
+     [
+      884,
+      212,
+      988,
+      263
+     ],
+     [
+      1130,
+      257,
+      1219,
+      309
+     ],
+     [
+      603,
+      304,
+      712,
+      355
+     ],
+     [
+      867,
+      305,
+      1004,
+      354
+     ],
+     [
+      1138,
+      350,
+      1211,
+      399
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1174,
+     "tokens_out": 3379
+    }
+   },
+   "seconds": 11.9
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 1,
+      "label": "Server Switch SRV-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 2,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 3,
+      "label": "Internet",
+      "type": "internet"
+     },
+     {
+      "box": 4,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 5,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 8,
+      "label": "Leaf-3",
+      "type": "switch"
+     },
+     {
+      "box": 9,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "NDR NDR-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "SPAN port on Core-1",
+      "type": "span"
+     },
+     {
+      "box": 12,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 13,
+      "label": "DLP",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 3,
+      "to": 4,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 0,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 0,
+      "speed": "100G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 6,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 12,
+      "to": 10,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 11,
+      "kind": "span",
+      "mirrors": "Core-1",
+      "direction": "both",
+      "feeds": 12
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      614,
+      30,
+      700,
+      79
+     ],
+     [
+      868,
+      28,
+      1004,
+      79
+     ],
+     [
+      1092,
+      29,
+      1256,
+      78
+     ],
+     [
+      28,
+      85,
+      149,
+      134
+     ],
+     [
+      234,
+      84,
+      368,
+      135
+     ],
+     [
+      427,
+      140,
+      510,
+      189
+     ],
+     [
+      619,
+      122,
+      696,
+      171
+     ],
+     [
+      876,
+      121,
+      996,
+      170
+     ],
+     [
+      618,
+      213,
+      697,
+      262
+     ],
+     [
+      884,
+      212,
+      988,
+      263
+     ],
+     [
+      1130,
+      257,
+      1219,
+      309
+     ],
+     [
+      603,
+      304,
+      712,
+      355
+     ],
+     [
+      867,
+      305,
+      1004,
+      354
+     ],
+     [
+      1138,
+      350,
+      1211,
+      399
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1174,
+     "tokens_out": 3411
+    }
+   },
+   "seconds": 12.4
+  }
+ },
+ "cost_usd": 0.06714,
+ "sam_seconds": 13.1,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.06714
+}

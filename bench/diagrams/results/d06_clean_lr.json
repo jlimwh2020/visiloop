@@ -724,9 +724,279 @@
     }
    },
    "seconds": 10.9
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 1,
+      "label": "SPAN port on Leaf-1 [ingress only]",
+      "type": "span"
+     },
+     {
+      "box": 2,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 3,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 4,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Distribution SW 2",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Branch VPN",
+      "type": "zone"
+     },
+     {
+      "box": 7,
+      "label": "NDR NDR-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 9,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 10,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 11,
+      "label": "NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 12,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 13,
+      "label": "Sandbox",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 8,
+      "to": 9,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 10,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 2,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 6,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 0,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 1,
+      "to": 11,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 11,
+      "to": 3,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 7,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 12,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 11,
+      "to": 13,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 10,
+      "kind": "tap",
+      "mirrors": "mirror A+B",
+      "direction": "both",
+      "feeds": 11
+     },
+     {
+      "box": 1,
+      "kind": "span",
+      "mirrors": "ingress only",
+      "direction": "rx_only",
+      "feeds": 11
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      1035,
+      28,
+      1155,
+      76
+     ],
+     [
+      1027,
+      118,
+      1162,
+      186
+     ],
+     [
+      850,
+      128,
+      927,
+      177
+     ],
+     [
+      1396,
+      155,
+      1571,
+      203
+     ],
+     [
+      648,
+      229,
+      730,
+      277
+     ],
+     [
+      806,
+      229,
+      970,
+      277
+     ],
+     [
+      1034,
+      229,
+      1155,
+      277
+     ],
+     [
+      1439,
+      245,
+      1528,
+      296
+     ],
+     [
+      27,
+      292,
+      228,
+      341
+     ],
+     [
+      304,
+      292,
+      447,
+      341
+     ],
+     [
+      506,
+      292,
+      590,
+      340
+     ],
+     [
+      1220,
+      293,
+      1307,
+      340
+     ],
+     [
+      1447,
+      337,
+      1519,
+      386
+     ],
+     [
+      1435,
+      427,
+      1532,
+      475
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1533,
+     "tokens_out": 3237
+    }
+   },
+   "seconds": 9.6
   }
  },
  "sam_seconds": 10.3,
- "cost_usd": 0.06145,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.07712,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01567
 }

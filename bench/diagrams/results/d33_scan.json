@@ -578,9 +578,227 @@
     }
    },
    "seconds": 9.6
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Edge Router RTR-01",
+      "type": "router"
+     },
+     {
+      "box": 2,
+      "label": "Firewall FW-02",
+      "type": "firewall"
+     },
+     {
+      "box": 3,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 4,
+      "label": "TAP-01 (copper) [both directions]",
+      "type": "tap"
+     },
+     {
+      "box": 5,
+      "label": "Core Switch CORE SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Visibility Fabric VF-1",
+      "type": "packet_broker"
+     },
+     {
+      "box": 7,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "NDR (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "Access Switch ACC-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 10,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 7,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 6,
+      "to": 8,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 9,
+      "to": 10,
+      "speed": "",
+      "kind": "production"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 4,
+      "kind": "tap",
+      "mirrors": "both directions",
+      "direction": "both",
+      "feeds": 6
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      69,
+      23,
+      139,
+      57
+     ],
+     [
+      61,
+      96,
+      155,
+      136
+     ],
+     [
+      136,
+      181,
+      206,
+      220
+     ],
+     [
+      47,
+      241,
+      117,
+      280
+     ],
+     [
+      123,
+      291,
+      238,
+      344
+     ],
+     [
+      28,
+      396,
+      124,
+      436
+     ],
+     [
+      152,
+      389,
+      263,
+      430
+     ],
+     [
+      172,
+      479,
+      224,
+      515
+     ],
+     [
+      253,
+      472,
+      360,
+      511
+     ],
+     [
+      28,
+      483,
+      132,
+      523
+     ],
+     [
+      40,
+      560,
+      128,
+      600
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 719,
+     "tokens_out": 4025
+    }
+   },
+   "seconds": 13.2
   }
  },
  "sam_seconds": 9.0,
- "cost_usd": 0.04908,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.06709,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01801
 }

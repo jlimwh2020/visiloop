@@ -834,9 +834,319 @@
     }
    },
    "seconds": 12.2
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet (ISP-A)",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "DC Core 1",
+      "type": "switch"
+     },
+     {
+      "box": 3,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 4,
+      "label": "Server Switch SRV-SW-03",
+      "type": "switch"
+     },
+     {
+      "box": 5,
+      "label": "Access Switch ACC-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "Core-2",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "DMZ (Web, Mail)",
+      "type": "zone"
+     },
+     {
+      "box": 8,
+      "label": "Server Zone (File, Web App)",
+      "type": "zone"
+     },
+     {
+      "box": 9,
+      "label": "Access Switch ACC-SW-02",
+      "type": "switch"
+     },
+     {
+      "box": 10,
+      "label": "Mirror port (Core-2)",
+      "type": "span"
+     },
+     {
+      "box": 11,
+      "label": "Guest Wi-Fi",
+      "type": "zone"
+     },
+     {
+      "box": 12,
+      "label": "Packet Broker NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 13,
+      "label": "DLP (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 14,
+      "label": "Forensics Recorder (primary)",
+      "type": "security_tool"
+     },
+     {
+      "box": 15,
+      "label": "APM",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 5,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 6,
+      "speed": "40G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 9,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 12,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 10,
+      "to": 12,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 12,
+      "to": 13,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 12,
+      "to": 14,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 12,
+      "to": 15,
+      "speed": "10G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 3,
+      "kind": "tap",
+      "mirrors": "RX+TX",
+      "direction": "both",
+      "feeds": 12
+     },
+     {
+      "box": 10,
+      "kind": "span",
+      "mirrors": "mirror: inbound only",
+      "direction": "rx_only",
+      "feeds": 12
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      275,
+      28,
+      475,
+      77
+     ],
+     [
+      331,
+      149,
+      420,
+      201
+     ],
+     [
+      249,
+      274,
+      358,
+      324
+     ],
+     [
+      408,
+      273,
+      506,
+      325
+     ],
+     [
+      28,
+      397,
+      163,
+      449
+     ],
+     [
+      208,
+      397,
+      348,
+      449
+     ],
+     [
+      414,
+      398,
+      500,
+      448
+     ],
+     [
+      35,
+      521,
+      154,
+      573
+     ],
+     [
+      196,
+      521,
+      345,
+      573
+     ],
+     [
+      387,
+      521,
+      527,
+      573
+     ],
+     [
+      568,
+      521,
+      682,
+      573
+     ],
+     [
+      397,
+      646,
+      517,
+      696
+     ],
+     [
+      628,
+      644,
+      763,
+      697
+     ],
+     [
+      391,
+      769,
+      528,
+      818
+     ],
+     [
+      570,
+      769,
+      822,
+      818
+     ],
+     [
+      863,
+      769,
+      936,
+      818
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1541,
+     "tokens_out": 5633
+    }
+   },
+   "seconds": 18.5
   }
  },
  "sam_seconds": 9.5,
- "cost_usd": 0.07259,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.09846,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.02587
 }

@@ -474,9 +474,187 @@
     }
    },
    "seconds": 6.1
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "WAN",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Firewall FW-01",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "TAP-01 (10G fiber)",
+      "type": "tap"
+     },
+     {
+      "box": 3,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Packet Broker NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 5,
+      "label": "Server Switch SRV-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "IDS",
+      "type": "security_tool"
+     },
+     {
+      "box": 7,
+      "label": "SIEM",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "VDI Farm",
+      "type": "zone"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 6,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "1G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 2,
+      "kind": "tap",
+      "mirrors": "mirror (TX only)",
+      "direction": "tx_only",
+      "feeds": 4
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      124,
+      28,
+      212,
+      77
+     ],
+     [
+      127,
+      136,
+      209,
+      187
+     ],
+     [
+      117,
+      260,
+      218,
+      311
+     ],
+     [
+      31,
+      384,
+      145,
+      435
+     ],
+     [
+      187,
+      384,
+      308,
+      435
+     ],
+     [
+      28,
+      508,
+      147,
+      559
+     ],
+     [
+      201,
+      509,
+      273,
+      558
+     ],
+     [
+      315,
+      509,
+      388,
+      558
+     ],
+     [
+      42,
+      618,
+      133,
+      667
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 791,
+     "tokens_out": 2285
+    }
+   },
+   "seconds": 7.3
   }
  },
  "sam_seconds": 7.8,
- "cost_usd": 0.04021,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.05091,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.0107
 }

@@ -756,9 +756,289 @@
     }
    },
    "seconds": 11.2
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "ISP",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "IPS IPS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 2,
+      "label": "Forensics Recorder FORENSICS-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 3,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 4,
+      "label": "Packet Broker NPB-01",
+      "type": "packet_broker"
+     },
+     {
+      "box": 5,
+      "label": "SIEM",
+      "type": "security_tool"
+     },
+     {
+      "box": 6,
+      "label": "TAP-01 (10G fiber) [mirror (both)]",
+      "type": "tap"
+     },
+     {
+      "box": 7,
+      "label": "Sandbox SANDBOX-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "OT Network (PLCs)",
+      "type": "zone"
+     },
+     {
+      "box": 9,
+      "label": "Floor 1 Switch",
+      "type": "switch"
+     },
+     {
+      "box": 10,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 11,
+      "label": "Leaf-2",
+      "type": "switch"
+     },
+     {
+      "box": 12,
+      "label": "Server Switch SRV-SW-03",
+      "type": "switch"
+     },
+     {
+      "box": 13,
+      "label": "User LAN (PCs)",
+      "type": "zone"
+     },
+     {
+      "box": 14,
+      "label": "VDI Farm",
+      "type": "zone"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 3,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 10,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 9,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 9,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 11,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 11,
+      "to": 13,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 10,
+      "to": 12,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 12,
+      "to": 14,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 4,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 4,
+      "to": 1,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 4,
+      "to": 2,
+      "speed": "25G",
+      "kind": "tool"
+     },
+     {
+      "from": 4,
+      "to": 5,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 6,
+      "kind": "tap",
+      "mirrors": "[mirror (both)]",
+      "direction": "both",
+      "feeds": 4
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      368,
+      28,
+      445,
+      78
+     ],
+     [
+      822,
+      94,
+      902,
+      146
+     ],
+     [
+      949,
+      145,
+      1126,
+      197
+     ],
+     [
+      457,
+      214,
+      590,
+      267
+     ],
+     [
+      826,
+      321,
+      962,
+      373
+     ],
+     [
+      1085,
+      326,
+      1159,
+      375
+     ],
+     [
+      594,
+      398,
+      734,
+      467
+     ],
+     [
+      982,
+      490,
+      1113,
+      541
+     ],
+     [
+      28,
+      539,
+      150,
+      591
+     ],
+     [
+      241,
+      562,
+      378,
+      611
+     ],
+     [
+      497,
+      619,
+      580,
+      668
+     ],
+     [
+      373,
+      803,
+      453,
+      853
+     ],
+     [
+      606,
+      811,
+      741,
+      864
+     ],
+     [
+      232,
+      978,
+      335,
+      1030
+     ],
+     [
+      710,
+      1017,
+      811,
+      1066
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 2151,
+     "tokens_out": 3275
+    }
+   },
+   "seconds": 11.0
   }
  },
  "sam_seconds": 10.5,
- "cost_usd": 0.06538,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.08199,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01661
 }

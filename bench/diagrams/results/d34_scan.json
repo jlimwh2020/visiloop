@@ -566,9 +566,221 @@
     }
    },
    "seconds": 9.3
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "Internet",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "NGFW-EDGE-1",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "TAP-01",
+      "type": "tap"
+     },
+     {
+      "box": 3,
+      "label": "Core-1",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "Packet Broker",
+      "type": "packet_broker"
+     },
+     {
+      "box": 5,
+      "label": "Leaf-1",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "DMZ Switch 2",
+      "type": "switch"
+     },
+     {
+      "box": 7,
+      "label": "Forensics Recorder",
+      "type": "security_tool"
+     },
+     {
+      "box": 8,
+      "label": "SIEM SIEM-01",
+      "type": "security_tool"
+     },
+     {
+      "box": 9,
+      "label": "Database Servers",
+      "type": "zone"
+     },
+     {
+      "box": 10,
+      "label": "Branch VPN",
+      "type": "zone"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 4,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "25G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 6,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 9,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 6,
+      "to": 10,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "40G",
+      "kind": "tool"
+     },
+     {
+      "from": 4,
+      "to": 8,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 2,
+      "kind": "tap",
+      "mirrors": "both directions",
+      "direction": "both",
+      "feeds": 4
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      242,
+      20,
+      334,
+      54
+     ],
+     [
+      232,
+      103,
+      340,
+      140
+     ],
+     [
+      253,
+      189,
+      315,
+      224
+     ],
+     [
+      179,
+      272,
+      239,
+      307
+     ],
+     [
+      304,
+      275,
+      407,
+      311
+     ],
+     [
+      56,
+      354,
+      113,
+      390
+     ],
+     [
+      155,
+      357,
+      258,
+      393
+     ],
+     [
+      287,
+      360,
+      419,
+      397
+     ],
+     [
+      448,
+      363,
+      520,
+      401
+     ],
+     [
+      14,
+      430,
+      137,
+      467
+     ],
+     [
+      165,
+      434,
+      258,
+      470
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 806,
+     "tokens_out": 2692
+    }
+   },
+   "seconds": 6.8
   }
  },
  "sam_seconds": 8.9,
- "cost_usd": 0.05181,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.06426,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01245
 }

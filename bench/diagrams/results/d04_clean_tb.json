@@ -762,9 +762,298 @@
     }
    },
    "seconds": 11.9
+  },
+  "improved": {
+   "prompts": [
+    "rounded rectangle box",
+    "ellipse",
+    "hexagon"
+   ],
+   "inventory": {
+    "devices": [
+     {
+      "box": 0,
+      "label": "ISP",
+      "type": "internet"
+     },
+     {
+      "box": 1,
+      "label": "Perimeter FW PFW-1",
+      "type": "firewall"
+     },
+     {
+      "box": 2,
+      "label": "TAP-01 (copper)",
+      "type": "tap"
+     },
+     {
+      "box": 3,
+      "label": "Core Switch CORE-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 4,
+      "label": "TAP-02 (10G fiber)",
+      "type": "tap"
+     },
+     {
+      "box": 5,
+      "label": "Server Switch SRV-SW-01",
+      "type": "switch"
+     },
+     {
+      "box": 6,
+      "label": "SPAN session 1",
+      "type": "span"
+     },
+     {
+      "box": 7,
+      "label": "DC Core 2",
+      "type": "switch"
+     },
+     {
+      "box": 8,
+      "label": "OT Network (PLCs)",
+      "type": "zone"
+     },
+     {
+      "box": 9,
+      "label": "Visibility Fabric VF-1",
+      "type": "packet_broker"
+     },
+     {
+      "box": 10,
+      "label": "APM",
+      "type": "security_tool"
+     },
+     {
+      "box": 11,
+      "label": "Sandbox",
+      "type": "security_tool"
+     },
+     {
+      "box": 12,
+      "label": "DLP",
+      "type": "security_tool"
+     },
+     {
+      "box": 13,
+      "label": "SIEM (primary)",
+      "type": "security_tool"
+     }
+    ],
+    "links": [
+     {
+      "from": 0,
+      "to": 1,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 2,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 3,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 4,
+      "to": 7,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 5,
+      "speed": "1G",
+      "kind": "production"
+     },
+     {
+      "from": 3,
+      "to": 7,
+      "speed": "10G",
+      "kind": "production"
+     },
+     {
+      "from": 5,
+      "to": 8,
+      "speed": "",
+      "kind": "production"
+     },
+     {
+      "from": 2,
+      "to": 9,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 4,
+      "to": 9,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 6,
+      "to": 9,
+      "speed": "",
+      "kind": "mirror"
+     },
+     {
+      "from": 9,
+      "to": 10,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 9,
+      "to": 11,
+      "speed": "10G",
+      "kind": "tool"
+     },
+     {
+      "from": 9,
+      "to": 12,
+      "speed": "1G",
+      "kind": "tool"
+     },
+     {
+      "from": 9,
+      "to": 13,
+      "speed": "25G",
+      "kind": "tool"
+     }
+    ],
+    "capture_points": [
+     {
+      "box": 2,
+      "kind": "tap",
+      "mirrors": "mirror: outbound only",
+      "direction": "tx_only",
+      "feeds": 9
+     },
+     {
+      "box": 4,
+      "kind": "tap",
+      "mirrors": "mirror (both)",
+      "direction": "both",
+      "feeds": 9
+     },
+     {
+      "box": 6,
+      "kind": "span",
+      "mirrors": "RX+TX",
+      "direction": "both",
+      "feeds": 9
+     }
+    ],
+    "untagged": [],
+    "boxes": [
+     [
+      463,
+      28,
+      539,
+      77
+     ],
+     [
+      435,
+      149,
+      567,
+      201
+     ],
+     [
+      369,
+      260,
+      465,
+      311
+     ],
+     [
+      211,
+      371,
+      343,
+      422
+     ],
+     [
+      532,
+      371,
+      644,
+      422
+     ],
+     [
+      28,
+      494,
+      163,
+      546
+     ],
+     [
+      205,
+      496,
+      351,
+      545
+     ],
+     [
+      483,
+      496,
+      594,
+      545
+     ],
+     [
+      34,
+      619,
+      157,
+      670
+     ],
+     [
+      343,
+      619,
+      490,
+      670
+     ],
+     [
+      190,
+      742,
+      263,
+      791
+     ],
+     [
+      305,
+      742,
+      401,
+      791
+     ],
+     [
+      443,
+      743,
+      516,
+      791
+     ],
+     [
+      559,
+      743,
+      702,
+      791
+     ]
+    ],
+    "_usage": {
+     "tokens_in": 1301,
+     "tokens_out": 3613
+    }
+   },
+   "seconds": 11.6
   }
  },
  "sam_seconds": 15.1,
- "cost_usd": 0.06254,
- "recorded_at": "2026-10-28"
+ "cost_usd": 0.07952,
+ "recorded_at": "2026-10-28",
+ "_last_cost": 0.01698
 }
