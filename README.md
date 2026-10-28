@@ -72,20 +72,23 @@ with symmetric hashing (every port's peak at or below 0.70 Gbps), or one 10 Gbps
 ### Benchmark suite: 200 cases (28 Oct 2026)
 
 A larger, generated suite across IDS, NDR, APM and SIEM tools: healthy feeds, below-threshold noise that must not
-alarm, one to three faults per case, 30 near-threshold cases, and tool-awareness traps. The answer key is computed
-from the generated packets, independently of VisiLoop's checks. Full details: [bench/suite/RESULTS.md](bench/suite/RESULTS.md).
+alarm, one to three faults per case, 30 near-threshold cases, and tool-awareness traps (heavy TLS, untagged or
+one-way traffic on a tool that tolerates it). The answer key is computed from the generated packets, independently
+of VisiLoop's checks. Full details: [bench/suite/RESULTS.md](bench/suite/RESULTS.md).
 
 | What | Result |
 |---|---|
-| Muse Spark diagnosis | **198/200** exactly right on the strict key; **200/200** tool-aware. Precision **100%**, recall **99.1%** |
-| Fix choice | **231/233** sensible (**231/231** tool-aware), **0** ungrounded claims |
-| Fault checks | **200/200** cases exactly right, **235/235** faults found, **0** false alarms |
+| Muse Spark diagnosis | **200/200** cases exactly right: **235/235** faults, **0** false alarms, **0** ungrounded claims |
+| Fix choice | **234/235** sensible |
+| Fault checks | **200/200** cases exactly right |
 | Fixes proven by simulation | **189/189** fixable faults verified fixed, every faulty case healthy afterwards |
-| Cost and speed | **US$2.15** for 200 diagnoses (about US$0.01 each), median **9.8 s** |
+| Cost and speed | **US$2.16** for 200 diagnoses (about US$0.01 each), median **9.6 s** |
 
-The only disagreements were four SIEM cases with one-way traffic. VisiLoop's SIEM profile says the tool does not
-need both directions, and Muse Spark applied that, finding a gap in our own one-way check, which ignores the
-tool profile.
+**Muse Spark found a gap in our own checks.** In the first run of the suite (v1), Muse Spark disagreed with the
+answer key on four SIEM cases with one-way traffic. Each time it explained that VisiLoop's SIEM profile does not need
+both directions, so no broker change was needed. It was right: our one-way check ignored the tool profile. We made the
+check tool-aware, added SIEM one-way traps to the suite (v2), and Muse Spark scored 200/200.
+v1 results: [bench/suite/results/RESULTS_v1.md](bench/suite/results/RESULTS_v1.md).
 
 ## Quick start
 

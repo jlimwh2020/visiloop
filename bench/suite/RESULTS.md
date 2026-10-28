@@ -18,7 +18,6 @@ Version 2 makes the one-way check tool-aware (a gap Muse Spark found in version 
 ## Headline
 
 - **Muse Spark diagnosis exactly right on 200/200 (100.0%) cases**, overall precision 100.0%, recall 100.0%.
-- **Tool-aware view: 200/200 (100.0%) exactly right, sensible fix 234/235 (99.6%).** Every disagreement with the strict key was Muse Spark applying the tool's profile (see section 3).
 - **Sensible fix chosen 234/235 (99.6%)** of the time; **0 ungrounded claims** reached the guard.
 - **Checks exactly right on 200/200 (100.0%) cases.**
 - **189/189 (100.0%) fixable faults verified fixed** in the simulated broker; 46 decryption items reported as advice.
@@ -95,6 +94,8 @@ Exactly right on **200/200 (100.0%)** cases. Tokens: 564,849 in, 342,161 out.
 Fix choices outside the accepted set:
 
 - `s151_double` packet_drops: `aggregate`
+
+Muse Spark only chooses and explains the fix; the broker settings themselves come from VisiLoop's deterministic fix plug-in for each fault, so a mislabelled choice does not change the configuration that is proposed and verified.
 
 ## Reproduce
 

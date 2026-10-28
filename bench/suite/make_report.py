@@ -209,9 +209,10 @@ def write_md(s):
         md += ["", "## Headline", "",
                f"- **Muse Spark diagnosis exactly right on {pct(a['exact'], a['cases'])} cases**, "
                f"overall precision {a['per_fault']['all']['precision']:.1%}, recall {a['per_fault']['all']['recall']:.1%}.",
-               f"- **Tool-aware view: {pct(a['tool_aware']['exact'], a['cases'])} exactly right, sensible fix "
-               f"{pct(a['tool_aware']['fix_sensible'], a['tool_aware']['fix_total'])}.** Every disagreement with the "
-               "strict key was Muse Spark applying the tool's profile (see section 3).",
+               *([f"- **Tool-aware view: {pct(a['tool_aware']['exact'], a['cases'])} exactly right, sensible fix "
+                  f"{pct(a['tool_aware']['fix_sensible'], a['tool_aware']['fix_total'])}.** Every disagreement with the "
+                  "strict key was Muse Spark applying the tool's profile (see section 3)."]
+                 if a["tool_aware"]["one_way_optional_cases"] else []),
                f"- **Sensible fix chosen {pct(a['fix_sensible'], a['fix_total'])}** of the time; "
                f"**{a['ungrounded_dropped']} ungrounded claims** reached the guard.",
                f"- **Checks exactly right on {pct(c['exact'], s['cases'])} cases.**",
@@ -261,6 +262,9 @@ def write_md(s):
         if a["bad_fixes"]:
             md += ["", "Fix choices outside the accepted set:", ""]
             md += [f"- `{n}` {fault}: `{act}`" for n, fault, act in a["bad_fixes"]]
+            md += ["", "Muse Spark only chooses and explains the fix; the broker settings themselves come from "
+                   "VisiLoop's deterministic fix plug-in for each fault, so a mislabelled choice does not change "
+                   "the configuration that is proposed and verified."]
     else:
         md += ["", "## 3. Muse Spark diagnosis", "", "Not run yet: `python bench/suite/run_suite_agent.py`"]
 
