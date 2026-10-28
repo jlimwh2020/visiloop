@@ -1,0 +1,140 @@
+{
+ "feed": "s176_triple",
+ "status": "degraded",
+ "summary": "Feed s176_triple to NDR is degraded: 100% VLAN tags stripped (VLANs 10,20 missing), 40.3% TCP sessions one-way, and 2.7% packet drops. NDR requires bidirectional, VLAN-aware, lossless traffic for detection - all three faults break reassembly and coverage.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker egress is stripping 802.1Q tags - 100% of packets are untagged while NDR requires VLANs 10 and 20, indicating broker configured to strip VLAN or deliver untagged handoff to tool port.",
+   "impact_on_tool": "NDR cannot segment or correlate traffic by VLAN 10/20, misses VLAN-dependent policies and detection logic, creating blind spots for those tenants.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "egress_mode": "tagged"
+    },
+    "why": "Preserve 802.1Q tags through packet broker to NDR so required VLAN context is retained for detection and filtering."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "85 of 211 TCP sessions (40.3%) show only one direction, typical of capturing only one side of the link or asymmetric routing where broker hashes client->server and server->client to different tool ports without aggregation.",
+   "impact_on_tool": "NDR needs both directions for TCP handshake tracking, stateful reassembly and payload analysis; one-way flows prevent session reconstruction, causing missed intrusions and broken detection.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "hash_by_bidirectional_flow": true
+    },
+    "why": "Aggregate both directions of each flow to the same NDR tool port to restore full bidirectional visibility required for stateful NDR analysis."
+   },
+   "evidence_frames": [
+    17,
+    98,
+    105,
+    111,
+    164,
+    173,
+    226,
+    252,
+    277,
+    338,
+    354,
+    391,
+    399,
+    409,
+    458,
+    477,
+    478,
+    492,
+    596,
+    665
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "68 of 2504 TCP packets (2.7%) show gaps/retransmissions indicating drops in the visibility path, most likely SPAN/mirror oversubscription and buffer exhaustion under burst since tool overload check is healthy.",
+   "impact_on_tool": "Missing packets break TCP reassembly, file extraction and stream analysis, degrading NDR detection accuracy and causing incomplete flows and false negatives.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "source": "SPAN",
+     "replacement": "TAP",
+     "tap_both_directions": true
+    },
+    "why": "TAP provides lossless full-duplex capture without SPAN buffer drops, eliminating sequence gaps and restoring complete traffic to the NDR."
+   },
+   "evidence_frames": [
+    91,
+    92,
+    140,
+    141,
+    186,
+    187,
+    188,
+    189,
+    200,
+    204,
+    268,
+    269,
+    324,
+    325,
+    348,
+    438,
+    439,
+    471,
+    472,
+    566
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3561,
+  "tokens_out": 2711,
+  "cost_usd": 0.01597,
+  "seconds": 15.1,
+  "recorded_at": "2026-10-29"
+ }
+}

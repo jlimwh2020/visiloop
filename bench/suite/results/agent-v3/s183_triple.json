@@ -1,0 +1,140 @@
+{
+ "feed": "s183_triple",
+ "status": "degraded",
+ "summary": "Feed s183_triple is degraded for IDS: 3 faults. VLANs 10,20 required by IDS are completely missing (100% untagged), 8.6% of frames are sliced to ~192 bytes breaking full-payload inspection, and 74.8% encrypted share exceeds IDS tolerance of 60%.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN is stripping 802.1Q tags or feed is taken from untagged access ports. All packets arrive untagged so required VLANs 10 and 20 are never seen.",
+   "impact_on_tool": "IDS cannot apply VLAN-aware policies or segment detection for VLANs 10,20. Traffic from those segments is invisible or misclassified, creating complete detection blind spot for those VLANs.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "pass-through"
+    },
+    "why": "IDS profile requires VLANs 10,20 to be present. Configure broker to preserve 802.1Q tags end-to-end and ensure source TAPs are on trunk links carrying 10,20."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snaplen configured to ~192 bytes (153/1779 frames = 8.6% truncated, above 5% threshold). Likely intentional slicing to save tool bandwidth.",
+   "impact_on_tool": "IDS needs_full_payload=true. Sliced frames lose L7 payload, breaking signature matching, file extraction, and stream reassembly. IDS will miss payload-based detections.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518,
+     "disable_slicing": true
+    },
+    "why": "IDS requires full payload up to 1518 bytes. Disable slicing or increase snaplen to max_frame_bytes on broker egress to this IDS."
+   },
+   "evidence_frames": [
+    16,
+    30,
+    31,
+    36,
+    45,
+    48,
+    65,
+    68,
+    112,
+    133,
+    156,
+    157,
+    160,
+    163,
+    175,
+    176,
+    178,
+    200,
+    210,
+    213
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "74.8% of bytes are encrypted vs 60% IDS tolerance. Traffic is predominantly TLS/encrypted and is being sent to IDS without prior decryption or selective filtering.",
+   "impact_on_tool": "IDS is payload-dependent and cannot inspect encrypted payloads. High encrypted share blinds detection, reduces signature efficacy to metadata only, and wastes IDS capacity.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "max_encrypted_share": 0.6,
+     "current_share": 0.7484,
+     "solution": "out-of-band TLS decryption or selective forwarding"
+    },
+    "why": "Share exceeds tool tolerance. Decrypt relevant TLS centrally and forward cleartext to IDS, or filter/route encrypted traffic that IDS cannot analyze to maintain effective coverage."
+   },
+   "evidence_frames": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3559,
+  "tokens_out": 2340,
+  "cost_usd": 0.01439,
+  "seconds": 13.7,
+  "recorded_at": "2026-10-29"
+ }
+}

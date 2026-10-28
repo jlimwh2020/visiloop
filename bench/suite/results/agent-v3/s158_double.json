@@ -1,0 +1,74 @@
+{
+ "feed": "s158_double",
+ "status": "degraded",
+ "summary": "Feed s158_double to IDS is degraded: 25.5% of frames are sliced to 128 bytes preventing payload inspection (high) and 15.6% are duplicates (medium). IDS requires full payload and will have severely reduced detection coverage until slicing is disabled and deduplication is enabled.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker packet slicing/truncation is enabled and cutting frames to ~128 bytes, likely to save bandwidth or fit the 1Gbps tool port. This strips L4 payload and is incompatible with IDS requirements.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection. With 959/3765 frames (25.5%) truncated, payload-based signatures, file extraction, and exploit detection will fail - traffic appears as false negatives.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "IDS is configured as needs_full_payload=true. Disable slicing on the broker policy for this IDS feed to forward full 1518-byte frames so signatures can match."
+   },
+   "evidence_frames": [
+    18,
+    19,
+    21,
+    23,
+    24,
+    47,
+    49,
+    52,
+    57,
+    59,
+    74,
+    75,
+    78,
+    79,
+    88,
+    89,
+    94,
+    95,
+    103,
+    105
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets delivered twice (586/3765 = 15.6% duplicates, threshold 5%). Typical cause is aggregating the same SPAN/mirror from two directions or two TAPs without broker deduplication, or a looped broker mesh forwarding both copies to the tool.",
+   "impact_on_tool": "IDS wastes CPU/storage processing duplicates, inflates flow counts and alerts, skews analytics, and can cause TCP reassembly/state issues. At 15.6% it reduces effective capacity of the 1Gbps IDS port.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10
+    },
+    "why": "Enable packet-broker deduplication (de-duplication window ~10ms) on the feed to s158_double to drop the second copy before delivery to the IDS, restoring accurate traffic counts."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3363,
+  "tokens_out": 1839,
+  "cost_usd": 0.01202,
+  "seconds": 11.1,
+  "recorded_at": "2026-10-29"
+ }
+}

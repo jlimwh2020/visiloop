@@ -1,0 +1,109 @@
+{
+ "feed": "s180_triple",
+ "status": "degraded",
+ "summary": "SIEM feed s180_triple is degraded: 15.3% of frames are dropped as oversize (>1518B, up to 8108B), 28.3% arrive still ERSPAN-encapsulated and opaque to the SIEM, and 19.4% are duplicates wasting capacity.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo frames and ERSPAN-encapsulated frames up to 8108 bytes to a 1 Gbps SIEM port with 1518-byte MTU. ERSPAN overhead pushes frames over the NIC limit so the card drops them before the SIEM can process them.",
+   "impact_on_tool": "SIEM silently drops 581 of 3808 frames (15.3%) at the NIC, creating a blind spot - those flows/events are never parsed, correlated or alerted.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518
+    },
+    "why": "SIEM has needs_full_payload=false and needs only headers/metadata, so slicing/trimming to 1518B at the broker preserves detection value while preventing NIC drops. If full payload is later required, use mtu_advice to raise SIEM MTU or lower network MTU instead."
+   },
+   "evidence_frames": [
+    45,
+    46,
+    47,
+    49,
+    50,
+    60,
+    61,
+    63,
+    64,
+    65,
+    67,
+    68,
+    124,
+    125,
+    127,
+    128,
+    130,
+    140,
+    141,
+    143
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "1076 of 3808 frames (28.3%) arrive inside ERSPAN tunnel. Broker is mirroring/ERSPAN-forwarding without stripping the outer tunnel header before delivery to the tool port.",
+   "impact_on_tool": "SIEM without ERSPAN decapsulation cannot parse inner Ethernet/IP headers or payload, so 28.3% of traffic is opaque to detection and correlation rules, reducing coverage.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN"
+    },
+    "why": "Strip ERSPAN at the packet broker to present native inner packets to the SIEM, restoring visibility without requiring tool-side tunnel support."
+   },
+   "evidence_frames": [
+    92,
+    94,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "19.4% duplicates (737 of 3808) from overlapping SPAN/ERSPAN sources or aggregation of same traffic via multiple broker ingress ports without deduplication enabled.",
+   "impact_on_tool": "Wastes SIEM 1G ingest, license and storage on redundant packets, inflates counts and can skew correlation/analytics while leaving less headroom for unique traffic.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {},
+    "why": "Enable packet-broker deduplication (window-based) to drop identical packets before delivery, freeing bandwidth for unique events."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3520,
+  "tokens_out": 2882,
+  "cost_usd": 0.01665,
+  "seconds": 15.2,
+  "recorded_at": "2026-10-29"
+ }
+}

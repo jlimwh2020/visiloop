@@ -1,0 +1,100 @@
+{
+ "feed": "s113_double",
+ "status": "degraded",
+ "summary": "Feed s113_double is degraded: 2 faults detected. 78.3% encrypted traffic exceeds IDS tolerance (60%) and 8.3% of frames are sliced to ~256 bytes, both reducing IDS payload visibility and detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "78.3% of bytes are encrypted (TLS/encrypted) vs 60% IDS tolerance. Packet broker is forwarding encrypted traffic without decryption/SSL visibility, likely no decrypt policy or keys installed before the IDS.",
+   "impact_on_tool": "IDS cannot inspect payloads inside encryption; signatures and anomaly detection are blind to ~78% of traffic, allowing threats to hide in encrypted flows and reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "packet_broker_before_ids",
+     "encrypted_share": 0.7832,
+     "threshold": 0.6
+    },
+    "why": "IDS needs cleartext payload for inspection; decrypt relevant TLS at broker/proxy or route a decrypted copy to IDS to bring encrypted share below 60% tolerance"
+   },
+   "evidence_frames": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    13,
+    15,
+    17,
+    19,
+    21,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing is enabled and cutting frames to ~256 bytes. 143 of 1728 frames (8.3%) are truncated, exceeding 5% threshold. IDS requires full payload but is receiving sliced packets.",
+   "impact_on_tool": "IDS with needs_full_payload=true cannot perform full signature matching, reassembly, or file extraction on truncated frames; attacks beyond 256 bytes are missed and alerts are incomplete.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 256,
+     "truncated_share": 0.0828
+    },
+    "why": "Disable slicing / set snaplen to 0 or >=1518 bytes for this IDS feed so full payload is delivered within its 1518-byte MTU, restoring detection capability"
+   },
+   "evidence_frames": [
+    43,
+    45,
+    78,
+    100,
+    135,
+    168,
+    185,
+    211,
+    227,
+    232,
+    243,
+    261,
+    285,
+    290,
+    301,
+    326,
+    332,
+    346,
+    357,
+    381
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3438,
+  "tokens_out": 1922,
+  "cost_usd": 0.01247,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-29"
+ }
+}

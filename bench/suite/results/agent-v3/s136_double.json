@@ -1,0 +1,98 @@
+{
+ "feed": "s136_double",
+ "status": "degraded",
+ "summary": "Feed s136_double is degraded for NDR: 58.6% VXLAN-encapsulated traffic hides inner flows and 14.5% of frames are sliced to 256 bytes, preventing full-payload inspection.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic (1770/3018 frames) without stripping the overlay header. NDR is seeing outer VXLAN packets instead of inner original frames.",
+   "impact_on_tool": "NDR cannot parse inner L2-L7 headers or payload, misses lateral movement and C2 detection, and wastes cycles on tunnel headers; 58.6% of traffic is effectively blind.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "encapsulated_share": 0.5865
+    },
+    "why": "Strip VXLAN at the packet broker to expose inner Ethernet/IP to the NDR for full detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing is enabled and cutting frames to ~256 bytes (437/3018 frames, 14.5% exceeds 5% threshold). Likely a broker slice policy left on for this NDR feed.",
+   "impact_on_tool": "NDR requires full payload for deep packet inspection, file extraction, and signature matching. Truncated payloads cause missed detections and broken stream reassembly.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 256
+    },
+    "why": "Disable slicing for this NDR feed to deliver full payload as required by tool profile (needs_full_payload=true)."
+   },
+   "evidence_frames": [
+    18,
+    22,
+    25,
+    33,
+    35,
+    41,
+    52,
+    53,
+    74,
+    77,
+    78,
+    88,
+    89,
+    91,
+    101,
+    102,
+    105,
+    117,
+    118,
+    120
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3442,
+  "tokens_out": 1861,
+  "cost_usd": 0.01221,
+  "seconds": 12.8,
+  "recorded_at": "2026-10-29"
+ }
+}

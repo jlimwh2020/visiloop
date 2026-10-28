@@ -1,0 +1,60 @@
+{
+ "feed": "s100_single",
+ "status": "degraded",
+ "summary": "Feed s100_single is degraded: 17.1% of frames truncated (mostly to 128 bytes) prevents NDR full-payload inspection. All other visibility checks healthy.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker has packet slicing / snap-length enabled at ~128 bytes, cutting payload from frames before delivery to tool.",
+   "impact_on_tool": "NDR requires full payload for deep packet inspection, signature matching and anomaly detection; truncated frames hide application payload and reduce detection coverage.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "NDR needs_full_payload=true - disable slicing (or set snaplen >=9216 to match tool max_frame_bytes) to deliver complete frames for analysis."
+   },
+   "evidence_frames": [
+    9,
+    13,
+    23,
+    24,
+    34,
+    36,
+    37,
+    40,
+    42,
+    53,
+    55,
+    59,
+    72,
+    73,
+    85,
+    89,
+    104,
+    105,
+    106,
+    110
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3318,
+  "tokens_out": 1466,
+  "cost_usd": 0.01038,
+  "seconds": 12.2,
+  "recorded_at": "2026-10-29"
+ }
+}

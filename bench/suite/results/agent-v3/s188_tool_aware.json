@@ -1,0 +1,26 @@
+{
+ "feed": "s188_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed 's188_tool_aware'. Tool receives complete, correct bidirectional traffic with no packet drops, duplicates, truncation, oversize, tunnel encapsulation, VLAN stripping, one-way, or overload issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 925,
+  "cost_usd": 0.00791,
+  "seconds": 7.7,
+  "recorded_at": "2026-10-29"
+ }
+}

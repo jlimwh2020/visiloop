@@ -1,0 +1,78 @@
+{
+ "feed": "s160_double",
+ "status": "degraded",
+ "summary": "Feed s160_double to IDS is degraded: 12.6% duplicate packets and 19.4% one-way TCP sessions (26/134). IDS requires both directions and full payload for stateful detection - both faults reduce detection coverage and waste tool capacity.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "19.4% of TCP sessions are one-way (26 of 134), exceeding 10% threshold. Most likely asymmetric routing combined with packet broker load-balancing without flow affinity, or SPAN/TAP covering only one direction, so client->server and server->client are sent to different tool ports or one direction is missing entirely.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and stateful signature matching. One-way flows prevent stream reassembly, break detection of exploits that span request/response, and cause high false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "flow_hash": "5-tuple"
+    },
+    "why": "Configure packet broker aggregation / flow-aware hashing to deliver both directions of each session to this same 1G IDS port, ensuring complete bidirectional flows for detection."
+   },
+   "evidence_frames": [
+    3,
+    148,
+    173,
+    189,
+    266,
+    506,
+    624,
+    669,
+    732,
+    912,
+    922,
+    931,
+    1018,
+    1026,
+    1403,
+    1448,
+    1517,
+    1526,
+    1617,
+    1629
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "12.6% of packets are duplicates (283 of 2243, threshold 5%). Typical cause is overlapping SPAN sessions, tapping both sides of a link, or aggregating multiple TAP feeds without broker deduplication enabled.",
+   "impact_on_tool": "Duplicates waste IDS 1G capacity and processing, inflate flow counts, distort analytics, and can trigger false positives or cause resource exhaustion that masks real attacks.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet broker deduplication (packet hash window) before delivery to IDS to drop identical copies while preserving one complete copy of each packet."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3369,
+  "tokens_out": 2114,
+  "cost_usd": 0.0132,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

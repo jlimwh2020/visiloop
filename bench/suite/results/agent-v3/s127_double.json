@@ -1,0 +1,100 @@
+{
+ "feed": "s127_double",
+ "status": "degraded",
+ "summary": "Feed s127_double is degraded: IDS drops 4.2% oversize frames (>1518B) and cannot inspect 28.6% ERSPAN-tunneled traffic, creating detection blind spots.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Source network uses jumbo frames up to 8108 bytes but IDS tool port is standard 1518B MTU and packet broker forwards them unchanged without slicing or MTU handling.",
+   "impact_on_tool": "IDS NIC silently drops 142/3381 frames (4.2%) exceeding 1518B, so IDS misses full flows and payload for large transfers, reducing detection coverage for attacks using large packets.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "observed_max_bytes": 8108,
+     "recommended_mtu": 9216
+    },
+    "why": "IDS needs full payload and cannot process truncated frames; increasing tool port MTU to 9216 (or at least 8108) or enabling jumbo support on broker egress prevents drops without slicing payload needed for IDS signatures."
+   },
+   "evidence_frames": [
+    159,
+    160,
+    163,
+    164,
+    166,
+    192,
+    194,
+    199,
+    200,
+    202,
+    203,
+    299,
+    302,
+    304,
+    307,
+    309,
+    395,
+    396,
+    398,
+    399
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "28.6% of traffic arrives encapsulated in ERSPAN (968/3381 frames) and packet broker is not stripping the tunnel header before delivery to IDS.",
+   "impact_on_tool": "IDS sees only outer ERSPAN headers and cannot parse inner original L2-L7 headers/payload, so 28.6% of traffic is opaque to IDS signatures and anomaly detection.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Stripping ERSPAN at the packet broker exposes inner packets to the IDS, restoring visibility without requiring IDS to support tunnel decapsulation."
+   },
+   "evidence_frames": [
+    101,
+    103,
+    104,
+    105,
+    106,
+    109,
+    110,
+    113,
+    114,
+    116,
+    119,
+    121,
+    122,
+    123,
+    125,
+    126,
+    135,
+    136,
+    137,
+    138
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3440,
+  "tokens_out": 2085,
+  "cost_usd": 0.01316,
+  "seconds": 14.2,
+  "recorded_at": "2026-10-29"
+ }
+}

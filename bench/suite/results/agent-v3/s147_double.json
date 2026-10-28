@@ -1,0 +1,102 @@
+{
+ "feed": "s147_double",
+ "status": "degraded",
+ "summary": "Feed s147_double to NDR is degraded: VLAN 20 traffic missing (49% untagged) and 7.0% TCP packet loss detected. NDR has blind spot for VLAN 20 and incomplete flows due to drops.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN trunk is stripping or not forwarding 802.1Q tags for VLAN 20. Required VLAN 20 not seen and 49% of packets are untagged, indicating VLAN preservation is disabled or trunk allowed-list missing VLAN 20.",
+   "impact_on_tool": "NDR is blind to all traffic on VLAN 20 and cannot apply VLAN-aware policies; 49% untagged traffic loses segmentation context, reducing detection coverage for lateral movement and VLAN-hopping.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "ensure_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Enable VLAN tag preservation/pass-through for required VLANs 10 and 20 on broker ingress/egress and verify trunk allows VLAN 20 so NDR receives correctly tagged traffic."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    21,
+    23,
+    24,
+    25,
+    27,
+    28,
+    30,
+    31,
+    34,
+    37
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Visibility path is dropping packets before the NDR - 171 of 2435 TCP packets (7.0%) show gaps/retransmissions exceeding 1% threshold. Tool overload check is healthy, so drops are upstream on SPAN/broker egress buffers due to microbursts or oversubscription, not tool NIC overload.",
+   "impact_on_tool": "NDR with needs_full_payload and needs_both_directions cannot reassemble flows or extract payloads; 7% missing segments causes broken TCP reassembly, missed detections, and false negatives for IDS/NDR analytics.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "add_tool_ports": 1
+    },
+    "why": "Distribute feed across additional NDR tool ports / broker egress group with 5-tuple hashing to eliminate egress buffer drops and ensure complete flow delivery without reordering."
+   },
+   "evidence_frames": [
+    23,
+    26,
+    114,
+    115,
+    128,
+    130,
+    140,
+    142,
+    165,
+    168,
+    183,
+    184,
+    198,
+    199,
+    267,
+    268,
+    314,
+    315,
+    316,
+    317
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3435,
+  "tokens_out": 2745,
+  "cost_usd": 0.01596,
+  "seconds": 16.1,
+  "recorded_at": "2026-10-29"
+ }
+}

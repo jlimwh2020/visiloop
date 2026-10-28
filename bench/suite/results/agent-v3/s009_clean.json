@@ -1,0 +1,26 @@
+{
+ "feed": "s009_clean",
+ "status": "healthy",
+ "summary": "Feed 's009_clean' is healthy for the NDR. All 9 visibility checks passed (duplicates, one_way, missing_vlan, truncated, oversize, packet_drops, tool_overload, encrypted_share, tunnel). Traffic is complete and correct for NDR requirements: bidirectional visibility, full payload, VLANs 10/20 present, no overload on 10 Gbps port, and jumbo support to 9216 bytes.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3180,
+  "tokens_out": 984,
+  "cost_usd": 0.00816,
+  "seconds": 8.5,
+  "recorded_at": "2026-10-29"
+ }
+}

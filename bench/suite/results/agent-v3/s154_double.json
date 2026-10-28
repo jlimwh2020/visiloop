@@ -1,0 +1,97 @@
+{
+ "feed": "s154_double",
+ "status": "degraded",
+ "summary": "IDS s154_double is degraded: 10.4% oversize frames (>1518B, up to 8058B) dropped by 1Gbps IDS NIC and 10.1% TCP packets show missing data due to broker slicing. Both cause silent detection gaps for payload-based signatures.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "227 of 2185 frames (10.4%) exceed the IDS port MTU of 1518 bytes (largest 8058 bytes). Likely jumbo frames or encapsulated traffic forwarded without MTU conditioning; the IDS NIC drops oversize frames before inspection.",
+   "impact_on_tool": "IDS silently loses ~10% of frames. Any attack or C2 in large/jumbogram frames is invisible, creating systematic detection blind spot.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "current_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "suggested_jumbo_mtu": 9000
+    },
+    "why": "IDS needs full payload but cannot receive frames >1518B. Enable jumbo-frame support (MTU 9000) on IDS NIC and packet-broker egress, or configure broker to handle MTU conditioning without slicing, so large frames are delivered intact instead of being dropped."
+   },
+   "evidence_frames": [
+    51,
+    52,
+    53,
+    54,
+    57,
+    59,
+    72,
+    74,
+    83,
+    86,
+    96,
+    97,
+    99,
+    100,
+    102,
+    156,
+    157,
+    159,
+    160,
+    188
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "212 of 2101 TCP packets (10.1%) show sequence gaps by IP-length analysis and the feed is sliced. Broker payload slicing/truncation is cutting packets short, breaking TCP reassembly.",
+   "impact_on_tool": "IDS requires full payload for stream reassembly and signature matching. Sliced packets cause missing data, failed reassembly, missed exploits and increased false negatives/evasion risk.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "Disable snaplen/slicing on the packet broker for this IDS feed to deliver full packets. Combine with jumbo-MTU fix above so full-size frames are not dropped after disabling slicing."
+   },
+   "evidence_frames": [
+    7,
+    8,
+    23,
+    24,
+    49,
+    51,
+    53,
+    55,
+    72,
+    77,
+    79,
+    80,
+    81,
+    82,
+    83,
+    85,
+    139,
+    187,
+    188,
+    192
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3460,
+  "tokens_out": 2605,
+  "cost_usd": 0.0154,
+  "seconds": 15.0,
+  "recorded_at": "2026-10-29"
+ }
+}

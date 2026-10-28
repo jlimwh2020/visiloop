@@ -1,0 +1,93 @@
+{
+ "feed": "s156_double",
+ "status": "degraded",
+ "summary": "Feed s156_double to IDS is degraded: 14.8% frames sliced to ~192 bytes and 10.4% TCP packets show missing data/sequence gaps. IDS requires full payload and both directions - slicing blinds payload inspection and breaks TCP reassembly.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker has slicing/snaplen enabled at ~192 bytes, cutting frames short before delivery. Evidence shows 456 of 3077 frames (14.8%) truncated, most to 192 bytes.",
+   "impact_on_tool": "IDS needs_full_payload=true for signature and anomaly detection. Truncated payload hides application data, exploits and C2, causing missed detections and evasion.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "IDS requires full payload up to 1518 bytes. Disable slicing / set snaplen >=1518 for this IDS feed to deliver complete frames."
+   },
+   "evidence_frames": [
+    11,
+    18,
+    19,
+    22,
+    23,
+    34,
+    36,
+    61,
+    73,
+    78,
+    89,
+    101,
+    117,
+    120,
+    122,
+    123,
+    131,
+    133,
+    141,
+    148
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Same slicing configuration is causing apparent packet loss: broker forwards sliced frames so TCP sequence analysis by IP length shows gaps. 310 of 2985 TCP packets (10.4%) show missing data, well above 1% threshold. Feed is confirmed sliced.",
+   "impact_on_tool": "IDS TCP reassembly and stream tracking fails with missing segments. Results in incomplete flows, missed alerts, and degraded detection coverage for multi-packet attacks.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "Removing slicing restores full packet length and eliminates sequence gaps. If slicing is needed for other tools, create an unsliced replica or increase snaplen to max_frame_bytes 1518 for this IDS feed."
+   },
+   "evidence_frames": [
+    31,
+    32,
+    33,
+    34,
+    50,
+    51,
+    52,
+    59,
+    60,
+    76,
+    91,
+    92,
+    93,
+    145,
+    148,
+    149,
+    195,
+    200,
+    202,
+    231
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3450,
+  "tokens_out": 2261,
+  "cost_usd": 0.01392,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-29"
+ }
+}

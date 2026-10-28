@@ -1,0 +1,63 @@
+{
+ "feed": "s076_single",
+ "status": "degraded",
+ "summary": "Feed s076_single is degraded for IDS: 21.9% of TCP sessions are one-way (33/151), exceeding 10% threshold. IDS requires bidirectional traffic for stateful inspection. All other checks (duplicates, encryption, VLAN, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is forwarding only one direction of TCP sessions to the IDS tool port. Most likely cause is incomplete aggregation - client-to-server and server-to-client directions are split across different tool ports, or capture is from a single-direction SPAN/TAP, or asymmetric routing with single-sided capture. 33 of 151 sessions affected.",
+   "impact_on_tool": "IDS needs both directions (needs_both_directions=true) for TCP reassembly, stream tracking, and signature matching. With 21.9% one-way flows, IDS cannot correlate request/response, misses attacks that span both directions, loses detection coverage and generates incomplete session logs.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_flow_5tuple": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port using 5-tuple hashing on the packet broker so the IDS sees complete bidirectional sessions for stateful analysis."
+   },
+   "evidence_frames": [
+    19,
+    28,
+    40,
+    87,
+    116,
+    186,
+    331,
+    385,
+    409,
+    464,
+    491,
+    681,
+    706,
+    820,
+    836,
+    991,
+    1028,
+    1036,
+    1109,
+    1116
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3306,
+  "tokens_out": 1720,
+  "cost_usd": 0.01144,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

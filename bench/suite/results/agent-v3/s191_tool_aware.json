@@ -1,0 +1,26 @@
+{
+ "feed": "s191_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed 's191_tool_aware'. Tool receives complete, correct traffic within its requirements (bidirectional, payload handling, 10Gbps capacity, VLANs, encryption share, frame size). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3177,
+  "tokens_out": 899,
+  "cost_usd": 0.00779,
+  "seconds": 7.0,
+  "recorded_at": "2026-10-29"
+ }
+}

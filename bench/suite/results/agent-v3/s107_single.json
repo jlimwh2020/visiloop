@@ -1,0 +1,63 @@
+{
+ "feed": "s107_single",
+ "status": "degraded",
+ "summary": "APM feed s107_single is degraded due to packet loss: 2.3% of TCP packets (57/2513) show missing data, exceeding 1% threshold. All other checks (duplicates, one-way, truncation, tunnels, VLAN, encryption, oversize, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Visibility fabric is dropping packets under load - TCP sequence gaps/retransmission gaps indicate ~2.3% loss. With tool overload healthy and no truncation/oversize, loss is occurring upstream of the tool at the SPAN/TAP or packet broker ingress/egress buffers due to microbursts or sustained oversubscription/policing, not at the APM itself.",
+   "impact_on_tool": "APM requires both directions for transaction correlation. Missing segments cause incomplete flows, inaccurate latency/response-time calculations, false retransmission/timeout alerts, and missed or broken traces, reducing APM detection coverage and service-map accuracy.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "egress_ports": 2
+    },
+    "why": "Distribute the feed across multiple 10G APM tool ports or broker egress groups with 5-tuple hashing to eliminate buffer drops and microburst loss while preserving both directions of each flow to the same tool instance."
+   },
+   "evidence_frames": [
+    218,
+    220,
+    285,
+    286,
+    299,
+    301,
+    404,
+    405,
+    480,
+    481,
+    512,
+    515,
+    691,
+    693,
+    718,
+    719,
+    800,
+    802,
+    824,
+    830
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3309,
+  "tokens_out": 2336,
+  "cost_usd": 0.01406,
+  "seconds": 17.1,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "feed": "s095_single",
+ "status": "degraded",
+ "summary": "Feed s095_single to IDS is degraded: 9.5% of frames are truncated/sliced to ~128 bytes (168/1770, threshold 5%), all other checks healthy. Slicing removes payload the IDS needs for detection.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snap-length is enabled at ~128 bytes, likely to conserve bandwidth to the 1 Gbps IDS port. 168 of 1770 frames (9.49%) are cut short, stripping L4/L7 payload before delivery.",
+   "impact_on_tool": "IDS needs_full_payload=true for signature matching and stream reassembly. Truncated frames hide exploits, prevent file/malware extraction and cause missed detections/false negatives.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_snaplen_bytes": 128,
+     "required_snaplen_bytes": 1518
+    },
+    "why": "IDS requires full payload up to 1518 bytes; disable slicing or set snaplen >=1518/MTU so complete packets reach the IDS for full detection coverage."
+   },
+   "evidence_frames": [
+    8,
+    11,
+    12,
+    23,
+    29,
+    31,
+    32,
+    40,
+    48,
+    49,
+    62,
+    145,
+    148,
+    164,
+    168,
+    169,
+    189,
+    194,
+    197,
+    203
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3317,
+  "tokens_out": 1786,
+  "cost_usd": 0.01174,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-29"
+ }
+}

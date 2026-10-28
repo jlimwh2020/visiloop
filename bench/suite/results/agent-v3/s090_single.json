@@ -1,0 +1,63 @@
+{
+ "feed": "s090_single",
+ "status": "degraded",
+ "summary": "Feed s090_single is degraded for NDR: 52.3% of TCP sessions (69/132) are one-way, exceeding 10% threshold. NDR requires bidirectional traffic for TCP reassembly and detection, so coverage is severely reduced. All other checks (duplicates, encryption, VLANs, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is forwarding only one direction per session. Most likely SPAN configured for RX-only or TX-only, or only one side of an asymmetric path is tapped without RX+TX aggregation, so the NDR receives client->server without server->client (or vice versa) for 69 sessions.",
+   "impact_on_tool": "NDR needs_both_directions=true for TCP stream reassembly, flow state, and behavioral detection. With 52% one-way flows it cannot reconstruct handshakes, track request/response, or detect lateral movement/C2/data exfiltration, causing missed detections and incomplete session records.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "span_config": "both rx and tx"
+    },
+    "why": "Aggregate RX and TX from the source TAP/SPAN into a single bidirectional feed to the NDR so both directions of each TCP session are delivered together for proper reassembly. If SPAN is in use, replace with TAP aggregation to avoid SPAN direction drops."
+   },
+   "evidence_frames": [
+    1,
+    38,
+    59,
+    69,
+    87,
+    97,
+    122,
+    142,
+    149,
+    201,
+    224,
+    229,
+    241,
+    249,
+    276,
+    296,
+    355,
+    412,
+    439,
+    452
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3300,
+  "tokens_out": 1793,
+  "cost_usd": 0.01175,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-29"
+ }
+}

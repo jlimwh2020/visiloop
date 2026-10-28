@@ -1,0 +1,26 @@
+{
+ "feed": "s016_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s016_clean. Traffic is complete and correct: no duplicates, one-way flows, drops, overload, truncation, tunnels, VLAN gaps, oversize frames, or excessive encryption detected. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3189,
+  "tokens_out": 826,
+  "cost_usd": 0.0075,
+  "seconds": 7.4,
+  "recorded_at": "2026-10-29"
+ }
+}

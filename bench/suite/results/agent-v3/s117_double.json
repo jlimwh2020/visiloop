@@ -1,0 +1,78 @@
+{
+ "feed": "s117_double",
+ "status": "degraded",
+ "summary": "APM feed s117_double is degraded: 56.2% of TCP sessions are one-way and 11.3% of packets are duplicates, preventing complete bidirectional transaction analysis.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding only one direction for most flows to this APM port. With 72 of 128 TCP sessions (56.2%) showing single-direction traffic, this indicates asymmetric routing combined with per-direction load-balancing/filtering or a SPAN/mirror configured for one direction, where return traffic is sent to a different tool port.",
+   "impact_on_tool": "APM needs_both_directions=true to correlate requests/responses and compute latency, error rate and transaction completion. One-way visibility causes broken transaction stitching, missing response times and under-reported errors.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_affinity": true,
+     "hash": "5-tuple"
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow/session to the same APM tool port using flow-aware bidirectional hashing, ensuring complete request/response pairs for APM."
+   },
+   "evidence_frames": [
+    1,
+    11,
+    47,
+    57,
+    75,
+    168,
+    226,
+    271,
+    275,
+    284,
+    297,
+    305,
+    313,
+    385,
+    387,
+    450,
+    460,
+    486,
+    510,
+    521
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "11.3% duplicate packets (181 of 1605) indicates overlapping capture sources (e.g., SPAN from two switches or dual TAPs) aggregated in the packet broker without deduplication, delivering the same packet twice.",
+   "impact_on_tool": "Duplicates inflate APM transaction counts, distort retransmission and latency calculations, and waste APM processing cycles and 10G port bandwidth even though full payload is not required.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to suppress identical packets within a short window before delivery, restoring accurate metrics and reducing load on APM."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3368,
+  "tokens_out": 2151,
+  "cost_usd": 0.01335,
+  "seconds": 15.1,
+  "recorded_at": "2026-10-29"
+ }
+}

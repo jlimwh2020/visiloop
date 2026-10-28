@@ -1,0 +1,137 @@
+{
+ "feed": "s175_triple",
+ "status": "degraded",
+ "summary": "Feed s175_triple is degraded for IDS: 25.5% of TCP sessions are one-way, 6.8% of TCP packets show sequence gaps indicating drops, and 11.0% of frames are sliced to 256 bytes. IDS requires both directions and full payload for stream reassembly and signature matching, so detection coverage is significantly reduced.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP conversations is reaching the tool (37/145 sessions = 25.5% one-way, threshold 10%). Most likely the packet broker is forwarding only RX or TX from a single tap/SPAN leg without aggregating both directions, or asymmetric routing is captured at a single point. IDS needs both directions is true.",
+   "impact_on_tool": "IDS cannot reassemble TCP streams, track state, or correlate request/response. Results in missed detections, broken flow records, and high false-negative rate for bidirectional signatures.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_both_legs": "combine RX+TX from paired tap/SPAN sources at broker"
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port so stateful inspection sees complete sessions."
+   },
+   "evidence_frames": [
+    3,
+    6,
+    54,
+    77,
+    92,
+    120,
+    131,
+    134,
+    146,
+    168,
+    215,
+    378,
+    503,
+    506,
+    554,
+    624,
+    669,
+    678,
+    721,
+    799
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "124/1836 TCP packets (6.8%, threshold 1%) show sequence gaps by IP length analysis. Feed is noted as sliced yet drops persist, indicating packet broker egress congestion/buffer drops or SPAN oversubscription before the 1 Gbps IDS port. Tool overload check is healthy, so loss is upstream of tool.",
+   "impact_on_tool": "IDS misses packets mid-stream causing failed reassembly, missed signatures, and evasion opportunity. 6.8% loss is well above IDS tolerance and degrades detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "feed": "s175_triple",
+     "tool_ports": 2,
+     "alternative": "filter non-IDS traffic"
+    },
+    "why": "Reduce per-port load and buffer pressure by load-balancing or filtering to eliminate broker drops and ensure lossless delivery to 1G IDS."
+   },
+   "evidence_frames": [
+    44,
+    45,
+    86,
+    87,
+    89,
+    90,
+    115,
+    282,
+    285,
+    287,
+    292,
+    293,
+    316,
+    317,
+    319,
+    321,
+    331,
+    334,
+    335,
+    337
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "213/1930 frames (11.0%, threshold 5%) are cut short, most to 256 bytes snaplen. Packet broker is configured to slice packets to save bandwidth. IDS needs_full_payload is true and max_frame_bytes is 1518, so slicing removes L7 payload.",
+   "impact_on_tool": "IDS cannot inspect full payload for signatures, malware, or exploit detection. Truncated frames cause signature mismatches and blind spots for any detection beyond headers.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518,
+     "disable_slicing": true,
+     "feed": "s175_triple"
+    },
+    "why": "IDS requires full payload; disable broker slicing/snaplen and forward full 1518B frames to restore payload visibility."
+   },
+   "evidence_frames": [
+    10,
+    15,
+    38,
+    43,
+    45,
+    66,
+    69,
+    96,
+    136,
+    148,
+    156,
+    159,
+    180,
+    181,
+    183,
+    184,
+    197,
+    200,
+    212,
+    233
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3576,
+  "tokens_out": 2674,
+  "cost_usd": 0.01583,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-29"
+ }
+}

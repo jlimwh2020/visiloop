@@ -1,0 +1,26 @@
+{
+ "feed": "s013_clean",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed (duplicates, encrypted_share, missing_vlan, one_way, oversize, packet_drops, tool_overload, truncated, tunnel). NDR requirements met: bidirectional traffic present, full payload preserved, VLANs 10/20 present, no overload/drops/truncation/tunneling/oversize issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3192,
+  "tokens_out": 885,
+  "cost_usd": 0.00775,
+  "seconds": 7.8,
+  "recorded_at": "2026-10-29"
+ }
+}

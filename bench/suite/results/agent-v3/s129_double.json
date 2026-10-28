@@ -1,0 +1,100 @@
+{
+ "feed": "s129_double",
+ "status": "degraded",
+ "summary": "Feed s129_double to NDR is degraded: 98.9% encrypted traffic exceeds 90% tolerance and 60.1% of frames are ERSPAN-encapsulated, both blinding payload inspection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Nearly all bytes (98.86%) are TLS/encrypted and delivered without decryption; NDR is receiving opaque payloads because no SSL visibility/decryption zone is configured before the packet broker egress.",
+   "impact_on_tool": "NDR requires full payload for detection and tolerates ~90% encrypted; at 99% encrypted it cannot perform deep packet inspection, JA3, or payload analytics, severely reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "packet_broker_egress",
+     "encrypted_share": 0.9886,
+     "threshold": 0.9
+    },
+    "why": "Decrypt or selectively forward decrypted traffic from a trusted decryption device so NDR receives cleartext payload it can analyze; alternatively filter to focus NDR on decryptable/cleartext segments."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    17,
+    19,
+    22,
+    23,
+    24
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "60.1% of frames (1218/2027) arrive inside ERSPAN tunnel; packet broker is forwarding encapsulated traffic from remote ERSPAN source without stripping the outer header before delivery to tool port.",
+   "impact_on_tool": "NDR sees outer ERSPAN headers instead of inner original flows, failing to parse inner IP/TCP and application payload, causing missed detections and broken flow reassembly despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "metric": 0.6009
+    },
+    "why": "Configure packet broker to terminate/strip ERSPAN encapsulation and deliver inner original packets so NDR can correctly decode flows and inspect payload."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3441,
+  "tokens_out": 1771,
+  "cost_usd": 0.01183,
+  "seconds": 15.2,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "feed": "s051_single",
+ "status": "degraded",
+ "summary": "61.2% of frames are VXLAN-encapsulated (1722/2813) - APM receives outer tunnel headers instead of inner application traffic, blinding transaction analysis.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic without stripping the overlay header. 61.2% VXLAN indicates SPAN/tunnel termination is not being decapsulated at the visibility layer before delivery to the APM port.",
+   "impact_on_tool": "APM cannot parse inner Ethernet/IP/TCP headers and application transactions; latency, error-rate and service-map calculations fail or are attributed to tunnel endpoints instead of real services. Despite needs_full_payload=false, the tool still needs decapsulated headers.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Strip VXLAN header on the packet broker and forward only the inner frame so the 10G APM receives native traffic it can decode for APM transaction correlation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3317,
+  "tokens_out": 1526,
+  "cost_usd": 0.01063,
+  "seconds": 9.2,
+  "recorded_at": "2026-10-29"
+ }
+}

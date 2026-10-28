@@ -1,0 +1,101 @@
+{
+ "feed": "s152_double",
+ "status": "degraded",
+ "summary": "Feed s152_double to IDS is degraded: 79% encrypted traffic exceeds 60% IDS tolerance and 2.6% of frames exceed 1518B MTU and are dropped by IDS NIC. Both reduce detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "79% of bytes are TLS-encrypted vs 60% IDS tolerance. Packet broker is forwarding encrypted sessions directly without out-of-band SSL decryption/visibility, so payloads remain opaque.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection. Encrypted payloads cannot be inspected, creating blind spots for malware, C2 and exploit detection inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "target_encrypted_share": 0.6,
+     "method": "out_of_band_ssl_visibility"
+    },
+    "why": "Decrypting selected TLS at a visibility appliance/broker before the IDS restores payload visibility and brings encrypted share below 60% threshold without overloading the IDS."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "63 of 2403 frames (2.6%, largest 8058 bytes) exceed the IDS 1G port MTU of 1518 bytes. Upstream jumbo MTU or encapsulation is not normalized by the packet broker, so frames arrive larger than the IDS NIC can accept.",
+   "impact_on_tool": "IDS NIC silently drops oversize frames. 2.6% packet loss means incomplete flows and missed detections; IDS cannot analyze traffic it never receives.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "enforce_at": "packet_broker",
+     "largest_observed": 8058
+    },
+    "why": "Normalize MTU at the packet broker (trim/filter or enforce 1518B) so frames fit the IDS port and are not dropped, preserving complete traffic for detection while respecting IDS needs_full_payload."
+   },
+   "evidence_frames": [
+    138,
+    141,
+    145,
+    146,
+    217,
+    218,
+    221,
+    247,
+    248,
+    250,
+    251,
+    275,
+    276,
+    278,
+    279,
+    281,
+    282,
+    460,
+    461,
+    463
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3445,
+  "tokens_out": 2094,
+  "cost_usd": 0.01321,
+  "seconds": 13.8,
+  "recorded_at": "2026-10-29"
+ }
+}

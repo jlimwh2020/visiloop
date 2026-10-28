@@ -1,0 +1,99 @@
+{
+ "feed": "s153_double",
+ "status": "degraded",
+ "summary": "Feed s153_double to IDS is degraded: 51.8% of TCP sessions are one-way and 16.9% of frames are sliced to 256 bytes. IDS requires both directions and full payload for TCP reassembly and signature matching.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / TAP aggregation is not delivering both directions of the same session to this IDS port. 103 of 199 TCP sessions (51.8%) show only one direction, typical of SPAN configured for RX-only, missing aggregation group, or per-flow load-balancing that hashes client->server and server->client to different tool ports (asymmetric routing not aggregated).",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP state tracking and stream reassembly. With only one side, handshakes never complete, state tables time out, and bidirectional signatures (request/response, C2, exfiltration) fail to fire, causing major detection gaps.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_bidirectional_flow": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port on the packet broker so TCP reassembly sees client and server sides together."
+   },
+   "evidence_frames": [
+    1,
+    21,
+    111,
+    112,
+    126,
+    190,
+    224,
+    231,
+    242,
+    301,
+    314,
+    323,
+    330,
+    434,
+    462,
+    484,
+    498,
+    506,
+    529,
+    551
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/truncation is enabled and cutting frames to ~256 bytes. 391 of 2319 frames (16.9%) are cut short, consistent with a broker slice policy to save bandwidth/tool load.",
+   "impact_on_tool": "IDS needs_full_payload=true. Truncation removes L7 payload beyond 256 bytes, so HTTP bodies, TLS handshakes, file transfers and IDS signatures that match on payload content cannot be evaluated, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 256,
+     "target": "forward_full_payload"
+    },
+    "why": "Disable slicing for this IDS feed so the tool receives full packets up to 1518 bytes for complete payload inspection; use filtering or dedicated load-balancing instead of slicing to manage load."
+   },
+   "evidence_frames": [
+    13,
+    14,
+    19,
+    36,
+    41,
+    44,
+    48,
+    51,
+    52,
+    56,
+    61,
+    65,
+    67,
+    68,
+    70,
+    73,
+    76,
+    94,
+    98,
+    99
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3439,
+  "tokens_out": 2170,
+  "cost_usd": 0.01352,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-29"
+ }
+}

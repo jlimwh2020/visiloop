@@ -1,0 +1,42 @@
+{
+ "feed": "s069_single",
+ "status": "degraded",
+ "summary": "Feed s069_single to SIEM is degraded due to 19.0% duplicate packets (679/3573) exceeding 5% threshold. All other visibility checks (encrypted_share, missing_vlan, one_way, oversize, packet_drops, tool_overload, truncated, tunnel) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Overlapping SPAN/mirror sessions or dual TAP feeds aggregated in packet broker without deduplication - same packet arrives via two paths and is forwarded twice to the SIEM tool port.",
+   "impact_on_tool": "SIEM will ingest duplicate events, inflating EPS, license and storage usage, creating duplicate alerts and skewed correlation/reporting and reducing retention. Detection still works but with significant noise and cost overhead.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_microseconds": 1000,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Enable packet-broker deduplication with ~1ms window to drop duplicate copies before delivery to SIEM, removing 19% waste while preserving all unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3243,
+  "tokens_out": 2204,
+  "cost_usd": 0.01342,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-29"
+ }
+}

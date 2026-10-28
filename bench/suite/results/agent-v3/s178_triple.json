@@ -1,0 +1,117 @@
+{
+ "feed": "s178_triple",
+ "status": "degraded",
+ "summary": "Feed s178_triple to 10G NDR is degraded: 3 faults found - traffic is 98.9% encrypted (above 90% tolerance), 17.1 Gbps microburst overloads 10G port (171% capacity), and 19% of frames are sliced to 192 bytes preventing full-payload inspection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "99% of bytes are encrypted (TLS) with no broker decryption or key forwarding; NDR tolerates ~90% encrypted before detection degrades.",
+   "impact_on_tool": "NDR is blind to payload content - cannot perform deep packet inspection, JA3, or payload-based detection; only metadata visible.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "packet_broker",
+     "method": "decrypt_once_and_forward_clear_or_forward_keys_to_NDR"
+    },
+    "why": "NDR needs cleartext payload for detection; decrypt at broker with HSM/keys or forward session keys to NDR to bring encrypted share below 90% threshold."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "1ms microburst peaked at 17.10 Gbps on a 10 Gbps NDR port (171% of capacity) - aggregate feed not load-balanced or shaped to tool speed.",
+   "impact_on_tool": "Tool NIC buffers overflow and drops packets during bursts; NDR misses flows and alerts, creating detection gaps despite no broker drops yet.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "target_ports_gbps": 10,
+     "add_tool_ports": 1
+    },
+    "why": "Spread 17+ Gbps bursts across 2x10G NDR ports/instances with flow-aware hashing to keep per-port utilization below 80% and prevent drops."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/packet trimming enabled with snaplen ~192 bytes; 1399 of 7351 frames (19.0%) are cut short.",
+   "impact_on_tool": "NDR needs full payload (needs_full_payload=true) for signature matching and file extraction; sliced packets break reassembly and hide payloads.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen_bytes": 9216,
+     "match_tool_mtu": true
+    },
+    "why": "Disable slicing or increase snaplen to tool max 9216 bytes so NDR receives complete L4 payload for detection."
+   },
+   "evidence_frames": [
+    4,
+    24,
+    26,
+    27,
+    35,
+    48,
+    50,
+    56,
+    67,
+    69,
+    77,
+    79,
+    91,
+    94,
+    96,
+    99,
+    111,
+    113,
+    118,
+    119
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3533,
+  "tokens_out": 2356,
+  "cost_usd": 0.01443,
+  "seconds": 16.9,
+  "recorded_at": "2026-10-29"
+ }
+}

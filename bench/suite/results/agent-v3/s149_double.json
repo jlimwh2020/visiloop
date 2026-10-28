@@ -1,0 +1,101 @@
+{
+ "feed": "s149_double",
+ "status": "degraded",
+ "summary": "Feed s149_double is degraded: IDS suffers 9.6% packet loss and 63.9% VXLAN-encapsulated traffic, both blocking complete payload inspection and detection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN aggregation is dropping packets under load - 254 of 2644 TCP packets (9.6%, threshold 1%) show gaps indicating buffer exhaustion/oversubscription before the IDS. Tool overload check is healthy, so loss is in the visibility fabric, not IDS port overload.",
+   "impact_on_tool": "IDS TCP reassembly and stream tracking fails with missing segments; signatures that span packets miss, allowing evasion, increasing false negatives and broken flow state for this IDS that needs both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "feed": "s149_double",
+     "method": "5-tuple_hash",
+     "target": "IDS_pool"
+    },
+    "why": "Distribute the feed across multiple IDS ingress ports/broker egress groups to eliminate buffer drops and deliver complete, in-order flows for reliable detection."
+   },
+   "evidence_frames": [
+    26,
+    27,
+    43,
+    44,
+    82,
+    85,
+    87,
+    88,
+    171,
+    175,
+    212,
+    217,
+    226,
+    227,
+    301,
+    303,
+    304,
+    318,
+    321,
+    334
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic is forwarded from a VXLAN overlay without decapsulation - 1779 of 2782 frames (63.9%, threshold 10%) remain inside VXLAN. Packet broker is passing outer VTEP headers to the tool instead of stripping the tunnel.",
+   "impact_on_tool": "IDS sees only outer VXLAN/IP/UDP headers and cannot inspect inner Ethernet/IP payload where attacks reside; with needs_full_payload=true, 63.9% of traffic is blind to signatures, anomaly detection and payload analysis.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "location": "packet_broker",
+     "feed": "s149_double"
+    },
+    "why": "Decapsulate/strip VXLAN at the packet broker and forward inner frames to the IDS so it receives the original L2-L7 payload for full signature matching."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3429,
+  "tokens_out": 2353,
+  "cost_usd": 0.01429,
+  "seconds": 16.4,
+  "recorded_at": "2026-10-29"
+ }
+}

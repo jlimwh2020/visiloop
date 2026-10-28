@@ -1,0 +1,63 @@
+{
+ "feed": "s066_single",
+ "status": "degraded",
+ "summary": "Feed s066_single to NDR is degraded: 20.6% of TCP sessions (35/170) are one-way, exceeding 10% threshold. NDR requires bidirectional traffic for stateful analysis. All other checks (duplicates, encryption, VLAN, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/feed is delivering only one direction for 20.6% of sessions. With no packet drops or tool overload detected, this is not loss/congestion but a visibility sourcing/aggregation issue: likely only one side of the path is tapped/SPANned, asymmetric routing is only partially captured, or broker is hashing client->server and server->client to different egress ports instead of aggregating both directions to this NDR.",
+   "impact_on_tool": "NDR needs both directions (needs_both_directions=true) for TCP reassembly, session tracking, and request/response correlation. One-way flows cause broken flow records, missed detections, inaccurate anomaly scoring, and inability to detect lateral movement/C2 for affected 35 sessions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "hash_mode": "bidirectional_flow_aware"
+    },
+    "why": "Aggregate both directions of each flow to the same NDR egress port using bidirectional flow-aware hashing/aggregation so the NDR receives complete client-server conversations for stateful detection."
+   },
+   "evidence_frames": [
+    6,
+    26,
+    149,
+    166,
+    304,
+    324,
+    346,
+    385,
+    407,
+    461,
+    561,
+    600,
+    712,
+    729,
+    753,
+    792,
+    966,
+    1299,
+    1336,
+    1343
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3311,
+  "tokens_out": 1991,
+  "cost_usd": 0.0126,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-29"
+ }
+}

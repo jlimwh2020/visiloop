@@ -1,0 +1,86 @@
+{
+ "feed": "s139_double",
+ "status": "degraded",
+ "summary": "Feed s139_double is degraded: IDS sees 19.0% one-way TCP sessions (needs both directions) and 2.37 Gbps bursts overload its 1 Gbps port (237% capacity). Both cause detection gaps.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "24 of 126 TCP sessions (19.0%, threshold 10%) show only one direction. Classic visibility gap from SPAN/TAP or packet broker not aggregating both directions to the same IDS port - either SPAN configured for Tx or Rx only, asymmetric routing with single-homed capture, or hash-based load-balancing splitting client->server and server->client across different tool ports.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly and stateful signature matching. One-way flows prevent stream reassembly, break flow tracking and bidirectional signatures, causing missed intrusions and high false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_mode": "bidirectional_5tuple",
+     "deliver_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregate both directions of each session to the same IDS tool port using bidirectional-aware hashing/aggregation on the packet broker, and verify SPAN/TAP captures both Tx and Rx. Ensures IDS sees full handshake and payload in both directions."
+   },
+   "evidence_frames": [
+    79,
+    123,
+    192,
+    232,
+    381,
+    511,
+    521,
+    704,
+    728,
+    749,
+    830,
+    1014,
+    1161,
+    1231,
+    1372,
+    1394,
+    1404,
+    1444,
+    1452,
+    1505
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 2.37 Gbps in 1 ms burst vs 1 Gbps IDS port (237% of capacity, 3 overloaded intervals). Aggregate feed rate exceeds tool port speed; packet broker is forwarding line-rate bursts without load-balancing, filtering, or rate-limiting.",
+   "impact_on_tool": "IDS port is oversubscribed by 2.37x. Tool NIC will drop packets indiscriminately during bursts, creating random detection holes, missed exploits, and incomplete flow logs even for correctly aggregated sessions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_port_speed_gbps": 1,
+     "peak_burst_gbps": 2.37,
+     "required_tool_ports": 3,
+     "hash": "bidirectional_5tuple",
+     "method": "packet_broker_load_balance_group"
+    },
+    "why": "Distribute traffic across 3x 1 Gbps IDS ports (or upgrade to 10 Gbps) with bidirectional-consistent load balancing so no single port exceeds 80% utilization, preserving packet delivery during bursts while keeping both directions of a flow together."
+   },
+   "evidence_frames": [
+    1,
+    476,
+    1170
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3392,
+  "tokens_out": 2281,
+  "cost_usd": 0.01393,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-29"
+ }
+}

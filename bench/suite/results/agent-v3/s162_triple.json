@@ -1,0 +1,141 @@
+{
+ "feed": "s162_triple",
+ "status": "degraded",
+ "summary": "IDS feed s162_triple is degraded with 3 faults: VLAN 20 missing (50% untagged), 5.3% jumbo frames >1518B dropped by IDS NIC, and 27.7% VXLAN-encapsulated traffic hiding inner payload from inspection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker is stripping 802.1Q tags or trunk misconfigured to not forward VLAN 20 to this IDS port - 50% of packets arrive untagged and required VLAN 20 never appears despite IDS requiring VLANs 10 and 20.",
+   "impact_on_tool": "IDS is blind to entire VLAN 20 segment; cannot apply VLAN-aware policies or detect lateral movement/segmentation violations on that VLAN, halving expected coverage.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "forward_trunk": true
+    },
+    "why": "Restore 802.1Q tags and ensure broker trunk forwards both VLANs 10 and 20 to the IDS so VLAN-based detection and correlation work."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    21,
+    22,
+    23,
+    25,
+    26,
+    29,
+    32,
+    35,
+    36,
+    37,
+    39
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Broker forwards jumbo/VXLAN-expanded frames up to 8104 bytes to a 1 Gbps IDS port limited to 1518 bytes without MTU handling or slicing; NIC drops oversize frames in hardware.",
+   "impact_on_tool": "IDS silently drops 5.3% of frames (114/2141) - complete flows with large payloads are lost, creating detection gaps for exploits, file transfers and exfiltration carried in large frames despite IDS needing full payload.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "port_speed_gbps": 1,
+     "largest_observed": 8104
+    },
+    "why": "Enable 9000B jumbo support on IDS NIC/switch path or configure broker to handle MTU (fragment/slice-aware) so frames are not hardware-dropped; jumbo enable preferred because IDS needs full payload and slicing would break inspection."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    10,
+    12,
+    22,
+    23,
+    25,
+    26,
+    296,
+    297,
+    299,
+    300,
+    302,
+    345,
+    346,
+    348,
+    349,
+    351,
+    447
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "27.7% of traffic (593/2141 frames) arrives inside VXLAN encapsulation because packet broker is not terminating/stripping tunnels before delivery; IDS sees only outer VTEP headers.",
+   "impact_on_tool": "IDS cannot parse inner Ethernet/IP and signatures fail on encapsulated traffic - attacks, C2 and lateral movement inside the VXLAN overlay are invisible to IDS despite being delivered.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_outer_headers": true,
+     "deliver_inner": true
+    },
+    "why": "Terminate/strip VXLAN at the packet broker and deliver decapsulated inner packets so IDS can inspect true payload with existing signatures."
+   },
+   "evidence_frames": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3580,
+  "tokens_out": 2936,
+  "cost_usd": 0.01695,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-29"
+ }
+}

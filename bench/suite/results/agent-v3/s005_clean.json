@@ -1,0 +1,26 @@
+{
+ "feed": "s005_clean",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed (duplicates, encrypted_share, missing_vlan, one_way, oversize, packet_drops, tool_overload, truncated, tunnel). SIEM on s005_clean receives complete, correct traffic within its profile (single-direction tolerant, no full payload required, 1 Gbps, no VLAN requirements). No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3175,
+  "tokens_out": 945,
+  "cost_usd": 0.00798,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-29"
+ }
+}

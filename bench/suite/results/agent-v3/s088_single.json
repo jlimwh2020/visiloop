@@ -1,0 +1,63 @@
+{
+ "feed": "s088_single",
+ "status": "degraded",
+ "summary": "SIEM feed s088_single is degraded due to ~3.0% TCP packet loss (87/2949, threshold 1%) despite slicing being active. All other checks (duplicates, encryption, VLANs, directionality, oversize, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Packet broker/fabric is dropping ~3% of TCP segments (87 of 2949) likely due to burst congestion or buffer exhaustion upstream of the 1Gbps SIEM port. The feed is already sliced (payload cut) to reduce load, indicating slicing alone is insufficient to prevent loss; sequence analysis by IP length confirms gaps.",
+   "impact_on_tool": "SIEM will miss ~3% of TCP segments leading to incomplete flow/event records and missed correlations. Since SIEM needs_full_payload=false and needs_both_directions=false, sliced payload itself is acceptable, but missing packets still creates blind spots for detection rules and forensic completeness.",
+   "recommended_fix": {
+    "action": "filter",
+    "params": {
+     "bpf": "vlan 10 or vlan 20",
+     "preserve": "SIEM-relevant event sources only"
+    },
+    "why": "Filtering to only SIEM-required VLANs 10,20 and relevant event traffic reduces broker fabric volume and buffer pressure without harming SIEM coverage (SIEM tolerates slicing and one-way), preventing the 3% drops while keeping slicing enabled."
+   },
+   "evidence_frames": [
+    78,
+    79,
+    105,
+    125,
+    126,
+    127,
+    258,
+    434,
+    435,
+    436,
+    588,
+    590,
+    733,
+    734,
+    735,
+    736,
+    769,
+    770,
+    851,
+    852
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3316,
+  "tokens_out": 3568,
+  "cost_usd": 0.01931,
+  "seconds": 21.2,
+  "recorded_at": "2026-10-29"
+ }
+}

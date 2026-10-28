@@ -1,0 +1,99 @@
+{
+ "feed": "s133_double",
+ "status": "degraded",
+ "summary": "Feed s133_double to APM is degraded: 18.4% of TCP sessions are one-way and 38.4% of frames arrive inside VXLAN tunnels, both preventing complete transaction visibility.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction for 19 of 103 TCP sessions (18.4%). Most likely asymmetric routing with separate ingress TAPs/SPANs not aggregated, or a load-balancing/hash policy that sends client->server and server->client to different tool ports. APM requires both directions on the same port.",
+   "impact_on_tool": "APM cannot correlate request/response pairs, cannot compute latency, transaction time, or TCP handshake RTT, and will misclassify 18% of sessions as incomplete/failed, degrading application performance monitoring coverage.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_bidirectional_flow": true
+    },
+    "why": "Aggregate both directions of each flow to the same APM tool port using bidirectional flow hashing so the APM sees complete sessions."
+   },
+   "evidence_frames": [
+    1,
+    125,
+    181,
+    206,
+    315,
+    342,
+    450,
+    737,
+    856,
+    977,
+    1018,
+    1038,
+    1109,
+    1128,
+    1135,
+    1160,
+    1167,
+    1174,
+    1213
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "568 of 1478 frames (38.4%) are VXLAN-encapsulated and forwarded still encapsulated. Packet broker is not stripping VXLAN headers before delivery to the APM, so the tool sees outer tunnel headers instead of inner application traffic.",
+   "impact_on_tool": "APM cannot parse inner IP/TCP and L7 headers, misses application transactions inside the overlay, and loses visibility on 38% of traffic for performance and error detection.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at": "packet_broker",
+     "forward_inner_payload": true
+    },
+    "why": "Configure packet broker to terminate/strip VXLAN encapsulation and forward only the inner frames so APM can decode application transactions."
+   },
+   "evidence_frames": [
+    36,
+    37,
+    39,
+    43,
+    45,
+    47,
+    48,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    103,
+    105,
+    106,
+    108,
+    110,
+    112,
+    114
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3429,
+  "tokens_out": 2021,
+  "cost_usd": 0.01288,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-29"
+ }
+}

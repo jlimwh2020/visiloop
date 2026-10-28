@@ -1,0 +1,26 @@
+{
+ "feed": "s015_clean",
+ "status": "healthy",
+ "summary": "Feed 's015_clean' is healthy: NDR receives complete, correct traffic. All 9 visibility checks passed - no duplicates, no one-way flows, no truncation, no drops/overload, VLANs 10,20 present, no tunnel encapsulation, frame sizes within 9216B and encrypted share within tolerance. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3185,
+  "tokens_out": 1003,
+  "cost_usd": 0.00824,
+  "seconds": 8.5,
+  "recorded_at": "2026-10-29"
+ }
+}

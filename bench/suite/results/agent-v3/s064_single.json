@@ -1,0 +1,64 @@
+{
+ "feed": "s064_single",
+ "status": "degraded",
+ "summary": "IDS feed s064_single is degraded due to one-way traffic: 41 of 188 TCP sessions (21.8%) show only one direction, exceeding 10% threshold. IDS requires bidirectional visibility and will have reduced detection coverage. No other faults detected (no duplicates, drops, overload, truncation, tunnels, VLAN or encryption issues).",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Feed is delivering only a single direction of bidirectional conversations. Most likely the packet broker is fed from a single SPAN/mirror direction or only one leg of a TAP/bond, or asymmetric routing return path is not being mirrored/aggregated to this tool port. Name 's064_single' suggests single-sided capture.",
+   "impact_on_tool": "IDS needs_both_directions=true to track TCP state, reassemble streams, and correlate request/response for signature and anomaly detection. With 21.8% one-way sessions the IDS cannot see handshakes, will fail to reassemble, misses attacks that span both directions, and generates incomplete flow logs/false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "feed": "s064_single",
+     "aggregate": "both_directions",
+     "source": "mirror both RX and TX or both TAP legs to single tool port"
+    },
+    "why": "Aggregating both directions into one coherent feed ensures the IDS sees client-to-server and server-to-client packets for the same session together, restoring stateful inspection and full detection coverage."
+   },
+   "evidence_frames": [
+    22,
+    30,
+    64,
+    76,
+    146,
+    156,
+    347,
+    370,
+    481,
+    519,
+    801,
+    874,
+    930,
+    938,
+    962,
+    1010,
+    1031,
+    1052,
+    1060,
+    1074
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3306,
+  "tokens_out": 1594,
+  "cost_usd": 0.01091,
+  "seconds": 9.2,
+  "recorded_at": "2026-10-29"
+ }
+}

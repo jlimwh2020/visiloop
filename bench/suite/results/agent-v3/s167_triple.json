@@ -1,0 +1,141 @@
+{
+ "feed": "s167_triple",
+ "status": "degraded",
+ "summary": "Feed s167_triple is degraded with 3 high-severity faults: 97.8% encrypted traffic exceeds NDR 90% tolerance, required VLAN 20 missing with 50% untagged, and 68% GRE-tunneled traffic. NDR cannot inspect payload or segment context for majority of traffic.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "98% of bytes are encrypted (threshold 90% for this NDR). Traffic is being forwarded without TLS decryption/SSL visibility - packet broker is delivering opaque TLS payloads the NDR cannot inspect.",
+   "impact_on_tool": "NDR needs full payload for deep packet inspection and behavioral detection. At 97.8% encrypted it is effectively blind to payload, JA3, and application-layer indicators, drastically reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker_or_ssl_visibility",
+     "target_share_below": 0.9,
+     "method": "selective_TLS_interception"
+    },
+    "why": "Provide decrypted copy or selectively decrypt before NDR so payload analytics and signatures can function; without decryption NDR cannot detect threats in encrypted flows."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    20,
+    21,
+    22
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen and 50% of packets arrive untagged. Packet broker aggregation or egress port is stripping 802.1Q tags or trunk filter is not forwarding VLAN 20 to this tool port.",
+   "impact_on_tool": "NDR requires VLANs 10 and 20 for tenant/segment-aware detection. Missing VLAN 20 and untagged delivery causes misclassification, broken VLAN-based policies, and missed coverage for that segment.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "ensure_trunk_forwards": 20
+    },
+    "why": "Restore and preserve 802.1Q tags end-to-end from TAP through packet broker to NDR so both required VLANs are visible for correct segmentation and detection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    21,
+    24,
+    25,
+    26,
+    28,
+    29,
+    32,
+    35,
+    37,
+    40
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "68% of frames (1184/1742) arrive inside GRE tunnel. Packet broker is forwarding encapsulated traffic without decapsulation, so NDR sees only outer tunnel headers.",
+   "impact_on_tool": "NDR cannot see inner IP addresses, ports, or payload for 68% of traffic. Flow correlation, signature matching, and behavioral analytics fail on tunneled flows.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "GRE",
+     "strip_outer_header": true,
+     "forward_inner_packet": true
+    },
+    "why": "Strip GRE outer header on packet broker and forward inner packets to NDR so it inspects true endpoints and payload instead of tunnel wrapper."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    54,
+    55,
+    56
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3567,
+  "tokens_out": 3027,
+  "cost_usd": 0.01732,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-29"
+ }
+}

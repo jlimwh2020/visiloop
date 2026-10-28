@@ -1,0 +1,124 @@
+{
+ "feed": "s172_triple",
+ "status": "degraded",
+ "summary": "Feed s172_triple is degraded: 100% of packets missing required VLANs 10,20, 13.30 Gbps microbursts overload 10 Gbps APM port (133%), and 27.9% ERSPAN tunnel traffic obscures inner flows.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN is stripping 802.1Q tags - 100% of packets arrive untagged despite APM requiring VLANs 10 and 20 for tier/tenant segmentation. Likely broker VLAN stripping / pop-tag policy or SPAN from access ports without trunk preservation.",
+   "impact_on_tool": "APM cannot filter, group, or baseline by application tier/VLAN; transactions from VLAN 10 and 20 are merged, breaking service maps, latency baselines, and alerting by business unit.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "restore_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough"
+    },
+    "why": "Restore and preserve 802.1Q tags end-to-end so APM receives VLAN 10,20 classification needed for correct APM segmentation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate/burst throughput exceeds APM port capacity - 13.30 Gbps peak in 1ms burst vs 10 Gbps port (133% load, 2 overloaded intervals). Single 10G tool port fed without load-balancing or burst shaping from broker.",
+   "impact_on_tool": "APM NIC drops packets during microbursts causing incomplete transactions, false latency/loss calculations, missed traces and degraded application performance visibility.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_ports": 2,
+     "hash": "5-tuple",
+     "capacity_gbps": 10
+    },
+    "why": "Distribute traffic across 2x10G APM ports with flow-aware hashing to keep per-port load <80% and eliminate burst drops while preserving flow coherence for APM."
+   },
+   "evidence_frames": [
+    1,
+    3162
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "27.9% of frames (2310/8286) arrive encapsulated in ERSPAN and are not stripped by packet broker. APM receives outer tunnel headers instead of inner application traffic.",
+   "impact_on_tool": "APM cannot parse inner L4-L7 headers, fails to decode transactions and measure true application latency; tunnel overhead inflates metrics and hides real endpoints.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "protocols": [
+      "ERSPAN"
+     ],
+     "strip_at": "packet_broker"
+    },
+    "why": "Terminate/strip ERSPAN at the packet broker to deliver native inner packets so APM can correctly dissect flows and compute application performance."
+   },
+   "evidence_frames": [
+    73,
+    75,
+    76,
+    78,
+    80,
+    81,
+    83,
+    84,
+    87,
+    88,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3535,
+  "tokens_out": 2147,
+  "cost_usd": 0.01354,
+  "seconds": 15.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "feed": "s059_single",
+ "status": "degraded",
+ "summary": "APM feed s059_single is degraded due to tool overload: 31.56 Gbps microburst exceeds 10 Gbps port capacity (316%). All other checks (duplicates, encryption, VLAN, one-way, oversize, drops, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating multiple inputs onto a single 10 Gbps APM port without load balancing. A 1 ms microburst peaked at 31.56 Gbps (3.16x line rate, 316% of capacity), overflowing the egress queue to the tool.",
+   "impact_on_tool": "APM will drop packets indiscriminately during bursts, causing incomplete transaction traces, inaccurate latency/error metrics, and missed performance degradations despite needing both directions but not full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "flow_hash_5_tuple",
+     "current_port_gbps": 10,
+     "peak_burst_gbps": 31.56,
+     "recommended_tool_ports": 4,
+     "aggregate_capacity_gbps": 40
+    },
+    "why": "Flow-hash load balancing across 3-4x 10G APM ports (or 40G) absorbs microbursts within aggregate capacity while preserving flow affinity required for APM bidirectional correlation, preventing burst drops."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3270,
+  "tokens_out": 1928,
+  "cost_usd": 0.01228,
+  "seconds": 12.5,
+  "recorded_at": "2026-10-29"
+ }
+}

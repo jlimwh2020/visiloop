@@ -1,0 +1,65 @@
+{
+ "feed": "s106_single",
+ "status": "degraded",
+ "summary": "IDS s106_single is degraded: 7.9% of frames (226/2859, up to 8058 bytes) exceed the tool's 1518-byte MTU and are dropped by its NIC, creating blind spot. No other visibility faults detected.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Upstream network/broker is forwarding jumbo frames (observed up to 8058 bytes) to a 1 Gbps IDS port limited to 1518 bytes. The packet broker is not normalizing MTU/slicing, so the IDS NIC drops oversize frames at ingress.",
+   "impact_on_tool": "IDS drops ~7.9% of frames before inspection. As IDS needs_full_payload=true and needs_both_directions, any attack, exploit or C2 payload carried in those large frames is completely missed, reducing detection coverage and breaking flow reassembly for those sessions.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "oversize_share": 0.079,
+     "suggestion": "enable_jumbo_on_tool_or_normalize_at_broker"
+    },
+    "why": "Tool requires full payload so broker slicing to 1518 would truncate payload and break IDS signatures. Instead enable 9000-byte jumbo support on IDS NIC/tool or configure packet broker to normalize MTU (fragment/slice with header preservation only if jumbo cannot be enabled) so frames are delivered without NIC drops while preserving payload for inspection."
+   },
+   "evidence_frames": [
+    26,
+    27,
+    29,
+    30,
+    42,
+    43,
+    45,
+    46,
+    49,
+    130,
+    131,
+    133,
+    134,
+    136,
+    209,
+    210,
+    212,
+    213,
+    225,
+    226
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3322,
+  "tokens_out": 2354,
+  "cost_usd": 0.01416,
+  "seconds": 21.7,
+  "recorded_at": "2026-10-29"
+ }
+}

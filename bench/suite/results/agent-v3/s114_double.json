@@ -1,0 +1,97 @@
+{
+ "feed": "s114_double",
+ "status": "degraded",
+ "summary": "Feed s114_double to IDS is degraded: 28.9% of frames are sliced to ~256 bytes and 58.0% remain ERSPAN-encapsulated, both preventing full payload inspection.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker has slicing/snap-length set to ~256 bytes, likely to save bandwidth or fit the 1Gbps tool port, cutting payload before delivery.",
+   "impact_on_tool": "IDS needs full payload for signature matching; 513/1773 truncated frames hide application data causing missed exploits and high false negatives.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518
+    },
+    "why": "Disable slicing and forward full 1518B frames so IDS receives complete payload for detection; use filtering instead of slicing if bandwidth is constrained."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    9,
+    10,
+    18,
+    22,
+    27,
+    29,
+    30,
+    35,
+    36,
+    39,
+    51,
+    52,
+    54,
+    55,
+    57,
+    58,
+    68
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic is forwarded via ERSPAN tunnel from remote source (1029 frames) and broker forwards outer encapsulation without stripping.",
+   "impact_on_tool": "IDS sees outer ERSPAN/GRE headers instead of inner IP/TCP payload for 58% of traffic and cannot parse or apply signatures, effectively blind to tunneled flows.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN"
+    },
+    "why": "Configure packet broker to strip ERSPAN encapsulation and present inner original packets so IDS can inspect normally."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3447,
+  "tokens_out": 2119,
+  "cost_usd": 0.01331,
+  "seconds": 12.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s034_mild",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for NDR on s034_mild. Bidirectional traffic present, no duplicates, drops, overload, truncation, oversize, tunnel encapsulation, missing VLANs (10,20 present), or excessive encryption. Feed delivers complete, correct traffic for detection.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3194,
+  "tokens_out": 952,
+  "cost_usd": 0.00804,
+  "seconds": 7.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,64 @@
+{
+ "feed": "s093_single",
+ "status": "degraded",
+ "summary": "Feed s093_single is degraded: 10.2% of frames (333/3260) exceed the SIEM's 1518-byte MTU and are dropped at the NIC, causing systematic visibility loss.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network segments are forwarding jumbo frames up to 8058 bytes, but the SIEM's 1 Gbps capture port is limited to standard 1518-byte Ethernet MTU with no jumbo-frame support. The packet broker is passing frames through unchanged.",
+   "impact_on_tool": "SIEM NIC drops all frames >1518 bytes before analysis - 10.2% loss (333/3260 frames). Results in missing events/flows and incomplete detection/correlation; largest dropped frames 8058 bytes.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "current_tool_mtu": 1518,
+     "largest_observed_bytes": 8058,
+     "recommended_mtu": 9000
+    },
+    "why": "Enable 9000-byte jumbo MTU on SIEM capture NIC/port and intervening broker egress, or alternatively configure broker to slice/fragment to 1518 bytes (SIEM needs_full_payload=false so slicing is safe) to prevent NIC-level drops."
+   },
+   "evidence_frames": [
+    22,
+    23,
+    25,
+    52,
+    53,
+    56,
+    58,
+    72,
+    74,
+    75,
+    76,
+    79,
+    80,
+    81,
+    142,
+    143,
+    145,
+    146,
+    148,
+    149
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3333,
+  "tokens_out": 2248,
+  "cost_usd": 0.01372,
+  "seconds": 14.4,
+  "recorded_at": "2026-10-29"
+ }
+}

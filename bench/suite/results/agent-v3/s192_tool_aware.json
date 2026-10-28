@@ -1,0 +1,26 @@
+{
+ "feed": "s192_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s192_tool_aware. Tool receives complete, correct traffic within its profile (bidirectional, 10Gbps, 9216B MTU) - no packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3188,
+  "tokens_out": 869,
+  "cost_usd": 0.00768,
+  "seconds": 6.6,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s027_mild",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for NDR feed s027_mild. Tool requirements (bidirectional traffic, full payload, VLANs [10,20], 10 Gbps, <90% encrypted, 9216B MTU) are met with no duplicates, drops, truncation, overload, or tunnel/VLAN issues.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3192,
+  "tokens_out": 813,
+  "cost_usd": 0.00745,
+  "seconds": 7.3,
+  "recorded_at": "2026-10-29"
+ }
+}

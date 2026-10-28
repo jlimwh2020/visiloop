@@ -1,0 +1,26 @@
+{
+ "feed": "s020_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s020_clean. SIEM requirements (one-way traffic acceptable, no full payload needed, 1 Gbps port, no VLAN requirements) are met with no duplicates, drops, overload, truncation, tunnels, or encryption issues.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3180,
+  "tokens_out": 806,
+  "cost_usd": 0.0074,
+  "seconds": 6.3,
+  "recorded_at": "2026-10-29"
+ }
+}

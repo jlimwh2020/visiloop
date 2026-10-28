@@ -1,0 +1,60 @@
+{
+ "feed": "s068_single",
+ "status": "degraded",
+ "summary": "Feed s068_single is degraded: 27.9% of frames are truncated/sliced to ~256 bytes, breaking full-payload inspection required by the IDS. All other checks (duplicates, encryption, VLAN, one-way, oversize, drops, overload, tunnel) are healthy.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker is configured to slice/truncate packets to ~256 bytes snaplen (503 of 1806 frames, 27.9% exceeds 5% threshold), likely to save bandwidth/tool capacity.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection; truncated packets hide application payload, causing missed exploits, malware and C2 detection and increased false negatives.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "IDS requires full payload per tool profile (needs_full_payload=true); forwarding unsliced frames restores complete L7 inspection coverage."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    10,
+    24,
+    25,
+    27,
+    28,
+    30,
+    31,
+    41,
+    42,
+    44,
+    54,
+    55,
+    57,
+    59,
+    62,
+    63,
+    79
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3319,
+  "tokens_out": 1506,
+  "cost_usd": 0.01055,
+  "seconds": 8.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s193_tool_aware",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for s193_tool_aware. SIEM is receiving complete, correct traffic within its profile (1 Gbps, no bidirectional/full-payload requirement, no VLAN requirement, max 1518B). No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3184,
+  "tokens_out": 903,
+  "cost_usd": 0.00782,
+  "seconds": 7.4,
+  "recorded_at": "2026-10-29"
+ }
+}

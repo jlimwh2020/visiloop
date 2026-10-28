@@ -1,0 +1,120 @@
+{
+ "feed": "s177_triple",
+ "status": "degraded",
+ "summary": "Feed s177_triple is degraded: NDR on 10 Gbps port is hit by 13.38 Gbps bursts (134% overload), 99.4% of bytes are encrypted exceeding 90% tolerance, and 28.1% of frames remain ERSPAN-encapsulated. NDR is dropping during bursts and blind to payload.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "99.4% of bytes are encrypted (threshold 90%), indicating packet broker is forwarding bulk TLS without selective decryption or filtering. NDR requires full payload but receives almost entirely opaque traffic.",
+   "impact_on_tool": "NDR cannot inspect payload for signatures, JA3, or anomaly detection; with 99% encryption detection coverage collapses to metadata-only, missing intrusions inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.9939,
+     "threshold": 0.9,
+     "location": "packet_broker"
+    },
+    "why": "Decrypt relevant TLS at broker (or filter/steer encrypted traffic) to bring inspectable share below 90% so NDR receives cleartext payload it needs for detection."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 13.38 Gbps in 1ms burst vs 10 Gbps NDR port (134% of capacity, 2 overloaded intervals). Single tool port is fed by aggregated/bursty broker output without load balancing or shaping.",
+   "impact_on_tool": "NDR ingress drops packets during bursts, causing incomplete flows, one-way artifacts and missed detections; even brief overload creates random blind spots.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "peak_gbps": 13.38,
+     "hash": "5-tuple",
+     "add_tool_ports": 1
+    },
+    "why": "Distribute traffic across 2x10G (or more) via broker load-balancing/hash to keep per-port utilization <80% and eliminate burst drops."
+   },
+   "evidence_frames": [
+    1,
+    3232
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "2214 of 7876 frames (28.1%) arrive inside ERSPAN tunnel (threshold 10%). Broker is forwarding remote ERSPAN without stripping outer header.",
+   "impact_on_tool": "NDR sees outer ERSPAN/IP/GRE instead of inner original Ethernet/IP, failing to parse inner flows, VLANs and L7; wastes MTU/bandwidth and breaks detection rules.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "share": 0.2811
+    },
+    "why": "Enable ERSPAN header stripping on packet broker to deliver inner original frames to NDR for correct parsing and detection."
+   },
+   "evidence_frames": [
+    67,
+    69,
+    71,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    83,
+    84,
+    88,
+    89,
+    91,
+    94,
+    97,
+    99,
+    102,
+    103
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3526,
+  "tokens_out": 2450,
+  "cost_usd": 0.01482,
+  "seconds": 16.2,
+  "recorded_at": "2026-10-29"
+ }
+}

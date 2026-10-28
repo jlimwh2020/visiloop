@@ -1,0 +1,135 @@
+{
+ "feed": "s165_triple",
+ "status": "degraded",
+ "summary": "Feed s165_triple is degraded with 3 faults: 85.8% encrypted traffic exceeds IDS 60% tolerance, 2.2% jumbo frames (up to 8058B) dropped by 1518B IDS port, and 6.6% TCP data missing due to packet broker slicing. IDS is blind to most payloads and missing frames/payload for inspection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "86% of bytes are encrypted (TLS) and forwarded as-is. Packet broker has no SSL visibility/decryption policy, so IDS receives ciphertext it cannot inspect. Exceeds IDS tolerance of 60%.",
+   "impact_on_tool": "IDS requires full payload for signature matching but cannot inspect encrypted payloads - ~86% of traffic is opaque, causing massive blind spot and missed exploit/C2 detection, high false negatives.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "decrypt_at_broker_or_forward_keys",
+     "target_share": 0.6
+    },
+    "why": "IDS needs cleartext payload; decrypt at packet broker with key sharing / SSL visibility appliance or selectively forward only decryptable traffic to restore inspection capability."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Upstream network is sending jumbo frames up to 8058 bytes but IDS 1Gbps port max_frame_bytes is 1518. Packet broker is not normalizing MTU/slicing, so NIC drops oversize frames before IDS sees them. 60/2713 frames (2.2%) affected.",
+   "impact_on_tool": "IDS NIC drops 2.2% of frames as oversize - those flows are never analyzed, creating detection gaps for attacks carried in large frames and breaking flow reassembly.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_mtu": 1518,
+     "largest_observed": 8058,
+     "suggestion": "enable_jumbo_to_9000_or_normalize_at_broker"
+    },
+    "why": "Tool port cannot receive frames >1518; either enable 9000B jumbo support on IDS NIC or configure packet broker to normalize/slice to 1518B so frames are not silently dropped."
+   },
+   "evidence_frames": [
+    19,
+    20,
+    22,
+    633,
+    634,
+    637,
+    641,
+    680,
+    682,
+    684,
+    686,
+    690,
+    856,
+    857,
+    859,
+    861,
+    862,
+    1008,
+    1009,
+    1011
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker has payload slicing enabled (detail notes 'feed is sliced'). Slicing truncates packets after headers, causing TCP sequence gaps - 169/2575 TCP packets (6.6%) show missing data by IP length sequence analysis.",
+   "impact_on_tool": "IDS needs_full_payload=true but receives truncated flows - TCP reassembly fails, signatures requiring full payload/stream never fire, and IDS reports incomplete sessions, severely degrading detection coverage.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "ensure_full_payload": true
+    },
+    "why": "IDS requires full payload for detection; disable slicing/truncation on this broker feed to deliver complete packets and eliminate sequence gaps."
+   },
+   "evidence_frames": [
+    22,
+    35,
+    36,
+    37,
+    71,
+    280,
+    281,
+    282,
+    328,
+    329,
+    330,
+    351,
+    357,
+    358,
+    359,
+    400,
+    401,
+    442,
+    443,
+    444
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3580,
+  "tokens_out": 2718,
+  "cost_usd": 0.01603,
+  "seconds": 14.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,82 @@
+{
+ "feed": "s148_double",
+ "status": "degraded",
+ "summary": "Feed s148_double to IDS is degraded: 24.5% duplicate packets (617/2516) and 100% missing VLAN tags for required VLANs 10,20. Duplicates waste IDS capacity and distort detection; stripped VLANs blind IDS to segment context.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Systematic duplication in visibility layer - packet broker aggregating overlapping SPAN/mirror sessions or TAP+SPAN feeds covering same traffic without deduplication, or a looped aggregation. 24.5% duplicates is far above 5% threshold and indicates broker-level duplication, not normal TCP retransmits.",
+   "impact_on_tool": "IDS reprocesses same packets, wasting CPU and 1G port capacity, inflating flow/alert counts, risking state-table exhaustion and false positives, and can cause the IDS to miss real attacks while busy with duplicates.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 5,
+     "mode": "hash"
+    },
+    "why": "Enable packet-broker deduplication (packet hash window ~5ms) on the aggregation to drop identical packets before delivery to IDS, restoring 1:1 traffic view and freeing IDS capacity for real detection."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "802.1Q tags stripped before IDS - broker is popping VLAN tags on ingress/egress or SPAN source is configured as access port instead of trunk. 100% untagged while VLANs 10 and 20 are required proves systematic tag removal.",
+   "impact_on_tool": "IDS loses segmentation context for VLANs 10 and 20, cannot apply VLAN-aware detection policies, misses VLAN-hopping and inter-VLAN lateral movement, and has zero visibility into those required segments.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "forward_mode": "retain_trunk"
+    },
+    "why": "Configure broker and SPAN/trunk to retain and forward 802.1Q tags for VLANs 10,20 end-to-end to the IDS so it receives correctly tagged traffic for accurate segmentation and coverage."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3369,
+  "tokens_out": 2379,
+  "cost_usd": 0.01432,
+  "seconds": 15.6,
+  "recorded_at": "2026-10-29"
+ }
+}

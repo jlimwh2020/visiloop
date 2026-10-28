@@ -1,0 +1,47 @@
+{
+ "feed": "s054_single",
+ "status": "degraded",
+ "summary": "Feed s054_single to 10 Gbps NDR is degraded due to tool overload: 1 ms microbursts peak at 12.51 Gbps (125% of port capacity) across 3 intervals, risking packet loss and detection gaps.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps NDR port is fed bursty aggregated traffic without load balancing. 1 ms bursts reach 12.51 Gbps, exceeding line rate (125% capacity, threshold 80%), causing 3 overloaded intervals. This is classic microburst overload from aggregation to a single tool port.",
+   "impact_on_tool": "NDR will drop packets at ingress during bursts. Flow reassembly and detection logic sees incomplete sessions, leading to missed detections, gaps in NDR coverage, and reduced fidelity for full-payload analysis which requires both directions and complete payloads.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 2,
+     "target_utilization": 0.8
+    },
+    "why": "Distribute traffic with 5-tuple hashing across 2x10G NDR ports/instances to keep per-port peak under 80% (8 Gbps) and absorb 12.5 Gbps microbursts without drops, preserving complete bidirectional full-payload visibility for NDR."
+   },
+   "evidence_frames": [
+    1,
+    3211,
+    5881
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3272,
+  "tokens_out": 1676,
+  "cost_usd": 0.01121,
+  "seconds": 12.4,
+  "recorded_at": "2026-10-29"
+ }
+}

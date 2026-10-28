@@ -1,0 +1,99 @@
+{
+ "feed": "s111_double",
+ "status": "degraded",
+ "summary": "Feed s111_double is degraded: 17.6% of TCP sessions are one-way and 13.2% of frames are sliced to ~192 bytes. IDS requires both directions and full payload for stateful signature detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions is reaching the IDS. Most likely the packet broker is forwarding a single SPAN/mirror direction or asymmetric TAP feeds without aggregating both sides, or flow-based load-balancing is splitting client->server and server->client to different tools.",
+   "impact_on_tool": "IDS needs both directions for TCP state tracking, stream reassembly and request/response correlation. With 24/136 sessions one-way, it will miss handshakes, fail to reassemble streams, miss exploits and generate inaccurate alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "hash_by_bidirectional_flow": true
+    },
+    "why": "Aggregate both directions of each bidirectional flow to the same IDS tool port so stateful detection sees full session."
+   },
+   "evidence_frames": [
+    125,
+    203,
+    309,
+    349,
+    392,
+    476,
+    703,
+    726,
+    736,
+    810,
+    887,
+    912,
+    964,
+    1022,
+    1071,
+    1094,
+    1499,
+    1542,
+    1577,
+    1688
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snaplen is enabled and cutting frames to ~192 bytes, likely to save bandwidth or fit tool capacity. 257 of 1948 frames (13.2%) are truncated.",
+   "impact_on_tool": "IDS needs full payload for signature matching, file extraction and exploit detection. Sliced frames strip L7 payload, making the IDS blind to application-layer attacks even when it sees both directions.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518,
+     "tool": "IDS"
+    },
+    "why": "IDS requires full payload up to 1518 bytes per tool profile; disable slicing or increase snaplen to at least max_frame_bytes so signatures can inspect complete packets."
+   },
+   "evidence_frames": [
+    9,
+    11,
+    16,
+    22,
+    25,
+    30,
+    42,
+    45,
+    46,
+    48,
+    50,
+    53,
+    83,
+    84,
+    86,
+    96,
+    100,
+    102,
+    114,
+    115
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3441,
+  "tokens_out": 2011,
+  "cost_usd": 0.01285,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-29"
+ }
+}

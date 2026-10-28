@@ -1,0 +1,91 @@
+{
+ "feed": "s144_double",
+ "status": "degraded",
+ "summary": "Feed s144_double is degraded: 2 high-severity faults. 8.5% of frames exceed IDS 1518-byte MTU and are dropped by NIC, plus microbursts to 2.78 Gbps overload the 1 Gbps IDS port (278% capacity). IDS is missing significant traffic and detection coverage is compromised.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo frames (up to 8058 bytes) from the monitored network without MTU normalization. The IDS tool port is standard 1518-byte MTU and its NIC silently drops oversized frames.",
+   "impact_on_tool": "IDS never sees 163/1908 frames (8.5%). Any attack, exploit or C2 hidden in large frames is invisible, flow reassembly fails, and IDS signatures cannot fire on dropped traffic.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "oversize_share": 0.0854
+    },
+    "why": "IDS needs_full_payload=true so slicing would break detection. Enable 9000-byte jumbo MTU on IDS NIC/port and packet broker egress, or configure broker to fragment/normalize jumbo frames to <=1518 bytes before delivery."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    19,
+    20,
+    22,
+    46,
+    47,
+    49,
+    50,
+    68,
+    70,
+    76,
+    137,
+    138,
+    140,
+    141,
+    233,
+    234,
+    236
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregated traffic delivered to a single 1 Gbps IDS port bursts to 2.78 Gbps in 1ms intervals. No load-balancing or rate-shaping on the packet broker, so microbursts exceed line-rate capacity.",
+   "impact_on_tool": "IDS ingress buffers overflow and randomly drops packets during 9 overloaded intervals. IDS loses both directions of flows intermittently, misses exploits, creates false negatives and breaks stateful detection.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_port_speed_gbps": 1,
+     "peak_gbps": 2.779,
+     "hash": "5-tuple",
+     "min_tool_ports": 3
+    },
+    "why": "Distribute traffic across 3+ IDS ports/instances with 5-tuple hashing to keep per-port utilization <80% and preserve flow symmetry (IDS needs_both_directions=true) while absorbing 2.78 Gbps bursts."
+   },
+   "evidence_frames": [
+    1,
+    197,
+    507,
+    699,
+    993,
+    1257,
+    1403,
+    1527,
+    1795
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3431,
+  "tokens_out": 2105,
+  "cost_usd": 0.01324,
+  "seconds": 13.4,
+  "recorded_at": "2026-10-29"
+ }
+}

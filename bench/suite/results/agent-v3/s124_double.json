@@ -1,0 +1,81 @@
+{
+ "feed": "s124_double",
+ "status": "degraded",
+ "summary": "Feed s124_double to 10 Gbps NDR is degraded: 99.2% of bytes are encrypted (exceeds 90% tolerance) and microbursts peak at 29.95 Gbps (299% of port capacity). NDR is blind to payload and dropping due to overload, severely reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Almost all traffic (99.22%) is TLS/encrypted and is being forwarded to the NDR without prior decryption. No SSL visibility appliance or packet broker decryption is in path before the tool.",
+   "impact_on_tool": "NDR requires full payload for detection but cannot inspect encrypted payloads; with 99% encrypted, signatures, JA3, and payload analytics are ineffective and threats inside TLS are missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "stage": "before_ndr",
+     "method": "out_of_band_decryption_or_visibility_decrypt"
+    },
+    "why": "Decrypt relevant TLS once at visibility layer and forward cleartext to NDR (with policy to respect privacy) to bring encrypted share below 90% and restore payload inspection."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering aggregated/bursty traffic without load balancing. A 1ms microburst hit 29.95 Gbps vs the NDR's 10 Gbps port (299% of capacity), indicating sustained rate exceeds single tool port.",
+   "impact_on_tool": "NDR NIC buffer overrun and packet drops during bursts; incomplete flows, missed detections, and degraded NDR analytics despite no broker drops detected.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "target_ports": 3,
+     "port_speed_gbps": 10
+    },
+    "why": "Distribute traffic across 3-4x 10G NDR ports/instances with flow-aware hashing to keep per-port utilization <80% and absorb 30 Gbps microbursts without loss."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3387,
+  "tokens_out": 1899,
+  "cost_usd": 0.0123,
+  "seconds": 16.2,
+  "recorded_at": "2026-10-29"
+ }
+}

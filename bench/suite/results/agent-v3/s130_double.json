@@ -1,0 +1,97 @@
+{
+ "feed": "s130_double",
+ "status": "degraded",
+ "summary": "SIEM feed s130_double is degraded: 12.3% of frames are oversized and dropped at the 1518-byte NIC, and 52.2% arrive inside ERSPAN tunnels hiding inner flows from SIEM parsing.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "396 of 3219 frames (12.3%) exceed the SIEM's 1518-byte MTU (largest 8108 bytes). Packet broker is forwarding jumbo/ERSPAN-encapsulated frames without slicing to the tool's MTU, so the SIEM NIC drops them on ingress.",
+   "impact_on_tool": "SIEM never sees 12.3% of traffic - dropped at NIC before ingestion. Complete blind spot for large flows, breaks correlation and alerting for those sessions.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518
+    },
+    "why": "SIEM needs_full_payload=false, so slicing to 1518 preserves L2-L7 headers for detection while fitting the 1Gbps port MTU and preventing NIC drops. No full payload needed."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    21,
+    22,
+    24,
+    34,
+    35,
+    37,
+    38,
+    40,
+    41,
+    51,
+    52,
+    54,
+    55,
+    220,
+    222,
+    225,
+    228
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "1679 of 3219 frames (52.2%) arrive inside ERSPAN tunnels. Packet broker is mirroring/encapsulating traffic and forwarding it without stripping the outer ERSPAN header before delivery to the SIEM.",
+   "impact_on_tool": "SIEM sees only outer ERSPAN/IP headers and cannot parse inner original IP/TCP/application headers for 52% of traffic. Rules, parsing and correlation fail on encapsulated flows, severely reducing detection coverage.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN"
+    },
+    "why": "Stripping ERSPAN at the packet broker exposes the inner original packets so the SIEM can parse and correlate them natively without requiring tunnel-aware decoding."
+   },
+   "evidence_frames": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3462,
+  "tokens_out": 2364,
+  "cost_usd": 0.01437,
+  "seconds": 14.4,
+  "recorded_at": "2026-10-29"
+ }
+}

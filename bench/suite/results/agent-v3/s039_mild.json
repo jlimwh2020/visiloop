@@ -1,0 +1,26 @@
+{
+ "feed": "s039_mild",
+ "status": "healthy",
+ "summary": "Feed s039_mild to IDS is healthy. All visibility checks passed: no duplicates, one-way traffic, drops, overload, truncation, oversize, tunnel encapsulation, missing VLANs, or excessive encryption. Tool requirements (bidirectional, full payload, 1 Gbps, 1518B MTU) are met.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3184,
+  "tokens_out": 796,
+  "cost_usd": 0.00736,
+  "seconds": 7.0,
+  "recorded_at": "2026-10-29"
+ }
+}

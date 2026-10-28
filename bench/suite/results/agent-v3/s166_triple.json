@@ -1,0 +1,127 @@
+{
+ "feed": "s166_triple",
+ "status": "degraded",
+ "summary": "Feed s166_triple to IDS is degraded: 3 faults found - 8.5% oversize jumbo frames dropped by 1518B NIC, 3.93 Gbps bursts overloading 1 Gbps port (393% capacity), and 21.2% VXLAN-encapsulated traffic hiding inner payload from IDS inspection.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker forwarding jumbo frames up to 8108 bytes without MTU handling to an IDS port limited to 1518 bytes. Likely VXLAN overhead or upstream jumbo MTU propagated without slicing/MTU normalization.",
+   "impact_on_tool": "IDS NIC drops 246/2894 frames (8.5%) at hardware level before inspection. Complete blind spot for attacks using large frames; IDS needs_full_payload=true so loss is total for those flows.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_observed_bytes": 8108,
+     "suggested_mtu": 9216
+    },
+    "why": "IDS requires full payload so slicing would break detection. Enable jumbo frames (MTU 9000-9216) on IDS NIC/port or normalize at broker to 1518 only if jumbo not supported - preserves payload for inspection instead of silent drop."
+   },
+   "evidence_frames": [
+    37,
+    38,
+    40,
+    41,
+    180,
+    181,
+    183,
+    184,
+    186,
+    196,
+    197,
+    199,
+    200,
+    202,
+    203,
+    232,
+    233,
+    235,
+    236,
+    248
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate/burst traffic from broker exceeds IDS port capacity. Peak 3.93 Gbps in 1ms burst vs 1 Gbps port (393% of capacity, 9 overloaded intervals) - no load balancing or filtering to fit tool.",
+   "impact_on_tool": "IDS drops packets randomly during bursts due to buffer overrun. Results in missed detections, broken TCP reassembly, one-way state, and gaps in IDS coverage during peak attack windows.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 3.93,
+     "threshold_gbps": 0.8,
+     "method": "5-tuple hash across 4x1G or 10G upgrade"
+    },
+    "why": "Distribute load across multiple IDS instances/ports or upgrade to 10G so sustained bursts stay below 80% utilization threshold and prevent tail drops."
+   },
+   "evidence_frames": [
+    1,
+    324,
+    654,
+    1072,
+    1367,
+    1681,
+    2021,
+    2429,
+    2753
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "613/2894 frames (21.2%) forwarded inside VXLAN tunnel without decapsulation at packet broker. IDS receives outer VXLAN header only.",
+   "impact_on_tool": "IDS cannot parse inner L2-L7 payload (IP, TCP, HTTP, etc.) for 21% of traffic. Signatures and anomaly detection fail on encapsulated traffic - major detection coverage loss.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Strip VXLAN header at broker to expose inner packets to IDS which has no tunnel decoding capability, restoring visibility for inspection."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3568,
+  "tokens_out": 2895,
+  "cost_usd": 0.01676,
+  "seconds": 16.2,
+  "recorded_at": "2026-10-29"
+ }
+}

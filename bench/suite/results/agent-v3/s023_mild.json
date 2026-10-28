@@ -1,0 +1,26 @@
+{
+ "feed": "s023_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s023_mild. No duplicates, drops, truncation, one-way, tunnel, VLAN, oversize, overload or encryption issues detected. Traffic is complete and correct for APM requirements.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3182,
+  "tokens_out": 883,
+  "cost_usd": 0.00773,
+  "seconds": 7.2,
+  "recorded_at": "2026-10-29"
+ }
+}

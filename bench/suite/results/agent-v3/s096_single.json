@@ -1,0 +1,64 @@
+{
+ "feed": "s096_single",
+ "status": "degraded",
+ "summary": "NDR feed s096_single is degraded: 18.2% of traffic (501/2754 frames) remains VXLAN-encapsulated (VNI 501), hiding inner payload from inspection. All other visibility checks (duplicates, one-way, drops, overload, truncation, VLAN, encryption, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding VXLAN overlay traffic (VNI 501) directly to the NDR without decapsulation/stripping. Likely SPAN or TAP from VTEP/uplink carrying overlay tunnels is being aggregated to the tool port as-is.",
+   "impact_on_tool": "NDR sees only outer VXLAN/UDP/IP headers and cannot parse inner Ethernet/IP/TCP payload for 18.2% of flows. With needs_full_payload=true and needs_both_directions=true, this blinds detection for east-west tunneled traffic, reducing detection coverage and preventing L7 analysis, IOC matching, and anomaly detection on inner flows.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_protocol": "VXLAN",
+     "vni": 501,
+     "location": "packet_broker_egress_to_NDR"
+    },
+    "why": "Strip VXLAN encapsulation at the packet broker to expose inner frames to the NDR. NDR requires full payload visibility and cannot natively decapsulate at scale; stripping restores complete L2-L7 visibility for ~18% of traffic without impacting other healthy feeds."
+   },
+   "evidence_frames": [
+    117,
+    120,
+    122,
+    124,
+    128,
+    130,
+    131,
+    133,
+    135,
+    136,
+    138,
+    140,
+    142,
+    146,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3314,
+  "tokens_out": 1539,
+  "cost_usd": 0.01068,
+  "seconds": 11.2,
+  "recorded_at": "2026-10-29"
+ }
+}

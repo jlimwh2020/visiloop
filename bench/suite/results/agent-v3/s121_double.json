@@ -1,0 +1,97 @@
+{
+ "feed": "s121_double",
+ "status": "degraded",
+ "summary": "Feed s121_double is degraded: 70.6% of traffic is VXLAN-encapsulated and opaque to the SIEM, and 2.9% of frames exceed the SIEM's 1518-byte MTU and are dropped by its NIC.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic (1428/2023 frames) without stripping the outer header. The SIEM receives only outer VXLAN/UDP/IP and cannot see inner Ethernet/IP/TCP headers.",
+   "impact_on_tool": "SIEM is blind to 70.6% of inner flows - cannot parse inner 5-tuple, apply correlation rules, or detect lateral movement hidden inside VXLAN. Detection coverage severely reduced.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN"
+    },
+    "why": "Strip VXLAN header on the packet broker and forward only the inner packet so the SIEM can parse and correlate the original traffic without needing tunnel decapsulation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "58 frames (2.9%) are larger than the SIEM's 1518-byte port MTU, up to 8108 bytes. Likely jumbo frames and VXLAN overhead pushing frames over the limit; the SIEM NIC drops oversize frames on ingress.",
+   "impact_on_tool": "SIEM loses ~2.9% of traffic completely due to NIC drops, creating gaps in logging and alerting. Even though SIEM needs_full_payload=false, it receives nothing for those frames.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "snaplen": 1518
+    },
+    "why": "Configure packet broker to slice/trim frames to 1518 bytes (or less) before delivery. SIEM does not need full payload, so slicing preserves headers for detection while preventing NIC drops."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    10,
+    12,
+    287,
+    288,
+    290,
+    347,
+    348,
+    350,
+    352,
+    354,
+    553,
+    554,
+    556,
+    557,
+    741,
+    742,
+    744
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3453,
+  "tokens_out": 2397,
+  "cost_usd": 0.0145,
+  "seconds": 17.1,
+  "recorded_at": "2026-10-29"
+ }
+}

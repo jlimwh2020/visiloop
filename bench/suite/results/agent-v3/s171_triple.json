@@ -1,0 +1,104 @@
+{
+ "feed": "s171_triple",
+ "status": "degraded",
+ "summary": "SIEM feed s171_triple is degraded with 3 faults: bursts of 3.62 Gbps overwhelm the 1 Gbps SIEM port, 5.6% of frames exceed 1518B and are dropped by NIC, and 7.4% duplicates waste capacity. Results in silent packet loss and reduced detection coverage.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate/burst traffic from packet broker exceeds single 1 Gbps SIEM ingest port with no load balancing or shaping. Peak 3.62 Gbps in 1ms bursts (362% of capacity) indicates multiple source ports aggregated to one tool port.",
+   "impact_on_tool": "SIEM NIC buffers overflow and drops packets during bursts (9 overloaded intervals). SIEM misses events, has incomplete flows/logs, and detection gaps during peak attacks.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "tool_ports": 4,
+     "port_speed_gbps": 1
+    },
+    "why": "SIEM port is 1 Gbps but bursts hit 3.62 Gbps. Load-balancing across 4x1G ports or to higher-capacity ingest distributes bursts and prevents buffer drops; SIEM does not need both directions so per-flow hashing is safe."
+   },
+   "evidence_frames": [
+    1,
+    413,
+    721,
+    1119,
+    1434,
+    1943,
+    2259,
+    2747,
+    3098
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Monitored network uses jumbo frames up to 8058 bytes, but packet broker forwards them unchanged to a 1 Gbps SIEM NIC limited to 1518 bytes. No slicing configured on broker egress.",
+   "impact_on_tool": "SIEM NIC silently drops all frames >1518B - 207 of 3725 frames (5.6%) are invisible to SIEM. Complete loss of visibility for large-frame flows, breaks detection and forensics.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518,
+     "preserve_headers": true
+    },
+    "why": "SIEM needs_full_payload=false, so payload can be truncated. Slicing at 1518B on packet broker ensures frames fit SIEM MTU and are not dropped, while preserving headers for SIEM correlation."
+   },
+   "evidence_frames": [
+    84,
+    85,
+    87,
+    88,
+    90,
+    142,
+    143,
+    145,
+    146,
+    213,
+    214,
+    216,
+    217,
+    219,
+    220,
+    341,
+    342,
+    344,
+    345,
+    355
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets arriving via multiple SPAN/mirror paths or overlapping TAP aggregation without deduplication on packet broker. 276 of 3725 packets (7.4%) are duplicates above 5% threshold.",
+   "impact_on_tool": "Wastes 7.4% of scarce 1 Gbps SIEM capacity and processing, inflates event counts, skews SIEM analytics/correlation and can cause false positives while exacerbating overload.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop duplicate copies before SIEM. Frees bandwidth for unique traffic and reduces load on already overloaded 1 Gbps port."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3504,
+  "tokens_out": 2676,
+  "cost_usd": 0.01575,
+  "seconds": 17.1,
+  "recorded_at": "2026-10-29"
+ }
+}

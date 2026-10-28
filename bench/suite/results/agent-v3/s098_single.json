@@ -1,0 +1,64 @@
+{
+ "feed": "s098_single",
+ "status": "degraded",
+ "summary": "Feed s098_single to IDS is degraded: 92.3% of bytes are encrypted vs 60% tolerance for this IDS. All other visibility checks (duplicates, one-way, VLAN, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "92.3% of traffic by bytes is TLS/encrypted (threshold 60% for this IDS). Packet broker is forwarding encrypted sessions without decryption, so payload is opaque.",
+   "impact_on_tool": "IDS requires full cleartext payload for signature and anomaly detection. With >92% encrypted, IDS is blind to most attacks and detection coverage is severely reduced; only metadata/handshake visible.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "upstream_of_packet_broker",
+     "approach": "SSL/TLS visibility appliance or broker-integrated decryption",
+     "policy": "decrypt authorized traffic and forward cleartext copy to IDS, retain encrypted copy per policy"
+    },
+    "why": "Decrypting authorized sessions upstream restores payload visibility the IDS needs, bringing encrypted share below 60% and re-enabling signature matching without changing TAP/SPAN."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3307,
+  "tokens_out": 1429,
+  "cost_usd": 0.01021,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s025_mild",
+ "status": "healthy",
+ "summary": "Feed s025_mild to SIEM is healthy: all visibility checks passed. Tool receives complete, correct traffic within its requirements (VLANs 10,20 present, no drops, no overload, no truncation/oversize, no tunnel/encryption issues). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3183,
+  "tokens_out": 762,
+  "cost_usd": 0.00722,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-29"
+ }
+}

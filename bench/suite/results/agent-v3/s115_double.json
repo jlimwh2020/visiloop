@@ -1,0 +1,82 @@
+{
+ "feed": "s115_double",
+ "status": "degraded",
+ "summary": "Feed s115_double to IDS is degraded: 14.8% of frames exceed IDS 1518B MTU (up to 8058B) and are dropped by NIC, plus 9.6% duplicates waste capacity. IDS needs full payload and both directions.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network carries jumbo frames (up to 8058 bytes) while IDS port max is 1518 bytes and packet broker is forwarding them unchanged without slicing or MTU handling.",
+   "impact_on_tool": "IDS NIC drops 331/2230 frames (14.8%) before inspection, creating blind spot for large-frame attacks and breaking detection for that traffic; needs_full_payload=true so loss is critical.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_mtu": 1518,
+     "largest_seen": 8058,
+     "options": [
+      "enable 9000B jumbo on IDS NIC if supported",
+      "or configure broker to slice to 1518B"
+     ]
+    },
+    "why": "Tool cannot receive >1518B frames; either enable jumbo support on IDS to keep full payload for detection, or slice at broker to at least deliver headers if jumbo not possible."
+   },
+   "evidence_frames": [
+    7,
+    8,
+    9,
+    11,
+    12,
+    38,
+    39,
+    41,
+    67,
+    69,
+    70,
+    73,
+    74,
+    76,
+    77,
+    87,
+    88,
+    90,
+    91,
+    93
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets arriving via two SPAN/TAP paths aggregated to one tool port without broker deduplication; 214 of 2230 packets (9.6%) seen twice, above 5% threshold.",
+   "impact_on_tool": "IDS wastes cycles re-inspecting duplicates, inflates flow/alert counts, skews analytics and can mask true rate limiting; reduces effective 1Gbps capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "location": "packet_broker"
+    },
+    "why": "Enable broker deduplication to drop second copy within short window before delivery to IDS, preserving single correct copy for stateful inspection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3379,
+  "tokens_out": 2306,
+  "cost_usd": 0.01402,
+  "seconds": 16.7,
+  "recorded_at": "2026-10-29"
+ }
+}

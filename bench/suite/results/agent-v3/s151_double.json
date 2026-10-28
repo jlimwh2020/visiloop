@@ -1,0 +1,101 @@
+{
+ "feed": "s151_double",
+ "status": "degraded",
+ "summary": "Feed s151_double to NDR is degraded: 5.6% TCP packet drops and 94.0% GRE-encapsulated traffic. NDR requires both directions and full payload but cannot reassemble incomplete streams or inspect inner packets while tunneled.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN aggregation is dropping packets under load: 159 of 2860 TCP packets (5.56% vs 1% threshold) show gaps/retransmissions indicating missing data before the NDR.",
+   "impact_on_tool": "NDR TCP reassembly fails, flows appear incomplete, detections missed and false negatives increase; 5.6% loss breaks stateful analysis that needs both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple-hash",
+     "tool_group": "ndr_group"
+    },
+    "why": "Distribute traffic across NDR cluster / reduce per-tool rate and broker egress oversubscription to eliminate drops; also verify TAP vs SPAN and broker buffer/capture capacity."
+   },
+   "evidence_frames": [
+    29,
+    30,
+    42,
+    43,
+    67,
+    70,
+    71,
+    72,
+    74,
+    132,
+    133,
+    171,
+    179,
+    183,
+    184,
+    193,
+    196,
+    225,
+    227,
+    271
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic is forwarded still encapsulated in GRE (2780 of 2958 frames, 94.0% vs 10% threshold) - packet broker is not stripping tunnels before delivery.",
+   "impact_on_tool": "NDR sees only outer GRE headers, cannot parse inner IP/TCP and application payload for 94% of traffic, effectively blind to lateral movement, C2 and exfiltration inside tunnels.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_types": [
+      "GRE"
+     ],
+     "strip_at": "packet_broker"
+    },
+    "why": "Terminate/strip GRE at packet broker and forward inner packets to NDR so it can apply full-payload inspection and detection on de-encapsulated traffic."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3437,
+  "tokens_out": 1967,
+  "cost_usd": 0.01266,
+  "seconds": 15.7,
+  "recorded_at": "2026-10-29"
+ }
+}

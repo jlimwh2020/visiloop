@@ -1,0 +1,26 @@
+{
+ "feed": "s002_clean",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for SIEM feed 's002_clean'. Traffic is complete and correct for this tool profile (one-way tolerant, truncated payload tolerant, 1 Gbps port, no VLAN requirements). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 784,
+  "cost_usd": 0.00731,
+  "seconds": 12.2,
+  "recorded_at": "2026-10-29"
+ }
+}

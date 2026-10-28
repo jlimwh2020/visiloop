@@ -1,0 +1,78 @@
+{
+ "feed": "s145_double",
+ "status": "degraded",
+ "summary": "Feed s145_double is degraded: NDR receives 9.1% duplicate packets and 18.6% one-way TCP sessions (29/156), breaking bidirectional session reconstruction required for NDR detection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets arriving via multiple SPAN/TAP paths aggregated without deduplication on the packet broker. 223 of 2459 packets (9.1%) exceed 5% threshold, typical of overlapping SPANs or dual-sided TAP aggregation.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate processing, inflates flow/packet counters, skews analytics and can cause false-positive detections and missed true positives due to state confusion.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to drop identical packets seen within short window before delivery to NDR, restoring accurate counts without losing unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker not aggregating both directions of TCP sessions to this NDR port - likely asymmetric routing with separate capture points or hash-based load-balancing splitting client->server and server->client to different tools.",
+   "impact_on_tool": "NDR requires both directions for TCP reassembly, session state, and attack detection. With 18.6% one-way sessions, NDR cannot reconstruct flows, misses lateral movement, C2, and exploit detection and generates incomplete flow records.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash": "5-tuple_bidirectional"
+    },
+    "why": "Configure packet broker to aggregate/correlate both directions using bidirectional 5-tuple hashing so each TCP session's forward and reverse packets go to the same NDR port."
+   },
+   "evidence_frames": [
+    23,
+    217,
+    224,
+    241,
+    299,
+    347,
+    348,
+    427,
+    636,
+    661,
+    668,
+    747,
+    907,
+    1068,
+    1242,
+    1318,
+    1411,
+    1438,
+    1462,
+    1470
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3363,
+  "tokens_out": 1672,
+  "cost_usd": 0.01131,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

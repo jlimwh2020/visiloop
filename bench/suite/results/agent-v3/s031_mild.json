@@ -1,0 +1,26 @@
+{
+ "feed": "s031_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM on s031_mild. Tool receives complete, correct traffic within its profile (bidirectional, VLANs 10/20, 10Gbps, jumbo 9216B). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3187,
+  "tokens_out": 936,
+  "cost_usd": 0.00796,
+  "seconds": 7.6,
+  "recorded_at": "2026-10-29"
+ }
+}

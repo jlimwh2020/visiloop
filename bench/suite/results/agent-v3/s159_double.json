@@ -1,0 +1,98 @@
+{
+ "feed": "s159_double",
+ "status": "degraded",
+ "summary": "Feed s159_double is degraded: 34.6% of TCP sessions are one-way and 14.7% of frames are sliced to ~192 bytes. NDR requires bidirectional traffic and full payload for TCP reassembly and detection, both are currently impaired.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction per TCP session to this NDR port. Most likely asymmetric routing with separate ingress TAPs/SPANs not aggregated, or a hash-based load-balancing rule splitting client->server and server->client to different tool ports.",
+   "impact_on_tool": "NDR needs both directions (needs_both_directions=true). With 47/136 sessions (34.6%) one-way, TCP stream reassembly, session state tracking, and anomaly/beacon detection will fail or generate false positives/negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash_symmetric": true
+    },
+    "why": "Aggregate both directions of each flow to the same NDR tool port using symmetric 5-tuple hashing so the NDR sees complete sessions for stateful analysis."
+   },
+   "evidence_frames": [
+    64,
+    71,
+    160,
+    234,
+    289,
+    340,
+    367,
+    375,
+    382,
+    430,
+    454,
+    498,
+    508,
+    530,
+    538,
+    582,
+    590,
+    676,
+    747,
+    916
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snaplen is enabled and truncating frames to ~192 bytes, likely to save bandwidth or fit tool capacity. 264/1792 frames (14.7%) are cut short.",
+   "impact_on_tool": "NDR needs full payload (needs_full_payload=true) for deep packet inspection, signature matching, and payload-based detection. Slicing removes L7 content and breaks detection coverage.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen_bytes": 9216
+    },
+    "why": "Disable slicing / set snaplen to tool max 9216 bytes so NDR receives complete frames and full payload for analysis."
+   },
+   "evidence_frames": [
+    7,
+    9,
+    10,
+    12,
+    13,
+    24,
+    27,
+    38,
+    41,
+    43,
+    53,
+    54,
+    56,
+    57,
+    59,
+    86,
+    89,
+    104,
+    105,
+    107
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3439,
+  "tokens_out": 1914,
+  "cost_usd": 0.01243,
+  "seconds": 11.1,
+  "recorded_at": "2026-10-29"
+ }
+}

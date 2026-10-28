@@ -1,0 +1,140 @@
+{
+ "feed": "s174_triple",
+ "status": "degraded",
+ "summary": "IDS feed s174_triple is degraded: 67.5% of TCP sessions are one-way (high), 4.3% of frames exceed IDS 1518B MTU and are dropped by NIC (medium), and 2.4% of TCP packets show gaps from capture drops (medium). IDS requires both directions and full payload for stateful detection - current loss creates major blind spots.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "129 of 191 TCP sessions (67.5%) show only one direction, well above 10% threshold. Indicates asymmetric routing or SPAN/packet-broker aggregation failure where forward and reverse paths are sent to different tool ports or only one side is tapped, so broker is not aggregating both directions to this IDS feed.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP state tracking, stream reassembly and signature correlation. With one-way traffic it cannot match request/response, misses exploits, C2 and exfiltration, and generates inaccurate alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by": "5-tuple",
+     "deliver_both_directions_to_same_port": true
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow (5-tuple hash) to the same IDS tool port so the IDS sees complete bidirectional sessions for stateful analysis."
+   },
+   "evidence_frames": [
+    1,
+    9,
+    31,
+    39,
+    46,
+    76,
+    84,
+    107,
+    114,
+    153,
+    160,
+    167,
+    179,
+    187,
+    198,
+    222,
+    230,
+    238,
+    265,
+    336
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "87 of 2035 frames (4.3%) exceed the IDS port max_frame_bytes 1518 (largest 8058 bytes), above 1% threshold. Likely jumbo frames or encapsulated traffic forwarded without MTU handling; IDS NIC silently drops frames larger than 1518B.",
+   "impact_on_tool": "IDS loses ~4% of traffic at NIC before analysis. Large frames often carry exploit payloads, file transfers and malware; drops create gaps in reassembly and blind spots for detection despite needs_full_payload=true.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_mtu": 1518,
+     "largest_observed": 8058,
+     "options": [
+      "enable_jumbo_frames_on_IDS_to_9000",
+      "configure_broker_to_slice_or_fragment_selectively_if_tool_cannot_support_jumbo"
+     ]
+    },
+    "why": "Either enable jumbo-frame support (MTU 9000+) on IDS and path, or configure broker to handle oversize (selective slicing/fragmentation) so frames are not silently dropped by the 1Gbps IDS port. Avoid blind slicing as IDS needs full payload."
+   },
+   "evidence_frames": [
+    61,
+    62,
+    64,
+    65,
+    67,
+    96,
+    97,
+    99,
+    100,
+    143,
+    144,
+    146,
+    148,
+    208,
+    210,
+    212,
+    213,
+    216,
+    217,
+    295
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "46 of 1881 TCP packets (2.4%) show missing data/gaps above 1% threshold, indicating drops in SPAN source or packet broker buffers due to burst/oversubscription. Compounds oversize NIC drops and suggests SPAN is oversubscribed.",
+   "impact_on_tool": "IDS misses segments needed for signature matching and TCP reassembly; gaps allow evasion, incomplete flow records and reduced detection coverage for exploits and malware.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_sources_feeding_s174_triple": true,
+     "alternative": "load_balance_or_filter_if_tap_not_possible"
+    },
+    "why": "TAPs do not drop under burst like SPAN. Replacing SPAN with TAP at aggregation points eliminates SPAN buffer drops; if TAP not possible, add load_balance across multiple IDS ports or filter irrelevant traffic to reduce burst loss."
+   },
+   "evidence_frames": [
+    24,
+    25,
+    78,
+    134,
+    136,
+    146,
+    147,
+    377,
+    378,
+    408,
+    410,
+    426,
+    579,
+    580,
+    581,
+    769,
+    774,
+    844,
+    889,
+    890
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3570,
+  "tokens_out": 3817,
+  "cost_usd": 0.02068,
+  "seconds": 17.9,
+  "recorded_at": "2026-10-29"
+ }
+}

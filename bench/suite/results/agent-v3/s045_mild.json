@@ -1,0 +1,26 @@
+{
+ "feed": "s045_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed s045_mild. No duplicates, drops, truncation, tunnels, VLAN stripping, one-way, oversize, overload or encryption issues detected. Traffic is complete and correct for SIEM requirements.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3178,
+  "tokens_out": 811,
+  "cost_usd": 0.00742,
+  "seconds": 7.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,99 @@
+{
+ "feed": "s119_double",
+ "status": "degraded",
+ "summary": "Feed s119_double to NDR is degraded: 2.3% TCP packet loss and 29.2% ERSPAN-encapsulated traffic reduce detection coverage. NDR will miss flow reassembly and fail to inspect inner payloads for nearly a third of traffic.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Packet broker/SPAN path is dropping packets before the NDR (2.28% TCP gaps, 34/1493 packets) - classic buffer exhaustion/oversubscription on ingress or fabric, not tool overload (tool_overload healthy). Sequence gaps at frames 51/52, 71/72 etc indicate broker discards under burst.",
+   "impact_on_tool": "NDR requires both directions and full payload for flow reassembly and detection; missing segments break TCP stream reconstruction, cause false negatives, missed C2/exfiltration detection and incomplete Zeek/Suricata logs.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_group": "ndr_pool",
+     "hash": "5-tuple"
+    },
+    "why": "Distribute load across NDR pool / reduce per-tool throughput and broker egress congestion to eliminate 2%+ drops; also review SPAN oversubscription and consider TAP aggregation with load balancing."
+   },
+   "evidence_frames": [
+    51,
+    52,
+    71,
+    72,
+    134,
+    135,
+    219,
+    221,
+    306,
+    307,
+    360,
+    361,
+    483,
+    484,
+    486,
+    487,
+    544,
+    546,
+    635,
+    636
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "29.2% of frames (453/1554) arrive encapsulated in ERSPAN from remote source; packet broker is forwarding tunnel intact without stripping outer header before NDR handoff.",
+   "impact_on_tool": "NDR sees outer ERSPAN/IP/GRE headers instead of inner Ethernet/IP payload; without decapsulation it cannot parse inner 5-tuple, application payload or VLANs, so ~29% of traffic is opaque to detection and analytics.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Configure packet broker to terminate/strip ERSPAN and forward inner original frames to NDR so it can inspect L2-L7 and apply VLAN/policy detection on required VLANs 10,20."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    11,
+    13,
+    15,
+    18,
+    20,
+    21,
+    22,
+    25,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3439,
+  "tokens_out": 2026,
+  "cost_usd": 0.01291,
+  "seconds": 17.2,
+  "recorded_at": "2026-10-29"
+ }
+}

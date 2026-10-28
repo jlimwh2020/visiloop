@@ -1,0 +1,64 @@
+{
+ "feed": "s078_single",
+ "status": "degraded",
+ "summary": "Feed s078_single to IDS is degraded: 74.5% of bytes are encrypted, exceeding the IDS tolerance of 60%. All other visibility checks (duplicates, VLANs, one-way, oversize, drops, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "74.5% of traffic by bytes is TLS/encrypted (threshold 60% for this IDS). Packet broker is forwarding encrypted sessions directly to the IDS without prior decryption or selective plaintext forwarding, so payload remains opaque.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection. With ~74% encrypted bytes, the IDS is blind to most application-layer attacks, malware C2, and exploit payloads, significantly reducing detection coverage despite healthy delivery on other metrics.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "observed_share": 0.7448,
+     "threshold": 0.6,
+     "suggestion": "enable selective SSL/TLS decryption or mirror decrypted traffic from SSL visibility appliance"
+    },
+    "why": "Decrypting or selectively forwarding decrypted traffic will bring encrypted share below 60% and restore payload visibility the IDS needs for full signature matching, without changing TAP/SPAN or load-balancing."
+   },
+   "evidence_frames": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3297,
+  "tokens_out": 1482,
+  "cost_usd": 0.01042,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,67 @@
+{
+ "feed": "s086_single",
+ "status": "degraded",
+ "summary": "Feed s086_single to IDS is degraded: 50% of packets are untagged and required VLAN 20 is completely missing, creating a coverage gap for IDS detection.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN trunk is stripping 802.1Q tags or filtering VLAN 20 before delivery. 50% untagged indicates VLAN tags removed or native VLAN misconfiguration, and VLAN 20 never arrives at tool port.",
+   "impact_on_tool": "IDS is blind to all traffic on VLAN 20 (50% of feed). Cannot detect intrusions, lateral movement, or policy violations on that segment; correlation and VLAN-aware signatures fail.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "forward_vlans": [
+      10,
+      20
+     ],
+     "ensure_tagging": "retain"
+    },
+    "why": "Restore 802.1Q tags and ensure VLANs 10 and 20 are both forwarded to IDS port to meet tool profile requirement and restore full detection coverage."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    26,
+    29,
+    32,
+    35,
+    36,
+    37,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3308,
+  "tokens_out": 1590,
+  "cost_usd": 0.01089,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-29"
+ }
+}

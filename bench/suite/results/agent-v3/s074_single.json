@@ -1,0 +1,42 @@
+{
+ "feed": "s074_single",
+ "status": "degraded",
+ "summary": "Feed s074_single to NDR is degraded: 13.2% duplicate packets (343/2595) exceeds 5% threshold. All other checks (one-way, truncated, packet drops, tool overload, encrypted share, missing VLAN, tunnel, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating overlapping capture points (e.g., multiple SPANs/TAPs covering the same link or both sides of an aggregation) without deduplication, delivering the same packet twice to the single NDR tool port.",
+   "impact_on_tool": "NDR wastes CPU/storage on 13.2% redundant packets, inflates flow counts and can skew behavioral analytics/detection; reduces effective 10G inspection capacity despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets seen within a short window before forwarding to the NDR, restoring complete but non-redundant traffic for accurate detection coverage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3244,
+  "tokens_out": 1702,
+  "cost_usd": 0.01129,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-29"
+ }
+}

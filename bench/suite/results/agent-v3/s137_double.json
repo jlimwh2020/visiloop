@@ -1,0 +1,101 @@
+{
+ "feed": "s137_double",
+ "status": "degraded",
+ "summary": "Feed s137_double to IDS is degraded: 17.9% of TCP sessions are one-way (exceeds 10% threshold, needs both directions) and 78% of bytes are encrypted (exceeds 60% tolerance for this IDS). No duplicates, drops, truncation, VLAN or tunnel issues detected.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of many TCP sessions is reaching the IDS. Most likely the source is a SPAN/mirror configured for TX or RX only, or only one side of an asymmetric routed path is tapped, and the packet broker is not aggregating both directions into this single IDS feed.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly and stateful signature matching. With 34/190 sessions one-way, the IDS cannot track handshakes, reassemble streams, or fire on bidirectional exploits, causing missed detections and false positives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "feed": "s137_double",
+     "aggregate_both_directions": true,
+     "source": "tap_both_sides_or_span_both_directions"
+    },
+    "why": "Aggregate RX and TX (or both sides of asymmetric path) in the packet broker to deliver a single coherent bidirectional flow to the IDS, restoring full session visibility."
+   },
+   "evidence_frames": [
+    1,
+    8,
+    191,
+    380,
+    388,
+    539,
+    811,
+    930,
+    981,
+    1002,
+    1006,
+    1017,
+    1078,
+    1116,
+    1144,
+    1352,
+    1435,
+    1445,
+    1449,
+    1459
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "78% of bytes are encrypted (TLS/QUIC) with no decryption before the IDS. Traffic mix has shifted to mostly encrypted, exceeding the IDS 60% tolerance, and the visibility tier is passing ciphertext straight to the tool.",
+   "impact_on_tool": "IDS needs full payload (needs_full_payload=true) for content inspection. Encrypted payloads are opaque, so signatures for exploits, malware, and C2 in the payload cannot fire, sharply reducing detection coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "feed": "s137_double",
+     "method": "decrypt_and_forward_selectively",
+     "location": "before_ids"
+    },
+    "why": "Advise decrypting relevant TLS centrally (or via dedicated decryption zone) and forwarding cleartext copy to IDS, or supplement with decrypted metadata/NDR, to bring encrypted share below 60% and restore payload inspection."
+   },
+   "evidence_frames": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3434,
+  "tokens_out": 2083,
+  "cost_usd": 0.01315,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-29"
+ }
+}

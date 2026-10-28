@@ -1,0 +1,26 @@
+{
+ "feed": "s042_mild",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for s042_mild. IDS receives complete, correct bidirectional traffic with full payload, no drops, duplicates, truncation, tunnels, VLAN stripping, oversize frames, overload, or excessive encryption. No packet broker changes required; detection coverage is optimal.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3174,
+  "tokens_out": 1024,
+  "cost_usd": 0.00832,
+  "seconds": 8.6,
+  "recorded_at": "2026-10-29"
+ }
+}

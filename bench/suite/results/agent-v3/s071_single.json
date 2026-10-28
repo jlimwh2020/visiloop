@@ -1,0 +1,66 @@
+{
+ "feed": "s071_single",
+ "status": "degraded",
+ "summary": "Feed s071_single is degraded: required VLAN 20 not seen, 50% of packets arrive untagged, reducing SIEM segmentation visibility.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP trunk is stripping 802.1Q tags or not forwarding VLAN 20 to this SIEM port. 50% untagged with VLAN 20 completely absent indicates VLAN filtering or an access-mode output stripping tags rather than a SPAN/TAP issue.",
+   "impact_on_tool": "SIEM loses VLAN context for half the traffic and has zero visibility into VLAN 20. VLAN-based correlation, filtering, and detection rules for VLAN 20 will not fire, creating a blind spot.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_tags": true
+    },
+    "why": "Configure packet broker egress to preserve 802.1Q tags and explicitly forward trunked VLANs 10 and 20 to the SIEM tool port so segmentation context is restored."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    10,
+    11,
+    13,
+    16,
+    18,
+    19,
+    20,
+    23,
+    25,
+    26,
+    29,
+    30,
+    32,
+    35,
+    36,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3302,
+  "tokens_out": 1783,
+  "cost_usd": 0.01171,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

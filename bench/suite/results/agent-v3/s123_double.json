@@ -1,0 +1,99 @@
+{
+ "feed": "s123_double",
+ "status": "degraded",
+ "summary": "Feed s123_double is degraded for NDR: 100% of frames are VXLAN-encapsulated and 97.3% of bytes are encrypted (threshold 90%). NDR sees only outer tunnel headers and ciphertext, severely limiting detection coverage.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic without stripping. All 3177/3177 frames arrive inside VXLAN (100% vs 10% threshold), so the NDR only sees outer VTEP headers.",
+   "impact_on_tool": "NDR cannot parse inner L2-L7 headers, flow 5-tuple, or payload. Correlation, IDS signatures, and behavioral detection fail on encapsulated traffic - effectively blind to 100% of inner flows.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "location": "packet_broker"
+    },
+    "why": "Strip VXLAN at the packet broker to present inner Ethernet/IP frames to the NDR so it can parse flows and apply detection. Preserve VNI as metadata/tag if needed for tenant context."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "97.26% of bytes are encrypted vs NDR tolerance of 90%. Traffic is predominantly TLS/encrypted with no decryption or key-sharing before the tool, leaving only headers visible.",
+   "impact_on_tool": "NDR requires full payload for deep packet inspection and threat detection. With 97% ciphertext, payload analysis, JA3, file extraction, and C2 detection are blind, reducing detection coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "decrypt_at_broker_or_forward_keys",
+     "target_share": 0.9
+    },
+    "why": "Decrypt selected TLS at packet broker / forward session keys to NDR, or filter to send only decryptable/policy-relevant encrypted flows to NDR to bring encrypted share below 90% and restore payload visibility."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3435,
+  "tokens_out": 1906,
+  "cost_usd": 0.01239,
+  "seconds": 14.4,
+  "recorded_at": "2026-10-29"
+ }
+}

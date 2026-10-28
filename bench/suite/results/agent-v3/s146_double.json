@@ -1,0 +1,99 @@
+{
+ "feed": "s146_double",
+ "status": "degraded",
+ "summary": "IDS feed s146_double is degraded: 82% encrypted traffic exceeds 60% tolerance and 7.4% jumbo frames exceed 1518-byte IDS MTU and are dropped, both severely reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "82% of bytes are encrypted (TLS) vs IDS tolerance of 60%; traffic is forwarded without broker-based decryption or key sharing, so payload is opaque to IDS signatures.",
+   "impact_on_tool": "IDS is blind to majority of payloads; signature matching, anomaly detection and full-payload inspection fail for ~82% of traffic, creating large detection gaps.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "ssl_visibility"
+    },
+    "why": "Decrypt relevant TLS at packet broker / SSL visibility appliance and forward cleartext to IDS, or selectively filter encrypted traffic that IDS cannot inspect, to restore payload visibility within tool tolerance."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "242 of 3254 frames (7.4%) exceed IDS port MTU of 1518 bytes (largest 8058 bytes) - jumbo frames delivered without fragmentation; IDS 1G NIC silently drops oversized frames.",
+   "impact_on_tool": "IDS misses 7.4% of frames entirely, breaking flow reassembly and allowing large-payload attacks to evade detection; IDS needs full payload so drops are worse than truncation.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_mtu": 9000,
+     "alternative": "broker_fragment_to_1518"
+    },
+    "why": "Enable jumbo-frame support (MTU 9000) on IDS capture port and broker egress, or configure broker to fragment/slice to 1518 bytes, to prevent silent NIC drops while preserving as much payload as possible for IDS that requires full payload."
+   },
+   "evidence_frames": [
+    162,
+    163,
+    165,
+    166,
+    168,
+    234,
+    235,
+    237,
+    238,
+    295,
+    296,
+    298,
+    299,
+    301,
+    304,
+    334,
+    335,
+    337,
+    338,
+    340
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3450,
+  "tokens_out": 2814,
+  "cost_usd": 0.01627,
+  "seconds": 16.6,
+  "recorded_at": "2026-10-29"
+ }
+}

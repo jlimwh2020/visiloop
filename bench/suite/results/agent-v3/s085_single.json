@@ -1,0 +1,46 @@
+{
+ "feed": "s085_single",
+ "status": "degraded",
+ "summary": "IDS feed s085_single is severely overloaded: 3.70 Gbps bursts on 1 Gbps port (370% capacity). All other visibility checks healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering ~3.7 Gbps micro-bursts to a 1 Gbps IDS port with no load balancing or rate control - 2 intervals exceeded 80% threshold, peaking at 370% of port capacity.",
+   "impact_on_tool": "IDS will drop packets at ingress due to buffer overrun, causing missed signatures, incomplete flow reassembly and blind spots for detection despite needing full payload and bidirectional traffic.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "group": "ids_pool",
+     "hash": "5-tuple",
+     "port_speed_gbps": 1
+    },
+    "why": "Distribute 3.7 Gbps bursts across multiple 1 Gbps IDS members with flow-aware hashing to keep per-tool load <80% and preserve complete bidirectional flows for detection."
+   },
+   "evidence_frames": [
+    1,
+    984
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3264,
+  "tokens_out": 1399,
+  "cost_usd": 0.01003,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,86 @@
+{
+ "feed": "s120_double",
+ "status": "degraded",
+ "summary": "Feed s120_double is degraded: IDS sees one-way traffic on 21.8% of TCP sessions (27/124) and microburst overload to 1.35 Gbps on a 1 Gbps port (135% capacity, 4 intervals). Both break stateful IDS detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is forwarding only one direction for 21.8% of TCP sessions (threshold 10%). Most likely SPAN/mirror configured TX-only or RX-only, or single-sided TAP on asymmetric path, or broker forwarding policy/filter that sends only client->server and not server->client to this tool port.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP state tracking, handshake validation and stream reassembly. One-way flows cannot be reassembled, signatures requiring server response fail, and stateful detection is blind to server-side attacks leading to false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_policy": "bidirectional_5_tuple",
+     "source": "both_directions_to_same_tool_port"
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port so the IDS sees complete bidirectional sessions for stateful analysis."
+   },
+   "evidence_frames": [
+    21,
+    79,
+    272,
+    282,
+    421,
+    457,
+    535,
+    629,
+    919,
+    994,
+    1227,
+    1247,
+    1249,
+    1262,
+    1275,
+    1282,
+    1371,
+    1432,
+    1466,
+    1509
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microbursts peak at 1.35 Gbps in 1 ms intervals vs 1 Gbps IDS port capacity (135% overload, 4 intervals). Packet broker is forwarding aggregate traffic at line-rate to a single 1G tool port without load-balancing, filtering or shaping.",
+   "impact_on_tool": "IDS ingress drops packets during bursts. For an IDS needing full payload, any loss means missed signatures, truncated flows and attacker evasion during high-throughput periods; overload also risks tool CPU exhaustion.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "flow_hash_5_tuple",
+     "tool_ports_required": 2,
+     "target_capacity_gbps": 2,
+     "preserve_bidirectional": true
+    },
+    "why": "Distribute flows across 2x1G (or 1x10G) IDS ports with flow-aware hashing to absorb 1.35 Gbps bursts without loss while keeping both directions of each flow together."
+   },
+   "evidence_frames": [
+    1,
+    365,
+    713,
+    1074
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3396,
+  "tokens_out": 2584,
+  "cost_usd": 0.01523,
+  "seconds": 21.5,
+  "recorded_at": "2026-10-29"
+ }
+}

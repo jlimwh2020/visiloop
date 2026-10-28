@@ -1,0 +1,60 @@
+{
+ "feed": "s083_single",
+ "status": "degraded",
+ "summary": "Feed s083_single is degraded: 8.6% packet loss (186/2165 TCP packets) exceeds 1% threshold. IDS will have incomplete TCP reassembly and missed detections.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror or packet broker is dropping packets under load (buffer/oversubscription). TCP analysis shows gaps/retransmissions indicating 8.6% missing data upstream of the IDS, while tool overload check is healthy, pointing to loss at the SPAN/broker, not the IDS itself.",
+   "impact_on_tool": "IDS needs both directions and full payload for signature matching and stream reassembly. With 8.6% missing segments, flows are incomplete, signatures fail to fire, and attackers can evade detection via missed packets.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "TAP provides lossless, out-of-band copy with no SPAN buffer drops or oversubscription. Replacing SPAN with TAP (and ensuring packet broker has sufficient buffer/capacity) eliminates the upstream loss causing TCP gaps."
+   },
+   "evidence_frames": [
+    31,
+    34,
+    59,
+    61,
+    89,
+    92,
+    124,
+    125,
+    150,
+    151,
+    153,
+    154,
+    166,
+    167,
+    201,
+    203,
+    210,
+    211,
+    213,
+    215
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3300,
+  "tokens_out": 1788,
+  "cost_usd": 0.01172,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,99 @@
+{
+ "feed": "s135_double",
+ "status": "degraded",
+ "summary": "Feed s135_double to SIEM is degraded: 4.2% TCP packet loss exceeds 1% threshold and 76.7% of frames are ERSPAN-encapsulated and not stripped, leaving SIEM with incomplete and unparsable traffic.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN source dropping packets under load - 117 of 2811 TCP packets (4.16%) show gaps/retransmissions, well above 1% threshold. Indicates broker egress buffer exhaustion or oversubscription before the 1Gbps SIEM port, even though tool_overload check is healthy.",
+   "impact_on_tool": "SIEM receives incomplete flows; ~4% of TCP transactions missing, causing missed events, broken correlation and reduced detection/forensic coverage despite SIEM not requiring both directions or full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "feed": "s135_double",
+     "threshold_percent": 1
+    },
+    "why": "Distribute feed across multiple broker egress ports or SIEM ingest members to eliminate buffer drops and keep loss <1%."
+   },
+   "evidence_frames": [
+    36,
+    42,
+    48,
+    49,
+    115,
+    116,
+    156,
+    161,
+    279,
+    280,
+    312,
+    313,
+    315,
+    317,
+    325,
+    326,
+    364,
+    365,
+    379,
+    380
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic forwarded via ERSPAN encapsulation (2279 of 2971 frames, 76.7%) and packet broker is not stripping tunnel headers before delivery. Broker is passing outer ERSPAN to tool port.",
+   "impact_on_tool": "SIEM sees outer ERSPAN headers instead of inner original IP/TCP; cannot parse or index inner fields, so ~77% of traffic is opaque to SIEM rules and analytics, creating major detection blind spot.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "feed": "s135_double"
+    },
+    "why": "Configure packet broker to strip ERSPAN encapsulation and deliver native inner packets so SIEM can parse L3-L7 fields and generate events."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3433,
+  "tokens_out": 2797,
+  "cost_usd": 0.01618,
+  "seconds": 16.7,
+  "recorded_at": "2026-10-29"
+ }
+}

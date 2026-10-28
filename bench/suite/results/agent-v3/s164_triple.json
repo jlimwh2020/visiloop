@@ -1,0 +1,118 @@
+{
+ "feed": "s164_triple",
+ "status": "degraded",
+ "summary": "Feed s164_triple to NDR is degraded with 3 high-severity faults: 95.2% ERSPAN encapsulation not stripped, microbursts to 21.72 Gbps overloading 10 Gbps tool port (217%), and 17.8% one-way TCP sessions. Tool cannot parse inner payload, drops bursts, and fails stateful reassembly.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is forwarding only one direction for many flows. 95 of 535 TCP sessions (17.8%) are unidirectional, exceeding 10% threshold. Typical cause is single-sided SPAN/TAP or failure to aggregate both directions of asymmetric routing at the broker before delivery to the NDR.",
+   "impact_on_tool": "NDR needs_both_directions=true for stateful TCP reassembly and detection. One-way flows prevent session reconstruction, break application identification and IDS signatures, causing missed detections and false positives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "aggregation_hash": "5-tuple"
+    },
+    "why": "Aggregate both directions of each flow at the packet broker so the NDR receives client->server and server->client together for complete session analysis."
+   },
+   "evidence_frames": [
+    33,
+    36,
+    37,
+    109,
+    131,
+    301,
+    354,
+    426,
+    516,
+    539,
+    567,
+    576,
+    654,
+    731,
+    893,
+    1080,
+    1163,
+    1359,
+    1411,
+    1431
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Traffic bursts exceed NDR port capacity with no load balancing. Peak 21.72 Gbps in 1ms burst vs 10 Gbps port = 217% of capacity (2 overloaded intervals). Even without broker drops, the tool NIC will drop during microbursts.",
+   "impact_on_tool": "NDR will silently drop packets at ingress during bursts, creating blind spots, incomplete flows, and missed alerts despite broker showing healthy. Detection coverage collapses under load.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "method": "5-tuple_hash",
+     "tool_group": "NDR_cluster"
+    },
+    "why": "Distribute traffic across multiple 10G NDR ports/nodes via hash-based load balancing to keep per-port utilization <80% and absorb 21+ Gbps bursts without loss."
+   },
+   "evidence_frames": [
+    1,
+    5483
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "95.2% of frames (7165/7527) arrive inside ERSPAN tunnel and are delivered encapsulated to the tool. Packet broker is forwarding ERSPAN from remote switches without decapsulation/stripping.",
+   "impact_on_tool": "NDR expects native Ethernet/IP and cannot parse inner payload inside ERSPAN/GRE. It wastes cycles on outer headers, fails to extract L4-L7, and misses 95% of detections; effectively blind to encapsulated traffic.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Configure packet broker to terminate/strip ERSPAN headers and forward only the inner original frames so NDR can inspect full payload with its 9216-byte MTU."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3536,
+  "tokens_out": 2492,
+  "cost_usd": 0.01501,
+  "seconds": 16.6,
+  "recorded_at": "2026-10-29"
+ }
+}

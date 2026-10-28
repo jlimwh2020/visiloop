@@ -1,0 +1,60 @@
+{
+ "feed": "s079_single",
+ "status": "degraded",
+ "summary": "Feed s079_single is degraded: 98.5% of bytes are encrypted, exceeding the NDR tolerance of 90%. All other visibility checks (duplicates, VLAN, one-way, oversize, drops, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Almost all traffic (98.5%) is TLS/encrypted and is being forwarded as-is with no decryption or cleartext feed from the packet broker. NDR tolerates up to 90% encrypted, so this exceeds its design point.",
+   "impact_on_tool": "NDR requires full payload for deep inspection, JA3/JA4, file extraction and anomaly detection. With only ciphertext visible, detection coverage is severely blinded and most threats inside encrypted sessions will be missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "Provide selective decryption via a compliant TLS visibility/decryption zone or forward already-decrypted traffic (e.g., from proxy/NGFW) to the NDR. This restores cleartext payload for inspection while respecting privacy/policy controls for excluded categories."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3312,
+  "tokens_out": 1623,
+  "cost_usd": 0.01104,
+  "seconds": 11.1,
+  "recorded_at": "2026-10-29"
+ }
+}

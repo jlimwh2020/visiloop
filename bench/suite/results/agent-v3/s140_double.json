@@ -1,0 +1,95 @@
+{
+ "feed": "s140_double",
+ "status": "degraded",
+ "summary": "Feed s140_double is degraded for NDR: 12.4% of frames truncated to ~256B and 8.7% of TCP packets show missing data (sequence gaps). Both point to packet broker slicing/trimming that strips payload the NDR needs for detection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker is slicing/trimming with small snaplen (~256B) causing TCP sequence gaps. Sequence analysis by IP length shows 170 of 1959 TCP packets (8.7%) with missing bytes, well above 1% threshold. Detail explicitly notes 'the feed is sliced' - slicing discards payload bytes and can also cause buffer drops.",
+   "impact_on_tool": "NDR needs_full_payload=true and needs_both_directions=true; missing TCP bytes breaks stream reassembly, file extraction, and signature matching, causing missed detections and noisy retransmission handling.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 9216
+    },
+    "why": "NDR supports up to 9216B and requires full payload. Disabling slicing restores complete TCP segments and eliminates the 8.7% sequence gaps."
+   },
+   "evidence_frames": [
+    20,
+    77,
+    78,
+    79,
+    80,
+    109,
+    110,
+    111,
+    121,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    155,
+    156,
+    170,
+    171
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Broker egress to NDR is configured to slice/trim packets to 256 bytes snaplen. 261 of 2105 frames (12.4%) are cut short, exceeding 5% threshold, most to exactly 256 bytes.",
+   "impact_on_tool": "NDR requires full payload for deep packet inspection. Truncated frames hide L7 headers, URIs, certificates and malware payloads, blinding detection and forensics.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "Disable packet slicing/trimming on the broker port feeding this NDR and forward full frames (up to 9216B) to restore payload visibility."
+   },
+   "evidence_frames": [
+    9,
+    22,
+    44,
+    65,
+    66,
+    68,
+    69,
+    78,
+    79,
+    81,
+    92,
+    95,
+    124,
+    125,
+    156,
+    167,
+    171,
+    179,
+    196,
+    200
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3459,
+  "tokens_out": 3272,
+  "cost_usd": 0.01823,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-29"
+ }
+}

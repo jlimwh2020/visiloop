@@ -1,0 +1,60 @@
+{
+ "feed": "s089_single",
+ "status": "degraded",
+ "summary": "Feed s089_single to IDS is degraded due to significant packet loss (7.8% of TCP packets show gaps). All other visibility checks (duplicates, encryption, VLANs, directionality, truncation, tunnels, oversize, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror port oversubscription or packet broker buffer exhaustion causing random packet drops before the IDS. 198 of 2542 TCP packets (7.79%, threshold 1%) show missing sequence data, consistent with a congested SPAN session or overloaded broker ingress dropping under burst load rather than IDS overload (tool_overload is healthy).",
+   "impact_on_tool": "IDS requires complete bidirectional streams and full payload for signature matching and stream reassembly. With 7.8% gaps, TCP reassembly fails, signatures miss across packet boundaries, and attacks can evade detection resulting in false negatives and incomplete forensic evidence.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Passive TAP does not drop packets under load like SPAN/mirror does and provides lossless, full-duplex capture. Replacing SPAN with TAP (with proper broker aggregation/capacity planning for the 1 Gbps IDS port) will eliminate the 7.8% loss and restore complete traffic to the IDS for reliable detection."
+   },
+   "evidence_frames": [
+    23,
+    26,
+    41,
+    42,
+    99,
+    100,
+    139,
+    142,
+    162,
+    163,
+    172,
+    174,
+    175,
+    203,
+    204,
+    234,
+    235,
+    273,
+    274,
+    281
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3305,
+  "tokens_out": 2104,
+  "cost_usd": 0.01307,
+  "seconds": 16.5,
+  "recorded_at": "2026-10-29"
+ }
+}

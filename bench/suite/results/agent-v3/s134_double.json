@@ -1,0 +1,101 @@
+{
+ "feed": "s134_double",
+ "status": "degraded",
+ "summary": "IDS feed s134_double is degraded: 80.6% encrypted traffic exceeds 60% IDS tolerance and 30.6% ERSPAN-encapsulated traffic hides inner packets from inspection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Traffic is predominantly TLS-encrypted and no SSL visibility/decryption is performed before the IDS. 81% encrypted bytes indicates the packet broker is forwarding encrypted sessions directly to the IDS without prior decryption or selective handling.",
+   "impact_on_tool": "IDS needs full payload for signature/anomaly detection but cannot inspect encrypted payloads; ~81% of bytes are opaque, drastically reducing detection coverage and causing missed exploits, malware and C2.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "observed_share": 0.8057,
+     "threshold": 0.6,
+     "location": "packet_broker"
+    },
+    "why": "Add SSL visibility/decryption before the IDS or selectively route decrypted traffic to the IDS so it receives cleartext payload it can analyze; otherwise filter undecryptable encrypted traffic to avoid wasting IDS capacity."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding ERSPAN-encapsulated traffic directly to the IDS without stripping the tunnel header. 606 of 1983 frames (30.6%) arrive as ERSPAN type 606, so the IDS sees outer tunnel headers instead of inner original packets.",
+   "impact_on_tool": "IDS cannot parse inner L2-L7 headers while encapsulated; 30.6% of frames are not decoded for signatures and anomaly detection, creating a large blind spot and wasted processing on tunnel overhead.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "observed_ratio": 0.3056
+    },
+    "why": "Configure packet broker to terminate/strip ERSPAN encapsulation and forward only the inner original packets so the IDS receives native Ethernet/IP it can inspect."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3429,
+  "tokens_out": 2512,
+  "cost_usd": 0.01496,
+  "seconds": 15.2,
+  "recorded_at": "2026-10-29"
+ }
+}

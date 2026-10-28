@@ -1,0 +1,46 @@
+{
+ "feed": "s091_single",
+ "status": "degraded",
+ "summary": "Feed s091_single is degraded: NDR 10 Gbps port is overloaded by 14.46 Gbps microbursts (145% of capacity, 2 intervals). No other visibility faults detected.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering aggregated/bursty traffic to a single 10 Gbps NDR port without load-balancing. 1ms peak of 14.46 Gbps exceeds port line-rate by 45%, causing buffer overrun and drops at the tool ingress.",
+   "impact_on_tool": "NDR will randomly drop packets during bursts, breaking flow reassembly, IDS signatures and behavioral detection. Results in missed detections, incomplete sessions and reduced coverage despite needing full payload and bidirectional traffic.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple",
+     "tool_group": "ndr_cluster",
+     "tool_ports": 2
+    },
+    "why": "Distribute traffic across 2+ NDR ports/nodes with 5-tuple hashing to keep flows intact while keeping per-port utilization below 80% and absorbing 14+ Gbps bursts without drops."
+   },
+   "evidence_frames": [
+    1,
+    3049
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3275,
+  "tokens_out": 1583,
+  "cost_usd": 0.01082,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-29"
+ }
+}

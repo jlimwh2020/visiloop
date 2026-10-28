@@ -1,0 +1,42 @@
+{
+ "feed": "s062_single",
+ "status": "degraded",
+ "summary": "IDS feed s062_single is degraded due to 28.9% duplicate packets (864/2989), well above 5% threshold. All other visibility checks (one-way, truncation, drops, overload, encryption, VLAN, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding duplicate copies of the same packets to the IDS - typically caused by aggregating both directions of a SPAN/mirror or two TAP feeds covering the same link without deduplication, or SPAN configured to mirror both ingress and egress on the same VLAN.",
+   "impact_on_tool": "IDS wastes CPU/capacity processing 28.9% redundant traffic, inflates connection state and alert counts, risks duplicate alerts and missed detections due to state-table pressure and inefficient signature matching despite needing full payload and bidirectional visibility.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets seen within a short time window before delivery to the 1 Gbps IDS port, restoring capacity for unique traffic inspection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3239,
+  "tokens_out": 1429,
+  "cost_usd": 0.01012,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

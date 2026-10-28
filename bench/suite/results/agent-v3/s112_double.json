@@ -1,0 +1,99 @@
+{
+ "feed": "s112_double",
+ "status": "degraded",
+ "summary": "Feed s112_double is degraded: 9.5% of frames exceed IDS 1518-byte MTU and are dropped by NIC, and 70.7% of traffic remains GRE-encapsulated hiding inner payload from IDS inspection.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo frames (up to 8096 bytes) from jumbo-enabled segments without MTU normalization to a 1Gbps IDS port limited to 1518 bytes. 240/2529 frames (9.5%) exceed threshold.",
+   "impact_on_tool": "IDS NIC silently drops oversize frames, causing 9.5% traffic loss. IDS with needs_full_payload=true loses flow reassembly and signature matching, creating detection blind spots for large-payload attacks.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_observed": 8096
+    },
+    "why": "Normalize MTU on broker to 1518B (fragment, truncate with awareness, or enable jumbo on IDS) so IDS can receive and inspect frames instead of NIC dropping them."
+   },
+   "evidence_frames": [
+    28,
+    29,
+    31,
+    102,
+    103,
+    105,
+    152,
+    153,
+    158,
+    159,
+    181,
+    182,
+    184,
+    185,
+    187,
+    188,
+    246,
+    247,
+    249,
+    250
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "1788/2529 frames (70.7%) arrive still encapsulated in GRE. Broker is mirroring/aggregating tunnel transit without decapsulation/stripping, forwarding outer headers only.",
+   "impact_on_tool": "IDS sees only outer GRE/IP headers, not inner IP/TCP payload. With needs_full_payload=true, IDS signatures, anomaly detection and session tracking fail for 70% of traffic - effectively blind to tunneled attacks.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "GRE",
+     "strip_outer_header": true
+    },
+    "why": "Configure packet broker to strip GRE and forward inner decapsulated packets so IDS can inspect true payload and apply detection logic."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3446,
+  "tokens_out": 2203,
+  "cost_usd": 0.01367,
+  "seconds": 16.8,
+  "recorded_at": "2026-10-29"
+ }
+}

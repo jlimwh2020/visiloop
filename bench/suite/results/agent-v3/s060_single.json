@@ -1,0 +1,64 @@
+{
+ "feed": "s060_single",
+ "status": "degraded",
+ "summary": "IDS feed s060_single is degraded: 4.8% of frames (157/3292) exceed the IDS 1518-byte MTU (up to 8058 bytes) and are dropped by the IDS NIC, creating a detection blind spot.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding jumbo/oversize frames up to 8058 bytes to a 1 Gbps IDS port with 1518-byte maximum frame size. The IDS network interface drops any frame larger than its MTU at ingress before the IDS engine sees it.",
+   "impact_on_tool": "IDS loses 4.8% of traffic before inspection (157 of 3292 frames). Attacks, exfiltration or C2 carried in large frames are invisible to the IDS, reducing detection coverage and allowing MTU-based evasion. IDS requires full payload so loss is not recoverable.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "oversize_share": 0.0477
+    },
+    "why": "IDS needs_full_payload=true, so broker slicing would break detection. Align MTUs: enable jumbo frames (e.g., 9000+ bytes) on the IDS port/NIC and path, or if not possible configure the packet broker to fragment or soft-truncate oversize frames to 1518 bytes for this tool port."
+   },
+   "evidence_frames": [
+    125,
+    126,
+    128,
+    342,
+    344,
+    350,
+    606,
+    607,
+    609,
+    610,
+    612,
+    740,
+    743,
+    746,
+    747,
+    749,
+    750,
+    945,
+    946,
+    948
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3319,
+  "tokens_out": 2259,
+  "cost_usd": 0.01375,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-29"
+ }
+}

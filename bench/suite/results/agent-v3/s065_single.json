@@ -1,0 +1,60 @@
+{
+ "feed": "s065_single",
+ "status": "degraded",
+ "summary": "IDS feed s065_single is otherwise healthy (no drops, truncation, overload, duplicates, or one-way traffic) but 68.9% of bytes are encrypted, exceeding the IDS tolerance of 60%, reducing payload visibility and detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Majority of traffic is TLS/encrypted (68.9% vs 60% threshold). Packet broker is forwarding encrypted sessions directly to the IDS without decryption or selective bypass, so the IDS sees only ciphertext.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection; encrypted payloads are opaque, so exploits, malware and C2 inside TLS go undetected and IDS cycles are wasted on undecryptable flows.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "IDS cannot inspect encrypted payloads natively; add SSL visibility/decryption upstream of the packet broker or filter/bypass trusted encrypted categories to bring encrypted share below 60% and restore inspection efficacy."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3297,
+  "tokens_out": 1704,
+  "cost_usd": 0.01136,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,98 @@
+{
+ "feed": "s155_double",
+ "status": "degraded",
+ "summary": "Feed s155_double to IDS is degraded: 29.1% of frames truncated to ~192 bytes (IDS needs full payload) and 80.2% of bytes encrypted (exceeds 60% IDS tolerance), both severely limiting detection coverage.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker is slicing / snap-length truncating frames to ~192 bytes (795 of 2729 frames, 29.1% > 5% threshold), likely a broker slicing policy to save bandwidth.",
+   "impact_on_tool": "IDS needs full payload for signature and anomaly detection; truncated payloads prevent payload inspection, reassembly and file extraction, causing missed detections.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518
+    },
+    "why": "IDS requires full payload per tool profile; disable slicing / set snaplen to 1518+ to forward complete frames to IDS."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    23,
+    24,
+    27,
+    29,
+    30,
+    38,
+    40,
+    41,
+    43,
+    51,
+    53,
+    54,
+    57
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "80.2% of bytes are encrypted (TLS/QUIC), well above the 60% this IDS can tolerate without decryption; traffic is forwarded encrypted with no broker-side decryption.",
+   "impact_on_tool": "IDS is blind to payload inside encryption; cannot apply signatures or detect exploits/malware in encrypted streams, reducing effective coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "decrypt_before_ids",
+     "location": "packet_broker_or_dedicated_decryption"
+    },
+    "why": "IDS cannot inspect encrypted payload; decrypt relevant TLS centrally (with proper keys/policy) and feed cleartext to IDS, or supplement with decrypted feed / NDR with JA3/JA4 and metadata analytics."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    35,
+    36,
+    37
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3435,
+  "tokens_out": 1936,
+  "cost_usd": 0.01252,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s104_single",
+ "status": "degraded",
+ "summary": "Feed s104_single to IDS is degraded: 17.8% of frames (307/1728) truncated to ~256 bytes exceeds 5% threshold. IDS requires full payload for detection.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker has packet slicing enabled at ~256 bytes, likely to save bandwidth/tool capacity, cutting frames short before delivery to the IDS.",
+   "impact_on_tool": "IDS needs full payload for signature matching and protocol analysis; truncated payload hides application content causing missed detections and reduced coverage.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "IDS requires full payload per tool profile; disabling slicing restores complete frames for accurate detection. If capacity is constrained, use filtering or load balancing instead of slicing."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    20,
+    22,
+    23,
+    43,
+    53,
+    54,
+    56,
+    65,
+    67,
+    70,
+    73,
+    74,
+    88,
+    89,
+    103,
+    104,
+    107,
+    114
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3303,
+  "tokens_out": 1882,
+  "cost_usd": 0.01213,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-29"
+ }
+}

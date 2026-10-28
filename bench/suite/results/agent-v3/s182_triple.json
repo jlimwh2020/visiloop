@@ -1,0 +1,103 @@
+{
+ "feed": "s182_triple",
+ "status": "degraded",
+ "summary": "Feed s182_triple to APM is degraded: 53.3% of TCP sessions are one-way, 9.1% packets are duplicates, and 1ms microbursts hit 15.34 Gbps on a 10 Gbps APM port (153% capacity). APM will see incomplete transactions and inflated retransmissions while dropping packets during bursts.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is not aggregating both directions of flows to the same tool port. 270 of 507 TCP sessions (53.3%) show only one direction, typical of asymmetric routing or ECMP/SPAN aggregation where client->server and server->client take different paths and are hashed to different outputs without symmetric aggregation.",
+   "impact_on_tool": "APM needs_both_directions=true to correlate requests and responses for latency, response time and TCP handshake analysis. With one-way traffic APM creates incomplete flows, cannot measure server response time, misses errors, and generates false timeout/retransmission alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "hash_mode": "symmetric_5tuple"
+    },
+    "why": "Aggregate/bond both directions using symmetric hashing so each bidirectional flow is delivered to the same APM port, restoring complete request-response visibility required for APM."
+   },
+   "evidence_frames": [
+    3,
+    56,
+    87,
+    93,
+    119,
+    127,
+    131,
+    153,
+    191,
+    249,
+    297,
+    351,
+    376,
+    398,
+    444,
+    452,
+    461,
+    481,
+    506,
+    532
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst of 15.34 Gbps in a 1ms interval exceeds the APM's 10 Gbps port capacity by 53% (153% of capacity). Broker is forwarding full aggregate without load-balancing or shaping, overrunning the tool's ingress buffer.",
+   "impact_on_tool": "APM will randomly drop packets during bursts, losing transactions, creating gaps in application performance metrics, and causing incomplete flow records and false performance degradation alerts.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "method": "symmetric_flow_hash",
+     "hash_fields": [
+      "ip_src",
+      "ip_dst",
+      "port_src",
+      "port_dst",
+      "protocol"
+     ],
+     "preserve_bidirectional_aggregation": true,
+     "target_tool_ports": 2
+    },
+    "why": "Distribute flows across 2+ APM ports with symmetric 5-tuple hashing to keep per-port utilization under 80% while keeping both directions of each flow together, preventing burst drops."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "9.1% duplicate packets (570 of 6265) indicates overlapping SPAN/mirror sources or double-tapped links being aggregated without deduplication on the packet broker, forwarding the same packet twice.",
+   "impact_on_tool": "APM wastes ~9% capacity processing redundant packets and will miscount duplicates as TCP retransmissions, inflating throughput, transaction counts and skewing latency/retransmission metrics.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_microseconds": 1000,
+     "detection": "packet_signature"
+    },
+    "why": "Enable broker deduplication to drop identical packets seen within a short time window before forwarding to APM, eliminating false retransmissions and freeing tool capacity."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3451,
+  "tokens_out": 2685,
+  "cost_usd": 0.01572,
+  "seconds": 15.4,
+  "recorded_at": "2026-10-29"
+ }
+}

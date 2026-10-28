@@ -1,0 +1,26 @@
+{
+ "feed": "s036_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s036_mild. Tool receives complete, correct traffic with no broker-induced impairments detected.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3191,
+  "tokens_out": 892,
+  "cost_usd": 0.00778,
+  "seconds": 7.8,
+  "recorded_at": "2026-10-29"
+ }
+}

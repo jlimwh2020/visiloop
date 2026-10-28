@@ -1,0 +1,63 @@
+{
+ "feed": "s101_single",
+ "status": "degraded",
+ "summary": "IDS feed s101_single is degraded due to high encrypted traffic share (70.7% vs 60% tolerance). All other visibility checks (duplicates, one-way, VLANs, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "71% of bytes are TLS-encrypted and delivered directly to the IDS without broker-based decryption or SSL visibility. No decryption zone/proxy is stripping or offloading encryption before the tool, so payload remains opaque.",
+   "impact_on_tool": "IDS needs full payload for signature matching and anomaly detection. With >60% encrypted, most sessions cannot be inspected, significantly reducing detection coverage for exploits, malware and C2 hidden inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "placement": "packet_broker",
+     "method": "ssl_visibility_with_selective_decryption"
+    },
+    "why": "Selective decryption or key-sharing before the IDS will bring encrypted share below the 60% tolerance and restore payload visibility for detection, without changing TAP/SPAN or adding load."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3302,
+  "tokens_out": 1584,
+  "cost_usd": 0.01086,
+  "seconds": 12.5,
+  "recorded_at": "2026-10-29"
+ }
+}

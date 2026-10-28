@@ -1,0 +1,67 @@
+{
+ "feed": "s053_single",
+ "status": "degraded",
+ "summary": "Feed s053_single to APM is degraded: 50% of traffic is untagged and required VLAN 20 is completely missing, breaking segmentation visibility. All other checks (duplicates, encryption, one-way, oversize, drops, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP aggregation port is stripping 802.1Q tags or is configured as access/untagged instead of 802.1Q trunk. Required VLAN 20 is not forwarded to the APM tool port, resulting in 50% untagged packets.",
+   "impact_on_tool": "APM requires VLANs 10 and 20 to segment and correlate application transactions by tenant/tier. With VLAN 20 missing and half the traffic untagged, the APM cannot attribute performance metrics to the correct VLAN, loses transaction context, and has blind spots for VLAN 20 applications.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "trunk_mode": "802.1Q"
+    },
+    "why": "Restore 802.1Q trunk preservation on the broker ingress/egress to forward VLANs 10 and 20 intact to the APM. This restores the VLAN context the APM needs without altering payload or load."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    17,
+    20,
+    23,
+    24,
+    25,
+    27,
+    30,
+    33,
+    36,
+    37,
+    38,
+    40
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3312,
+  "tokens_out": 1542,
+  "cost_usd": 0.01069,
+  "seconds": 8.3,
+  "recorded_at": "2026-10-29"
+ }
+}

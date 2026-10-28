@@ -1,0 +1,78 @@
+{
+ "feed": "s142_double",
+ "status": "degraded",
+ "summary": "Feed s142_double to NDR is degraded: 11.6% duplicate packets waste capacity and 51.1% of TCP sessions are one-way, preventing stateful NDR detection. No truncation, drops, overload, VLAN or encryption issues detected.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "51.1% of TCP sessions (67/131) are single-direction, well above 10% threshold. NDR requires both directions but is only seeing one side. Most likely packet broker is not aggregating both directions to this tool port - e.g., asymmetric routing with single-sided SPAN/TAP, or per-packet load-balancing splitting client->server and server->client across different outputs, or TX-only SPAN.",
+   "impact_on_tool": "NDR needs_both_directions=true for TCP reassembly, flow state and attack detection. With only one direction it cannot reconstruct sessions, misses lateral movement/exfiltration, creates incomplete flows and false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_flow_5tuple": true
+    },
+    "why": "Aggregate both directions of each flow to the same NDR port using flow-aware (5-tuple) hashing/aggregation so the NDR sees complete bidirectional sessions for detection."
+   },
+   "evidence_frames": [
+    1,
+    9,
+    18,
+    88,
+    98,
+    106,
+    114,
+    171,
+    179,
+    195,
+    203,
+    211,
+    218,
+    248,
+    295,
+    321,
+    333,
+    356,
+    364,
+    372
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "11.6% of packets (206/1775) are duplicates, exceeding 5% threshold. Indicates overlapping capture sources (e.g., SPAN + TAP on same link, or both sides of a TAP aggregated without deduplication) and packet broker forwarding both copies to the NDR without deduplication.",
+   "impact_on_tool": "Duplicates waste NDR 10G port bandwidth and processing, inflate flow/packet counters, skew analytics and can cause false detections or mask real anomalies while reducing effective detection coverage.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication (hash-based, ~10ms window) to suppress duplicate copies before delivery to NDR, preserving capacity for unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3361,
+  "tokens_out": 2010,
+  "cost_usd": 0.01274,
+  "seconds": 14.4,
+  "recorded_at": "2026-10-29"
+ }
+}

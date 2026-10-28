@@ -1,0 +1,63 @@
+{
+ "feed": "s058_single",
+ "status": "degraded",
+ "summary": "NDR feed s058_single is degraded due to 2.7% packet loss (52 of 1956 TCP packets, threshold 1%) indicating incomplete traffic delivery. All other visibility checks (duplicates, one-way, truncated, tunnel, VLAN, encrypted share, oversize, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Visibility fabric dropping packets upstream of the tool. TCP sequence gaps show 2.7% loss consistent with SPAN/mirror oversubscription or packet broker ingress/egress buffer exhaustion and microburst drops on the single 10G feed. Tool overload is healthy, so drops occur in the TAP/SPAN or broker before delivery to the NDR.",
+   "impact_on_tool": "NDR requires both directions and full payload for TCP reassembly and anomaly detection. Missing packets break flows, cause incomplete sessions, missed signatures and reduced detection coverage for C2, exfiltration and lateral movement, increasing false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 2
+    },
+    "why": "Distribute traffic across multiple NDR ingress ports with flow-aware 5-tuple hashing to eliminate single-link congestion and broker buffer drops while preserving flow integrity for complete reassembly."
+   },
+   "evidence_frames": [
+    44,
+    45,
+    46,
+    48,
+    116,
+    117,
+    118,
+    225,
+    226,
+    252,
+    254,
+    380,
+    381,
+    454,
+    456,
+    466,
+    467,
+    476,
+    477,
+    493
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3299,
+  "tokens_out": 2545,
+  "cost_usd": 0.01494,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-29"
+ }
+}

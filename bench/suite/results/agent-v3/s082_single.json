@@ -1,0 +1,60 @@
+{
+ "feed": "s082_single",
+ "status": "degraded",
+ "summary": "Feed s082_single is degraded: 3.9% TCP packet loss (73 of 1886 packets) exceeds 1% threshold, breaking NDR flow reassembly. All other visibility checks (duplicates, one-way, VLAN, truncation, tunnels, encryption, oversize, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror or packet broker ingress is dropping packets under load. 3.87% of TCP packets show gaps (73/1886) indicating buffer exhaustion/oversubscription at the SPAN destination or broker ingress, not at the NDR itself (tool_overload healthy).",
+   "impact_on_tool": "NDR requires complete bidirectional traffic with full payload for TCP stream reassembly and detection. Missing segments cause incomplete flows, failed reassembly, missed signatures/anomalies and evasion, significantly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Passive TAP provides lossless line-rate copy without SPAN buffer overflow or broker oversubscription drops. Replacing SPAN with TAP (and ensuring broker capacity/load-balancing to 10Gbps tool port) ensures complete packet delivery for reliable NDR detection."
+   },
+   "evidence_frames": [
+    4,
+    7,
+    58,
+    60,
+    68,
+    69,
+    146,
+    147,
+    228,
+    229,
+    308,
+    309,
+    364,
+    367,
+    391,
+    392,
+    408,
+    410,
+    450,
+    451
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3314,
+  "tokens_out": 2152,
+  "cost_usd": 0.01329,
+  "seconds": 13.0,
+  "recorded_at": "2026-10-29"
+ }
+}

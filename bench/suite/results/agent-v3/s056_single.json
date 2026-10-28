@@ -1,0 +1,60 @@
+{
+ "feed": "s056_single",
+ "status": "degraded",
+ "summary": "Feed s056_single is degraded: 22.7% of frames (420/1849) are truncated to ~128 bytes, preventing full-payload inspection required by the NDR. All other checks (duplicates, encrypted_share, missing_vlan, one_way, oversize, packet_drops, tool_overload, tunnel) are healthy.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker slicing/snap-length is enabled and cutting packets to 128 bytes before delivery to the tool port.",
+   "impact_on_tool": "NDR needs_full_payload=true for DPI, protocol parsing and threat detection; truncated payloads hide L7 content, causing missed detections, incomplete flow reassembly and reduced detection coverage.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {},
+    "why": "Disabling slicing restores full packets so the NDR receives complete payloads as required for detection."
+   },
+   "evidence_frames": [
+    4,
+    7,
+    9,
+    10,
+    12,
+    25,
+    29,
+    40,
+    53,
+    56,
+    59,
+    71,
+    72,
+    74,
+    77,
+    90,
+    93,
+    103,
+    104,
+    106
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3313,
+  "tokens_out": 1838,
+  "cost_usd": 0.01195,
+  "seconds": 9.1,
+  "recorded_at": "2026-10-29"
+ }
+}

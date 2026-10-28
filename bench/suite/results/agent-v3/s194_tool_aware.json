@@ -1,0 +1,26 @@
+{
+ "feed": "s194_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed 's194_tool_aware'. No duplicates, drops, truncation, oversize, one-way, tunnel, VLAN or encryption issues detected. Traffic meets SIEM requirements (single direction sufficient, no full payload required, 1G port) - no packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3181,
+  "tokens_out": 851,
+  "cost_usd": 0.00759,
+  "seconds": 6.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "feed": "s132_double",
+ "status": "degraded",
+ "summary": "Feed s132_double is degraded: 98.5% encrypted traffic exceeds NDR 90% tolerance and VLAN 20 is missing (50% untagged) due to tag stripping, severely limiting payload inspection and VLAN-aware detection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "98.5% of bytes are encrypted (TLS) and forwarded without decryption. Packet broker is delivering encrypted payloads directly to the NDR, exceeding its 90% encrypted-share tolerance. No SSL/TLS visibility/decryption stage is configured before the tool.",
+   "impact_on_tool": "NDR needs full payload for DPI, JA3, and behavioral detection. With payloads opaque, detection is reduced to flow metadata only; C2, exfiltration, and lateral movement signatures that require payload will be missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker_before_tool",
+     "target_encrypted_share_below": 0.9
+    },
+    "why": "Decrypt or selectively forward decrypted traffic (e.g., via TLS visibility appliance / broker decryption) to bring encrypted share below 90% so NDR can inspect payloads as required."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen; 50% of packets arrive untagged. Upstream TAP/SPAN or packet broker is stripping 802.1Q tags on ingress/egress, so VLAN context is lost before delivery to the NDR.",
+   "impact_on_tool": "NDR requires VLANs 10 and 20 for segmentation and correlation. Without VLAN 20 tags it cannot apply VLAN-aware policies or detect east-west threats per segment, creating blind spots and incomplete coverage.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "ensure_tagged": [
+      20
+     ]
+    },
+    "why": "Configure packet broker and TAP/SPAN to preserve and forward 802.1Q tags for VLANs 10 and 20 end-to-end so NDR receives correctly tagged traffic for full coverage."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    10,
+    11,
+    13,
+    16,
+    17,
+    18,
+    20,
+    23,
+    25,
+    28,
+    31,
+    34,
+    35,
+    36,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3428,
+  "tokens_out": 2198,
+  "cost_usd": 0.01363,
+  "seconds": 14.8,
+  "recorded_at": "2026-10-29"
+ }
+}

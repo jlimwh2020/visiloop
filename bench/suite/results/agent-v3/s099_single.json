@@ -1,0 +1,42 @@
+{
+ "feed": "s099_single",
+ "status": "degraded",
+ "summary": "Feed s099_single to APM is degraded due to 9.9% duplicate packets (209/2117) exceeding 5% threshold. All other visibility checks (one-way, VLAN, truncation, drops, overload, tunnels, encryption, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Duplicate packets from overlapping capture points (e.g., SPAN sessions or dual TAP feeds) aggregated to a single tool port without packet broker deduplication. Same packet seen via two paths and forwarded twice.",
+   "impact_on_tool": "APM will double-count transactions, inflate flow counts and distort latency/response-time calculations, wasting processing and potentially triggering false performance alerts despite not needing full payload.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "5-tuple"
+    },
+    "why": "Enable packet broker deduplication to suppress identical packets arriving within a short window before delivery to the 10G APM port, restoring accurate transaction counts without losing coverage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3247,
+  "tokens_out": 1325,
+  "cost_usd": 0.00969,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-29"
+ }
+}

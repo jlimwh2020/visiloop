@@ -1,0 +1,97 @@
+{
+ "feed": "s118_double",
+ "status": "degraded",
+ "summary": "Feed s118_double to IDS is degraded: 27.5% of frames are sliced to 128 bytes (887/3228) and 97.2% remain VXLAN-encapsulated (3138/3228), both blocking full-payload inspection required by IDS.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker slicing/snaplen is configured to ~128 bytes, likely to save bandwidth to the 1 Gbps IDS port. Broker is truncating frames before delivery instead of forwarding full frames.",
+   "impact_on_tool": "IDS needs_full_payload=true for signature matching and stream reassembly; truncated frames lose L4 payload so IDS will miss exploits, fail to detect application-layer attacks, and generate incomplete sessions.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518
+    },
+    "why": "IDS requires full payload; disable slicing or set snaplen >= max_frame_bytes (1518) so complete packets reach IDS for detection."
+   },
+   "evidence_frames": [
+    7,
+    10,
+    14,
+    19,
+    20,
+    22,
+    30,
+    32,
+    33,
+    46,
+    48,
+    52,
+    53,
+    57,
+    60,
+    65,
+    68,
+    76,
+    78,
+    79
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic is sourced from a VXLAN overlay and the packet broker is forwarding encapsulated frames without decapsulation. 97.2% of frames still carry VXLAN headers on the tool port.",
+   "impact_on_tool": "IDS sees only outer VXLAN/IP/UDP headers and cannot parse inner Ethernet/IP/TCP and payload; signatures never match inner traffic, causing near-total detection blindness.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN"
+    },
+    "why": "Strip VXLAN encapsulation on the packet broker to present inner original frames to IDS for correct parsing and detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3447,
+  "tokens_out": 2347,
+  "cost_usd": 0.01428,
+  "seconds": 19.1,
+  "recorded_at": "2026-10-29"
+ }
+}

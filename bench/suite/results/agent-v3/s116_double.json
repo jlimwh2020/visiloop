@@ -1,0 +1,81 @@
+{
+ "feed": "s116_double",
+ "status": "degraded",
+ "summary": "IDS feed s116_double is degraded: 3.80 Gbps microbursts overload the 1 Gbps IDS port (380% capacity, 2 intervals) causing 3.5% TCP packet loss (54 of 1552 packets with sequence gaps). IDS requires full payload and bidirectional flows; gaps break stream reassembly and cause missed detections.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Microburst-driven buffer drops: TCP sequence analysis shows 3.5% missing data (54/1552 packets) correlated with 3.80 Gbps bursts vs 1 Gbps port. Feed is noted as sliced, indicating broker is already trying to reduce load but still exceeding port/buffer capacity and dropping packets.",
+   "impact_on_tool": "IDS cannot reassemble TCP streams, misses payload for signature matching, creates false negatives and incomplete alerts; violates needs_full_payload requirement.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "ports": 4
+    },
+    "why": "Distribute traffic across multiple IDS ports/cluster members via packet-broker load balancing to keep per-port rate below 80% of 1 Gbps and eliminate burst drops while preserving full payload"
+   },
+   "evidence_frames": [
+    138,
+    140,
+    142,
+    144,
+    236,
+    237,
+    320,
+    321,
+    378,
+    379,
+    380,
+    416,
+    417,
+    575,
+    576,
+    577,
+    578,
+    695,
+    696,
+    698
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 3.80 Gbps in 1 ms burst exceeds IDS 1 Gbps port capacity by 380% (threshold 0.8), with 2 overloaded intervals detected.",
+   "impact_on_tool": "IDS port saturated, will indiscriminately drop packets, miss attacks, and risk bypass/fail-open under load; detection coverage severely reduced.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "ports": 4
+    },
+    "why": "Spread load across 4x1G IDS ports or load-balanced group, or add filtering to cap per-tool throughput below port speed and prevent overload drops"
+   },
+   "evidence_frames": [
+    1,
+    1028
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3404,
+  "tokens_out": 4187,
+  "cost_usd": 0.02205,
+  "seconds": 22.5,
+  "recorded_at": "2026-10-29"
+ }
+}

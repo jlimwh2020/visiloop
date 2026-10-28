@@ -1,0 +1,63 @@
+{
+ "feed": "s102_single",
+ "status": "degraded",
+ "summary": "Feed s102_single is degraded: 56.3% of traffic (1705/3030 frames) is VXLAN-encapsulated and forwarded without decapsulation. SIEM sees only outer VTEP headers, all other visibility checks are healthy.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is passing through overlay VXLAN traffic (1705 frames, UDP port 4789) without stripping the outer header, likely tapped on a VTEP uplink or configured to forward encapsulated traffic as-is.",
+   "impact_on_tool": "SIEM without VXLAN decapsulation sees only outer VTEP IPs/UDP 4789 and VXLAN VNI, not the inner Ethernet/IP 5-tuple. Correlation, filtering and detection rules fail for 56.3% of traffic, severely reducing detection coverage even though SIEM does not require full payload or bidirectional flow.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_outer_header": true
+    },
+    "why": "Stripping VXLAN outer Ethernet/IP/UDP header at the packet broker exposes inner headers so the SIEM can parse true source/destination endpoints and apply its detection logic without native tunnel support."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3316,
+  "tokens_out": 2052,
+  "cost_usd": 0.01287,
+  "seconds": 13.3,
+  "recorded_at": "2026-10-29"
+ }
+}

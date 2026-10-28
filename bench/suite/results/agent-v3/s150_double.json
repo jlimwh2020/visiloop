@@ -1,0 +1,100 @@
+{
+ "feed": "s150_double",
+ "status": "degraded",
+ "summary": "Feed s150_double to IDS is degraded: 14.5% of frames are jumbo frames exceeding the 1G IDS port MTU (1518B) and are dropped by NIC, plus burst throughput hits 3.05 Gbps (305% of 1 Gbps port) causing overload drops. Both cause silent packet loss and detection blind spots.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo frames (up to 8058 bytes) from the network without MTU normalization. The IDS tool port has a 1518-byte MTU limit, so 466/3218 frames (14.48%) exceed what the NIC can receive.",
+   "impact_on_tool": "IDS NIC drops oversized frames before analysis. 14.5% traffic loss means missed exploits, file extraction failures and incomplete stream reassembly; IDS is blind to large-frame flows.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "trim_to": 1518,
+     "preserve_headers": true
+    },
+    "why": "Slice/trim frames at the packet broker to 1518 bytes so they fit the IDS port and are not dropped by NIC. Trade-off: IDS needs full payload, so ideally upgrade IDS NIC to 9000B jumbo support and use mtu_advice instead; slicing is immediate broker fix to restore visibility vs 100% loss."
+   },
+   "evidence_frames": [
+    8,
+    10,
+    15,
+    17,
+    19,
+    22,
+    24,
+    70,
+    71,
+    73,
+    74,
+    117,
+    118,
+    120,
+    121,
+    123,
+    149,
+    150,
+    152,
+    164
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate feed bursts to 3.05 Gbps in 1ms intervals vs 1 Gbps IDS port capacity. Packet broker is aggregating too many source ports/taps to a single tool port without load-balancing or filtering, causing 24 overloaded intervals.",
+   "impact_on_tool": "IDS is overrun at 305% of line rate during bursts, causing buffer overruns and random packet drops. Results in missed detections, broken TCP reassembly, and IDS state exhaustion due to incomplete flows.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "required_capacity_gbps": 4,
+     "tool_ports": 4
+    },
+    "why": "Distribute traffic across 3-4 IDS ports/instances via 5-tuple load balancing at the packet broker so no single 1 Gbps port exceeds 80% utilization, or add filtering to reduce load to <0.8 Gbps sustained."
+   },
+   "evidence_frames": [
+    79,
+    176,
+    337,
+    411,
+    497,
+    584,
+    733,
+    875,
+    949,
+    1073,
+    1167,
+    1275,
+    1550,
+    1823,
+    2002,
+    2093,
+    2243,
+    2518,
+    2681,
+    2730
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3476,
+  "tokens_out": 2437,
+  "cost_usd": 0.0147,
+  "seconds": 15.7,
+  "recorded_at": "2026-10-29"
+ }
+}

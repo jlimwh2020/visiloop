@@ -1,0 +1,86 @@
+{
+ "feed": "s157_double",
+ "status": "degraded",
+ "summary": "IDS feed s157_double is degraded: 8.4% of frames exceed IDS 1518B MTU and are dropped by NIC, plus 2.56 Gbps microbursts overload the 1 Gbps IDS port (256% capacity). Both cause silent packet loss and reduced detection coverage.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo/encapsulated frames up to 8058 bytes without MTU normalization, while the IDS port/NIC is standard 1518B. 137 of 1634 frames (8.4% > 1% threshold) exceed the limit.",
+   "impact_on_tool": "IDS NIC drops oversized frames before analysis - 8.4% blind spot. IDS misses signatures, fails TCP reassembly and file extraction for those flows, and cannot detect attacks carried in large frames.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_observed": 8058
+    },
+    "why": "IDS needs_full_payload=true so broker slicing would break detection. Enable 9000B jumbo on IDS NIC/tool or configure broker to normalize MTU/slice only as last resort to prevent NIC-level drops."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    21,
+    22,
+    24,
+    25,
+    202,
+    203,
+    205,
+    208,
+    262,
+    263,
+    265,
+    266,
+    268,
+    332,
+    335,
+    339,
+    341
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate/burst rate from broker exceeds IDS port capacity. Peak 2.56 Gbps in 1ms burst vs 1 Gbps port (256% of capacity, threshold 80%) across 6 intervals - no load-balancing or shaping in front of IDS.",
+   "impact_on_tool": "IDS ingress buffers overflow and drops packets randomly during bursts. Causes missed detections, one-way flow artifacts, broken stream reassembly, and alert fatigue/false negatives under load.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 2.56,
+     "suggested_tool_ports": 3
+    },
+    "why": "Distribute traffic across 2-3 IDS ports/instances via 5-tuple load balancing or add aggregation filtering to keep per-port utilization <80% and eliminate burst drops."
+   },
+   "evidence_frames": [
+    1,
+    288,
+    584,
+    794,
+    1090,
+    1409
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3425,
+  "tokens_out": 2208,
+  "cost_usd": 0.01367,
+  "seconds": 15.0,
+  "recorded_at": "2026-10-29"
+ }
+}

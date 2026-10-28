@@ -1,0 +1,78 @@
+{
+ "feed": "s141_double",
+ "status": "degraded",
+ "summary": "Feed s141_double is degraded: 70.1% ERSPAN tunnel encapsulation blinds IDS inspection and 18.3% duplicates waste capacity.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding ERSPAN-encapsulated traffic directly to the IDS without decapsulation. 1344 of 1917 frames (70.1%) still carry ERSPAN outer header, indicating missing 'strip tunnel' policy on the broker egress to the tool port.",
+   "impact_on_tool": "IDS requires full payload and cannot parse inner Ethernet/IP/TCP headers while encapsulated; 70% of traffic is opaque to signatures and anomaly detection, creating a major detection blind spot.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "location": "packet_broker_egress"
+    },
+    "why": "Stripping ERSPAN at the packet broker exposes the original inner frames so the IDS can decode L2-L7 and apply detection to the 70% currently hidden."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets are being delivered twice - consistent with 'double' feed aggregating overlapping SPAN sessions or both sides of a TAP without deduplication. 350 of 1917 packets (18.3%) are duplicates, well above 5% threshold.",
+   "impact_on_tool": "IDS wastes CPU, storage and state-table on duplicate packets, inflates flow/connection counts, risks false positives on threshold signatures and reduces headroom for real traffic analysis.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets within a short time window before the 1G IDS port, eliminating 18% overhead while preserving unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3371,
+  "tokens_out": 2136,
+  "cost_usd": 0.01329,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,114 @@
+{
+ "feed": "s173_triple",
+ "status": "degraded",
+ "summary": "Feed s173_triple is degraded: 25.4% duplicates, 100% missing VLAN 10/20 tags, and 1.3% TCP gaps impair IDS detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Aggregation without deduplication - same packets forwarded twice via overlapping SPAN/mirror sessions (ingress+egress or dual uplinks) through packet broker with no dedup window.",
+   "impact_on_tool": "IDS wastes ~25% of its 1G capacity on duplicates, inflates state tables, skews thresholds and risks missing real attacks due to processing overhead and duplicate alerts.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to suppress identical packets within a short window before delivery to IDS, restoring capacity and accurate detection."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "802.1Q tags stripped at source or broker - 100% packets untagged despite IDS requiring VLANs 10 and 20, indicating SPAN from access ports or broker policy stripping VLAN headers.",
+   "impact_on_tool": "IDS cannot apply VLAN-aware policies or segment traffic for VLANs 10/20; loses tenant/zone context causing blind spots and misattribution.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Configure source trunk/SPAN to preserve 802.1Q and set broker to forward tags intact so IDS receives required VLAN 10/20 context."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Lossy SPAN/mirror or broker buffer drops - 55 of 4349 TCP packets (1.3% >1% threshold) show gaps/retransmissions while tool_overload is healthy, pointing to source oversubscription not IDS overload.",
+   "impact_on_tool": "IDS TCP reassembly and stream signature matching fail on gapped flows; allows evasion and missed payload inspection.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Replace lossy SPAN with physical TAP and ensure broker buffering/bandwidth is sufficient for lossless delivery to IDS."
+   },
+   "evidence_frames": [
+    275,
+    278,
+    295,
+    297,
+    299,
+    745,
+    746,
+    911,
+    915,
+    932,
+    933,
+    944,
+    947,
+    1069,
+    1077,
+    1460,
+    1461,
+    1490,
+    1494,
+    1523
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3506,
+  "tokens_out": 2749,
+  "cost_usd": 0.01607,
+  "seconds": 16.2,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,99 @@
+{
+ "feed": "s143_double",
+ "status": "degraded",
+ "summary": "Feed s143_double is degraded: 21.5% of TCP sessions are one-way and 58.0% of frames remain VXLAN-encapsulated, preventing IDS stateful inspection and payload analysis.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/TAP aggregation is delivering only one direction for many flows. 41 of 191 TCP sessions (21.5%) show single direction, typical of asymmetric routing with single-sided SPAN/TAP or flow-based load-balancing that splits client->server and server->client across different tool ports.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and stateful signatures. One-way sessions cannot be reassembled, handshakes fail, and bidirectional attack detection is blind, causing missed intrusions and inaccurate state tracking.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "hash_mode": "5-tuple_bidirectional"
+    },
+    "why": "Aggregate both directions of each 5-tuple to the same IDS port so the IDS sees complete handshakes and can reassemble streams for detection."
+   },
+   "evidence_frames": [
+    30,
+    94,
+    101,
+    134,
+    137,
+    257,
+    281,
+    304,
+    449,
+    467,
+    609,
+    623,
+    704,
+    711,
+    763,
+    988,
+    995,
+    1085,
+    1187,
+    1288
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding overlay traffic without decapsulation. 1515 of 2610 frames (58.0%) arrive inside VXLAN tunnel, indicating strip/decapsulation policy is missing or not applied to this feed.",
+   "impact_on_tool": "IDS sees only outer VXLAN/UDP/IP headers and cannot parse inner Ethernet/IP/TCP payload. Signatures and protocol decoders fail on 58% of traffic, leaving overlay workloads effectively unmonitored.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Strip VXLAN headers at the packet broker to expose inner frames to the IDS for full L2-L7 inspection and signature matching."
+   },
+   "evidence_frames": [
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    61,
+    62,
+    64,
+    66,
+    67,
+    70,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3429,
+  "tokens_out": 2372,
+  "cost_usd": 0.01437,
+  "seconds": 15.0,
+  "recorded_at": "2026-10-29"
+ }
+}

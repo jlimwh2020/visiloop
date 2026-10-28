@@ -1,0 +1,49 @@
+{
+ "feed": "s109_single",
+ "status": "degraded",
+ "summary": "SIEM feed s109_single is degraded due to tool overload: 4.35 Gbps microbursts exceed the 1 Gbps SIEM port by 435% (3 intervals). All other checks (duplicates, encryption, VLAN, one-way, oversize, drops, truncation, tunnel) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding bursty traffic peaking at 4.35 Gbps in 1ms intervals to a single 1 Gbps SIEM ingest port (435% of capacity, 3 overloaded intervals). No load balancing or rate shaping is applied, so microbursts overwhelm the tool port buffers.",
+   "impact_on_tool": "SIEM ingress will drop excess packets during bursts, causing missed events, incomplete correlation and reduced detection coverage. Even though this SIEM does not require both directions or full payload, sustained oversubscription guarantees loss at the tool.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 4.35,
+     "hash": "5-tuple",
+     "target_group": "siem_pool",
+     "min_ports_required": 5
+    },
+    "why": "Distribute bursts across multiple 1G SIEM ports (or upgrade to 10G) with 5-tuple load balancing to keep per-port utilization below 80% threshold and eliminate burst drops."
+   },
+   "evidence_frames": [
+    1,
+    997,
+    2012
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3272,
+  "tokens_out": 1934,
+  "cost_usd": 0.01231,
+  "seconds": 13.1,
+  "recorded_at": "2026-10-29"
+ }
+}

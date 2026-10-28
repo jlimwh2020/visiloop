@@ -1,0 +1,62 @@
+{
+ "feed": "s052_single",
+ "status": "degraded",
+ "summary": "Feed s052_single to IDS is degraded due to significant packet loss: 9.0% of TCP packets (143/1583) show missing data, well above 1% threshold. IDS flow reassembly and signature matching will be impaired. All other checks (duplicates, encryption, VLAN, one-way, oversize, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream capture is dropping packets before delivery to IDS. With tool_overload healthy, loss is not IDS ingress policing but earlier - typically SPAN/mirror oversubscription or packet broker buffer exhaustion under bursts, causing gaps in TCP sequences.",
+   "impact_on_tool": "IDS requires both directions and full payload for TCP reassembly and signature detection. 9% missing data breaks reassembly, causes missed exploits, evasion opportunities, and incomplete logging/alerting.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "target": "s052_single source"
+    },
+    "why": "Passive TAP provides lossless line-rate copy unlike SPAN which drops under load. If TAP already present, add broker filtering or load-balancing to keep aggregate throughput within lossless forwarding capacity."
+   },
+   "evidence_frames": [
+    89,
+    91,
+    112,
+    115,
+    128,
+    129,
+    150,
+    153,
+    184,
+    187,
+    188,
+    190,
+    257,
+    258,
+    339,
+    340,
+    359,
+    361,
+    376,
+    378
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3300,
+  "tokens_out": 2384,
+  "cost_usd": 0.01426,
+  "seconds": 14.0,
+  "recorded_at": "2026-10-29"
+ }
+}

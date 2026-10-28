@@ -1,0 +1,99 @@
+{
+ "feed": "s122_double",
+ "status": "degraded",
+ "summary": "Feed s122_double is degraded: 73% encrypted traffic exceeds IDS 60% tolerance and 4.3% jumbo frames (up to 8058B) exceed IDS 1518B MTU and are dropped.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "73% of bytes are encrypted (TLS) forwarded without decryption; IDS tolerates ~60%. Packet broker is mirroring encrypted traffic directly without SSL visibility/decryption layer.",
+   "impact_on_tool": "IDS cannot inspect payloads for signatures/anomaly detection on ~73% of traffic, leaving only ~27% visible and significantly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker_visibility_layer",
+     "target_encrypted_share_below": 0.6
+    },
+    "why": "Decrypting relevant TLS flows (or forwarding a decrypted copy from an SSL visibility appliance) before the IDS restores payload inspection capability within tool tolerance."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    33,
+    34,
+    35,
+    36
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Network uses jumbo frames up to 8058 bytes while IDS port is limited to 1518 bytes standard MTU. Broker forwards frames unchanged without MTU handling.",
+   "impact_on_tool": "IDS NIC silently drops 91 of 2093 frames (4.3%) that exceed MTU, causing missed detections, broken flow reassembly and incomplete IDS coverage for large-frame flows.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_mtu_bytes": 9216,
+     "broker_option": "enable_jumbo_support"
+    },
+    "why": "Enabling jumbo MTU (9216) on IDS port prevents drops; if tool cannot support jumbos, configure broker to fragment or slice only oversize frames to preserve delivery while keeping full payload for normal frames which IDS requires."
+   },
+   "evidence_frames": [
+    174,
+    175,
+    177,
+    178,
+    180,
+    206,
+    207,
+    209,
+    210,
+    486,
+    487,
+    489,
+    490,
+    492,
+    706,
+    707,
+    709,
+    710,
+    734,
+    735
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3438,
+  "tokens_out": 2381,
+  "cost_usd": 0.01442,
+  "seconds": 14.7,
+  "recorded_at": "2026-10-29"
+ }
+}

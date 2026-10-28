@@ -1,0 +1,26 @@
+{
+ "feed": "s021_mild",
+ "status": "healthy",
+ "summary": "Feed s021_mild to IDS is healthy: all 9 visibility checks passed. Tool requirements (bidirectional traffic, full payload, 1 Gbps, VLANs 10,20, max encrypted share 0.6, MTU 1518) are met with no corrective packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3185,
+  "tokens_out": 912,
+  "cost_usd": 0.00786,
+  "seconds": 7.5,
+  "recorded_at": "2026-10-29"
+ }
+}

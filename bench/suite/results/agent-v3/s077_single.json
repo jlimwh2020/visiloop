@@ -1,0 +1,42 @@
+{
+ "feed": "s077_single",
+ "status": "degraded",
+ "summary": "IDS feed s077_single shows 17.8% duplicate packets (736/4124) exceeding 5% threshold. All other visibility checks (VLANs, encryption, one-way, drops, overload, truncation, tunnels, oversize) are healthy. Duplicates waste IDS capacity and risk false positives.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding the same packets twice, typically from overlapping SPAN sessions or aggregating the same TAP feed via two paths without deduplication enabled.",
+   "impact_on_tool": "IDS wastes cycles re-analyzing 17.8% duplicate packets, inflates flow/alert counts, and reduces effective detection capacity for real threats despite needing full payload and bidirectional visibility.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets within a short window before delivery to the 1 Gbps IDS port, restoring capacity without losing unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3243,
+  "tokens_out": 1355,
+  "cost_usd": 0.00981,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-29"
+ }
+}

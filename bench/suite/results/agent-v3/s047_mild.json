@@ -1,0 +1,26 @@
+{
+ "feed": "s047_mild",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for NDR feed s047_mild. Tool receives complete, correct traffic: bidirectional flows present, full payload intact, no duplicates, drops, overload, truncation, tunnels, VLAN stripping, oversize, or excessive encryption. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3187,
+  "tokens_out": 961,
+  "cost_usd": 0.00807,
+  "seconds": 7.5,
+  "recorded_at": "2026-10-29"
+ }
+}

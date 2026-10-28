@@ -1,0 +1,139 @@
+{
+ "feed": "s185_triple",
+ "status": "degraded",
+ "summary": "Feed s185_triple is degraded: 83.3% encrypted traffic exceeds IDS 60% tolerance, required VLAN 20 is missing (48% untagged), and 9.1% TCP packet drops exceed 1% threshold - all reduce IDS detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "83.3% of bytes are encrypted vs IDS tolerance of 60%; traffic is opaque to IDS without decryption, likely TLS forwarded without SSL visibility.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection; encrypted payloads cannot be inspected, blinding detection for 83% of traffic and allowing threats to hide in TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_at": "visibility_layer",
+     "policy": "decrypt_or_selectively_forward_decryptable_TLS"
+    },
+    "why": "IDS needs cleartext payload; decrypting at packet broker/SSL visibility appliance or filtering to only forward decryptable traffic restores inspection capability within 60% tolerance."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen and 48% of packets are untagged; packet broker or TAP/SPAN trunk is stripping 802.1Q tags or not forwarding VLAN 20.",
+   "impact_on_tool": "IDS requires VLANs 10 and 20 for segmentation-aware policies; missing VLAN 20 means ~50% of expected traffic is invisible or misclassified, creating coverage gap for that segment.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "forward_untagged": false
+    },
+    "why": "Preserving and forwarding 802.1Q tags for VLANs 10 and 20 ensures IDS receives complete, correctly segmented traffic for policy enforcement."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    8,
+    9,
+    10,
+    12,
+    16,
+    17,
+    19,
+    21,
+    24,
+    27,
+    29,
+    30,
+    31,
+    33,
+    36,
+    39,
+    41,
+    43
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "9.1% of TCP packets (264/2900) show gaps/retransmissions indicating drops in SPAN or packet broker due to oversubscription/congestion before the IDS 1Gbps port.",
+   "impact_on_tool": "IDS needs both directions and full streams for TCP reassembly; 9% loss causes broken flows, missed signatures, and evasion - IDS cannot reliably detect attacks.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "add_capacity": true
+    },
+    "why": "Distributing traffic across multiple IDS instances/ports or reducing oversubscription prevents buffer drops and delivers complete flows to the IDS."
+   },
+   "evidence_frames": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    17,
+    29,
+    32,
+    43,
+    44,
+    45,
+    63,
+    65,
+    103,
+    106,
+    135,
+    136,
+    144,
+    147,
+    149
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3554,
+  "tokens_out": 2497,
+  "cost_usd": 0.01505,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-29"
+ }
+}

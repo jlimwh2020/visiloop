@@ -1,0 +1,114 @@
+{
+ "feed": "s161_triple",
+ "status": "degraded",
+ "summary": "Feed s161_triple to IDS is degraded: 3 faults detected - 91% encrypted traffic exceeds IDS tolerance, 10.8% jumbo frames dropped by 1518B IDS port, and 17.4% duplicates waste capacity. IDS has blind spots on encrypted and oversize flows and reduced detection efficiency.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "91.2% of bytes are encrypted (threshold 60% for this IDS). Traffic is predominantly TLS/encrypted and is being sent to IDS without prior decryption - packet broker is mirroring encrypted flows directly to IDS.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection but cannot inspect encrypted payloads. 91% of traffic is opaque, so IDS will miss intrusions, malware, and C2 inside TLS and will waste cycles attempting inspection.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_before_ids": true,
+     "method": "ssl_visibility_appliance_or_broker_decrypt"
+    },
+    "why": "IDS needs cleartext to detect threats. Decrypt once before IDS (or selectively forward decrypted copy) brings encrypted share below 60% tolerance while preserving privacy/policy controls."
+   },
+   "evidence_frames": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "347 of 3224 frames (10.8%) exceed the IDS port MTU of 1518 bytes, largest 8058 bytes. Indicates jumbo frames or encapsulated traffic (e.g., VXLAN/GRE with large MTU) from network being forwarded unchanged to a 1Gbps IDS port that only supports standard Ethernet MTU.",
+   "impact_on_tool": "IDS NIC drops all frames >1518 bytes silently. 10.8% of traffic never reaches detection engine, creating complete blind spot for large flows - attackers can evade detection using large frames, and IDS misses attacks in those flows.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_mtu_bytes": 9216,
+     "alternative": "enable_jumbo_on_ids_or_slice_at_broker"
+    },
+    "why": "Either enable 9000+ byte jumbo MTU on IDS port/NIC to accept 8058B frames, or configure packet broker to truncate/slice or fragment oversize frames to 1518B before delivery. Jumbo enable is preferred since IDS needs full payload."
+   },
+   "evidence_frames": [
+    39,
+    40,
+    42,
+    44,
+    95,
+    96,
+    97,
+    98,
+    103,
+    104,
+    107,
+    108,
+    146,
+    148,
+    156,
+    157,
+    161,
+    178,
+    179,
+    181
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "562 of 3224 packets (17.4%) are duplicates, well above 5% threshold. Classic packet broker aggregation issue - same packet arriving via multiple SPAN/TAP paths or both sides of a link aggregated without deduplication enabled.",
+   "impact_on_tool": "IDS wastes ~17% of its 1Gbps budget re-processing identical packets, inflates event counts, can skew stream reassembly and cause false positives, and reduces headroom for real traffic.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Enable broker-level deduplication (time-window based) to suppress duplicate copies before IDS, freeing capacity and ensuring accurate detection without double-counting."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3514,
+  "tokens_out": 2415,
+  "cost_usd": 0.01466,
+  "seconds": 14.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,116 @@
+{
+ "feed": "s169_triple",
+ "status": "degraded",
+ "summary": "Feed s169_triple to NDR is degraded: 34.1% of TCP sessions are one-way, 17.9% packets are duplicates, and 10.2% frames are sliced to 192 bytes. NDR requires both directions and full payload for reassembly and detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is not aggregating both directions of each flow to the same NDR tool port. Likely asymmetric routing or flow-unaware load-balancing / separate TAP/SPAN feeds sent to different outputs, so only client->server or server->client arrives.",
+   "impact_on_tool": "NDR needs both directions (needs_both_directions=true) for TCP reassembly, session tracking and anomaly detection. With 57/167 sessions (34.1%) one-way, state tracking fails, detections are missed and false positives increase.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash_mode": "symmetric_5_tuple",
+     "group_both_directions_to_same_tool": true
+    },
+    "why": "Aggregate both directions of each flow to the same NDR port using symmetric hashing so the NDR sees complete bidirectional sessions for reassembly."
+   },
+   "evidence_frames": [
+    22,
+    56,
+    84,
+    115,
+    122,
+    239,
+    270,
+    353,
+    364,
+    555,
+    563,
+    575,
+    607,
+    618,
+    639,
+    659,
+    694,
+    760,
+    773,
+    782
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets arriving via multiple SPAN/mirror paths or overlapping TAP aggregations without deduplication in the packet broker. 478/2667 packets (17.9%) exceed 5% threshold.",
+   "impact_on_tool": "Duplicates waste NDR 10G port bandwidth and processing, inflate flow/packet counters, skew analytics, and can trigger duplicate alerts while masking true rates.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to drop identical packets seen within a short window before forwarding to the NDR, eliminating 17.9% duplicate load."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snap-length enabled and cutting frames to ~192 bytes to save bandwidth. 272/2667 frames (10.2%) are truncated.",
+   "impact_on_tool": "NDR needs full payload (needs_full_payload=true) for deep packet inspection, signature matching and payload anomaly detection. Slicing at 192 bytes removes L7 payload, blinding detection for exploits and C2.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen_bytes": 0,
+     "forward_full_packet": true,
+     "mtu_up_to_bytes": 9216
+    },
+    "why": "Disable slicing for this NDR feed so full packets up to the tool's 9216 byte max are forwarded, restoring payload visibility."
+   },
+   "evidence_frames": [
+    7,
+    39,
+    43,
+    49,
+    76,
+    78,
+    103,
+    104,
+    107,
+    142,
+    159,
+    173,
+    199,
+    203,
+    208,
+    222,
+    224,
+    228,
+    229,
+    253
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3504,
+  "tokens_out": 2074,
+  "cost_usd": 0.01319,
+  "seconds": 14.3,
+  "recorded_at": "2026-10-29"
+ }
+}

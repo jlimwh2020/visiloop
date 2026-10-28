@@ -1,0 +1,39 @@
+{
+ "feed": "s094_single",
+ "status": "degraded",
+ "summary": "Feed s094_single to SIEM is degraded due to 18.6% duplicate packets (469/2522), exceeding 5% threshold. No other visibility faults detected; traffic is otherwise complete and correct for SIEM requirements.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating multiple SPAN/TAP sources without deduplication, forwarding the same packet twice to the single SIEM tool port. Common when same traffic is seen on two SPAN sessions or both sides of an aggregated TAP.",
+   "impact_on_tool": "SIEM wastes storage/license and processing on duplicate events, inflates counts and correlation alerts, and consumes ~18% of 1Gbps tool port capacity with redundant data without improving detection.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {},
+    "why": "Enable packet deduplication on the packet broker for feed s094_single to remove identical packets before delivery to SIEM, restoring accurate event counts and freeing bandwidth."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3241,
+  "tokens_out": 1347,
+  "cost_usd": 0.00978,
+  "seconds": 9.9,
+  "recorded_at": "2026-10-29"
+ }
+}

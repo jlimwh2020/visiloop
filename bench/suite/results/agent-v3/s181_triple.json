@@ -1,0 +1,121 @@
+{
+ "feed": "s181_triple",
+ "status": "degraded",
+ "summary": "IDS s181_triple is degraded: 28.5% one-way TCP sessions, 11% oversize frames dropped by 1518B NIC, and 3.42 Gbps microbursts overloading 1 Gbps port (342% capacity). All three cause silent packet/flow loss and break stateful detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "28.5% of TCP sessions (35/123) are seen in only one direction. Packet broker/SPAN is forwarding only one side of flows to this IDS port - likely single-direction SPAN, missing TAP on return path, or broker not aggregating both directions of asymmetric routing to same tool port.",
+   "impact_on_tool": "IDS needs_both_directions=true for TCP reassembly and state tracking. One-way traffic prevents handshake correlation, stream reassembly, and request/response matching, causing missed exploits, broken signatures, and inaccurate session logging.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions": true,
+     "affinity": "5-tuple"
+    },
+    "why": "Aggregate client->server and server->client for each flow to the same IDS port with flow-aware affinity so IDS sees complete bidirectional sessions for stateful inspection."
+   },
+   "evidence_frames": [
+    1,
+    131,
+    190,
+    213,
+    283,
+    317,
+    343,
+    395,
+    418,
+    442,
+    475,
+    607,
+    649,
+    656,
+    681,
+    763,
+    882,
+    905,
+    913,
+    992
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network forwards jumbo frames up to 8058 bytes but IDS port max_frame_bytes is 1518. 185/1675 frames (11.0%) exceed IDS MTU and are forwarded unchanged by broker, so IDS NIC drops them silently.",
+   "impact_on_tool": "IDS loses 11% of frames entirely before inspection. Large transfers where attacks/exfiltration hide are most affected; gaps break reassembly and allow evasion of signatures and anomaly detection despite needs_full_payload=true.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518
+    },
+    "why": "Slice frames at packet broker to 1518B to prevent NIC drops and ensure headers/payload start reaches IDS. Long-term enable jumbo on IDS or lower network MTU to preserve full payload without truncation."
+   },
+   "evidence_frames": [
+    13,
+    14,
+    16,
+    32,
+    34,
+    37,
+    39,
+    58,
+    59,
+    61,
+    62,
+    72,
+    73,
+    75,
+    76,
+    78,
+    79,
+    123,
+    124,
+    126
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak burst 3.42 Gbps in 1ms vs 1 Gbps IDS port (342% capacity, 6 overloaded intervals). Single 1G tool port is undersized for aggregated feed with no load-balancing or filtering; microbursts overflow port buffers.",
+   "impact_on_tool": "Port buffers overflow and randomly drop packets during bursts - exactly when traffic is heaviest. IDS suffers indiscriminate packet loss, missed detections, and incomplete flows under load.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "target_utilization": 0.8,
+     "upgrade_or_add_ports_to_gbps": 4
+    },
+    "why": "Distribute traffic with flow-aware (5-tuple) load balancing across multiple 1G ports or upgrade to 10G so per-port utilization stays <80% and flow coherence is preserved for IDS."
+   },
+   "evidence_frames": [
+    1,
+    250,
+    537,
+    772,
+    1137,
+    1339
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3545,
+  "tokens_out": 3218,
+  "cost_usd": 0.01811,
+  "seconds": 17.5,
+  "recorded_at": "2026-10-29"
+ }
+}

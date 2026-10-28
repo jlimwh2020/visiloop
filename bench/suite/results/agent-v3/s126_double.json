@@ -1,0 +1,78 @@
+{
+ "feed": "s126_double",
+ "status": "degraded",
+ "summary": "Feed s126_double to SIEM is degraded: 9.3% duplicate packets (265/2858) and 2.2% TCP packet drops (61/2798) detected. Other checks (one-way, VLAN, encryption, oversize, truncated, tunnel, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating the same traffic from multiple SPAN/mirror sources (or both sides of a link) without deduplication - consistent with 'double' feed name. 9.3% duplicates exceeds 5% threshold.",
+   "impact_on_tool": "SIEM wastes storage, license and processing on duplicate events, inflates counts and correlation logic, and reduces fidelity. SIEM does not need both directions/full payload, so detection still functions but with noise and inefficiency.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets seen within a short window before forwarding to the 1G SIEM port, eliminating double-counting without losing unique events."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream SPAN/mirror or packet broker is dropping packets under load - 2.2% of TCP packets show gaps vs 1% threshold. Tool overload is healthy, so loss occurs before the SIEM, typical of SPAN buffer overflow or broker oversubscription.",
+   "impact_on_tool": "SIEM receives incomplete TCP streams and missing events, causing broken flow reassembly, incomplete logs and potential missed correlations/detections.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_type": "passive",
+     "check_broker_oversubscription": true
+    },
+    "why": "Replace lossy SPAN/mirror with passive TAP and verify broker buffering/bandwidth to eliminate pre-tool drops. If TAP already in use, tune broker buffers and consider load_balance to prevent drops."
+   },
+   "evidence_frames": [
+    85,
+    91,
+    178,
+    182,
+    295,
+    296,
+    378,
+    379,
+    623,
+    625,
+    656,
+    657,
+    685,
+    686,
+    698,
+    699,
+    834,
+    835,
+    836,
+    938
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3364,
+  "tokens_out": 2715,
+  "cost_usd": 0.01574,
+  "seconds": 14.7,
+  "recorded_at": "2026-10-29"
+ }
+}
