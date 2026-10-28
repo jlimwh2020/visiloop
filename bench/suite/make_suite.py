@@ -3,8 +3,8 @@
 Each case varies the tool (IDS, NDR, APM, SIEM), its required VLANs, the traffic mix
 and size, and injects 0-3 faults at clear or near-threshold levels, often with a
 below-threshold "mild" fault as noise. Some cases test tool awareness: heavy TLS on a
-tool that tolerates it, or untagged traffic on a tool that needs no VLANs, must NOT
-alarm.
+tool that tolerates it, untagged traffic on a tool that needs no VLANs, or one-way
+traffic on a SIEM (which does not need both directions), must NOT alarm.
 
 The answer key is computed by this script directly from the packets it wrote (pure
 Python, no tshark), so it is independent of VisiLoop's checks. Cases whose true value
@@ -146,14 +146,14 @@ def truth(feed, injected_loss, profile):
                "encrypted_share": enc, "untagged": untagged, "missing_vlans": missing}
     labels = {
         "duplicates": dup_rate > LIMITS["duplicates"],
-        "one_way": one_way > LIMITS["one_way"],
+        "one_way": profile.needs_both_directions and one_way > LIMITS["one_way"],
         "packet_drops": loss > LIMITS["packet_drops"],
         "tool_overload": load > LIMITS["tool_overload"],
         "encrypted_share": enc > profile.max_encrypted_share,
         "missing_vlan": bool(profile.required_vlans) and (bool(missing) or untagged > LIMITS["untagged"]),
     }
     gray = [k for k in ("duplicates", "one_way", "packet_drops", "tool_overload")
-            if GRAY[k][0] < metrics[k] < GRAY[k][1]]
+            if GRAY[k][0] < metrics[k] < GRAY[k][1] and (k != "one_way" or profile.needs_both_directions)]
     if profile.max_encrypted_share < 1 and abs(enc - profile.max_encrypted_share) < GRAY["encrypted_margin"]:
         gray.append("encrypted_share")
     if profile.required_vlans and not missing and GRAY["untagged"][0] < untagged < GRAY["untagged"][1]:
@@ -190,7 +190,9 @@ def pick_tool(rng, faults):
     """A tool type on which every requested fault is possible."""
     options = TOOLS
     if "encrypted_share" in faults:
-        options = [t for t in TOOLS if t in ("IDS", "NDR")]      # APM and SIEM tolerate 100% TLS
+        options = [t for t in options if t in ("IDS", "NDR")]    # APM and SIEM tolerate 100% TLS
+    if "one_way" in faults:
+        options = [t for t in options if t != "SIEM"]            # a SIEM does not need both directions
     return rng.choice(options)
 
 
@@ -250,6 +252,8 @@ def build_case(idx, kind, faults, rng, workdir):
         if "missing_vlan" in mild and not vlans_req:
             mild.remove("missing_vlan")
         lv = levels(rng, faults, mild, kind, profile)
+        if kind == "tool_aware" and tool == "SIEM":
+            lv["one_way"] = rng.uniform(0.2, 0.6)        # one-way traffic on a SIEM: must not alarm
 
         # traffic
         big = "tool_overload" in faults and profile.max_rate_gbps >= 10
@@ -319,7 +323,7 @@ def main():
     a = ap.parse_args()
     os.makedirs(CASES, exist_ok=True)
     rng = random.Random(a.seed)
-    manifest = {"version": 1, "seed": a.seed, "limits": LIMITS, "gray_zones": GRAY, "cases": []}
+    manifest = {"version": 2, "seed": a.seed, "limits": LIMITS, "gray_zones": GRAY, "cases": []}
     work = tempfile.mkdtemp(prefix="suite_")
     for i, (kind, faults) in enumerate(plan(a.n, rng), start=1):
         case, feed, ingress = build_case(i, kind, faults, rng, work)

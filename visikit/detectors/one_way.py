@@ -2,6 +2,10 @@
 
 Typical causes: a SPAN port mirroring RX only, a TAP feeding just one direction,
 or asymmetric routing where the return path crosses an unmonitored link.
+
+Tool-aware: a tool whose profile does not need both directions (for example a
+SIEM taking connection records) is not harmed by one-way traffic, so it is not
+reported as a fault there. Muse Spark pointed out this gap in the benchmark suite.
 """
 from collections import defaultdict
 
@@ -17,6 +21,8 @@ class OneWay:
     fault = "one_way"
 
     def run(self, ctx: FeedContext) -> list[Finding]:
+        if not ctx.profile.needs_both_directions:
+            return []
         senders = defaultdict(set)
         first_frame = {}
         for frame, stream, src in fields(ctx.pcap, ["frame.number", "tcp.stream", "ip.src"], "tcp"):
@@ -28,7 +34,7 @@ class OneWay:
         share = len(one_sided) / len(senders)
         if share <= THRESHOLD:
             return []
-        severity = "high" if (share > 0.3 or ctx.profile.needs_both_directions) else "medium"
+        severity = "high"          # this tool needs both directions, so any material share hurts it
         return [Finding(
             fault=self.fault, feed=ctx.feed, severity=severity,
             metric=round(share, 4), threshold=THRESHOLD,

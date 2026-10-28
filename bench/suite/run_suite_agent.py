@@ -24,7 +24,15 @@ from visikit.core.schema import FeedContext                 # noqa: E402
 from visikit.profiles import load_profile                   # noqa: E402
 
 CASES = os.path.join(HERE, "cases")
-OUT = os.path.join(HERE, "results", "agent")
+
+
+def out_dir(manifest):
+    """Each suite version keeps its own results (version 1 used results/agent)."""
+    v = manifest.get("version", 1)
+    return os.path.join(HERE, "results", "agent" if v == 1 else f"agent-v{v}")
+
+
+OUT = None
 
 
 def spent():
@@ -61,9 +69,13 @@ def main():
     a = ap.parse_args()
     if not os.environ.get("MODEL_API_KEY"):
         sys.exit("MODEL_API_KEY is not set. Run set_key.py first, then open a new terminal.")
+    global OUT
     with open(os.path.join(CASES, "manifest.json")) as f:
-        cases = json.load(f)["cases"]
+        manifest = json.load(f)
+    cases = manifest["cases"]
+    OUT = OUT or out_dir(manifest)
     os.makedirs(OUT, exist_ok=True)
+    print(f"Suite version {manifest.get('version', 1)}; results go to {OUT}")
     todo = [c for c in cases if (not a.cases or c["name"] in a.cases)
             and not os.path.exists(os.path.join(OUT, c["name"] + ".json"))]
     if a.limit:

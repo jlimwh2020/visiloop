@@ -81,7 +81,7 @@ def main():
     broken = [n for n in with_faults if not checks[n]["loop"]["result"].startswith("healthy")]
     lb = [x["ports"] for x in fixes if x["action"] == "load_balance"]
 
-    summary = {"cases": len(order), "kinds": by(cs, crow, lambda c: c["kind"]),
+    summary = {"suite_version": manifest.get("version", 1), "cases": len(order), "kinds": by(cs, crow, lambda c: c["kind"]),
                "checks": {"exact": c_exact, "per_fault": c_prf, "failures": c_fail,
                           "by_tool": by(cs, crow, lambda c: c["tool"]),
                           "near_threshold": by(cs, crow, lambda c: "near threshold" if c["near_threshold"] else "clear")},
@@ -92,7 +92,8 @@ def main():
                         "load_balance_ports": {"min": min(lb), "max": max(lb), "median": statistics.median(lb)} if lb else None}}
 
     # ---- agent
-    agent_dir = os.path.join(RES, "agent")
+    v = manifest.get("version", 1)
+    agent_dir = os.path.join(RES, "agent" if v == 1 else f"agent-v{v}")
     agent = {}
     if os.path.isdir(agent_dir):
         for n in order:
@@ -182,10 +183,13 @@ def write_md(s):
     c, l = s["checks"], s["loop"]
     kinds = {"clean": "healthy feed", "mild": "only below-threshold faults (must not alarm)",
              "single": "one fault", "double": "two faults", "triple": "three faults",
-             "tool_aware": "heavy TLS or untagged traffic on a tool that tolerates it (must not alarm)"}
+             "tool_aware": "heavy TLS, untagged or one-way traffic on a tool that tolerates it (must not alarm)"}
     md = [
-        "# VisiLoop benchmark suite: results",
+        f"# VisiLoop benchmark suite v{s.get('suite_version', 1)}: results",
         "",
+        *(["Version 2 makes the one-way check tool-aware (a gap Muse Spark found in version 1) and adds "
+           "one-way traps on SIEM tools. Version 1 results: [results/RESULTS_v1.md](results/RESULTS_v1.md).", ""]
+          if s.get("suite_version", 1) >= 2 else []),
         f"**{s['cases']} generated test cases** across four tool types (IDS, NDR, APM, SIEM), with 0 to 3 faults each, "
         "near-threshold faults, below-threshold noise and tool-awareness traps. "
         "The answer key is computed by the generator directly from the packets it wrote, independently of VisiLoop's checks. "

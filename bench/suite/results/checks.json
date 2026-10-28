@@ -1,428 +1,44 @@
 {
- "generated": "2026-10-28 17:24",
+ "generated": "2026-10-28 21:50",
  "results": [
   {
    "name": "s001_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.64,
+   "check_seconds": 2.71,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.64
+   "seconds": 2.71
   },
   {
    "name": "s002_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.7,
+   "check_seconds": 2.71,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.7
+   "seconds": 2.71
   },
   {
    "name": "s003_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.59,
+   "check_seconds": 1.47,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.59
+   "seconds": 1.47
   },
   {
    "name": "s004_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.58,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.58
-  },
-  {
-   "name": "s005_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.56,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.56
-  },
-  {
-   "name": "s006_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.52,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.52
-  },
-  {
-   "name": "s007_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.38,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.38
-  },
-  {
-   "name": "s008_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.06,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.06
-  },
-  {
-   "name": "s009_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.81,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.81
-  },
-  {
-   "name": "s010_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.67,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.67
-  },
-  {
-   "name": "s011_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.51,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.51
-  },
-  {
-   "name": "s012_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.24,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.24
-  },
-  {
-   "name": "s013_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.35,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.35
-  },
-  {
-   "name": "s014_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.72,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.72
-  },
-  {
-   "name": "s015_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.94,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.94
-  },
-  {
-   "name": "s016_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.0,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.0
-  },
-  {
-   "name": "s017_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.0,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.0
-  },
-  {
-   "name": "s018_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.08,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.08
-  },
-  {
-   "name": "s019_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.65,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.65
-  },
-  {
-   "name": "s020_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.83,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.83
-  },
-  {
-   "name": "s021_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.81,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.81
-  },
-  {
-   "name": "s022_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.89,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.89
-  },
-  {
-   "name": "s023_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.74,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.74
-  },
-  {
-   "name": "s024_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.84,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.84
-  },
-  {
-   "name": "s025_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.8,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.8
-  },
-  {
-   "name": "s026_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.3,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.3
-  },
-  {
-   "name": "s027_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.79,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.79
-  },
-  {
-   "name": "s028_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.39,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.39
-  },
-  {
-   "name": "s029_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.59,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.59
-  },
-  {
-   "name": "s030_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.82,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.82
-  },
-  {
-   "name": "s031_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.33,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.33
-  },
-  {
-   "name": "s032_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.36,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.36
-  },
-  {
-   "name": "s033_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.8,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.8
-  },
-  {
-   "name": "s034_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.82,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.82
-  },
-  {
-   "name": "s035_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.83,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.83
-  },
-  {
-   "name": "s036_mild",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -434,19 +50,103 @@
    "seconds": 1.48
   },
   {
-   "name": "s037_mild",
+   "name": "s005_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.49,
+   "check_seconds": 1.26,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.49
+   "seconds": 1.26
   },
   {
-   "name": "s038_mild",
+   "name": "s006_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.42,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.42
+  },
+  {
+   "name": "s007_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.3,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.3
+  },
+  {
+   "name": "s008_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.42,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.42
+  },
+  {
+   "name": "s009_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.71,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.71
+  },
+  {
+   "name": "s010_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.74,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.74
+  },
+  {
+   "name": "s011_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.54,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.54
+  },
+  {
+   "name": "s012_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.31,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.31
+  },
+  {
+   "name": "s013_clean",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -458,7 +158,55 @@
    "seconds": 1.4
   },
   {
-   "name": "s039_mild",
+   "name": "s014_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.53,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.53
+  },
+  {
+   "name": "s015_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.77,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.77
+  },
+  {
+   "name": "s016_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.77,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.77
+  },
+  {
+   "name": "s017_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.62,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.62
+  },
+  {
+   "name": "s018_clean",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -470,31 +218,43 @@
    "seconds": 1.8
   },
   {
-   "name": "s040_mild",
+   "name": "s019_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.65,
+   "check_seconds": 1.53,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.65
+   "seconds": 1.53
   },
   {
-   "name": "s041_mild",
+   "name": "s020_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.67,
+   "check_seconds": 1.66,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.67
+   "seconds": 1.66
   },
   {
-   "name": "s042_mild",
+   "name": "s021_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.84,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.84
+  },
+  {
+   "name": "s022_mild",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -506,31 +266,175 @@
    "seconds": 1.57
   },
   {
-   "name": "s043_mild",
+   "name": "s023_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.78,
+   "check_seconds": 1.59,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.78
+   "seconds": 1.59
   },
   {
-   "name": "s044_mild",
+   "name": "s024_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.17,
+   "check_seconds": 1.69,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.17
+   "seconds": 1.69
   },
   {
-   "name": "s045_mild",
+   "name": "s025_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.58,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.58
+  },
+  {
+   "name": "s026_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.36,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.36
+  },
+  {
+   "name": "s027_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.91,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.91
+  },
+  {
+   "name": "s028_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.32,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.32
+  },
+  {
+   "name": "s029_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.68,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.68
+  },
+  {
+   "name": "s030_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.71,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.71
+  },
+  {
+   "name": "s031_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.46,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.46
+  },
+  {
+   "name": "s032_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.2,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.2
+  },
+  {
+   "name": "s033_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.94,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.94
+  },
+  {
+   "name": "s034_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.33,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.33
+  },
+  {
+   "name": "s035_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.89,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.89
+  },
+  {
+   "name": "s036_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.39,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.39
+  },
+  {
+   "name": "s037_mild",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -540,6 +444,102 @@
     "result": "healthy (no faults found)"
    },
    "seconds": 1.47
+  },
+  {
+   "name": "s038_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.44,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.44
+  },
+  {
+   "name": "s039_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.91,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.91
+  },
+  {
+   "name": "s040_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.76,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.76
+  },
+  {
+   "name": "s041_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.48,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.48
+  },
+  {
+   "name": "s042_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.31,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.31
+  },
+  {
+   "name": "s043_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.69,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.69
+  },
+  {
+   "name": "s044_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.02,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.02
+  },
+  {
+   "name": "s045_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.12,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.12
   },
   {
    "name": "s046_mild",
@@ -558,48 +558,48 @@
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.65,
+   "check_seconds": 1.98,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.65
+   "seconds": 1.98
   },
   {
    "name": "s048_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.51,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.51
+   "seconds": 1.67
   },
   {
    "name": "s049_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.09,
+   "check_seconds": 1.84,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.09
+   "seconds": 1.84
   },
   {
    "name": "s050_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.74,
+   "check_seconds": 1.5,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.74
+   "seconds": 1.5
   },
   {
    "name": "s051_single",
@@ -612,7 +612,7 @@
    "metrics": {
     "one_way": 0.3223
    },
-   "check_seconds": 1.74,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [
      {
@@ -629,7 +629,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.63
+   "seconds": 3.81
   },
   {
    "name": "s052_single",
@@ -642,7 +642,7 @@
    "metrics": {
     "packet_drops": 0.0161
    },
-   "check_seconds": 1.44,
+   "check_seconds": 1.06,
    "loop": {
     "fixes": [
      {
@@ -659,7 +659,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.98
+   "seconds": 2.38
   },
   {
    "name": "s053_single",
@@ -672,7 +672,7 @@
    "metrics": {
     "packet_drops": 0.0457
    },
-   "check_seconds": 1.95,
+   "check_seconds": 2.1,
    "loop": {
     "fixes": [
      {
@@ -689,7 +689,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.95
+   "seconds": 3.75
   },
   {
    "name": "s054_single",
@@ -702,7 +702,7 @@
    "metrics": {
     "tool_overload": 1.491
    },
-   "check_seconds": 1.95,
+   "check_seconds": 1.84,
    "loop": {
     "fixes": [
      {
@@ -722,7 +722,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 9.75
+   "seconds": 10.22
   },
   {
    "name": "s055_single",
@@ -735,7 +735,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.68,
+   "check_seconds": 1.71,
    "loop": {
     "fixes": [
      {
@@ -752,7 +752,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.46
+   "seconds": 3.87
   },
   {
    "name": "s056_single",
@@ -765,7 +765,7 @@
    "metrics": {
     "duplicates": 0.2321
    },
-   "check_seconds": 1.86,
+   "check_seconds": 1.98,
    "loop": {
     "fixes": [
      {
@@ -782,7 +782,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.57
+   "seconds": 3.52
   },
   {
    "name": "s057_single",
@@ -795,7 +795,7 @@
    "metrics": {
     "packet_drops": 0.0174
    },
-   "check_seconds": 1.3,
+   "check_seconds": 1.27,
    "loop": {
     "fixes": [
      {
@@ -812,7 +812,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.55
+   "seconds": 2.49
   },
   {
    "name": "s058_single",
@@ -825,7 +825,7 @@
    "metrics": {
     "packet_drops": 0.044
    },
-   "check_seconds": 1.75,
+   "check_seconds": 2.05,
    "loop": {
     "fixes": [
      {
@@ -842,7 +842,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.64
+   "seconds": 3.86
   },
   {
    "name": "s059_single",
@@ -855,7 +855,7 @@
    "metrics": {
     "tool_overload": 1.608
    },
-   "check_seconds": 1.73,
+   "check_seconds": 1.5,
    "loop": {
     "fixes": [
      {
@@ -875,7 +875,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 8.95
+   "seconds": 8.89
   },
   {
    "name": "s060_single",
@@ -888,7 +888,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 2.05,
+   "check_seconds": 1.82,
    "loop": {
     "fixes": [
      {
@@ -905,7 +905,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.99
+   "seconds": 3.6
   },
   {
    "name": "s061_single",
@@ -918,7 +918,7 @@
    "metrics": {
     "packet_drops": 0.074
    },
-   "check_seconds": 1.29,
+   "check_seconds": 1.23,
    "loop": {
     "fixes": [
      {
@@ -935,7 +935,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.84
+   "seconds": 2.67
   },
   {
    "name": "s062_single",
@@ -948,7 +948,7 @@
    "metrics": {
     "duplicates": 0.2714
    },
-   "check_seconds": 2.29,
+   "check_seconds": 2.34,
    "loop": {
     "fixes": [
      {
@@ -965,7 +965,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.94
+   "seconds": 4.2
   },
   {
    "name": "s063_single",
@@ -978,7 +978,7 @@
    "metrics": {
     "packet_drops": 0.056
    },
-   "check_seconds": 1.71,
+   "check_seconds": 1.95,
    "loop": {
     "fixes": [
      {
@@ -995,7 +995,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.1
+   "seconds": 3.47
   },
   {
    "name": "s064_single",
@@ -1008,7 +1008,7 @@
    "metrics": {
     "encrypted_share": 0.8656
    },
-   "check_seconds": 1.56,
+   "check_seconds": 1.99,
    "loop": {
     "fixes": [
      {
@@ -1027,7 +1027,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.34
+   "seconds": 4.15
   },
   {
    "name": "s065_single",
@@ -1040,7 +1040,7 @@
    "metrics": {
     "one_way": 0.7664
    },
-   "check_seconds": 1.24,
+   "check_seconds": 1.38,
    "loop": {
     "fixes": [
      {
@@ -1057,7 +1057,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.83
+   "seconds": 3.24
   },
   {
    "name": "s066_single",
@@ -1070,7 +1070,7 @@
    "metrics": {
     "one_way": 0.5798
    },
-   "check_seconds": 1.56,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [
      {
@@ -1087,7 +1087,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.25
+   "seconds": 3.53
   },
   {
    "name": "s067_single",
@@ -1100,7 +1100,7 @@
    "metrics": {
     "encrypted_share": 0.9255
    },
-   "check_seconds": 1.43,
+   "check_seconds": 1.51,
    "loop": {
     "fixes": [
      {
@@ -1119,7 +1119,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.79
+   "seconds": 2.81
   },
   {
    "name": "s068_single",
@@ -1132,7 +1132,7 @@
    "metrics": {
     "tool_overload": 2.549
    },
-   "check_seconds": 3.04,
+   "check_seconds": 2.78,
    "loop": {
     "fixes": [
      {
@@ -1153,7 +1153,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 17.44
+   "seconds": 16.85
   },
   {
    "name": "s069_single",
@@ -1166,7 +1166,7 @@
    "metrics": {
     "duplicates": 0.093
    },
-   "check_seconds": 1.63,
+   "check_seconds": 1.15,
    "loop": {
     "fixes": [
      {
@@ -1183,7 +1183,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.11
+   "seconds": 2.42
   },
   {
    "name": "s070_single",
@@ -1196,7 +1196,7 @@
    "metrics": {
     "tool_overload": 3.725
    },
-   "check_seconds": 1.69,
+   "check_seconds": 1.32,
    "loop": {
     "fixes": [
      {
@@ -1222,7 +1222,7 @@
     "result": "healthy",
     "tool_ports_after": 9
    },
-   "seconds": 22.27
+   "seconds": 20.27
   },
   {
    "name": "s071_single",
@@ -1235,7 +1235,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.58,
+   "check_seconds": 1.76,
    "loop": {
     "fixes": [
      {
@@ -1252,7 +1252,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.25
+   "seconds": 3.45
   },
   {
    "name": "s072_single",
@@ -1265,7 +1265,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.68,
+   "check_seconds": 1.71,
    "loop": {
     "fixes": [
      {
@@ -1295,7 +1295,7 @@
    "metrics": {
     "duplicates": 0.0976
    },
-   "check_seconds": 1.92,
+   "check_seconds": 1.62,
    "loop": {
     "fixes": [
      {
@@ -1312,7 +1312,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.63
+   "seconds": 3.07
   },
   {
    "name": "s074_single",
@@ -1325,7 +1325,7 @@
    "metrics": {
     "duplicates": 0.2028
    },
-   "check_seconds": 2.15,
+   "check_seconds": 2.14,
    "loop": {
     "fixes": [
      {
@@ -1342,7 +1342,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 4.05
+   "seconds": 4.32
   },
   {
    "name": "s075_single",
@@ -1355,7 +1355,7 @@
    "metrics": {
     "one_way": 0.1714
    },
-   "check_seconds": 1.46,
+   "check_seconds": 1.61,
    "loop": {
     "fixes": [
      {
@@ -1372,7 +1372,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.96
+   "seconds": 3.27
   },
   {
    "name": "s076_single",
@@ -1383,9 +1383,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.3578
+    "one_way": 0.5094
    },
-   "check_seconds": 1.57,
+   "check_seconds": 1.26,
    "loop": {
     "fixes": [
      {
@@ -1402,7 +1402,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.41
+   "seconds": 2.81
   },
   {
    "name": "s077_single",
@@ -1413,29 +1413,33 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 1.714
+    "tool_overload": 3.048
    },
-   "check_seconds": 2.8,
+   "check_seconds": 1.76,
    "loop": {
     "fixes": [
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
+      "ports": 7
      }
     ],
     "after": {
      "s077_single-port1": [],
      "s077_single-port2": [],
-     "s077_single-port3": []
+     "s077_single-port3": [],
+     "s077_single-port4": [],
+     "s077_single-port5": [],
+     "s077_single-port6": [],
+     "s077_single-port7": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "tool_ports_after": 7
    },
-   "seconds": 15.77
+   "seconds": 16.66
   },
   {
    "name": "s078_single",
@@ -1446,9 +1450,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.8548
+    "encrypted_share": 0.9309
    },
-   "check_seconds": 1.4,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [
      {
@@ -1467,7 +1471,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.82
+   "seconds": 3.26
   },
   {
    "name": "s079_single",
@@ -1478,9 +1482,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.3627
+    "one_way": 0.4035
    },
-   "check_seconds": 1.37,
+   "check_seconds": 1.21,
    "loop": {
     "fixes": [
      {
@@ -1497,7 +1501,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.83
+   "seconds": 2.69
   },
   {
    "name": "s080_single",
@@ -1508,9 +1512,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.0894
+    "duplicates": 0.2825
    },
-   "check_seconds": 1.49,
+   "check_seconds": 1.94,
    "loop": {
     "fixes": [
      {
@@ -1527,7 +1531,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.89
+   "seconds": 3.46
   },
   {
    "name": "s081_single",
@@ -1538,9 +1542,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0205
+    "packet_drops": 0.0745
    },
-   "check_seconds": 1.64,
+   "check_seconds": 1.62,
    "loop": {
     "fixes": [
      {
@@ -1557,7 +1561,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.13
+   "seconds": 3.26
   },
   {
    "name": "s082_single",
@@ -1570,7 +1574,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.46,
+   "check_seconds": 1.34,
    "loop": {
     "fixes": [
      {
@@ -1587,7 +1591,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.08
+   "seconds": 2.75
   },
   {
    "name": "s083_single",
@@ -1598,9 +1602,9 @@
     "missing_vlan"
    ],
    "metrics": {
-    "missing_vlan": 1.0
+    "missing_vlan": 0.5
    },
-   "check_seconds": 1.59,
+   "check_seconds": 1.48,
    "loop": {
     "fixes": [
      {
@@ -1617,7 +1621,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.39
+   "seconds": 2.95
   },
   {
    "name": "s084_single",
@@ -1628,9 +1632,9 @@
     "one_way"
    ],
    "metrics": {
-    "one_way": 0.3039
+    "one_way": 0.7722
    },
-   "check_seconds": 1.38,
+   "check_seconds": 1.34,
    "loop": {
     "fixes": [
      {
@@ -1647,7 +1651,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.74
+   "seconds": 3.2
   },
   {
    "name": "s085_single",
@@ -1658,9 +1662,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.1967
+    "duplicates": 0.2839
    },
-   "check_seconds": 1.6,
+   "check_seconds": 1.88,
    "loop": {
     "fixes": [
      {
@@ -1677,7 +1681,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.12
+   "seconds": 3.42
   },
   {
    "name": "s086_single",
@@ -1688,9 +1692,9 @@
     "missing_vlan"
    ],
    "metrics": {
-    "missing_vlan": 0.5
+    "missing_vlan": 1.0
    },
-   "check_seconds": 1.82,
+   "check_seconds": 1.32,
    "loop": {
     "fixes": [
      {
@@ -1707,7 +1711,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.51
+   "seconds": 2.76
   },
   {
    "name": "s087_single",
@@ -1718,9 +1722,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.6663
+    "encrypted_share": 0.9334
    },
-   "check_seconds": 1.46,
+   "check_seconds": 1.38,
    "loop": {
     "fixes": [
      {
@@ -1739,7 +1743,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.17
+   "seconds": 2.69
   },
   {
    "name": "s088_single",
@@ -1750,9 +1754,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0183
+    "packet_drops": 0.0494
    },
-   "check_seconds": 1.43,
+   "check_seconds": 1.93,
    "loop": {
     "fixes": [
      {
@@ -1769,7 +1773,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.03
+   "seconds": 4.18
   },
   {
    "name": "s089_single",
@@ -1780,9 +1784,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0776
+    "packet_drops": 0.0736
    },
-   "check_seconds": 1.6,
+   "check_seconds": 1.73,
    "loop": {
     "fixes": [
      {
@@ -1799,7 +1803,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.31
+   "seconds": 3.24
   },
   {
    "name": "s090_single",
@@ -1810,9 +1814,9 @@
     "encrypted_share"
    ],
    "metrics": {
-    "encrypted_share": 0.7179
+    "encrypted_share": 0.9417
    },
-   "check_seconds": 1.63,
+   "check_seconds": 2.01,
    "loop": {
     "fixes": [
      {
@@ -1831,7 +1835,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.34
+   "seconds": 4.18
   },
   {
    "name": "s091_single",
@@ -1842,16 +1846,16 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 4.044
+    "tool_overload": 4.233
    },
-   "check_seconds": 1.24,
+   "check_seconds": 1.34,
    "loop": {
     "fixes": [
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 8
+      "ports": 10
      }
     ],
     "after": {
@@ -1862,14 +1866,16 @@
      "s091_single-port5": [],
      "s091_single-port6": [],
      "s091_single-port7": [],
-     "s091_single-port8": []
+     "s091_single-port8": [],
+     "s091_single-port9": [],
+     "s091_single-port10": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 8
+    "tool_ports_after": 10
    },
-   "seconds": 15.8
+   "seconds": 24.83
   },
   {
    "name": "s092_single",
@@ -1880,9 +1886,9 @@
     "missing_vlan"
    ],
    "metrics": {
-    "missing_vlan": 0.5
+    "missing_vlan": 1.0
    },
-   "check_seconds": 1.59,
+   "check_seconds": 1.87,
    "loop": {
     "fixes": [
      {
@@ -1899,7 +1905,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.33
+   "seconds": 3.73
   },
   {
    "name": "s093_single",
@@ -1910,9 +1916,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0914
+    "packet_drops": 0.047
    },
-   "check_seconds": 1.53,
+   "check_seconds": 1.69,
    "loop": {
     "fixes": [
      {
@@ -1929,7 +1935,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.18
+   "seconds": 3.39
   },
   {
    "name": "s094_single",
@@ -1940,16 +1946,16 @@
     "tool_overload"
    ],
    "metrics": {
-    "tool_overload": 3.217
+    "tool_overload": 4.697
    },
-   "check_seconds": 1.67,
+   "check_seconds": 1.74,
    "loop": {
     "fixes": [
      {
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 6
+      "ports": 11
      }
     ],
     "after": {
@@ -1958,14 +1964,19 @@
      "s094_single-port3": [],
      "s094_single-port4": [],
      "s094_single-port5": [],
-     "s094_single-port6": []
+     "s094_single-port6": [],
+     "s094_single-port7": [],
+     "s094_single-port8": [],
+     "s094_single-port9": [],
+     "s094_single-port10": [],
+     "s094_single-port11": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 6
+    "tool_ports_after": 11
    },
-   "seconds": 13.2
+   "seconds": 31.48
   },
   {
    "name": "s095_single",
@@ -1976,9 +1987,9 @@
     "duplicates"
    ],
    "metrics": {
-    "duplicates": 0.1933
+    "duplicates": 0.2244
    },
-   "check_seconds": 1.82,
+   "check_seconds": 2.06,
    "loop": {
     "fixes": [
      {
@@ -1995,7 +2006,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.57
+   "seconds": 4.12
   },
   {
    "name": "s096_single",
@@ -2008,7 +2019,7 @@
    "metrics": {
     "encrypted_share": 0.8251
    },
-   "check_seconds": 1.54,
+   "check_seconds": 1.65,
    "loop": {
     "fixes": [
      {
@@ -2027,7 +2038,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.2
+   "seconds": 3.05
   },
   {
    "name": "s097_single",
@@ -2040,7 +2051,7 @@
    "metrics": {
     "one_way": 0.5652
    },
-   "check_seconds": 1.13,
+   "check_seconds": 1.32,
    "loop": {
     "fixes": [
      {
@@ -2057,7 +2068,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.45
+   "seconds": 2.64
   },
   {
    "name": "s098_single",
@@ -2070,7 +2081,7 @@
    "metrics": {
     "encrypted_share": 0.8647
    },
-   "check_seconds": 1.46,
+   "check_seconds": 1.33,
    "loop": {
     "fixes": [
      {
@@ -2089,7 +2100,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.67
+   "seconds": 2.64
   },
   {
    "name": "s099_single",
@@ -2102,7 +2113,7 @@
    "metrics": {
     "tool_overload": 1.281
    },
-   "check_seconds": 2.36,
+   "check_seconds": 2.65,
    "loop": {
     "fixes": [
      {
@@ -2121,7 +2132,7 @@
     "result": "healthy",
     "tool_ports_after": 2
    },
-   "seconds": 12.53
+   "seconds": 13.38
   },
   {
    "name": "s100_single",
@@ -2134,7 +2145,7 @@
    "metrics": {
     "duplicates": 0.0772
    },
-   "check_seconds": 1.39,
+   "check_seconds": 1.7,
    "loop": {
     "fixes": [
      {
@@ -2151,7 +2162,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.93
+   "seconds": 3.61
   },
   {
    "name": "s101_single",
@@ -2164,7 +2175,7 @@
    "metrics": {
     "encrypted_share": 0.8656
    },
-   "check_seconds": 1.63,
+   "check_seconds": 1.5,
    "loop": {
     "fixes": [
      {
@@ -2183,7 +2194,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.21
+   "seconds": 3.09
   },
   {
    "name": "s102_single",
@@ -2196,7 +2207,7 @@
    "metrics": {
     "encrypted_share": 0.9371
    },
-   "check_seconds": 1.63,
+   "check_seconds": 1.96,
    "loop": {
     "fixes": [
      {
@@ -2215,7 +2226,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.58
+   "seconds": 3.56
   },
   {
    "name": "s103_single",
@@ -2228,7 +2239,7 @@
    "metrics": {
     "encrypted_share": 0.9458
    },
-   "check_seconds": 1.54,
+   "check_seconds": 1.37,
    "loop": {
     "fixes": [
      {
@@ -2247,7 +2258,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.33
+   "seconds": 2.74
   },
   {
    "name": "s104_single",
@@ -2260,7 +2271,7 @@
    "metrics": {
     "tool_overload": 1.446
    },
-   "check_seconds": 3.88,
+   "check_seconds": 2.88,
    "loop": {
     "fixes": [
      {
@@ -2280,7 +2291,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 18.13
+   "seconds": 16.59
   },
   {
    "name": "s105_single",
@@ -2293,7 +2304,7 @@
    "metrics": {
     "tool_overload": 1.458
    },
-   "check_seconds": 3.07,
+   "check_seconds": 2.86,
    "loop": {
     "fixes": [
      {
@@ -2313,7 +2324,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 17.11
+   "seconds": 16.82
   },
   {
    "name": "s106_single",
@@ -2326,7 +2337,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.5,
+   "check_seconds": 1.75,
    "loop": {
     "fixes": [
      {
@@ -2343,7 +2354,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.41
+   "seconds": 3.31
   },
   {
    "name": "s107_single",
@@ -2356,7 +2367,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.64,
+   "check_seconds": 1.58,
    "loop": {
     "fixes": [
      {
@@ -2373,7 +2384,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.7
+   "seconds": 3.21
   },
   {
    "name": "s108_single",
@@ -2386,7 +2397,7 @@
    "metrics": {
     "one_way": 0.2286
    },
-   "check_seconds": 1.58,
+   "check_seconds": 1.3,
    "loop": {
     "fixes": [
      {
@@ -2403,7 +2414,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.38
+   "seconds": 2.75
   },
   {
    "name": "s109_single",
@@ -2416,7 +2427,7 @@
    "metrics": {
     "duplicates": 0.2793
    },
-   "check_seconds": 2.14,
+   "check_seconds": 1.97,
    "loop": {
     "fixes": [
      {
@@ -2433,7 +2444,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.95
+   "seconds": 3.73
   },
   {
    "name": "s110_single",
@@ -2446,7 +2457,7 @@
    "metrics": {
     "one_way": 0.2035
    },
-   "check_seconds": 1.49,
+   "check_seconds": 1.45,
    "loop": {
     "fixes": [
      {
@@ -2463,7 +2474,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.07
+   "seconds": 3.25
   },
   {
    "name": "s111_double",
@@ -2479,7 +2490,7 @@
     "duplicates": 0.0904,
     "tool_overload": 4.624
    },
-   "check_seconds": 2.09,
+   "check_seconds": 1.35,
    "loop": {
     "fixes": [
      {
@@ -2512,7 +2523,7 @@
     "result": "healthy",
     "tool_ports_after": 11
    },
-   "seconds": 29.57
+   "seconds": 26.89
   },
   {
    "name": "s112_double",
@@ -2528,7 +2539,7 @@
     "encrypted_share": 0.9399,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.78,
+   "check_seconds": 1.58,
    "loop": {
     "fixes": [
      {
@@ -2552,7 +2563,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.49
+   "seconds": 2.94
   },
   {
    "name": "s113_double",
@@ -2568,7 +2579,7 @@
     "missing_vlan": 0.5,
     "tool_overload": 1.624
    },
-   "check_seconds": 1.87,
+   "check_seconds": 1.42,
    "loop": {
     "fixes": [
      {
@@ -2594,7 +2605,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 11.41
+   "seconds": 10.58
   },
   {
    "name": "s114_double",
@@ -2610,7 +2621,7 @@
     "encrypted_share": 0.7948,
     "packet_drops": 0.0188
    },
-   "check_seconds": 1.58,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [
      {
@@ -2634,7 +2645,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.3
+   "seconds": 3.18
   },
   {
    "name": "s115_double",
@@ -2650,7 +2661,7 @@
     "encrypted_share": 0.7179,
     "tool_overload": 1.711
    },
-   "check_seconds": 1.29,
+   "check_seconds": 1.48,
    "loop": {
     "fixes": [
      {
@@ -2681,7 +2692,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 3
    },
-   "seconds": 7.33
+   "seconds": 7.82
   },
   {
    "name": "s116_double",
@@ -2697,7 +2708,7 @@
     "encrypted_share": 0.8231,
     "tool_overload": 1.559
    },
-   "check_seconds": 1.44,
+   "check_seconds": 1.33,
    "loop": {
     "fixes": [
      {
@@ -2728,7 +2739,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 3
    },
-   "seconds": 7.11
+   "seconds": 6.98
   },
   {
    "name": "s117_double",
@@ -2744,7 +2755,7 @@
     "duplicates": 0.0918,
     "encrypted_share": 0.6775
    },
-   "check_seconds": 2.23,
+   "check_seconds": 1.8,
    "loop": {
     "fixes": [
      {
@@ -2768,7 +2779,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 4.14
+   "seconds": 3.68
   },
   {
    "name": "s118_double",
@@ -2784,7 +2795,7 @@
     "encrypted_share": 0.9071,
     "one_way": 0.216
    },
-   "check_seconds": 1.51,
+   "check_seconds": 1.3,
    "loop": {
     "fixes": [
      {
@@ -2808,7 +2819,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.16
+   "seconds": 2.82
   },
   {
    "name": "s119_double",
@@ -2824,7 +2835,7 @@
     "duplicates": 0.2146,
     "one_way": 0.619
    },
-   "check_seconds": 1.53,
+   "check_seconds": 1.47,
    "loop": {
     "fixes": [
      {
@@ -2846,7 +2857,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.13
+   "seconds": 2.83
   },
   {
    "name": "s120_double",
@@ -2862,7 +2873,7 @@
     "encrypted_share": 0.9424,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.87,
+   "check_seconds": 1.54,
    "loop": {
     "fixes": [
      {
@@ -2886,7 +2897,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.47
+   "seconds": 3.29
   },
   {
    "name": "s121_double",
@@ -2902,7 +2913,7 @@
     "duplicates": 0.2769,
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.78,
+   "check_seconds": 1.29,
    "loop": {
     "fixes": [
      {
@@ -2924,7 +2935,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.26
+   "seconds": 2.71
   },
   {
    "name": "s122_double",
@@ -2940,7 +2951,7 @@
     "encrypted_share": 0.935,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.59,
+   "check_seconds": 1.43,
    "loop": {
     "fixes": [
      {
@@ -2964,7 +2975,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.21
+   "seconds": 3.01
   },
   {
    "name": "s123_double",
@@ -2980,7 +2991,7 @@
     "missing_vlan": 0.5,
     "tool_overload": 1.821
    },
-   "check_seconds": 2.1,
+   "check_seconds": 1.83,
    "loop": {
     "fixes": [
      {
@@ -3006,7 +3017,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 13.79
+   "seconds": 13.14
   },
   {
    "name": "s124_double",
@@ -3019,10 +3030,10 @@
     "tool_overload"
    ],
    "metrics": {
-    "one_way": 0.2115,
-    "tool_overload": 2.237
+    "one_way": 0.2105,
+    "tool_overload": 1.814
    },
-   "check_seconds": 1.77,
+   "check_seconds": 2.67,
    "loop": {
     "fixes": [
      {
@@ -3034,22 +3045,21 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 5
+      "ports": 4
      }
     ],
     "after": {
      "s124_double-port1": [],
      "s124_double-port2": [],
      "s124_double-port3": [],
-     "s124_double-port4": [],
-     "s124_double-port5": []
+     "s124_double-port4": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 5
+    "tool_ports_after": 4
    },
-   "seconds": 14.82
+   "seconds": 18.38
   },
   {
    "name": "s125_double",
@@ -3062,10 +3072,10 @@
     "one_way"
    ],
    "metrics": {
-    "duplicates": 0.1467,
-    "one_way": 0.6667
+    "duplicates": 0.1642,
+    "one_way": 0.6855
    },
-   "check_seconds": 1.65,
+   "check_seconds": 1.55,
    "loop": {
     "fixes": [
      {
@@ -3087,7 +3097,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.5
+   "seconds": 3.3
   },
   {
    "name": "s126_double",
@@ -3100,10 +3110,10 @@
     "tool_overload"
    ],
    "metrics": {
-    "missing_vlan": 1.0,
-    "tool_overload": 1.468
+    "missing_vlan": 0.5,
+    "tool_overload": 3.213
    },
-   "check_seconds": 1.75,
+   "check_seconds": 1.65,
    "loop": {
     "fixes": [
      {
@@ -3115,20 +3125,23 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
+      "ports": 6
      }
     ],
     "after": {
      "s126_double-port1": [],
      "s126_double-port2": [],
-     "s126_double-port3": []
+     "s126_double-port3": [],
+     "s126_double-port4": [],
+     "s126_double-port5": [],
+     "s126_double-port6": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "tool_ports_after": 6
    },
-   "seconds": 9.59
+   "seconds": 14.28
   },
   {
    "name": "s127_double",
@@ -3142,9 +3155,9 @@
    ],
    "metrics": {
     "missing_vlan": 0.5,
-    "tool_overload": 3.064
+    "tool_overload": 3.13
    },
-   "check_seconds": 2.63,
+   "check_seconds": 2.82,
    "loop": {
     "fixes": [
      {
@@ -3171,7 +3184,7 @@
     "result": "healthy",
     "tool_ports_after": 5
    },
-   "seconds": 18.49
+   "seconds": 19.82
   },
   {
    "name": "s128_double",
@@ -3184,10 +3197,10 @@
     "missing_vlan"
    ],
    "metrics": {
-    "encrypted_share": 0.9473,
+    "encrypted_share": 0.9391,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.67,
+   "check_seconds": 1.7,
    "loop": {
     "fixes": [
      {
@@ -3211,7 +3224,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.56
+   "seconds": 3.48
   },
   {
    "name": "s129_double",
@@ -3224,10 +3237,10 @@
     "packet_drops"
    ],
    "metrics": {
-    "encrypted_share": 0.934,
-    "packet_drops": 0.0826
+    "encrypted_share": 0.6485,
+    "packet_drops": 0.0307
    },
-   "check_seconds": 1.3,
+   "check_seconds": 1.86,
    "loop": {
     "fixes": [
      {
@@ -3251,7 +3264,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.63
+   "seconds": 3.93
   },
   {
    "name": "s130_double",
@@ -3264,10 +3277,10 @@
     "tool_overload"
    ],
    "metrics": {
-    "packet_drops": 0.0996,
-    "tool_overload": 1.416
+    "packet_drops": 0.0206,
+    "tool_overload": 2.908
    },
-   "check_seconds": 1.26,
+   "check_seconds": 3.84,
    "loop": {
     "fixes": [
      {
@@ -3279,20 +3292,22 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
+      "ports": 5
      }
     ],
     "after": {
      "s130_double-port1": [],
      "s130_double-port2": [],
-     "s130_double-port3": []
+     "s130_double-port3": [],
+     "s130_double-port4": [],
+     "s130_double-port5": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 3
+    "tool_ports_after": 5
    },
-   "seconds": 6.59
+   "seconds": 22.58
   },
   {
    "name": "s131_double",
@@ -3305,10 +3320,10 @@
     "missing_vlan"
    ],
    "metrics": {
-    "encrypted_share": 0.9313,
+    "encrypted_share": 0.7971,
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.49,
+   "check_seconds": 1.52,
    "loop": {
     "fixes": [
      {
@@ -3332,7 +3347,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.87
+   "seconds": 3.16
   },
   {
    "name": "s132_double",
@@ -3346,9 +3361,9 @@
    ],
    "metrics": {
     "missing_vlan": 1.0,
-    "tool_overload": 1.702
+    "tool_overload": 1.679
    },
-   "check_seconds": 1.62,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [
      {
@@ -3360,21 +3375,20 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 4
+      "ports": 3
      }
     ],
     "after": {
      "s132_double-port1": [],
      "s132_double-port2": [],
-     "s132_double-port3": [],
-     "s132_double-port4": []
+     "s132_double-port3": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 4
+    "tool_ports_after": 3
    },
-   "seconds": 12.56
+   "seconds": 7.93
   },
   {
    "name": "s133_double",
@@ -3388,9 +3402,9 @@
    ],
    "metrics": {
     "missing_vlan": 1.0,
-    "tool_overload": 2.786
+    "tool_overload": 2.889
    },
-   "check_seconds": 1.47,
+   "check_seconds": 1.81,
    "loop": {
     "fixes": [
      {
@@ -3402,7 +3416,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 7
+      "ports": 6
      }
     ],
     "after": {
@@ -3411,15 +3425,14 @@
      "s133_double-port3": [],
      "s133_double-port4": [],
      "s133_double-port5": [],
-     "s133_double-port6": [],
-     "s133_double-port7": []
+     "s133_double-port6": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 7
+    "tool_ports_after": 6
    },
-   "seconds": 16.63
+   "seconds": 14.59
   },
   {
    "name": "s134_double",
@@ -3432,10 +3445,10 @@
     "packet_drops"
    ],
    "metrics": {
-    "one_way": 0.25,
-    "packet_drops": 0.0555
+    "one_way": 0.7431,
+    "packet_drops": 0.0227
    },
-   "check_seconds": 1.39,
+   "check_seconds": 1.52,
    "loop": {
     "fixes": [
      {
@@ -3457,7 +3470,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.87
+   "seconds": 2.82
   },
   {
    "name": "s135_double",
@@ -3473,7 +3486,7 @@
     "duplicates": 0.2424,
     "packet_drops": 0.0179
    },
-   "check_seconds": 1.3,
+   "check_seconds": 1.66,
    "loop": {
     "fixes": [
      {
@@ -3495,7 +3508,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.46
+   "seconds": 3.25
   },
   {
    "name": "s136_double",
@@ -3511,7 +3524,7 @@
     "duplicates": 0.08,
     "one_way": 0.6937
    },
-   "check_seconds": 1.31,
+   "check_seconds": 1.79,
    "loop": {
     "fixes": [
      {
@@ -3533,7 +3546,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.38
+   "seconds": 3.79
   },
   {
    "name": "s137_double",
@@ -3549,7 +3562,7 @@
     "encrypted_share": 0.947,
     "missing_vlan": 1.0
    },
-   "check_seconds": 1.24,
+   "check_seconds": 1.71,
    "loop": {
     "fixes": [
      {
@@ -3573,7 +3586,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.02
+   "seconds": 3.33
   },
   {
    "name": "s138_double",
@@ -3589,7 +3602,7 @@
     "encrypted_share": 0.942,
     "tool_overload": 1.349
    },
-   "check_seconds": 2.92,
+   "check_seconds": 2.31,
    "loop": {
     "fixes": [
      {
@@ -3617,7 +3630,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 2
    },
-   "seconds": 15.21
+   "seconds": 13.48
   },
   {
    "name": "s139_double",
@@ -3633,7 +3646,7 @@
     "packet_drops": 0.0543,
     "tool_overload": 3.335
    },
-   "check_seconds": 1.83,
+   "check_seconds": 1.49,
    "loop": {
     "fixes": [
      {
@@ -3662,7 +3675,7 @@
     "result": "healthy",
     "tool_ports_after": 7
    },
-   "seconds": 17.84
+   "seconds": 15.44
   },
   {
    "name": "s140_double",
@@ -3678,7 +3691,7 @@
     "one_way": 0.2121,
     "packet_drops": 0.0473
    },
-   "check_seconds": 1.78,
+   "check_seconds": 1.67,
    "loop": {
     "fixes": [
      {
@@ -3700,7 +3713,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.35
+   "seconds": 3.38
   },
   {
    "name": "s141_double",
@@ -3716,7 +3729,7 @@
     "missing_vlan": 1.0,
     "tool_overload": 2.164
    },
-   "check_seconds": 3.15,
+   "check_seconds": 3.27,
    "loop": {
     "fixes": [
      {
@@ -3742,7 +3755,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 18.16
+   "seconds": 20.29
   },
   {
    "name": "s142_double",
@@ -3758,7 +3771,7 @@
     "encrypted_share": 0.9435,
     "tool_overload": 2.995
    },
-   "check_seconds": 3.46,
+   "check_seconds": 2.87,
    "loop": {
     "fixes": [
      {
@@ -3795,7 +3808,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 5
    },
-   "seconds": 19.7
+   "seconds": 19.94
   },
   {
    "name": "s143_double",
@@ -3811,7 +3824,7 @@
     "missing_vlan": 0.5,
     "tool_overload": 1.526
    },
-   "check_seconds": 1.55,
+   "check_seconds": 1.72,
    "loop": {
     "fixes": [
      {
@@ -3836,7 +3849,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 7.73
+   "seconds": 8.1
   },
   {
    "name": "s144_double",
@@ -3852,7 +3865,7 @@
     "duplicates": 0.1977,
     "encrypted_share": 0.9181
    },
-   "check_seconds": 2.04,
+   "check_seconds": 2.19,
    "loop": {
     "fixes": [
      {
@@ -3876,7 +3889,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 4.03
+   "seconds": 3.75
   },
   {
    "name": "s145_double",
@@ -3892,7 +3905,7 @@
     "missing_vlan": 1.0,
     "packet_drops": 0.0177
    },
-   "check_seconds": 1.63,
+   "check_seconds": 1.58,
    "loop": {
     "fixes": [
      {
@@ -3914,7 +3927,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.25
+   "seconds": 3.38
   },
   {
    "name": "s146_double",
@@ -3930,7 +3943,7 @@
     "duplicates": 0.0888,
     "tool_overload": 3.104
    },
-   "check_seconds": 1.6,
+   "check_seconds": 1.65,
    "loop": {
     "fixes": [
      {
@@ -3960,7 +3973,7 @@
     "result": "healthy",
     "tool_ports_after": 8
    },
-   "seconds": 23.43
+   "seconds": 22.94
   },
   {
    "name": "s147_double",
@@ -3976,7 +3989,7 @@
     "encrypted_share": 0.6366,
     "tool_overload": 1.962
    },
-   "check_seconds": 2.0,
+   "check_seconds": 1.89,
    "loop": {
     "fixes": [
      {
@@ -4008,7 +4021,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 4
    },
-   "seconds": 13.13
+   "seconds": 12.37
   },
   {
    "name": "s148_double",
@@ -4024,7 +4037,7 @@
     "packet_drops": 0.0192,
     "tool_overload": 2.466
    },
-   "check_seconds": 3.49,
+   "check_seconds": 3.83,
    "loop": {
     "fixes": [
      {
@@ -4050,7 +4063,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 19.32
+   "seconds": 21.46
   },
   {
    "name": "s149_double",
@@ -4066,7 +4079,7 @@
     "one_way": 0.7817,
     "tool_overload": 1.428
    },
-   "check_seconds": 1.51,
+   "check_seconds": 1.92,
    "loop": {
     "fixes": [
      {
@@ -4097,7 +4110,7 @@
     "result": "healthy",
     "tool_ports_after": 9
    },
-   "seconds": 20.08
+   "seconds": 21.52
   },
   {
    "name": "s150_double",
@@ -4113,7 +4126,7 @@
     "missing_vlan": 0.5,
     "tool_overload": 1.626
    },
-   "check_seconds": 3.7,
+   "check_seconds": 3.44,
    "loop": {
     "fixes": [
      {
@@ -4138,7 +4151,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 19.48
+   "seconds": 20.01
   },
   {
    "name": "s151_double",
@@ -4154,7 +4167,7 @@
     "duplicates": 0.0891,
     "packet_drops": 0.0179
    },
-   "check_seconds": 1.49,
+   "check_seconds": 1.63,
    "loop": {
     "fixes": [
      {
@@ -4176,7 +4189,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.39
+   "seconds": 3.38
   },
   {
    "name": "s152_double",
@@ -4192,7 +4205,7 @@
     "packet_drops": 0.0673,
     "tool_overload": 1.46
    },
-   "check_seconds": 1.58,
+   "check_seconds": 1.6,
    "loop": {
     "fixes": [
      {
@@ -4218,7 +4231,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 12.02
+   "seconds": 10.52
   },
   {
    "name": "s153_double",
@@ -4234,7 +4247,7 @@
     "duplicates": 0.2319,
     "one_way": 0.4397
    },
-   "check_seconds": 1.34,
+   "check_seconds": 1.42,
    "loop": {
     "fixes": [
      {
@@ -4256,7 +4269,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.77
+   "seconds": 2.61
   },
   {
    "name": "s154_double",
@@ -4272,7 +4285,7 @@
     "missing_vlan": 0.5,
     "tool_overload": 1.659
    },
-   "check_seconds": 2.3,
+   "check_seconds": 2.0,
    "loop": {
     "fixes": [
      {
@@ -4297,7 +4310,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 10.92
+   "seconds": 9.9
   },
   {
    "name": "s155_double",
@@ -4313,7 +4326,7 @@
     "one_way": 0.1897,
     "tool_overload": 2.024
    },
-   "check_seconds": 2.27,
+   "check_seconds": 2.41,
    "loop": {
     "fixes": [
      {
@@ -4339,7 +4352,7 @@
     "result": "healthy",
     "tool_ports_after": 4
    },
-   "seconds": 15.73
+   "seconds": 16.11
   },
   {
    "name": "s156_double",
@@ -4355,7 +4368,7 @@
     "duplicates": 0.0907,
     "missing_vlan": 0.5
    },
-   "check_seconds": 2.0,
+   "check_seconds": 1.61,
    "loop": {
     "fixes": [
      {
@@ -4377,7 +4390,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.97
+   "seconds": 3.31
   },
   {
    "name": "s157_double",
@@ -4393,7 +4406,7 @@
     "duplicates": 0.1243,
     "tool_overload": 3.019
    },
-   "check_seconds": 1.72,
+   "check_seconds": 1.81,
    "loop": {
     "fixes": [
      {
@@ -4421,7 +4434,7 @@
     "result": "healthy",
     "tool_ports_after": 6
    },
-   "seconds": 13.5
+   "seconds": 13.28
   },
   {
    "name": "s158_double",
@@ -4437,7 +4450,7 @@
     "encrypted_share": 0.6601,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.52,
+   "check_seconds": 1.31,
    "loop": {
     "fixes": [
      {
@@ -4461,7 +4474,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.25
+   "seconds": 2.98
   },
   {
    "name": "s159_double",
@@ -4477,7 +4490,7 @@
     "duplicates": 0.2629,
     "encrypted_share": 0.9172
    },
-   "check_seconds": 2.05,
+   "check_seconds": 1.85,
    "loop": {
     "fixes": [
      {
@@ -4501,7 +4514,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.58
+   "seconds": 3.41
   },
   {
    "name": "s160_double",
@@ -4539,7 +4552,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.23
+   "seconds": 3.27
   },
   {
    "name": "s161_triple",
@@ -4558,7 +4571,7 @@
     "encrypted_share": 0.9291,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.74,
+   "check_seconds": 1.62,
    "loop": {
     "fixes": [
      {
@@ -4587,7 +4600,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.87
+   "seconds": 3.2
   },
   {
    "name": "s162_triple",
@@ -4606,7 +4619,7 @@
     "missing_vlan": 0.5,
     "packet_drops": 0.0593
    },
-   "check_seconds": 1.68,
+   "check_seconds": 1.63,
    "loop": {
     "fixes": [
      {
@@ -4635,7 +4648,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.45
+   "seconds": 3.39
   },
   {
    "name": "s163_triple",
@@ -4650,11 +4663,11 @@
     "packet_drops"
    ],
    "metrics": {
-    "duplicates": 0.0747,
-    "one_way": 0.3831,
-    "packet_drops": 0.0439
+    "duplicates": 0.178,
+    "one_way": 0.1727,
+    "packet_drops": 0.0457
    },
-   "check_seconds": 1.33,
+   "check_seconds": 1.65,
    "loop": {
     "fixes": [
      {
@@ -4681,7 +4694,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 2.81
+   "seconds": 3.45
   },
   {
    "name": "s164_triple",
@@ -4696,11 +4709,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.941,
-    "missing_vlan": 0.5,
-    "tool_overload": 1.292
+    "encrypted_share": 0.7571,
+    "missing_vlan": 1.0,
+    "tool_overload": 3.527
    },
-   "check_seconds": 2.85,
+   "check_seconds": 1.52,
    "loop": {
     "fixes": [
      {
@@ -4712,7 +4725,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 2
+      "ports": 6
      },
      {
       "fault": "encrypted_share",
@@ -4726,14 +4739,26 @@
      ],
      "s164_triple-port2": [
       "encrypted_share"
+     ],
+     "s164_triple-port3": [
+      "encrypted_share"
+     ],
+     "s164_triple-port4": [
+      "encrypted_share"
+     ],
+     "s164_triple-port5": [
+      "encrypted_share"
+     ],
+     "s164_triple-port6": [
+      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 2
+    "tool_ports_after": 6
    },
-   "seconds": 15.06
+   "seconds": 11.54
   },
   {
    "name": "s165_triple",
@@ -4748,11 +4773,11 @@
     "one_way"
    ],
    "metrics": {
-    "encrypted_share": 0.6658,
+    "encrypted_share": 0.7575,
     "missing_vlan": 0.5,
-    "one_way": 0.5896
+    "one_way": 0.2051
    },
-   "check_seconds": 1.67,
+   "check_seconds": 1.62,
    "loop": {
     "fixes": [
      {
@@ -4781,7 +4806,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.58
+   "seconds": 3.34
   },
   {
    "name": "s166_triple",
@@ -4796,11 +4821,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.6658,
-    "one_way": 0.4865,
-    "tool_overload": 1.801
+    "encrypted_share": 0.6691,
+    "one_way": 0.6303,
+    "tool_overload": 2.057
    },
-   "check_seconds": 1.63,
+   "check_seconds": 1.54,
    "loop": {
     "fixes": [
      {
@@ -4812,7 +4837,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 6
+      "ports": 9
      },
      {
       "fault": "encrypted_share",
@@ -4833,19 +4858,24 @@
      "s166_triple-port4": [
       "encrypted_share"
      ],
-     "s166_triple-port5": [
+     "s166_triple-port5": [],
+     "s166_triple-port6": [],
+     "s166_triple-port7": [
       "encrypted_share"
      ],
-     "s166_triple-port6": [
+     "s166_triple-port8": [
+      "encrypted_share"
+     ],
+     "s166_triple-port9": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 6
+    "tool_ports_after": 9
    },
-   "seconds": 13.85
+   "seconds": 22.49
   },
   {
    "name": "s167_triple",
@@ -4860,11 +4890,11 @@
     "packet_drops"
    ],
    "metrics": {
-    "encrypted_share": 0.9445,
+    "encrypted_share": 0.7071,
     "missing_vlan": 1.0,
-    "packet_drops": 0.0669
+    "packet_drops": 0.0271
    },
-   "check_seconds": 2.18,
+   "check_seconds": 1.99,
    "loop": {
     "fixes": [
      {
@@ -4893,7 +4923,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 4.34
+   "seconds": 3.74
   },
   {
    "name": "s168_triple",
@@ -4908,11 +4938,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.1738,
-    "one_way": 0.2057,
-    "tool_overload": 2.089
+    "duplicates": 0.2781,
+    "one_way": 0.6616,
+    "tool_overload": 1.319
    },
-   "check_seconds": 1.59,
+   "check_seconds": 3.03,
    "loop": {
     "fixes": [
      {
@@ -4945,7 +4975,7 @@
     "result": "healthy",
     "tool_ports_after": 6
    },
-   "seconds": 17.07
+   "seconds": 28.32
   },
   {
    "name": "s169_triple",
@@ -4960,11 +4990,11 @@
     "packet_drops"
    ],
    "metrics": {
-    "encrypted_share": 0.9018,
-    "one_way": 0.4123,
-    "packet_drops": 0.0367
+    "encrypted_share": 0.8328,
+    "one_way": 0.5714,
+    "packet_drops": 0.0325
    },
-   "check_seconds": 1.52,
+   "check_seconds": 1.23,
    "loop": {
     "fixes": [
      {
@@ -4993,7 +5023,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.18
+   "seconds": 2.63
   },
   {
    "name": "s170_triple",
@@ -5008,11 +5038,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.6554,
-    "missing_vlan": 1.0,
-    "tool_overload": 2.774
+    "encrypted_share": 0.9474,
+    "missing_vlan": 0.5,
+    "tool_overload": 2.473
    },
-   "check_seconds": 1.74,
+   "check_seconds": 3.02,
    "loop": {
     "fixes": [
      {
@@ -5024,7 +5054,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 5
+      "ports": 4
      },
      {
       "fault": "encrypted_share",
@@ -5033,7 +5063,9 @@
      }
     ],
     "after": {
-     "s170_triple-port1": [],
+     "s170_triple-port1": [
+      "encrypted_share"
+     ],
      "s170_triple-port2": [
       "encrypted_share"
      ],
@@ -5042,17 +5074,14 @@
      ],
      "s170_triple-port4": [
       "encrypted_share"
-     ],
-     "s170_triple-port5": [
-      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 5
+    "tool_ports_after": 4
    },
-   "seconds": 13.64
+   "seconds": 17.51
   },
   {
    "name": "s171_triple",
@@ -5067,11 +5096,11 @@
     "one_way"
    ],
    "metrics": {
-    "encrypted_share": 0.7515,
-    "missing_vlan": 1.0,
-    "one_way": 0.7632
+    "encrypted_share": 0.6963,
+    "missing_vlan": 0.5,
+    "one_way": 0.201
    },
-   "check_seconds": 1.26,
+   "check_seconds": 2.17,
    "loop": {
     "fixes": [
      {
@@ -5100,7 +5129,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.7
+   "seconds": 4.05
   },
   {
    "name": "s172_triple",
@@ -5115,11 +5144,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.0859,
-    "encrypted_share": 0.799,
-    "tool_overload": 3.09
+    "duplicates": 0.2599,
+    "encrypted_share": 0.9305,
+    "tool_overload": 3.408
    },
-   "check_seconds": 1.71,
+   "check_seconds": 3.54,
    "loop": {
     "fixes": [
      {
@@ -5131,7 +5160,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 9
+      "ports": 6
      },
      {
       "fault": "encrypted_share",
@@ -5157,23 +5186,14 @@
      ],
      "s172_triple-port6": [
       "encrypted_share"
-     ],
-     "s172_triple-port7": [
-      "encrypted_share"
-     ],
-     "s172_triple-port8": [
-      "encrypted_share"
-     ],
-     "s172_triple-port9": [
-      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 9
+    "tool_ports_after": 6
    },
-   "seconds": 26.62
+   "seconds": 30.02
   },
   {
    "name": "s173_triple",
@@ -5188,11 +5208,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.1096,
-    "encrypted_share": 0.9334,
-    "tool_overload": 1.294
+    "duplicates": 0.1849,
+    "encrypted_share": 0.864,
+    "tool_overload": 1.784
    },
-   "check_seconds": 3.17,
+   "check_seconds": 1.97,
    "loop": {
     "fixes": [
      {
@@ -5204,7 +5224,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 2
+      "ports": 3
      },
      {
       "fault": "encrypted_share",
@@ -5218,14 +5238,17 @@
      ],
      "s173_triple-port2": [
       "encrypted_share"
+     ],
+     "s173_triple-port3": [
+      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 2
+    "tool_ports_after": 3
    },
-   "seconds": 14.34
+   "seconds": 8.64
   },
   {
    "name": "s174_triple",
@@ -5240,11 +5263,11 @@
     "packet_drops"
    ],
    "metrics": {
-    "duplicates": 0.0893,
-    "missing_vlan": 1.0,
-    "packet_drops": 0.0707
+    "duplicates": 0.1954,
+    "missing_vlan": 0.5,
+    "packet_drops": 0.03
    },
-   "check_seconds": 1.62,
+   "check_seconds": 1.82,
    "loop": {
     "fixes": [
      {
@@ -5271,7 +5294,7 @@
     "result": "healthy",
     "tool_ports_after": 1
    },
-   "seconds": 3.36
+   "seconds": 3.85
   },
   {
    "name": "s175_triple",
@@ -5286,11 +5309,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.1699,
-    "encrypted_share": 0.9336,
-    "tool_overload": 2.297
+    "duplicates": 0.0845,
+    "encrypted_share": 0.9445,
+    "tool_overload": 3.402
    },
-   "check_seconds": 4.06,
+   "check_seconds": 2.39,
    "loop": {
     "fixes": [
      {
@@ -5302,7 +5325,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 4
+      "ports": 5
      },
      {
       "fault": "encrypted_share",
@@ -5322,14 +5345,17 @@
      ],
      "s175_triple-port4": [
       "encrypted_share"
+     ],
+     "s175_triple-port5": [
+      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 4
+    "tool_ports_after": 5
    },
-   "seconds": 20.83
+   "seconds": 17.49
   },
   {
    "name": "s176_triple",
@@ -5345,10 +5371,10 @@
    ],
    "metrics": {
     "missing_vlan": 0.5,
-    "packet_drops": 0.0439,
-    "tool_overload": 3.712
+    "packet_drops": 0.0488,
+    "tool_overload": 1.281
    },
-   "check_seconds": 1.9,
+   "check_seconds": 3.1,
    "loop": {
     "fixes": [
      {
@@ -5365,25 +5391,20 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 8
+      "ports": 3
      }
     ],
     "after": {
      "s176_triple-port1": [],
      "s176_triple-port2": [],
-     "s176_triple-port3": [],
-     "s176_triple-port4": [],
-     "s176_triple-port5": [],
-     "s176_triple-port6": [],
-     "s176_triple-port7": [],
-     "s176_triple-port8": []
+     "s176_triple-port3": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 8
+    "tool_ports_after": 3
    },
-   "seconds": 21.24
+   "seconds": 19.34
   },
   {
    "name": "s177_triple",
@@ -5398,11 +5419,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.0739,
-    "packet_drops": 0.0424,
-    "tool_overload": 1.651
+    "duplicates": 0.0842,
+    "packet_drops": 0.0828,
+    "tool_overload": 1.437
    },
-   "check_seconds": 2.74,
+   "check_seconds": 1.62,
    "loop": {
     "fixes": [
      {
@@ -5432,7 +5453,7 @@
     "result": "healthy",
     "tool_ports_after": 3
    },
-   "seconds": 16.45
+   "seconds": 8.7
   },
   {
    "name": "s178_triple",
@@ -5447,11 +5468,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.9391,
-    "one_way": 0.1745,
-    "tool_overload": 2.439
+    "encrypted_share": 0.9351,
+    "one_way": 0.1906,
+    "tool_overload": 2.079
    },
-   "check_seconds": 3.0,
+   "check_seconds": 3.2,
    "loop": {
     "fixes": [
      {
@@ -5463,7 +5484,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 5
+      "ports": 4
      },
      {
       "fault": "encrypted_share",
@@ -5483,15 +5504,12 @@
      ],
      "s178_triple-port4": [
       "encrypted_share"
-     ],
-     "s178_triple-port5": [
-      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 5
+    "tool_ports_after": 4
    },
    "seconds": 18.92
   },
@@ -5508,11 +5526,11 @@
     "one_way"
    ],
    "metrics": {
-    "encrypted_share": 0.8605,
+    "encrypted_share": 0.9091,
     "missing_vlan": 0.5,
-    "one_way": 0.4404
+    "one_way": 0.4041
    },
-   "check_seconds": 1.56,
+   "check_seconds": 2.08,
    "loop": {
     "fixes": [
      {
@@ -5541,7 +5559,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 2.89
+   "seconds": 4.23
   },
   {
    "name": "s180_triple",
@@ -5556,11 +5574,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.9427,
-    "packet_drops": 0.027,
-    "tool_overload": 1.673
+    "encrypted_share": 0.7283,
+    "packet_drops": 0.0405,
+    "tool_overload": 3.069
    },
-   "check_seconds": 2.93,
+   "check_seconds": 1.51,
    "loop": {
     "fixes": [
      {
@@ -5572,7 +5590,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 3
+      "ports": 7
      },
      {
       "fault": "encrypted_share",
@@ -5587,16 +5605,26 @@
      "s180_triple-port2": [
       "encrypted_share"
      ],
-     "s180_triple-port3": [
+     "s180_triple-port3": [],
+     "s180_triple-port4": [
+      "encrypted_share"
+     ],
+     "s180_triple-port5": [
+      "encrypted_share"
+     ],
+     "s180_triple-port6": [
+      "encrypted_share"
+     ],
+     "s180_triple-port7": [
       "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 3
+    "tool_ports_after": 7
    },
-   "seconds": 17.55
+   "seconds": 17.27
   },
   {
    "name": "s181_triple",
@@ -5611,11 +5639,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "encrypted_share": 0.7662,
-    "one_way": 0.2866,
-    "tool_overload": 3.598
+    "encrypted_share": 0.7075,
+    "one_way": 0.4667,
+    "tool_overload": 2.744
    },
-   "check_seconds": 1.46,
+   "check_seconds": 1.42,
    "loop": {
     "fixes": [
      {
@@ -5627,7 +5655,7 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 9
+      "ports": 11
      },
      {
       "fault": "encrypted_share",
@@ -5662,14 +5690,20 @@
      ],
      "s181_triple-port9": [
       "encrypted_share"
+     ],
+     "s181_triple-port10": [
+      "encrypted_share"
+     ],
+     "s181_triple-port11": [
+      "encrypted_share"
      ]
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy except advice items",
-    "tool_ports_after": 9
+    "tool_ports_after": 11
    },
-   "seconds": 23.07
+   "seconds": 29.8
   },
   {
    "name": "s182_triple",
@@ -5684,11 +5718,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "duplicates": 0.1627,
-    "missing_vlan": 1.0,
-    "tool_overload": 2.436
+    "duplicates": 0.2094,
+    "missing_vlan": 0.5,
+    "tool_overload": 3.143
    },
-   "check_seconds": 3.74,
+   "check_seconds": 3.63,
    "loop": {
     "fixes": [
      {
@@ -5705,21 +5739,22 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 4
+      "ports": 5
      }
     ],
     "after": {
      "s182_triple-port1": [],
      "s182_triple-port2": [],
      "s182_triple-port3": [],
-     "s182_triple-port4": []
+     "s182_triple-port4": [],
+     "s182_triple-port5": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 4
+    "tool_ports_after": 5
    },
-   "seconds": 21.33
+   "seconds": 20.6
   },
   {
    "name": "s183_triple",
@@ -5734,11 +5769,11 @@
     "one_way"
    ],
    "metrics": {
-    "duplicates": 0.0944,
-    "encrypted_share": 0.9137,
-    "one_way": 0.2333
+    "duplicates": 0.2132,
+    "encrypted_share": 0.6345,
+    "one_way": 0.4587
    },
-   "check_seconds": 1.48,
+   "check_seconds": 1.34,
    "loop": {
     "fixes": [
      {
@@ -5767,7 +5802,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.2
+   "seconds": 3.0
   },
   {
    "name": "s184_triple",
@@ -5782,11 +5817,11 @@
     "missing_vlan"
    ],
    "metrics": {
-    "duplicates": 0.183,
-    "encrypted_share": 0.9208,
+    "duplicates": 0.0803,
+    "encrypted_share": 0.7417,
     "missing_vlan": 0.5
    },
-   "check_seconds": 1.63,
+   "check_seconds": 1.97,
    "loop": {
     "fixes": [
      {
@@ -5815,7 +5850,7 @@
     "result": "healthy except advice items",
     "tool_ports_after": 1
    },
-   "seconds": 3.25
+   "seconds": 3.65
   },
   {
    "name": "s185_triple",
@@ -5830,11 +5865,11 @@
     "tool_overload"
    ],
    "metrics": {
-    "missing_vlan": 1.0,
-    "one_way": 0.1746,
-    "tool_overload": 1.529
+    "missing_vlan": 0.5,
+    "one_way": 0.2095,
+    "tool_overload": 3.579
    },
-   "check_seconds": 1.56,
+   "check_seconds": 1.98,
    "loop": {
     "fixes": [
      {
@@ -5851,84 +5886,30 @@
       "fault": "tool_overload",
       "action": "load_balance",
       "status": "verified fixed",
-      "ports": 4
+      "ports": 10
      }
     ],
     "after": {
      "s185_triple-port1": [],
      "s185_triple-port2": [],
      "s185_triple-port3": [],
-     "s185_triple-port4": []
+     "s185_triple-port4": [],
+     "s185_triple-port5": [],
+     "s185_triple-port6": [],
+     "s185_triple-port7": [],
+     "s185_triple-port8": [],
+     "s185_triple-port9": [],
+     "s185_triple-port10": []
     },
     "new_faults": [],
     "unresolved": [],
     "result": "healthy",
-    "tool_ports_after": 4
+    "tool_ports_after": 10
    },
-   "seconds": 11.19
+   "seconds": 29.01
   },
   {
    "name": "s186_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.32,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.32
-  },
-  {
-   "name": "s187_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.43,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.43
-  },
-  {
-   "name": "s188_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.72,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.72
-  },
-  {
-   "name": "s189_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.75,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.75
-  },
-  {
-   "name": "s190_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.45,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.45
-  },
-  {
-   "name": "s191_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -5940,67 +5921,91 @@
    "seconds": 1.51
   },
   {
-   "name": "s192_tool_aware",
+   "name": "s187_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.59,
+   "check_seconds": 0.92,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.59
+   "seconds": 0.92
+  },
+  {
+   "name": "s188_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.38,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.38
+  },
+  {
+   "name": "s189_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.04,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.04
+  },
+  {
+   "name": "s190_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.37,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.37
+  },
+  {
+   "name": "s191_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.35,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.35
+  },
+  {
+   "name": "s192_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.53,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.53
   },
   {
    "name": "s193_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.45,
+   "check_seconds": 1.37,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.45
+   "seconds": 1.37
   },
   {
    "name": "s194_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.41,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.41
-  },
-  {
-   "name": "s195_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.52,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.52
-  },
-  {
-   "name": "s196_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.78,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.78
-  },
-  {
-   "name": "s197_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -6012,40 +6017,76 @@
    "seconds": 1.44
   },
   {
-   "name": "s198_tool_aware",
+   "name": "s195_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.41,
+   "check_seconds": 1.2,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.41
+   "seconds": 1.2
+  },
+  {
+   "name": "s196_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.2,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.2
+  },
+  {
+   "name": "s197_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.67,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.67
+  },
+  {
+   "name": "s198_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.13,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.13
   },
   {
    "name": "s199_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.8,
+   "check_seconds": 1.17,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.8
+   "seconds": 1.17
   },
   {
    "name": "s200_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.39,
+   "check_seconds": 1.06,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.39
+   "seconds": 1.06
   }
  ]
 }
