@@ -1,0 +1,7651 @@
+{
+ "version": 1,
+ "seed": 11,
+ "diagrams": [
+  {
+   "name": "d01_clean_tb",
+   "style": "clean_tb",
+   "file": "d01_clean_tb.png",
+   "size": [
+    852,
+    740
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      551.4,
+      28.8,
+      751.5,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      520.1,
+      150.1,
+      652.1,
+      200.8
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Perimeter FW PFW-2",
+     "type": "firewall",
+     "box": [
+      652.1,
+      230.1,
+      784.1,
+      280.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      677.5,
+      434.1,
+      758.8,
+      482.1
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      690.1,
+      555.5,
+      823.5,
+      603.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      697.5,
+      663.5,
+      816.1,
+      711.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      429.5,
+      434.1,
+      564.1,
+      482.1
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      538.1,
+      310.1,
+      634.1,
+      360.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder (primary)",
+     "type": "security_tool",
+     "box": [
+      28.8,
+      555.5,
+      279.5,
+      603.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      322.1,
+      555.5,
+      418.1,
+      603.5
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      460.8,
+      555.5,
+      532.8,
+      603.5
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      575.5,
+      555.5,
+      647.5,
+      603.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder (primary)",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "IPS",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d02_clean_tb",
+   "style": "clean_tb",
+   "file": "d02_clean_tb.png",
+   "size": [
+    720,
+    931
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      69.4,
+      28.8,
+      269.5,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      103.5,
+      260.8,
+      235.5,
+      311.5
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      108.1,
+      136.8,
+      230.8,
+      187.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      104.1,
+      371.5,
+      234.8,
+      422.1
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      101.5,
+      495.5,
+      237.5,
+      543.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      70.1,
+      603.5,
+      218.1,
+      654.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      261.5,
+      727.5,
+      408.1,
+      778.1
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Floor 1 Switch)",
+     "type": "span",
+     "box": [
+      260.8,
+      603.5,
+      408.8,
+      654.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IPS (primary)",
+     "type": "security_tool",
+     "box": [
+      28.8,
+      852.8,
+      158.1,
+      900.8
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "SIEM SIEM-01",
+     "type": "security_tool",
+     "box": [
+      200.8,
+      851.5,
+      292.8,
+      902.1
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      336.1,
+      852.8,
+      512.1,
+      900.8
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "DLP (primary)",
+     "type": "security_tool",
+     "box": [
+      554.8,
+      852.8,
+      690.8,
+      900.8
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "span1",
+     "label": "Mirror port (Floor 1 Switch)",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror (RX only)",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IPS (primary)",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "SIEM SIEM-01",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "Forensics Recorder",
+     "speed": "40G"
+    },
+    {
+     "id": "tool3",
+     "label": "DLP (primary)",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d03_clean_tb",
+   "style": "clean_tb",
+   "file": "d03_clean_tb.png",
+   "size": [
+    675,
+    1210
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      236.6,
+      28.8,
+      357.0,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      252.8,
+      258.1,
+      340.8,
+      308.8
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      224.8,
+      136.8,
+      368.8,
+      184.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      344.8,
+      492.8,
+      475.5,
+      543.5
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      188.8,
+      616.8,
+      322.1,
+      667.5
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      364.8,
+      616.8,
+      503.5,
+      667.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      305.5,
+      742.1,
+      424.1,
+      790.1
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Server Switch SRV-SW-02",
+     "type": "switch",
+     "box": [
+      128.1,
+      740.8,
+      262.8,
+      791.5
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      28.8,
+      899.5,
+      148.8,
+      947.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker NPB-01",
+     "type": "packet_broker",
+     "box": [
+      406.8,
+      1008.8,
+      541.5,
+      1059.5
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      362.1,
+      382.1,
+      458.1,
+      432.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      409.5,
+      820.8,
+      554.8,
+      868.8
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN-2 [mirror: inbound only]",
+     "type": "span",
+     "box": [
+      192.1,
+      898.1,
+      388.1,
+      948.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "SIEM (primary)",
+     "type": "security_tool",
+     "box": [
+      328.1,
+      1132.8,
+      470.8,
+      1180.8
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      514.1,
+      1132.8,
+      586.1,
+      1180.8
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "tx_only",
+     "wording": "TX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "RX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN-2 [mirror: inbound only]",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "SIEM (primary)",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "IPS",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d04_clean_tb",
+   "style": "clean_tb",
+   "file": "d04_clean_tb.png",
+   "size": [
+    741,
+    820
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      463.5,
+      28.8,
+      539.5,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      435.5,
+      150.1,
+      567.5,
+      200.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      212.1,
+      371.5,
+      342.8,
+      422.1
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "DC Core 2",
+     "type": "switch",
+     "box": [
+      483.5,
+      496.8,
+      594.1,
+      544.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Server Switch SRV-SW-01",
+     "type": "switch",
+     "box": [
+      28.8,
+      495.5,
+      163.5,
+      546.1
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "OT Network (PLCs)",
+     "type": "zone",
+     "box": [
+      35.5,
+      619.5,
+      156.8,
+      670.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      344.1,
+      619.5,
+      490.8,
+      670.1
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      369.5,
+      260.8,
+      465.5,
+      311.5
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      206.1,
+      496.8,
+      351.5,
+      544.8
+     ]
+    },
+    {
+     "id": "tap2",
+     "label": "TAP-02 (10G fiber)",
+     "type": "tap",
+     "box": [
+      532.8,
+      371.5,
+      643.5,
+      422.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      190.8,
+      743.5,
+      262.8,
+      791.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      305.5,
+      743.5,
+      401.5,
+      791.5
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      444.1,
+      743.5,
+      516.1,
+      791.5
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM (primary)",
+     "type": "security_tool",
+     "box": [
+      559.5,
+      743.5,
+      702.1,
+      791.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "tx_only",
+     "wording": "mirror: outbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "tap2",
+     "label": "TAP-02 (10G fiber)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror (both)",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "DLP",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM (primary)",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d05_clean_lr",
+   "style": "clean_lr",
+   "file": "d05_clean_lr.png",
+   "size": [
+    1600,
+    423
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      19.9,
+      244.4,
+      158.0,
+      277.6
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      459.9,
+      212.2,
+      520.6,
+      247.2
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "NGFW-EDGE-2",
+     "type": "firewall",
+     "box": [
+      338.4,
+      277.6,
+      439.6,
+      310.7
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      199.4,
+      243.5,
+      284.1,
+      278.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      667.0,
+      212.2,
+      741.5,
+      245.4
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Distribution SW 1",
+     "type": "switch",
+     "box": [
+      782.9,
+      47.5,
+      892.4,
+      80.6
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      1040.2,
+      19.9,
+      1142.3,
+      54.9
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      790.7,
+      147.8,
+      884.6,
+      180.9
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      1035.1,
+      84.3,
+      1147.4,
+      117.4
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Server Switch SRV-SW-03",
+     "type": "switch",
+     "box": [
+      791.2,
+      211.3,
+      884.2,
+      246.3
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      1050.7,
+      211.3,
+      1131.7,
+      246.3
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Network Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      1256.0,
+      274.8,
+      1395.9,
+      307.9
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      540.9,
+      287.7,
+      607.1,
+      322.7
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DMZ Switch 2)",
+     "type": "span",
+     "box": [
+      1040.2,
+      146.9,
+      1142.3,
+      181.9
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN session 2 [RX only]",
+     "type": "span",
+     "box": [
+      912.7,
+      273.9,
+      1014.9,
+      308.9
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      1494.3,
+      180.9,
+      1544.0,
+      214.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      1458.5,
+      243.5,
+      1579.9,
+      276.7
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      1494.3,
+      306.1,
+      1544.0,
+      339.2
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "IPS IPS-01",
+     "type": "security_tool",
+     "box": [
+      1492.0,
+      368.7,
+      1546.3,
+      403.7
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DMZ Switch 2)",
+     "kind": "span",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN session 2 [RX only]",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "RX only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder",
+     "speed": "40G"
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "IPS IPS-01",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d06_clean_lr",
+   "style": "clean_lr",
+   "file": "d06_clean_lr.png",
+   "size": [
+    1600,
+    504
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      28.6,
+      293.6,
+      227.5,
+      341.3
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      305.7,
+      293.6,
+      447.5,
+      341.3
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      648.9,
+      230.0,
+      729.7,
+      277.7
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      850.9,
+      129.3,
+      926.5,
+      177.0
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      1036.4,
+      28.6,
+      1154.4,
+      76.3
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Distribution SW 2",
+     "type": "switch",
+     "box": [
+      807.9,
+      230.0,
+      969.5,
+      277.7
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      1035.8,
+      230.0,
+      1155.0,
+      277.7
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "NPB-01",
+     "type": "packet_broker",
+     "box": [
+      1221.3,
+      293.6,
+      1307.4,
+      341.3
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "type": "tap",
+     "box": [
+      507.1,
+      293.6,
+      589.2,
+      341.3
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on Leaf-1 [ingress only]",
+     "type": "span",
+     "box": [
+      1029.2,
+      119.4,
+      1161.7,
+      187.0
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      1396.2,
+      155.8,
+      1571.1,
+      203.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR NDR-01",
+     "type": "security_tool",
+     "box": [
+      1439.9,
+      245.9,
+      1527.4,
+      296.3
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      1447.9,
+      338.7,
+      1519.4,
+      386.4
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      1436.0,
+      428.8,
+      1531.4,
+      476.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on Leaf-1 [ingress only]",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "ingress only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR NDR-01",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "DLP",
+     "speed": "25G"
+    },
+    {
+     "id": "tool3",
+     "label": "Sandbox",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d07_clean_lr",
+   "style": "clean_lr",
+   "file": "d07_clean_lr.png",
+   "size": [
+    1600,
+    377
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      25.7,
+      150.5,
+      204.1,
+      193.2
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      281.3,
+      107.7,
+      359.7,
+      152.8
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Firewall FW-02",
+     "type": "firewall",
+     "box": [
+      281.3,
+      190.9,
+      359.7,
+      236.0
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      437.0,
+      150.5,
+      533.3,
+      193.2
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      611.7,
+      56.6,
+      732.9,
+      99.4
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      800.1,
+      25.7,
+      907.0,
+      68.5
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Access Switch ACC-SW-02",
+     "type": "switch",
+     "box": [
+      610.5,
+      149.3,
+      734.1,
+      194.4
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      809.0,
+      106.5,
+      898.1,
+      149.3
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Server Switch SRV-SW-03",
+     "type": "switch",
+     "box": [
+      612.3,
+      257.4,
+      732.3,
+      302.6
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      787.6,
+      270.5,
+      919.5,
+      315.7
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Network Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      1089.5,
+      188.5,
+      1270.1,
+      231.3
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on ACC-SW-02",
+     "type": "span",
+     "box": [
+      788.2,
+      187.3,
+      918.9,
+      232.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IDS IDS-01",
+     "type": "security_tool",
+     "box": [
+      1427.0,
+      64.9,
+      1498.3,
+      110.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder (primary)",
+     "type": "security_tool",
+     "box": [
+      1351.0,
+      148.1,
+      1574.4,
+      190.9
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      1430.6,
+      228.9,
+      1494.8,
+      271.7
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      1430.6,
+      309.7,
+      1494.8,
+      352.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "span1",
+     "label": "SPAN port on ACC-SW-02",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IDS IDS-01",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder (primary)",
+     "speed": "40G"
+    },
+    {
+     "id": "tool2",
+     "label": "DLP",
+     "speed": "25G"
+    },
+    {
+     "id": "tool3",
+     "label": "NDR",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d08_clean_lr",
+   "style": "clean_lr",
+   "file": "d08_clean_lr.png",
+   "size": [
+    1285,
+    428
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      28.8,
+      86.1,
+      149.2,
+      134.1
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      235.9,
+      84.8,
+      367.9,
+      135.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      427.9,
+      140.8,
+      509.2,
+      188.8
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core-2",
+     "type": "switch",
+     "box": [
+      615.9,
+      31.5,
+      699.9,
+      79.5
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      619.9,
+      123.5,
+      695.9,
+      171.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      877.2,
+      122.1,
+      995.9,
+      170.1
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Server Switch SRV-SW-02",
+     "type": "switch",
+     "box": [
+      869.2,
+      28.8,
+      1003.9,
+      79.5
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      1093.2,
+      30.1,
+      1255.9,
+      78.1
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Leaf-3",
+     "type": "switch",
+     "box": [
+      618.6,
+      214.1,
+      697.2,
+      262.1
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      885.2,
+      212.8,
+      987.9,
+      263.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      869.2,
+      306.1,
+      1003.9,
+      354.1
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on Core-1",
+     "type": "span",
+     "box": [
+      603.9,
+      304.8,
+      711.9,
+      355.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "NDR NDR-01",
+     "type": "security_tool",
+     "box": [
+      1130.6,
+      258.1,
+      1218.6,
+      308.8
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      1138.6,
+      351.5,
+      1210.6,
+      399.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "span1",
+     "label": "SPAN port on Core-1",
+     "kind": "span",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "NDR NDR-01",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "DLP",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d09_visio_mono",
+   "style": "visio_mono",
+   "file": "d09_visio_mono.png",
+   "size": [
+    380,
+    694
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      114.7,
+      28.8,
+      229.6,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      131.5,
+      136.8,
+      212.8,
+      187.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      115.5,
+      247.5,
+      228.8,
+      298.1
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      28.8,
+      371.5,
+      147.5,
+      422.1
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      35.5,
+      495.5,
+      140.8,
+      543.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      197.5,
+      495.5,
+      317.5,
+      543.5
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-01",
+     "type": "span",
+     "box": [
+      190.8,
+      371.5,
+      324.1,
+      422.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      164.1,
+      616.8,
+      236.1,
+      664.8
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      278.8,
+      616.8,
+      350.8,
+      664.8
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-01",
+     "kind": "span",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d10_visio_mono",
+   "style": "visio_mono",
+   "file": "d10_visio_mono.png",
+   "size": [
+    417,
+    696
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      124.6,
+      28.8,
+      211.7,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      127.5,
+      136.8,
+      208.8,
+      187.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      31.5,
+      384.8,
+      144.8,
+      435.5
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Server Switch SRV-SW-01",
+     "type": "switch",
+     "box": [
+      28.8,
+      508.8,
+      147.5,
+      559.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      42.8,
+      619.5,
+      133.5,
+      667.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker NPB-01",
+     "type": "packet_broker",
+     "box": [
+      188.1,
+      384.8,
+      308.1,
+      435.5
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "type": "tap",
+     "box": [
+      118.1,
+      260.8,
+      218.1,
+      311.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      201.5,
+      510.1,
+      273.5,
+      558.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "SIEM",
+     "type": "security_tool",
+     "box": [
+      316.1,
+      510.1,
+      388.1,
+      558.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "kind": "tap",
+     "direction": "tx_only",
+     "wording": "mirror (TX only)",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IDS",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "SIEM",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d11_visio_mono",
+   "style": "visio_mono",
+   "file": "d11_visio_mono.png",
+   "size": [
+    812,
+    975
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      488.7,
+      28.8,
+      603.6,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      483.5,
+      136.8,
+      608.8,
+      184.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      418.8,
+      368.8,
+      513.5,
+      416.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Server Switch SRV-SW-01",
+     "type": "switch",
+     "box": [
+      149.5,
+      490.1,
+      268.1,
+      540.8
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      28.8,
+      651.5,
+      135.5,
+      699.5
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      310.8,
+      491.5,
+      429.5,
+      539.5
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      332.8,
+      651.5,
+      423.5,
+      699.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      430.8,
+      774.1,
+      560.1,
+      824.8
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "type": "tap",
+     "box": [
+      496.1,
+      244.8,
+      596.1,
+      295.5
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (SRV-SW-01)",
+     "type": "span",
+     "box": [
+      178.8,
+      650.1,
+      289.5,
+      700.8
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN session 2 [RX only]",
+     "type": "span",
+     "box": [
+      432.8,
+      570.1,
+      558.1,
+      620.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      287.5,
+      898.1,
+      359.5,
+      946.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      402.1,
+      898.1,
+      474.1,
+      946.1
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      516.8,
+      898.1,
+      588.8,
+      946.1
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      632.1,
+      898.1,
+      782.8,
+      946.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (SRV-SW-01)",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror (RX only)",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN session 2 [RX only]",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "RX only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "IPS",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "Forensics Recorder",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d12_visio_mono",
+   "style": "visio_mono",
+   "file": "d12_visio_mono.png",
+   "size": [
+    915,
+    1043
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      549.5,
+      28.8,
+      621.5,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      522.8,
+      260.8,
+      648.1,
+      308.8
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      531.5,
+      136.8,
+      639.5,
+      187.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      283.5,
+      496.8,
+      356.8,
+      544.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      40.8,
+      619.5,
+      159.5,
+      667.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      28.8,
+      730.1,
+      171.5,
+      778.1
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Access Switch ACC-SW-02",
+     "type": "switch",
+     "box": [
+      202.1,
+      618.1,
+      320.8,
+      668.8
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      214.8,
+      728.8,
+      305.5,
+      779.5
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Floor 3 Switch",
+     "type": "switch",
+     "box": [
+      363.5,
+      619.5,
+      484.8,
+      667.5
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      348.8,
+      728.8,
+      456.8,
+      779.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      604.8,
+      839.5,
+      734.1,
+      890.1
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive) [RX+TX]",
+     "type": "tap",
+     "box": [
+      542.1,
+      368.8,
+      628.8,
+      436.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1 [mirror: outbound only]",
+     "type": "span",
+     "box": [
+      499.5,
+      728.8,
+      682.1,
+      779.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "SIEM",
+     "type": "security_tool",
+     "box": [
+      452.1,
+      964.8,
+      524.1,
+      1012.8
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      567.5,
+      964.8,
+      651.5,
+      1012.8
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "IPS IPS-01",
+     "type": "security_tool",
+     "box": [
+      694.8,
+      963.5,
+      766.8,
+      1014.1
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "DLP DLP-01",
+     "type": "security_tool",
+     "box": [
+      810.1,
+      963.5,
+      886.1,
+      1014.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive) [RX+TX]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1 [mirror: outbound only]",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "mirror: outbound only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "SIEM",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "IPS IPS-01",
+     "speed": "25G"
+    },
+    {
+     "id": "tool3",
+     "label": "DLP DLP-01",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d13_shapes_mixed",
+   "style": "shapes_mixed",
+   "file": "d13_shapes_mixed.png",
+   "size": [
+    782,
+    1009
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      425.7,
+      28.8,
+      520.2,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      249.2,
+      150.1,
+      451.3,
+      227.7
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Perimeter FW PFW-2",
+     "type": "firewall",
+     "box": [
+      494.6,
+      150.1,
+      696.6,
+      227.7
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      309.6,
+      301.0,
+      390.9,
+      349.0
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core-2",
+     "type": "switch",
+     "box": [
+      490.9,
+      422.4,
+      574.9,
+      470.4
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      282.3,
+      422.4,
+      418.3,
+      470.4
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      262.3,
+      630.4,
+      379.6,
+      681.0
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker NPB-01",
+     "type": "packet_broker",
+     "box": [
+      397.6,
+      754.4,
+      617.5,
+      837.1
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "type": "tap",
+     "box": [
+      514.4,
+      301.0,
+      676.8,
+      349.0
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Core-1)",
+     "type": "span",
+     "box": [
+      28.8,
+      499.7,
+      261.0,
+      601.0
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN-2",
+     "type": "span",
+     "box": [
+      421.9,
+      631.7,
+      603.9,
+      679.7
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM APM-01",
+     "type": "security_tool",
+     "box": [
+      394.9,
+      910.4,
+      484.3,
+      980.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      527.6,
+      921.3,
+      623.6,
+      969.3
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "bidirectional",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Core-1)",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror (RX only)",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN-2",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM APM-01",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d14_shapes_mixed",
+   "style": "shapes_mixed",
+   "file": "d14_shapes_mixed.png",
+   "size": [
+    979,
+    1087
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      308.1,
+      28.8,
+      384.1,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      238.8,
+      384.0,
+      453.4,
+      432.0
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Border Router",
+     "type": "router",
+     "box": [
+      252.6,
+      136.8,
+      439.7,
+      323.9
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      412.1,
+      532.0,
+      520.1,
+      580.0
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core-2",
+     "type": "switch",
+     "box": [
+      56.1,
+      706.6,
+      140.1,
+      754.6
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      632.8,
+      706.6,
+      768.8,
+      754.6
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      640.8,
+      872.0,
+      760.8,
+      920.0
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Floor 2 Switch",
+     "type": "switch",
+     "box": [
+      28.8,
+      872.0,
+      167.5,
+      920.0
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      48.1,
+      1010.7,
+      148.1,
+      1058.7
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Access Switch ACC-SW-03",
+     "type": "switch",
+     "box": [
+      811.5,
+      705.3,
+      950.1,
+      756.0
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      829.5,
+      870.7,
+      932.1,
+      921.3
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      326.4,
+      854.6,
+      565.9,
+      937.4
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "type": "tap",
+     "box": [
+      115.5,
+      505.3,
+      336.8,
+      606.6
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DC Core 1)",
+     "type": "span",
+     "box": [
+      341.7,
+      680.0,
+      590.5,
+      781.3
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      402.1,
+      1010.7,
+      474.1,
+      1058.7
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      516.8,
+      1010.7,
+      588.8,
+      1058.7
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "IPS (primary)",
+     "type": "security_tool",
+     "box": [
+      632.1,
+      1010.7,
+      761.5,
+      1058.7
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "APM (primary)",
+     "type": "security_tool",
+     "box": [
+      218.8,
+      1010.7,
+      358.8,
+      1058.7
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DC Core 1)",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "egress only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IDS",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "DLP",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "IPS (primary)",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "APM (primary)",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d15_shapes_mixed",
+   "style": "shapes_mixed",
+   "file": "d15_shapes_mixed.png",
+   "size": [
+    914,
+    1358
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      285.4,
+      28.8,
+      485.5,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      248.4,
+      474.6,
+      450.5,
+      552.2
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "NGFW-EDGE-2",
+     "type": "firewall",
+     "box": [
+      415.2,
+      397.3,
+      635.8,
+      445.3
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Border Router",
+     "type": "router",
+     "box": [
+      291.9,
+      136.8,
+      479.0,
+      323.9
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      295.5,
+      756.2,
+      403.5,
+      804.2
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      57.5,
+      877.5,
+      190.8,
+      925.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      28.8,
+      1012.2,
+      147.5,
+      1060.2
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Distribution SW 2",
+     "type": "switch",
+     "box": [
+      268.1,
+      877.5,
+      430.8,
+      925.5
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "OT Network (PLCs)",
+     "type": "zone",
+     "box": [
+      190.1,
+      1010.8,
+      311.5,
+      1061.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "NPB-01",
+     "type": "packet_broker",
+     "box": [
+      589.3,
+      1160.2,
+      728.3,
+      1208.2
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "type": "tap",
+     "box": [
+      426.8,
+      581.5,
+      624.1,
+      682.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Distribution SW 2)",
+     "type": "span",
+     "box": [
+      353.7,
+      985.5,
+      715.9,
+      1086.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IPS (primary)",
+     "type": "security_tool",
+     "box": [
+      387.5,
+      1281.5,
+      516.8,
+      1329.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      560.1,
+      1281.5,
+      632.1,
+      1329.5
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      674.8,
+      1281.5,
+      770.8,
+      1329.5
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      813.5,
+      1281.5,
+      885.5,
+      1329.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "kind": "tap",
+     "direction": "tx_only",
+     "wording": "egress only",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Distribution SW 2)",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "TX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IPS (primary)",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "speed": "25G"
+    },
+    {
+     "id": "tool2",
+     "label": "Sandbox",
+     "speed": "10G"
+    },
+    {
+     "id": "tool3",
+     "label": "DLP",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d16_shapes_mixed",
+   "style": "shapes_mixed",
+   "file": "d16_shapes_mixed.png",
+   "size": [
+    893,
+    1370
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      577.9,
+      28.8,
+      698.4,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      461.4,
+      383.6,
+      596.2,
+      461.2
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "NGFW-EDGE-2",
+     "type": "firewall",
+     "box": [
+      643.8,
+      398.4,
+      864.4,
+      446.4
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      551.4,
+      136.8,
+      724.9,
+      310.3
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      528.1,
+      743.8,
+      609.5,
+      791.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      408.8,
+      866.5,
+      544.8,
+      914.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      443.5,
+      1019.8,
+      563.5,
+      1067.8
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Access Switch ACC-SW-02",
+     "type": "switch",
+     "box": [
+      587.5,
+      865.2,
+      726.1,
+      915.8
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      606.8,
+      1019.8,
+      725.5,
+      1067.8
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "NPB-01",
+     "type": "packet_broker",
+     "box": [
+      177.9,
+      1171.8,
+      317.0,
+      1219.8
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 [RX+TX]",
+     "type": "tap",
+     "box": [
+      667.5,
+      551.8,
+      851.5,
+      653.2
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Floor 1 Switch) [mirror A+B]",
+     "type": "span",
+     "box": [
+      94.0,
+      975.8,
+      400.9,
+      1111.8
+     ]
+    },
+    {
+     "id": "tap2",
+     "label": "TAP-02 (10G fiber) [mirror A+B]",
+     "type": "tap",
+     "box": [
+      374.1,
+      534.5,
+      624.8,
+      670.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      128.8,
+      1293.2,
+      200.8,
+      1341.2
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      243.5,
+      1293.2,
+      419.5,
+      1341.2
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 [RX+TX]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Floor 1 Switch) [mirror A+B]",
+     "kind": "span",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "tap2",
+     "label": "TAP-02 (10G fiber) [mirror A+B]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d17_organic",
+   "style": "organic",
+   "file": "d17_organic.png",
+   "size": [
+    1106,
+    1100
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      361.8,
+      28.8,
+      437.8,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      419.0,
+      218.1,
+      551.0,
+      268.7
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      404.2,
+      628.3,
+      512.2,
+      676.3
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      329.2,
+      455.1,
+      467.8,
+      505.8
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      153.8,
+      374.5,
+      253.8,
+      422.5
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Access Switch ACC-SW-02",
+     "type": "switch",
+     "box": [
+      195.5,
+      710.9,
+      334.1,
+      761.6
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      28.8,
+      796.5,
+      147.5,
+      844.5
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Access Switch ACC-SW-03",
+     "type": "switch",
+     "box": [
+      447.6,
+      825.7,
+      586.2,
+      876.4
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      489.3,
+      1020.2,
+      592.0,
+      1070.9
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "NPB-01",
+     "type": "packet_broker",
+     "box": [
+      748.7,
+      393.0,
+      835.4,
+      441.0
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "type": "tap",
+     "box": [
+      544.7,
+      456.0,
+      643.3,
+      506.6
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      536.1,
+      352.1,
+      681.4,
+      400.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      900.8,
+      444.1,
+      1076.8,
+      492.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      921.9,
+      274.9,
+      993.9,
+      322.9
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      794.5,
+      177.9,
+      866.5,
+      225.9
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      864.8,
+      574.1,
+      936.8,
+      622.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "ingress only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "speed": "40G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "IDS",
+     "speed": "10G"
+    },
+    {
+     "id": "tool3",
+     "label": "DLP",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d18_organic",
+   "style": "organic",
+   "file": "d18_organic.png",
+   "size": [
+    1187,
+    1095
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      368.7,
+      28.8,
+      444.7,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      458.3,
+      216.1,
+      590.3,
+      266.7
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      498.6,
+      620.0,
+      579.9,
+      668.0
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      242.1,
+      563.3,
+      378.1,
+      611.3
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "OT Network (PLCs)",
+     "type": "zone",
+     "box": [
+      28.8,
+      540.3,
+      150.1,
+      590.9
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Leaf-2",
+     "type": "switch",
+     "box": [
+      373.9,
+      804.6,
+      452.6,
+      852.6
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      232.6,
+      979.4,
+      335.3,
+      1030.1
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Server Switch SRV-SW-03",
+     "type": "switch",
+     "box": [
+      606.7,
+      812.7,
+      741.4,
+      863.3
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      711.6,
+      1018.1,
+      811.6,
+      1066.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker NPB-01",
+     "type": "packet_broker",
+     "box": [
+      827.0,
+      322.9,
+      961.6,
+      373.5
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber) [mirror (both)]",
+     "type": "tap",
+     "box": [
+      595.5,
+      399.6,
+      734.2,
+      467.6
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IPS IPS-01",
+     "type": "security_tool",
+     "box": [
+      823.0,
+      95.6,
+      901.6,
+      146.2
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox SANDBOX-01",
+     "type": "security_tool",
+     "box": [
+      982.2,
+      490.7,
+      1112.9,
+      541.4
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "SIEM",
+     "type": "security_tool",
+     "box": [
+      1086.5,
+      327.0,
+      1158.5,
+      375.0
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "Forensics Recorder FORENSICS-01",
+     "type": "security_tool",
+     "box": [
+      949.7,
+      146.0,
+      1125.7,
+      196.7
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber) [mirror (both)]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror (both)",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IPS IPS-01",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox SANDBOX-01",
+     "speed": "25G"
+    },
+    {
+     "id": "tool2",
+     "label": "SIEM",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "Forensics Recorder FORENSICS-01",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d19_organic",
+   "style": "organic",
+   "file": "d19_organic.png",
+   "size": [
+    1259,
+    1227
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      323.6,
+      1150.3,
+      418.1,
+      1198.3
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      511.4,
+      730.7,
+      654.1,
+      778.7
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      405.6,
+      947.4,
+      549.6,
+      995.4
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      405.3,
+      467.3,
+      513.3,
+      515.3
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core-2",
+     "type": "switch",
+     "box": [
+      702.1,
+      602.3,
+      786.1,
+      650.3
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      262.8,
+      248.1,
+      398.8,
+      296.1
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      28.8,
+      163.0,
+      191.5,
+      211.0
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Leaf-2",
+     "type": "switch",
+     "box": [
+      922.0,
+      740.2,
+      1000.6,
+      788.2
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      1111.9,
+      845.1,
+      1230.5,
+      893.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      640.5,
+      223.1,
+      787.1,
+      273.7
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      561.3,
+      458.8,
+      657.3,
+      509.4
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      433.2,
+      82.4,
+      578.5,
+      130.4
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "Mirror port (Core-2)",
+     "type": "span",
+     "box": [
+      825.1,
+      388.1,
+      937.1,
+      438.7
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      829.5,
+      28.8,
+      901.5,
+      76.8
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "mirror: outbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "Mirror port (Core-2)",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "TX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IPS",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d20_organic",
+   "style": "organic",
+   "file": "d20_organic.png",
+   "size": [
+    1030,
+    1252
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      591.6,
+      1174.9,
+      712.1,
+      1222.9
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      560.8,
+      776.2,
+      648.8,
+      826.9
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      579.0,
+      976.8,
+      701.7,
+      1027.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      333.1,
+      349.7,
+      463.7,
+      400.4
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      186.7,
+      183.6,
+      320.0,
+      231.6
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      70.6,
+      28.8,
+      173.3,
+      79.5
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Floor 2 Switch",
+     "type": "switch",
+     "box": [
+      214.8,
+      489.9,
+      353.5,
+      537.9
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      28.8,
+      562.1,
+      148.8,
+      610.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      642.3,
+      402.4,
+      776.9,
+      450.4
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      526.3,
+      558.8,
+      622.3,
+      609.5
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-01 [RX+TX]",
+     "type": "span",
+     "box": [
+      503.4,
+      216.4,
+      658.1,
+      284.4
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN-2",
+     "type": "span",
+     "box": [
+      459.0,
+      450.8,
+      548.4,
+      498.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      825.0,
+      468.5,
+      1001.0,
+      516.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      827.3,
+      248.5,
+      899.3,
+      296.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "bidirectional",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-01 [RX+TX]",
+     "kind": "span",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN-2",
+     "kind": "span",
+     "direction": "both",
+     "wording": "bidirectional",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d21_dark",
+   "style": "dark",
+   "file": "d21_dark.png",
+   "size": [
+    843,
+    926
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      86.1,
+      28.8,
+      162.1,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      80.1,
+      258.1,
+      168.1,
+      308.8
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      52.1,
+      136.8,
+      196.1,
+      184.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      183.5,
+      490.1,
+      291.5,
+      538.1
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "DC Core 2",
+     "type": "switch",
+     "box": [
+      43.5,
+      612.8,
+      154.1,
+      660.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      218.1,
+      612.8,
+      294.1,
+      660.8
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      206.1,
+      736.8,
+      306.1,
+      784.8
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Server Switch SRV-SW-02",
+     "type": "switch",
+     "box": [
+      28.8,
+      735.5,
+      163.5,
+      786.1
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      44.8,
+      846.1,
+      147.5,
+      896.8
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      403.5,
+      490.1,
+      538.1,
+      538.1
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "type": "tap",
+     "box": [
+      196.1,
+      368.8,
+      278.8,
+      416.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      337.5,
+      612.8,
+      409.5,
+      660.8
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder FORENSICS-01",
+     "type": "security_tool",
+     "box": [
+      452.1,
+      611.5,
+      628.1,
+      662.1
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "SIEM (primary)",
+     "type": "security_tool",
+     "box": [
+      671.5,
+      612.8,
+      814.1,
+      660.8
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "bidirectional",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "DLP",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder FORENSICS-01",
+     "speed": "40G"
+    },
+    {
+     "id": "tool2",
+     "label": "SIEM (primary)",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d22_dark",
+   "style": "dark",
+   "file": "d22_dark.png",
+   "size": [
+    643,
+    1083
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      144.6,
+      28.8,
+      265.0,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      73.5,
+      260.8,
+      205.5,
+      311.5
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Firewall FW-02",
+     "type": "firewall",
+     "box": [
+      227.5,
+      340.8,
+      315.5,
+      391.5
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      143.5,
+      136.8,
+      266.1,
+      187.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      85.5,
+      420.8,
+      193.5,
+      468.8
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      204.8,
+      542.1,
+      338.1,
+      592.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      28.8,
+      543.5,
+      162.1,
+      591.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      44.1,
+      652.8,
+      146.8,
+      703.5
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      203.5,
+      654.1,
+      339.5,
+      702.1
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      127.5,
+      763.5,
+      290.1,
+      811.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      338.8,
+      884.8,
+      473.5,
+      932.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      333.5,
+      763.5,
+      478.8,
+      811.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      198.1,
+      1006.1,
+      270.1,
+      1054.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      312.8,
+      1006.1,
+      384.8,
+      1054.1
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      427.5,
+      1006.1,
+      499.5,
+      1054.1
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      542.1,
+      1006.1,
+      614.1,
+      1054.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IDS",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "IPS",
+     "speed": "10G"
+    },
+    {
+     "id": "tool2",
+     "label": "APM",
+     "speed": "10G"
+    },
+    {
+     "id": "tool3",
+     "label": "NDR",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d23_dark",
+   "style": "dark",
+   "file": "d23_dark.png",
+   "size": [
+    965,
+    847
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      276.1,
+      28.8,
+      476.2,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      332.1,
+      150.1,
+      420.1,
+      200.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      250.1,
+      275.5,
+      358.1,
+      323.5
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core-2",
+     "type": "switch",
+     "box": [
+      415.5,
+      399.5,
+      499.5,
+      447.5
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      209.5,
+      398.1,
+      348.1,
+      448.8
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      196.8,
+      522.1,
+      344.8,
+      572.8
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Access Switch ACC-SW-02",
+     "type": "switch",
+     "box": [
+      388.1,
+      522.1,
+      526.8,
+      572.8
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      398.1,
+      647.5,
+      516.8,
+      695.5
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Server Switch SRV-SW-03",
+     "type": "switch",
+     "box": [
+      28.8,
+      398.1,
+      163.5,
+      448.8
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      36.1,
+      522.1,
+      153.5,
+      572.8
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker NPB-01",
+     "type": "packet_broker",
+     "box": [
+      628.8,
+      646.1,
+      763.5,
+      696.8
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      409.5,
+      274.1,
+      505.5,
+      324.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Core-2)",
+     "type": "span",
+     "box": [
+      569.5,
+      522.1,
+      681.5,
+      572.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "DLP (primary)",
+     "type": "security_tool",
+     "box": [
+      392.1,
+      770.1,
+      528.1,
+      818.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder (primary)",
+     "type": "security_tool",
+     "box": [
+      570.8,
+      770.1,
+      821.5,
+      818.1
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      864.1,
+      770.1,
+      936.1,
+      818.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Core-2)",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "DLP (primary)",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder (primary)",
+     "speed": "25G"
+    },
+    {
+     "id": "tool2",
+     "label": "APM",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d24_dark",
+   "style": "dark",
+   "file": "d24_dark.png",
+   "size": [
+    813,
+    1028
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      521.5,
+      28.8,
+      616.1,
+      76.8
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      469.5,
+      230.1,
+      601.5,
+      280.8
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Perimeter FW PFW-2",
+     "type": "firewall",
+     "box": [
+      614.8,
+      150.1,
+      746.8,
+      200.8
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      476.1,
+      438.1,
+      557.5,
+      486.1
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Floor 1 Switch",
+     "type": "switch",
+     "box": [
+      264.8,
+      559.5,
+      400.8,
+      607.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      28.8,
+      718.1,
+      191.5,
+      766.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      449.5,
+      827.5,
+      584.1,
+      875.5
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper) [mirror: inbound only]",
+     "type": "tap",
+     "box": [
+      588.1,
+      310.1,
+      784.1,
+      378.1
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1 [mirror: inbound only]",
+     "type": "span",
+     "box": [
+      234.8,
+      716.8,
+      430.8,
+      767.5
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN port on Core-1",
+     "type": "span",
+     "box": [
+      462.8,
+      636.8,
+      570.8,
+      687.5
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Sandbox SANDBOX-01",
+     "type": "security_tool",
+     "box": [
+      244.8,
+      948.8,
+      375.5,
+      999.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IDS IDS-01",
+     "type": "security_tool",
+     "box": [
+      418.1,
+      948.8,
+      498.1,
+      999.5
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      540.8,
+      950.1,
+      612.8,
+      998.1
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM",
+     "type": "security_tool",
+     "box": [
+      655.5,
+      950.1,
+      727.5,
+      998.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper) [mirror: inbound only]",
+     "kind": "tap",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1 [mirror: inbound only]",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN port on Core-1",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror (RX only)",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Sandbox SANDBOX-01",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "IDS IDS-01",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "APM",
+     "speed": "25G"
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d25_dense",
+   "style": "dense",
+   "file": "d25_dense.png",
+   "size": [
+    1600,
+    523
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      26.9,
+      185.1,
+      115.0,
+      229.9
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      318.0,
+      185.1,
+      387.7,
+      229.9
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      156.1,
+      185.1,
+      263.2,
+      229.9
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      611.9,
+      241.1,
+      692.9,
+      285.9
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "DC Core 2",
+     "type": "switch",
+     "box": [
+      775.1,
+      151.4,
+      857.3,
+      196.3
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      782.5,
+      213.7,
+      849.8,
+      258.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      1028.5,
+      213.7,
+      1120.7,
+      258.5
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Floor 2 Switch",
+     "type": "switch",
+     "box": [
+      1022.9,
+      26.9,
+      1126.3,
+      71.7
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      1204.7,
+      26.9,
+      1328.0,
+      71.7
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Distribution SW 3",
+     "type": "switch",
+     "box": [
+      756.4,
+      276.0,
+      875.9,
+      320.8
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      1036.0,
+      276.0,
+      1113.2,
+      320.8
+     ]
+    },
+    {
+     "id": "acc3",
+     "label": "Leaf-4",
+     "type": "switch",
+     "box": [
+      1040.9,
+      89.2,
+      1108.2,
+      134.0
+     ]
+    },
+    {
+     "id": "zone3",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      1220.9,
+      89.2,
+      1311.8,
+      134.0
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      1215.3,
+      327.0,
+      1317.4,
+      371.9
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber) [mirror (both)]",
+     "type": "tap",
+     "box": [
+      448.8,
+      237.4,
+      550.9,
+      289.7
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      895.9,
+      325.8,
+      1003.0,
+      370.6
+     ]
+    },
+    {
+     "id": "span2",
+     "label": "SPAN port on DC Core 2",
+     "type": "span",
+     "box": [
+      1025.4,
+      151.4,
+      1123.8,
+      196.3
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "DLP (primary)",
+     "type": "security_tool",
+     "box": [
+      1430.7,
+      202.5,
+      1534.1,
+      247.3
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      1448.7,
+      264.8,
+      1516.0,
+      309.6
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "Forensics Recorder (primary)",
+     "type": "security_tool",
+     "box": [
+      1391.5,
+      327.0,
+      1573.3,
+      371.9
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      1445.0,
+      389.3,
+      1519.7,
+      434.1
+     ]
+    },
+    {
+     "id": "tool4",
+     "label": "IPS IPS-01",
+     "type": "security_tool",
+     "box": [
+      1448.7,
+      451.6,
+      1516.0,
+      496.4
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber) [mirror (both)]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror (both)",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "both",
+     "wording": "bidirectional",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span2",
+     "label": "SPAN port on DC Core 2",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "RX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "DLP (primary)",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "Forensics Recorder (primary)",
+     "speed": "40G"
+    },
+    {
+     "id": "tool3",
+     "label": "Sandbox",
+     "speed": "25G"
+    },
+    {
+     "id": "tool4",
+     "label": "IPS IPS-01",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d26_dense",
+   "style": "dense",
+   "file": "d26_dense.png",
+   "size": [
+    1600,
+    518
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      28.4,
+      383.3,
+      99.4,
+      430.6
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      299.2,
+      343.9,
+      372.8,
+      391.2
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Firewall FW-02",
+     "type": "firewall",
+     "box": [
+      393.8,
+      396.4,
+      467.4,
+      443.8
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      142.8,
+      383.3,
+      255.8,
+      430.6
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      624.5,
+      148.0,
+      695.5,
+      195.3
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "DC Core 2",
+     "type": "switch",
+     "box": [
+      786.8,
+      225.6,
+      873.6,
+      272.9
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      774.3,
+      33.6,
+      886.1,
+      81.0
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "VDI Farm",
+     "type": "zone",
+     "box": [
+      991.9,
+      28.4,
+      1073.4,
+      75.7
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Floor 2 Switch",
+     "type": "switch",
+     "box": [
+      978.1,
+      225.6,
+      1087.2,
+      272.9
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      1223.2,
+      225.6,
+      1353.3,
+      272.9
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Distribution SW 3",
+     "type": "switch",
+     "box": [
+      767.1,
+      105.9,
+      893.3,
+      153.3
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      976.1,
+      94.1,
+      1089.1,
+      141.4
+     ]
+    },
+    {
+     "id": "acc3",
+     "label": "Access Switch ACC-SW-04",
+     "type": "switch",
+     "box": [
+      976.8,
+      159.8,
+      1088.5,
+      207.2
+     ]
+    },
+    {
+     "id": "zone3",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      1239.6,
+      159.8,
+      1336.9,
+      207.2
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Network Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      1208.8,
+      343.9,
+      1367.8,
+      391.2
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "type": "tap",
+     "box": [
+      488.4,
+      342.5,
+      576.5,
+      389.9
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DC Core 2)",
+     "type": "span",
+     "box": [
+      985.3,
+      291.3,
+      1079.9,
+      338.6
+     ]
+    },
+    {
+     "id": "tap2",
+     "label": "TAP-02 (passive)",
+     "type": "tap",
+     "box": [
+      619.9,
+      396.4,
+      700.1,
+      443.8
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      1467.7,
+      245.3,
+      1538.7,
+      292.6
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      1434.8,
+      311.0,
+      1571.5,
+      358.3
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "IPS (primary)",
+     "type": "security_tool",
+     "box": [
+      1451.3,
+      376.7,
+      1555.1,
+      424.0
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM SIEM-01",
+     "type": "security_tool",
+     "box": [
+      1464.4,
+      442.4,
+      1542.0,
+      489.8
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DC Core 2)",
+     "kind": "span",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "tap2",
+     "label": "TAP-02 (passive)",
+     "kind": "tap",
+     "direction": "rx_only",
+     "wording": "RX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "NDR",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder",
+     "speed": "40G"
+    },
+    {
+     "id": "tool2",
+     "label": "IPS (primary)",
+     "speed": "10G"
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM SIEM-01",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d27_dense",
+   "style": "dense",
+   "file": "d27_dense.png",
+   "size": [
+    1450,
+    579
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      28.8,
+      215.5,
+      100.8,
+      263.5
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      321.5,
+      179.5,
+      430.8,
+      227.5
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "NGFW-EDGE-2",
+     "type": "firewall",
+     "box": [
+      318.1,
+      247.5,
+      434.1,
+      295.5
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      144.8,
+      215.5,
+      259.5,
+      263.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      499.5,
+      162.1,
+      586.1,
+      210.1
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      663.5,
+      252.8,
+      772.8,
+      300.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      664.1,
+      28.8,
+      772.1,
+      76.8
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      898.1,
+      28.8,
+      995.5,
+      76.8
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      891.5,
+      295.5,
+      1002.1,
+      343.5
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      1089.5,
+      295.5,
+      1182.8,
+      343.5
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Distribution SW 3",
+     "type": "switch",
+     "box": [
+      654.1,
+      95.5,
+      782.1,
+      143.5
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      897.5,
+      95.5,
+      996.1,
+      143.5
+     ]
+    },
+    {
+     "id": "acc3",
+     "label": "Distribution SW 4",
+     "type": "switch",
+     "box": [
+      882.1,
+      228.8,
+      1011.5,
+      276.8
+     ]
+    },
+    {
+     "id": "zone3",
+     "label": "OT Network (PLCs)",
+     "type": "zone",
+     "box": [
+      1086.8,
+      228.8,
+      1185.5,
+      276.8
+     ]
+    },
+    {
+     "id": "acc4",
+     "label": "Leaf-5",
+     "type": "switch",
+     "box": [
+      682.1,
+      162.1,
+      754.1,
+      210.1
+     ]
+    },
+    {
+     "id": "zone4",
+     "label": "User LAN (PCs)",
+     "type": "zone",
+     "box": [
+      904.8,
+      162.1,
+      988.8,
+      210.1
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Network Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      1055.5,
+      402.1,
+      1216.8,
+      450.1
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "type": "tap",
+     "box": [
+      502.1,
+      252.8,
+      583.5,
+      300.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (CORE-SW-02) [TX only]",
+     "type": "span",
+     "box": [
+      888.1,
+      362.1,
+      1005.5,
+      418.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      1282.1,
+      302.1,
+      1420.8,
+      350.1
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      1315.5,
+      368.8,
+      1387.5,
+      416.8
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      1315.5,
+      435.5,
+      1387.5,
+      483.5
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM",
+     "type": "security_tool",
+     "box": [
+      1315.5,
+      502.1,
+      1387.5,
+      550.1
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror A+B",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (CORE-SW-02) [TX only]",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "TX only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "DLP",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "speed": "10G"
+    },
+    {
+     "id": "tool3",
+     "label": "SIEM",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d28_dense",
+   "style": "dense",
+   "file": "d28_dense.png",
+   "size": [
+    1600,
+    425
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      27.7,
+      131.5,
+      96.9,
+      177.7
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      300.8,
+      99.5,
+      411.0,
+      145.6
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Perimeter FW PFW-2",
+     "type": "firewall",
+     "box": [
+      303.3,
+      163.6,
+      408.5,
+      209.7
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Border Router",
+     "type": "router",
+     "box": [
+      139.2,
+      131.5,
+      244.4,
+      177.7
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      484.7,
+      95.6,
+      568.1,
+      141.8
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      648.8,
+      161.0,
+      754.0,
+      207.2
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Server Switch SRV-SW-01",
+     "type": "switch",
+     "box": [
+      648.2,
+      27.7,
+      754.6,
+      73.8
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      832.2,
+      27.7,
+      927.1,
+      73.8
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      826.4,
+      220.0,
+      932.8,
+      266.2
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      984.1,
+      220.0,
+      1111.0,
+      266.2
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "DMZ Switch 3",
+     "type": "switch",
+     "box": [
+      648.2,
+      91.8,
+      754.6,
+      137.9
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      824.5,
+      91.8,
+      934.7,
+      137.9
+     ]
+    },
+    {
+     "id": "acc3",
+     "label": "Distribution SW 4",
+     "type": "switch",
+     "box": [
+      817.4,
+      155.9,
+      941.8,
+      202.1
+     ]
+    },
+    {
+     "id": "zone3",
+     "label": "OT Network (PLCs)",
+     "type": "zone",
+     "box": [
+      1000.1,
+      91.8,
+      1095.0,
+      137.9
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      1214.9,
+      254.6,
+      1320.0,
+      300.8
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 [mirror (both)]",
+     "type": "tap",
+     "box": [
+      473.8,
+      163.6,
+      579.0,
+      209.7
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "type": "span",
+     "box": [
+      992.4,
+      155.9,
+      1102.7,
+      202.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "NDR NDR-01",
+     "type": "security_tool",
+     "box": [
+      1443.1,
+      158.5,
+      1514.9,
+      204.6
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      1444.4,
+      222.6,
+      1513.6,
+      268.7
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "Forensics Recorder (primary)",
+     "type": "security_tool",
+     "box": [
+      1385.4,
+      286.7,
+      1572.6,
+      332.8
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      1444.4,
+      350.8,
+      1513.6,
+      396.9
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 [mirror (both)]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror (both)",
+     "written_on": "label",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN session 1",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "ingress only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "NDR NDR-01",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "Forensics Recorder (primary)",
+     "speed": "25G"
+    },
+    {
+     "id": "tool3",
+     "label": "APM",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d29_whiteboard",
+   "style": "whiteboard",
+   "file": "d29_whiteboard.jpg",
+   "size": [
+    1166,
+    1206
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      745.2,
+      181.7,
+      835.0,
+      229.0
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      748.1,
+      273.9,
+      833.6,
+      328.2
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      569.3,
+      495.6,
+      644.3,
+      535.6
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "DMZ Switch 1",
+     "type": "switch",
+     "box": [
+      246.6,
+      608.4,
+      382.9,
+      649.1
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      171.0,
+      713.9,
+      333.4,
+      756.9
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      473.5,
+      609.0,
+      617.5,
+      650.4
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      366.7,
+      708.0,
+      523.1,
+      767.6
+     ]
+    },
+    {
+     "id": "acc2",
+     "label": "Server Switch SRV-SW-03",
+     "type": "switch",
+     "box": [
+      653.0,
+      601.6,
+      790.9,
+      659.5
+     ]
+    },
+    {
+     "id": "zone2",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      681.4,
+      719.2,
+      808.7,
+      763.3
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      654.5,
+      840.0,
+      812.4,
+      904.3
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      744.4,
+      390.1,
+      839.1,
+      445.5
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN-1",
+     "type": "span",
+     "box": [
+      558.6,
+      717.9,
+      644.9,
+      761.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM",
+     "type": "security_tool",
+     "box": [
+      595.7,
+      972.0,
+      662.7,
+      1019.0
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "type": "security_tool",
+     "box": [
+      700.5,
+      974.9,
+      765.6,
+      1022.2
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "SIEM",
+     "type": "security_tool",
+     "box": [
+      804.0,
+      977.8,
+      877.8,
+      1025.7
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN-1",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "mirror: outbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "IDS",
+     "speed": "1G"
+    },
+    {
+     "id": "tool2",
+     "label": "SIEM",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d30_whiteboard",
+   "style": "whiteboard",
+   "file": "d30_whiteboard.jpg",
+   "size": [
+    568,
+    1140
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      190.2,
+      128.7,
+      278.3,
+      188.7
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      157.6,
+      336.7,
+      295.3,
+      388.4
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      163.3,
+      226.7,
+      297.3,
+      281.2
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      162.2,
+      432.7,
+      284.0,
+      497.1
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      182.9,
+      563.8,
+      256.3,
+      608.1
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      123.4,
+      661.8,
+      260.3,
+      724.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Network Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      255.4,
+      787.0,
+      433.0,
+      837.8
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (Leaf-1)",
+     "type": "span",
+     "box": [
+      296.6,
+      661.4,
+      400.6,
+      721.2
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      260.8,
+      905.8,
+      325.8,
+      955.0
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      361.5,
+      899.2,
+      422.9,
+      947.0
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "span1",
+     "label": "Mirror port (Leaf-1)",
+     "kind": "span",
+     "direction": "both",
+     "wording": "RX+TX",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IPS",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d31_whiteboard",
+   "style": "whiteboard",
+   "file": "d31_whiteboard.jpg",
+   "size": [
+    896,
+    933
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      297.4,
+      130.0,
+      508.6,
+      192.9
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      334.0,
+      265.0,
+      470.6,
+      310.5
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      278.7,
+      380.1,
+      392.5,
+      441.6
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      417.9,
+      511.4,
+      535.6,
+      575.3
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      118.9,
+      498.1,
+      227.2,
+      557.9
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      132.6,
+      614.6,
+      223.3,
+      659.0
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "NPB-01",
+     "type": "packet_broker",
+     "box": [
+      492.4,
+      640.0,
+      575.7,
+      686.6
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "type": "tap",
+     "box": [
+      435.6,
+      382.8,
+      519.1,
+      445.4
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (CORE-SW-01)",
+     "type": "span",
+     "box": [
+      259.0,
+      504.3,
+      381.7,
+      566.6
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "IPS (primary)",
+     "type": "security_tool",
+     "box": [
+      312.4,
+      735.5,
+      423.5,
+      784.0
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder FORENSICS-01",
+     "type": "security_tool",
+     "box": [
+      458.4,
+      741.7,
+      607.6,
+      810.2
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      643.8,
+      766.7,
+      710.9,
+      813.0
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper)",
+     "kind": "tap",
+     "direction": "tx_only",
+     "wording": "TX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (CORE-SW-01)",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "RX only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "IPS (primary)",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder FORENSICS-01",
+     "speed": "40G"
+    },
+    {
+     "id": "tool2",
+     "label": "NDR",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d32_whiteboard",
+   "style": "whiteboard",
+   "file": "d32_whiteboard.jpg",
+   "size": [
+    1118,
+    1256
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet (ISP-A)",
+     "type": "internet",
+     "box": [
+      196.8,
+      151.2,
+      388.7,
+      203.3
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      223.6,
+      359.6,
+      336.1,
+      421.0
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "WAN Router R1",
+     "type": "router",
+     "box": [
+      223.9,
+      251.7,
+      349.3,
+      295.7
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      316.2,
+      599.2,
+      431.8,
+      665.1
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      163.3,
+      726.3,
+      275.6,
+      793.0
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Server Switch SRV-SW-01",
+     "type": "switch",
+     "box": [
+      307.3,
+      737.4,
+      425.4,
+      805.6
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      298.7,
+      859.8,
+      424.9,
+      930.7
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Floor 2 Switch",
+     "type": "switch",
+     "box": [
+      148.1,
+      854.1,
+      265.9,
+      907.0
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      148.6,
+      973.2,
+      250.3,
+      1042.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      548.2,
+      882.6,
+      683.8,
+      956.2
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "type": "tap",
+     "box": [
+      331.6,
+      473.2,
+      430.3,
+      536.2
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-01 [TX only]",
+     "type": "span",
+     "box": [
+      457.9,
+      737.7,
+      599.8,
+      831.7
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Sandbox",
+     "type": "security_tool",
+     "box": [
+      346.4,
+      1002.4,
+      430.0,
+      1054.5
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder (primary)",
+     "type": "security_tool",
+     "box": [
+      464.2,
+      1015.1,
+      687.8,
+      1083.4
+     ]
+    },
+    {
+     "id": "tool2",
+     "label": "IDS IDS-01",
+     "type": "security_tool",
+     "box": [
+      724.0,
+      1034.2,
+      810.4,
+      1105.9
+     ]
+    },
+    {
+     "id": "tool3",
+     "label": "NDR",
+     "type": "security_tool",
+     "box": [
+      847.8,
+      1056.1,
+      917.8,
+      1109.2
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (10G fiber)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "bidirectional",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-01 [TX only]",
+     "kind": "span",
+     "direction": "tx_only",
+     "wording": "TX only",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Sandbox",
+     "speed": "1G"
+    },
+    {
+     "id": "tool1",
+     "label": "Forensics Recorder (primary)",
+     "speed": "25G"
+    },
+    {
+     "id": "tool2",
+     "label": "IDS IDS-01",
+     "speed": "1G"
+    },
+    {
+     "id": "tool3",
+     "label": "NDR",
+     "speed": "1G"
+    }
+   ]
+  },
+  {
+   "name": "d33_scan",
+   "style": "scan",
+   "file": "d33_scan.jpg",
+   "size": [
+    371,
+    613
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      68.9,
+      22.1,
+      140.5,
+      59.0
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      47.8,
+      241.9,
+      117.6,
+      280.6
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Firewall FW-02",
+     "type": "firewall",
+     "box": [
+      136.5,
+      181.5,
+      206.2,
+      220.2
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      61.9,
+      97.1,
+      155.0,
+      136.9
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core Switch CORE-SW-01",
+     "type": "switch",
+     "box": [
+      28.3,
+      396.7,
+      124.2,
+      436.6
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      28.8,
+      483.2,
+      132.1,
+      523.5
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      40.4,
+      560.9,
+      127.9,
+      600.5
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      152.3,
+      389.9,
+      263.1,
+      430.6
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper) [both directions]",
+     "type": "tap",
+     "box": [
+      122.8,
+      292.1,
+      238.8,
+      345.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      172.8,
+      479.6,
+      224.8,
+      515.6
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "NDR (primary)",
+     "type": "security_tool",
+     "box": [
+      253.5,
+      473.0,
+      360.4,
+      511.7
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (copper) [both directions]",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "DLP",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "NDR (primary)",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d34_scan",
+   "style": "scan",
+   "file": "d34_scan.jpg",
+   "size": [
+    543,
+    491
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "Internet",
+     "type": "internet",
+     "box": [
+      241.9,
+      19.4,
+      334.8,
+      55.2
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "NGFW-EDGE-1",
+     "type": "firewall",
+     "box": [
+      232.3,
+      104.1,
+      340.4,
+      140.3
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "Core-1",
+     "type": "switch",
+     "box": [
+      179.7,
+      272.8,
+      239.3,
+      307.8
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      56.8,
+      355.7,
+      113.6,
+      390.7
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Database Servers",
+     "type": "zone",
+     "box": [
+      14.8,
+      431.3,
+      137.0,
+      467.8
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "DMZ Switch 2",
+     "type": "switch",
+     "box": [
+      156.2,
+      358.1,
+      258.7,
+      394.1
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Branch VPN",
+     "type": "zone",
+     "box": [
+      166.0,
+      434.9,
+      258.2,
+      470.7
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Packet Broker",
+     "type": "packet_broker",
+     "box": [
+      304.2,
+      275.8,
+      407.7,
+      311.8
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "type": "tap",
+     "box": [
+      253.6,
+      189.6,
+      315.0,
+      224.6
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "type": "security_tool",
+     "box": [
+      288.2,
+      361.3,
+      419.6,
+      398.0
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "SIEM SIEM-01",
+     "type": "security_tool",
+     "box": [
+      449.1,
+      364.2,
+      520.0,
+      401.3
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "Forensics Recorder",
+     "speed": "40G"
+    },
+    {
+     "id": "tool1",
+     "label": "SIEM SIEM-01",
+     "speed": "25G"
+    }
+   ]
+  },
+  {
+   "name": "d35_scan",
+   "style": "scan",
+   "file": "d35_scan.jpg",
+   "size": [
+    351,
+    696
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "WAN",
+     "type": "internet",
+     "box": [
+      70.6,
+      21.4,
+      142.2,
+      58.3
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Perimeter FW PFW-1",
+     "type": "firewall",
+     "box": [
+      16.3,
+      185.2,
+      116.8,
+      225.3
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Perimeter FW PFW-2",
+     "type": "firewall",
+     "box": [
+      114.0,
+      236.7,
+      214.5,
+      276.8
+     ]
+    },
+    {
+     "id": "rtr",
+     "label": "Edge Router RTR-01",
+     "type": "router",
+     "box": [
+      63.5,
+      96.5,
+      156.5,
+      136.2
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      129.9,
+      377.9,
+      211.7,
+      415.2
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Leaf-1",
+     "type": "switch",
+     "box": [
+      265.7,
+      464.7,
+      323.2,
+      500.9
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "DMZ (Web, Mail)",
+     "type": "zone",
+     "box": [
+      254.7,
+      546.5,
+      342.1,
+      586.0
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "NPB-01",
+     "type": "packet_broker",
+     "box": [
+      75.2,
+      556.9,
+      141.2,
+      593.5
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "type": "tap",
+     "box": [
+      40.7,
+      298.0,
+      102.8,
+      334.4
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DC Core 1) [mirror (RX only)]",
+     "type": "span",
+     "box": [
+      113.0,
+      461.8,
+      237.3,
+      515.0
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "DLP",
+     "type": "security_tool",
+     "box": [
+      34.1,
+      646.4,
+      86.0,
+      682.3
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox SANDBOX-01",
+     "type": "security_tool",
+     "box": [
+      114.2,
+      639.4,
+      214.7,
+      679.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "both directions",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "Mirror port (DC Core 1) [mirror (RX only)]",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror (RX only)",
+     "written_on": "label",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "DLP",
+     "speed": "25G"
+    },
+    {
+     "id": "tool1",
+     "label": "Sandbox SANDBOX-01",
+     "speed": "10G"
+    }
+   ]
+  },
+  {
+   "name": "d36_scan",
+   "style": "scan",
+   "file": "d36_scan.jpg",
+   "size": [
+    496,
+    592
+   ],
+   "devices": [
+    {
+     "id": "internet",
+     "label": "ISP",
+     "type": "internet",
+     "box": [
+      236.8,
+      18.1,
+      295.2,
+      54.0
+     ]
+    },
+    {
+     "id": "fw0",
+     "label": "Firewall FW-01",
+     "type": "firewall",
+     "box": [
+      186.2,
+      104.7,
+      255.7,
+      142.8
+     ]
+    },
+    {
+     "id": "fw1",
+     "label": "Firewall FW-02",
+     "type": "firewall",
+     "box": [
+      285.0,
+      100.8,
+      354.5,
+      138.9
+     ]
+    },
+    {
+     "id": "core0",
+     "label": "DC Core 1",
+     "type": "switch",
+     "box": [
+      178.0,
+      192.3,
+      259.6,
+      229.1
+     ]
+    },
+    {
+     "id": "core1",
+     "label": "Core Switch CORE-SW-02",
+     "type": "switch",
+     "box": [
+      227.6,
+      275.7,
+      323.2,
+      314.9
+     ]
+    },
+    {
+     "id": "acc0",
+     "label": "Access Switch ACC-SW-01",
+     "type": "switch",
+     "box": [
+      92.4,
+      280.8,
+      195.4,
+      320.3
+     ]
+    },
+    {
+     "id": "zone0",
+     "label": "Server Zone (File, Web App)",
+     "type": "zone",
+     "box": [
+      23.1,
+      370.2,
+      131.7,
+      409.9
+     ]
+    },
+    {
+     "id": "acc1",
+     "label": "Floor 2 Switch",
+     "type": "switch",
+     "box": [
+      160.7,
+      365.8,
+      266.5,
+      403.5
+     ]
+    },
+    {
+     "id": "zone1",
+     "label": "Guest Wi-Fi",
+     "type": "zone",
+     "box": [
+      173.5,
+      452.9,
+      260.6,
+      489.9
+     ]
+    },
+    {
+     "id": "npb",
+     "label": "Visibility Fabric VF-1",
+     "type": "packet_broker",
+     "box": [
+      347.4,
+      444.1,
+      457.9,
+      483.9
+     ]
+    },
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "type": "tap",
+     "box": [
+      288.0,
+      187.4,
+      360.3,
+      225.7
+     ]
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-02",
+     "type": "span",
+     "box": [
+      294.9,
+      359.2,
+      408.3,
+      399.1
+     ]
+    },
+    {
+     "id": "tool0",
+     "label": "APM (primary)",
+     "type": "security_tool",
+     "box": [
+      298.6,
+      533.1,
+      405.3,
+      570.9
+     ]
+    },
+    {
+     "id": "tool1",
+     "label": "IPS",
+     "type": "security_tool",
+     "box": [
+      434.3,
+      529.9,
+      486.0,
+      565.5
+     ]
+    }
+   ],
+   "capture_points": [
+    {
+     "id": "tap1",
+     "label": "TAP-01 (passive)",
+     "kind": "tap",
+     "direction": "both",
+     "wording": "mirror (both)",
+     "written_on": "edge",
+     "feeds": "npb"
+    },
+    {
+     "id": "span1",
+     "label": "SPAN port on CORE-SW-02",
+     "kind": "span",
+     "direction": "rx_only",
+     "wording": "mirror: inbound only",
+     "written_on": "edge",
+     "feeds": "npb"
+    }
+   ],
+   "tools": [
+    {
+     "id": "tool0",
+     "label": "APM (primary)",
+     "speed": "10G"
+    },
+    {
+     "id": "tool1",
+     "label": "IPS",
+     "speed": "10G"
+    }
+   ]
+  }
+ ]
+}

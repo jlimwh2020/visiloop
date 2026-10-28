@@ -66,21 +66,31 @@ def _iou(a, b):
 
 
 # ---------- step 1: SAM 3.1 boxes ----------
-def sam_boxes(img: Image.Image, client=None, prompts=SAM_PROMPTS):
-    """Return [[x1, y1, x2, y2], ...] for every device shape SAM 3.1 finds."""
+def sam_prompt_boxes(img: Image.Image, prompt: str, client=None, url=None):
+    """Boxes SAM 3.1 returns for one text prompt: [[x1, y1, x2, y2], ...]."""
     client = client or _client()
-    url = _data_url(img)
+    resp = client.responses.create(model=SAM_MODEL, input=[{
+        "type": "message", "role": "user",
+        "content": [{"type": "input_text", "text": prompt}, {"type": "input_image", "image_url": url or _data_url(img)}]}])
+    return [list(map(int, m)) for m in re.findall(r"<\|box;x1=(\d+);y1=(\d+);x2=(\d+);y2=(\d+)", resp.output_text or "")]
+
+
+def merge_boxes(lists):
+    """Combine boxes from several prompts, dropping overlaps, in reading order."""
     boxes = []
-    for prompt in prompts:
-        resp = client.responses.create(model=SAM_MODEL, input=[{
-            "type": "message", "role": "user",
-            "content": [{"type": "input_text", "text": prompt}, {"type": "input_image", "image_url": url}]}])
-        for m in re.findall(r"<\|box;x1=(\d+);y1=(\d+);x2=(\d+);y2=(\d+)", resp.output_text or ""):
-            box = list(map(int, m))
+    for found in lists:
+        for box in found:
             if all(_iou(box, b) < 0.5 for b in boxes):
                 boxes.append(box)
     boxes.sort(key=lambda b: (b[1] // 40, b[0]))      # reading order: top to bottom, left to right
     return boxes
+
+
+def sam_boxes(img: Image.Image, client=None, prompts=SAM_PROMPTS):
+    """Return [[x1, y1, x2, y2], ...] for every device shape SAM 3.1 finds."""
+    client = client or _client()
+    url = _data_url(img)
+    return merge_boxes([sam_prompt_boxes(img, p, client, url) for p in prompts])
 
 
 def numbered(img: Image.Image, boxes):
