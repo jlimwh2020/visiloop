@@ -5,6 +5,23 @@
 **▶ Demo video (2 min): [youtu.be/Jd9V8uX0U1g](https://youtu.be/Jd9V8uX0U1g)** · **Live demo: [visiloop.streamlit.app](https://visiloop.streamlit.app/)** (no sign-in needed; open the sidebar,
 keep the *breach* case and click **Run VisiLoop**. If the app is asleep, click to wake it and wait about a minute.)
 
+### Since the demo video (updated 29 Oct 2026)
+
+The video shows VisiLoop on 13 synthetic cases. Since then it has been tested much harder, and each round of tests
+found and fixed real problems:
+
+| Test | Result |
+|---|---|
+| [Benchmark suite](bench/suite/RESULTS.md): 200 cases, nine faults, alone and combined, with near-threshold traps | checks **200/200**; Muse Spark **200/200** faults and **235/235** fixes |
+| [Counter benchmark](bench/counters/RESULTS.md): 100 feed paths, where is the loss? | **100/100** located to the device and port; Muse Spark **69/69** faults, **68/69** fixes |
+| [Diagram stress test](bench/diagrams/RESULTS.md): 36 diagrams in 9 drawing styles | **534/536** devices found; **34/36** ready to pin, the two misses flagged |
+| [Soft lab](lab/softlab/RESULTS.md): real traffic on a virtual switch and packet broker, real SNMP | **16/16** capture tests, **5/5** counter tests, monitoring with **0** false alarms |
+
+New in the live demo: in the sidebar's **Case** list, the four **Real traffic** cases are recordings from the soft
+lab (a receive-only SPAN, an overloaded SPAN port, packet slicing, ERSPAN left wrapped). **Path counters** adds
+interface counters that name the switch or broker port where packets are lost. The **Monitor** page replays a
+morning of continuous monitoring with alerts.
+
 Security tools such as IDS, NDR and SIEM can only detect what the network feeds them. In real deployments
 those feeds, delivered by TAPs, SPAN ports and packet brokers, are often silently broken: packets dropped in
 bursts, duplicated, missing one direction of a conversation, untagged, or encrypted beyond what the tool can

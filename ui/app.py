@@ -21,6 +21,7 @@ from visikit.proof import ids                                     # noqa: E402
 from visikit.vision import diagram as dg                          # noqa: E402
 
 CASES = os.path.join(ROOT, "bench", "cases")
+SOFTLAB = os.path.join(ROOT, "demo", "softlab")     # real-traffic recordings from the soft lab
 DEMO_DIAGRAM = os.path.join(ROOT, "demo", "diagram.png")
 RECORDED = os.path.join(ROOT, "demo", "agent_runs")
 TMP = os.path.join(tempfile.gettempdir(), "visiloop_ui")
@@ -119,18 +120,30 @@ ensure_cases()
 source = st.sidebar.radio("Traffic capture", ["Demo case", "Upload my own"], horizontal=True)
 pcap = ingress = case_name = None
 demo_profile = ("IDS", (10, 20))
+case_vlans = [10, 20]
 if source == "Demo case":
     if not os.path.exists(os.path.join(CASES, "manifest.json")):
         st.sidebar.error("Demo cases could not be generated. Run: python bench/inject.py")
     else:
         manifest = json.load(open(os.path.join(CASES, "manifest.json")))
-        cases = {c["name"]: c for c in manifest["cases"]}
-        default = "breach" if "breach" in cases else ("combined" if "combined" in cases else list(cases)[0])
-        pick = st.sidebar.selectbox("Case", list(cases), index=list(cases).index(default))
-        pcap = os.path.join(CASES, cases[pick]["file"])
-        ingress = os.path.join(CASES, cases[pick]["ingress"])
-        case_name = pick
-        demo_profile = (manifest["profile"], tuple(manifest["required_vlans"]))
+        cases = {c["name"]: {**c, "dir": CASES, "vlans": manifest["required_vlans"], "tool": manifest["profile"]}
+                 for c in manifest["cases"]}
+        real = {}
+        if os.path.exists(os.path.join(SOFTLAB, "manifest.json")):
+            with open(os.path.join(SOFTLAB, "manifest.json")) as f:
+                real = {c["label"]: {**c, "dir": SOFTLAB} for c in json.load(f)["cases"]}
+        options = list(cases) + list(real)
+        default = "breach" if "breach" in cases else ("combined" if "combined" in cases else options[0])
+        pick = st.sidebar.selectbox("Case", options, index=options.index(default),
+                                    help="Synthetic cases, and real traffic recorded in the soft lab (lab/softlab)")
+        c = cases.get(pick) or real[pick]
+        pcap = os.path.join(c["dir"], c["file"])
+        ingress = os.path.join(c["dir"], c["ingress"]) if c.get("ingress") else None
+        case_name = c["name"]
+        case_vlans = c["vlans"]
+        demo_profile = (c["tool"], tuple(c["vlans"]))
+        if pick in real:
+            st.sidebar.caption(f"**Real traffic (soft lab, test {c['test']}).** {c['setup']}")
 else:
     up = st.sidebar.file_uploader("Capture from the tool's input (.pcap)", type=["pcap", "pcapng"])
     up_in = st.sidebar.file_uploader("Optional: broker ingress capture, to prove fixes", type=["pcap", "pcapng"])
@@ -140,7 +153,9 @@ else:
         ingress = _save_upload(up_in, "ingress_" + up_in.name)
 
 tool = st.sidebar.selectbox("Tool on this feed", ["IDS", "NDR", "APM", "SIEM"])
-vlans = tuple(int(v) for v in st.sidebar.text_input("Required VLANs", "10,20").split(",") if v.strip())
+vlans = tuple(int(v) for v in st.sidebar.text_input(
+    "Required VLANs", ",".join(map(str, case_vlans)), key=f"vlans_{case_name}",
+    help="VLANs the tool must see; blank if the feed is untagged").split(",") if v.strip())
 
 counter_label = st.sidebar.selectbox("Path counters (where is the loss?)", list(COUNTER_SCENARIOS),
                                      help="Interface counters along the feed's path, from switches and brokers. "

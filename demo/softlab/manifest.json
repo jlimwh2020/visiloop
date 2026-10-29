@@ -1,0 +1,58 @@
+{
+ "about": "Real traffic recorded in the soft lab (lab/softlab): 1-second excerpts of the tool port (and of the broker's lossless copy, to prove fixes on real traffic). Each test set up one fault on a software switch and packet broker carrying real HTTP, HTTPS, DNS and iperf3 traffic.",
+ "cases": [
+  {
+   "name": "softlab_L02",
+   "label": "Real traffic: receive-only SPAN",
+   "test": "L02_span_rx_only",
+   "file": "L02_span_rx_only.pcap",
+   "ingress": "L02_span_rx_only_ingress.pcap",
+   "tool": "IDS",
+   "vlans": [],
+   "expect": [
+    "one_way"
+   ],
+   "setup": "The tool is fed by a SPAN session that copies only what the switch receives on the client port, so the server's replies never reach it."
+  },
+  {
+   "name": "softlab_L04",
+   "label": "Real traffic: SPAN destination overloaded",
+   "test": "L04_span_oversubscribed",
+   "file": "L04_span_oversubscribed.pcap",
+   "ingress": null,
+   "tool": "IDS",
+   "vlans": [],
+   "expect": [
+    "packet_drops"
+   ],
+   "setup": "Both directions of a busy link are mirrored into a SPAN destination port too slow for them: it discards what does not fit."
+  },
+  {
+   "name": "softlab_L07",
+   "label": "Real traffic: packet slicing at 128 bytes",
+   "test": "L07_slicing",
+   "file": "L07_slicing.pcap",
+   "ingress": "L07_slicing_ingress.pcap",
+   "tool": "IDS",
+   "vlans": [],
+   "expect": [
+    "truncated"
+   ],
+   "setup": "The packet broker slices every frame on the tool port to 128 bytes, so the IDS loses the payload it inspects."
+  },
+  {
+   "name": "softlab_L08",
+   "label": "Real traffic: ERSPAN still wrapped",
+   "test": "L08_tunnel",
+   "file": "L08_tunnel.pcap",
+   "ingress": null,
+   "tool": "IDS",
+   "vlans": [],
+   "expect": [
+    "oversize",
+    "tunnel"
+   ],
+   "setup": "The switch sends an ERSPAN session to the broker, which forwards it to the tool without stripping the tunnel headers. The extra 50 bytes also push full-size frames over the IDS port's 1518-byte limit."
+  }
+ ]
+}
