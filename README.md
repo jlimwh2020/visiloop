@@ -2,13 +2,13 @@
 
 **Your security tools may be blind. VisiLoop finds out why, fixes it, and proves it.**
 
-**▶ Demo video (2 min): [youtu.be/Jd9V8uX0U1g](https://youtu.be/Jd9V8uX0U1g)** · **Live demo: [visiloop.streamlit.app](https://visiloop.streamlit.app/)** (no sign-in needed; open the sidebar,
+**▶ Demo video (2 min): [youtu.be/Jd9V8uX0U1g](https://youtu.be/Jd9V8uX0U1g)** · **▶ Since the video (73 s): [youtu.be/gEjxrXi8b6c](https://youtu.be/gEjxrXi8b6c)** · **Live demo: [visiloop.streamlit.app](https://visiloop.streamlit.app/)** (no sign-in needed; open the sidebar,
 keep the *breach* case and click **Run VisiLoop**. If the app is asleep, click to wake it and wait about a minute.)
 
 ### Since the demo video (updated 29 Oct 2026)
 
 The video shows VisiLoop on 13 synthetic cases. Since then it has been tested much harder, and each round of tests
-found and fixed real problems:
+found and fixed real problems (73-second update: [youtu.be/gEjxrXi8b6c](https://youtu.be/gEjxrXi8b6c)):
 
 | Test | Result |
 |---|---|
