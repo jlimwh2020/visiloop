@@ -1,0 +1,33 @@
+# Copy to lab/lab_path.yaml. The IDS feed's SPAN path in LAB_SETUP.md:
+#   9300 Gi1/0/1 (mirrored) -> 9300 Gi1/0/24 (SPAN destination) -> EXA P3 (input) -> EXA P5 (to the laptop)
+# Fill in the management IPs and read-only community, and the EXA interface names exactly as listed by:
+#   python -m visikit.counters --list <EXA mgmt IP> --community visiloop-ro
+#   python -m visikit.counters --list <9300 mgmt IP> --community visiloop-ro
+# Test:  python -m visikit.counters --path lab/lab_path.yaml --snmp --seconds 30 --tool IDS
+feed: lab-ids
+path:
+  - name: "C9300 Gi1/0/1 (mirrored)"
+    role: span_source
+    device: C9300
+    port: Gi1/0/1
+    speed_gbps: 1
+    mirrors: both                  # rx for test L02 (match the SPAN session)
+    source: {host: <9300 mgmt IP>, community: visiloop-ro, if_name: "Gi1/0/1"}
+  - name: "C9300 Gi1/0/24 (SPAN destination)"
+    role: span_dest
+    device: C9300
+    port: Gi1/0/24
+    speed_gbps: 1
+    source: {host: <9300 mgmt IP>, community: visiloop-ro, if_name: "Gi1/0/24"}
+  - name: "EXA48800 P3 (SPAN input)"
+    role: broker_in
+    device: EXA48800
+    port: P3
+    speed_gbps: 1
+    source: {host: <EXA mgmt IP>, community: visiloop-ro, if_name: "<EXA name for P3>"}
+  - name: "EXA48800 P5 (to the laptop)"
+    role: broker_out
+    device: EXA48800
+    port: P5
+    speed_gbps: 1
+    source: {host: <EXA mgmt IP>, community: visiloop-ro, if_name: "<EXA name for P5>"}

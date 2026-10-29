@@ -2,6 +2,7 @@
 
     python -m visikit.counters --path demo/counters/span_oversubscribed.yaml          # simulated
     python -m visikit.counters --path my_path.yaml --snmp --seconds 60 --tool IDS      # real devices over SNMP
+    python -m visikit.counters --list 192.0.2.11 --community lab-ro                    # a device's interface names
 """
 import argparse
 
@@ -26,11 +27,26 @@ def source_for(path_file, snmp):
 
 def main():
     ap = argparse.ArgumentParser(description="Locate packet loss along a feed's path from interface counters")
-    ap.add_argument("--path", required=True, help="path file (YAML): hops, and SNMP details or a simulated scenario")
+    ap.add_argument("--path", help="path file (YAML): hops, and SNMP details or a simulated scenario")
+    ap.add_argument("--list", metavar="HOST", help="list a device's interfaces over SNMP (to write a path file)")
+    ap.add_argument("--community", default="public", help="SNMP read-only community, with --list")
+    ap.add_argument("--port", type=int, default=161, help="SNMP port, with --list")
     ap.add_argument("--snmp", action="store_true", help="read real devices over SNMP (default: simulate)")
     ap.add_argument("--seconds", type=float, default=60)
     ap.add_argument("--tool", default="IDS")
     a = ap.parse_args()
+    if a.list:
+        from visikit.counters.snmp import list_interfaces
+        rows = list_interfaces(a.list, a.community, a.port)
+        print(f"{len(rows)} interfaces on {a.list}:")
+        print(f"  {'if_index':>9}  {'if_name':<28}{'speed':>9}  description")
+        for i, r in sorted(rows.items()):
+            sp = int(r.get("mbps") or 0)
+            speed = f"{sp / 1000:g} Gbps" if sp >= 1000 else (f"{sp} Mbps" if sp else "-")
+            print(f"  {i:>9}  {r.get('name', ''):<28}{speed:>9}  {r.get('alias', '')}")
+        return
+    if not a.path:
+        ap.error("--path is required (or use --list HOST)")
     src, feed = source_for(a.path, a.snmp)
     print(f"Measuring {feed} for {a.seconds:g} s ...")
     pc = src.measure(a.seconds)

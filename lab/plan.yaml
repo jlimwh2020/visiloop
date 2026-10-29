@@ -1,128 +1,137 @@
 # VisiLoop lab test plan: one test per fault, set up on purpose on lab equipment.
-#
-# Setup is written vendor-neutrally: use the equivalent setting on your TAP, switch and
-# packet broker. The capture laptop plays the security tool: it is plugged into the broker
-# tool port (or the switch SPAN destination) and records what a tool would receive.
+# Written for a Cisco Catalyst C9300-24T-E, a Cubro EXA48800, a Cubro CBR.TAP 10/100/1000-B-R3 copper TAP on the
+# client link, and optionally a Cubro CBR.Opto-1-MM-R3 optical TAP on a 10G link and a Cubro CUB.OPTOSLIM-4L-MM or
+# -8L-MM multi-link TAP (L13, L14): see LAB_SETUP.md for the port plan and the exact commands.
+# Skip any test whose equipment is not set up (type s at the prompt). Port names: client Gi1/0/1, server Gi1/0/2, SPAN destination Gi1/0/24 -> EXA P3,
+# ERSPAN Te1/1/1 -> EXA P4, TAP legs -> EXA P1 + P2, tool port EXA P5 -> laptop, ingress copy EXA P6 -> laptop.
 #
 # LAB TRAFFIC ONLY. Never capture customer, production or personal traffic.
 #
-# Fields:
-#   tool       tool profile VisiLoop judges the feed against (IDS, NDR, APM, SIEM)
-#   vlans      VLANs the tool must see (leave [] if the lab traffic is untagged)
-#   expect     faults VisiLoop should report ([] = healthy)
-#   seconds    how long to capture
-#   setup      what to configure before capturing
-#   traffic    what to run while capturing
-#   restore    what to undo afterwards
-#   ingress    true: also capture the lossless broker input (TAP output) on a second
-#              interface, so VisiLoop can verify its fixes on real traffic
+# Fields: tool (profile judged against), vlans (VLANs the tool must see), expect (faults VisiLoop should report),
+# seconds, setup, traffic, restore, ingress (also record EXA P6, the clean copy, to verify fixes on real traffic).
 
 defaults:
   tool: IDS
   vlans: []
   seconds: 60
   traffic: >-
-    Standard lab mix for the whole capture: web browsing from the lab client to the lab
-    web server (HTTP and HTTPS), a few DNS lookups, and a file download of about 50 MB.
+    Standard lab mix for the whole capture: web browsing from the lab client to the lab web server (HTTP and
+    HTTPS), a few DNS lookups, and a file download of about 50 MB.
 
 tests:
   - id: L01_baseline
     expect: []
     ingress: true
-    setup: >-
-      Passive TAP on the client-server link. Broker maps both TAP legs (A->B and B->A)
-      to the tool port. No slicing, no VLAN stripping, no deduplication needed.
-    restore: "Keep this setup: it is the starting point for most tests."
+    setup: "Baseline (LAB_SETUP.md): EXA rule 'tool' = P1 + P2 -> P5, no slicing, dedup, VLAN or tunnel changes."
+    restore: Keep this setup; it is the starting point for every test.
 
   - id: L02_span_rx_only
     expect: [one_way]
     ingress: true
     setup: >-
-      Instead of the TAP, feed the broker from a switch SPAN session on the client-facing
-      port, mirroring received traffic only (RX / ingress only). Broker maps it to the tool port.
-    restore: Set the SPAN session back to both directions (or remove it).
+      9300: monitor session 1 source interface Gi1/0/1 rx; monitor session 1 destination interface Gi1/0/24.
+      EXA rule 'tool': input P3 only (the SPAN), output P5.
+    restore: "9300: no monitor session 1. EXA rule 'tool' back to P1 + P2."
 
   - id: L03_overlapping_inputs
     expect: [duplicates]
     setup: >-
-      Map BOTH the TAP legs and a SPAN session (both directions) of the same link to the
-      tool port, with deduplication off. Every packet now arrives twice.
-    restore: Remove the SPAN input from the map (or turn deduplication on).
+      9300: monitor session 1 source interface Gi1/0/1 both; destination Gi1/0/24.
+      EXA rule 'tool': inputs P1 + P2 + P3 (TAP and SPAN of the same link), deduplication OFF.
+    restore: "9300: no monitor session 1. EXA rule 'tool' back to P1 + P2."
 
   - id: L04_span_oversubscribed
     expect: [packet_drops]
     seconds: 90
     setup: >-
-      SPAN several busy ports (both directions) to a single 1G SPAN destination, so the
-      mirrored total exceeds 1 Gbps. Feed it to the tool port.
+      9300: monitor session 1 source interface Gi1/0/1 - 2 both; destination Gi1/0/24 (1G).
+      EXA rule 'tool': input P3 only. Start lab/lab_monitor.yaml in a second window to watch the counters.
     traffic: >-
-      Run iperf3 between two lab hosts on the spanned ports for the whole capture
-      (iperf3 -c <server> -t 90 -P 4), plus the standard web mix.
-    restore: Reduce the SPAN session to a single port.
+      iperf3 from client to server for the whole capture (iperf3 -c <server> -t 90 -b 900M), plus the standard
+      web mix. Mirroring both ports in both directions offers well over 1 Gbps to Gi1/0/24.
+    restore: "9300: no monitor session 1. EXA rule 'tool' back to P1 + P2."
 
   - id: L05_burst
     expect: [tool_overload]
     setup: >-
-      TAP feed as in L01, tool port at 1G. Make sure the lab link carries more than 1 Gbps
-      during the bursts (10G link, or several 1G sources).
+      Baseline (or, better, the optical TAP on a 10G link into EXA P7 + P8, rule 'tool' = P7 + P8 -> P5; see
+      LAB_SETUP.md). Start lab/lab_monitor.yaml in a second window to watch the EXA P5 counters.
     traffic: >-
-      Every 10 seconds, a 2-second burst: iperf3 -c <server> -t 2 -b 3G -P 8 (or your
-      traffic generator's burst profile at 2-3x the tool port speed).
-    restore: Stop the burst traffic.
+      Every 10 seconds, 2 seconds of traffic in both directions at once (iperf3 -c <server> -t 2 --bidir):
+      the two TAP legs together carry close to 2 Gbps into the 1G tool port P5.
+    restore: Stop iperf3.
 
   - id: L06_vlan_stripped
-    tool: IDS
     vlans: [10, 20]
     expect: [missing_vlan]
     ingress: true
     setup: >-
-      Lab traffic tagged: client on VLAN 10, server on VLAN 20, TAP on the trunk. Configure
-      the broker to strip VLAN tags on the tool port.
-    restore: Turn VLAN stripping off (preserve tags).
+      EXA: tag traffic arriving on P1 with VLAN 10 and on P2 with VLAN 20 (per-port tagging), and turn VLAN
+      stripping ON for output P5 only (P6 keeps the tags). First check in Wireshark that tags reach the laptop
+      on P6; if the laptop NIC strips tags, skip this test.
+    restore: "EXA: VLAN stripping off, per-port tagging off."
 
   - id: L07_slicing
     expect: [truncated]
     ingress: true
-    setup: >-
-      TAP feed as in L01. Enable packet slicing on the tool port at 128 bytes.
-    restore: Turn slicing off.
+    setup: "EXA rule 'tool': packet slicing at 128 bytes on output P5 (P6 unchanged)."
+    restore: "EXA: slicing off."
 
   - id: L08_tunnel
     expect: [tunnel]
     setup: >-
-      Remote SPAN: an ERSPAN (or GRE / VXLAN) session from a lab switch, terminating on the
-      broker, with tunnel header stripping OFF, mapped to the tool port.
-    restore: Turn tunnel header stripping on (or remove the session).
+      9300 ERSPAN source session 2 from Gi1/0/1 to the EXA tunnel endpoint on P4 (LAB_SETUP.md). EXA: terminate
+      the ERSPAN session on P4 with header stripping OFF; rule 'tool': input P4 only, output P5.
+      Needs the C9300-NM-8X module and a DNA licence; skip if not available.
+    restore: Keep the ERSPAN session for L08b.
+
+  - id: L08b_tunnel_stripped
+    expect: []
+    setup: >-
+      VisiLoop's fix for L08, on real equipment: same ERSPAN session, with ERSPAN header stripping ON in the EXA.
+      VisiLoop should report the feed healthy.
+    restore: "9300: no monitor session 2. EXA: stripping off, rule 'tool' back to P1 + P2."
 
   - id: L09_jumbo
     expect: [oversize]
     setup: >-
-      Set MTU 9000 on the lab client and server and the lab link (jumbo frames). TAP feed
-      as in L01 to the tool port.
+      9300: system mtu 9198. Lab client and server NICs: MTU 9000. Baseline EXA rule. If the copper TAP does not pass
+      jumbo frames (the capture shows none), use the optical TAP on a fibre link instead (LAB_SETUP.md).
     traffic: >-
-      The 50 MB download and an iperf3 run (iperf3 -c <server> -t 30) between the two
-      jumbo hosts, plus the standard web mix.
-    restore: Set the MTU back to 1500 on the hosts and link.
+      iperf3 between the two jumbo hosts (iperf3 -c <server> -t 30), the 50 MB download, and the standard web mix.
+    restore: Lab client and server back to MTU 1500.
 
   - id: L10_encrypted
     expect: [encrypted_share]
-    setup: TAP feed as in L01.
-    traffic: >-
-      HTTPS only: download the 50 MB file over HTTPS several times and browse the HTTPS site.
-      No plain HTTP during this capture.
+    setup: Baseline.
+    traffic: HTTPS only (the 50 MB download over HTTPS, several times, and the HTTPS site). No plain HTTP.
     restore: Nothing to undo.
 
   - id: L11_combined
     expect: [one_way, truncated]
     ingress: true
-    setup: >-
-      RX-only SPAN as in L02, AND slicing at 128 bytes on the tool port as in L07.
-    restore: Undo both.
+    setup: "L02 setup (RX-only SPAN into P3, rule 'tool' input P3) plus slicing at 128 bytes on P5."
+    restore: "9300: no monitor session 1. EXA: slicing off, rule 'tool' back to P1 + P2."
 
   - id: L12_siem_tolerates_slicing
     tool: SIEM
     expect: []
+    setup: "L07 setup (slicing 128 bytes on P5), judged as a SIEM feed: VisiLoop must NOT report slicing."
+    restore: "EXA: slicing off."
+
+  - id: L13_multi_link_overload
+    expect: [tool_overload]
     setup: >-
-      Slicing at 128 bytes on the tool port, judged as a SIEM feed. A SIEM does not need the
-      payload, so VisiLoop must NOT report slicing.
-    restore: Turn slicing off.
+      Optional (OptoSlim multi-link TAP): tap 2-4 busy multimode links and aggregate all of their monitor outputs in
+      one EXA rule to the 1G tool port P5 (LAB_SETUP.md). Start lab/lab_monitor.yaml to watch EXA P5.
+    traffic: iperf3 on each tapped link at the same time, so their combined load exceeds 1 Gbps.
+    restore: "EXA: remove the OptoSlim inputs from rule 'tool' (back to P1 + P2)."
+
+  - id: L14_double_tapped
+    expect: [duplicates]
+    setup: >-
+      Optional (OptoSlim multi-link TAP): tap two links the same traffic crosses (a server uplink and the link behind
+      it) and aggregate both in one EXA rule to P5 with deduplication OFF.
+    restore: >-
+      Then turn EXA deduplication ON (VisiLoop's fix) and check with a short --seconds 20 recording of L01 that the
+      feed is healthy. Finally remove the OptoSlim inputs from rule 'tool'.

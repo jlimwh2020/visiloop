@@ -1,6 +1,6 @@
 # VisiLoop lab kit: prove the checks on real traffic
 
-Twelve tests, one fault each, set up on purpose on lab TAPs, switches and packet brokers.
+Fifteen tests: one fault each, one that verifies a fix, and two optional multi-link tests, set up on purpose on lab TAPs, switches and packet brokers.
 The capture laptop plays the security tool. **Lab traffic only**: never customer, production
 or personal traffic. `capture.py` asks you to confirm this before recording anything.
 
@@ -17,7 +17,7 @@ or personal traffic. `capture.py` asks you to confirm this before recording anyt
 ```
 python lab/capture.py --list                            # find the interface numbers
 python lab/capture.py --iface 5 --seconds 10 --only L01_baseline   # 10-second dry run first
-python lab/capture.py --iface 5 --ingress-iface 6       # all twelve tests, about 30 minutes
+python lab/capture.py --iface 5 --ingress-iface 6       # all tests, about 45-60 minutes
 python lab/run_lab.py                                   # score them (free)
 python lab/run_lab.py --agent                           # add Muse Spark (about US$0.15)
 ```
@@ -38,12 +38,17 @@ packets during a capture, the script warns you: that test's result would not be 
 | L06_vlan_stripped | broker strips VLAN tags | missing VLANs |
 | L07_slicing | slicing at 128 bytes on the tool port | packet slicing |
 | L08_tunnel | ERSPAN/GRE/VXLAN session without tunnel stripping | tunnel headers |
+| L08b_tunnel_stripped | the same session with stripping on (VisiLoop's fix) | healthy |
 | L09_jumbo | MTU 9000 hosts, 1518-byte tool port | oversize frames |
 | L10_encrypted | HTTPS only | encrypted share |
 | L11_combined | RX-only SPAN plus slicing | one-way traffic, packet slicing |
 | L12_siem_tolerates_slicing | slicing, judged as a SIEM feed | healthy (a SIEM does not need the payload) |
+| L13_multi_link_overload (optional) | 2-4 tapped fibre links aggregated onto one 1G tool port | tool overload |
+| L14_double_tapped (optional) | the same traffic tapped on two links, dedup off | duplicates |
 
-Edit `plan.yaml` to match your lab: speeds, VLAN numbers, the tool profile per test, capture length.
+The plan and [LAB_SETUP.md](LAB_SETUP.md) are written for a Cisco Catalyst C9300-24T-E and a Cubro EXA48800, with
+a port plan and the exact switch commands for each test. For other equipment, edit `plan.yaml`: speeds, VLAN
+numbers, the tool profile per test, capture length.
 
 ## Notes
 

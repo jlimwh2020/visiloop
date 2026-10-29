@@ -59,7 +59,9 @@ class Feed:
         self.active = {}              # fault -> finding
         self.cycle = 0
         if spec.get("path"):
-            path = os.path.join(base_dir, spec["path"]) if not os.path.isabs(spec["path"]) else spec["path"]
+            path = spec["path"]
+            if not os.path.isabs(path) and not os.path.exists(path):
+                path = os.path.join(base_dir, path)          # relative to the config's folder as a fallback
             if spec.get("snmp"):
                 from visikit.counters.snmp import SnmpSource
                 with open(path) as f:

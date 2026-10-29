@@ -7,3 +7,7 @@ bench/out/
 bench/suite/cases/
 lab/captures/
 lab/results.json
+lab/lab_path.yaml
+lab/lab_monitor.yaml
+lab/lab_monitor.db
+lab/lab_alerts.log

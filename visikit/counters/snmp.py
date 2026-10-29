@@ -54,6 +54,29 @@ async def _if_index(engine, target, community, name):
     raise LookupError(f"interface {name!r} not found")
 
 
+async def _list(host, community, port=161, timeout=2, retries=1):
+    from pysnmp.hlapi.v3arch.asyncio import (CommunityData, ContextData, ObjectIdentity, ObjectType, SnmpEngine,
+                                             UdpTransportTarget, walk_cmd)
+    engine = SnmpEngine()
+    target = await UdpTransportTarget.create((host, int(port)), timeout=timeout, retries=retries)
+    rows = {}
+    for col, key in ((IF_NAME, "name"), (OIDS["high_speed"], "mbps"), ("1.3.6.1.2.1.31.1.1.1.18", "alias")):
+        async for err, status, idx, binds in walk_cmd(engine, CommunityData(community, mpModel=1), target, ContextData(),
+                                                      ObjectType(ObjectIdentity(col)), lexicographicMode=False):
+            if err or status:
+                raise RuntimeError(f"SNMP error: {err or status.prettyPrint()}")
+            for oid, val in binds:
+                i = int(str(oid).rsplit(".", 1)[1])
+                rows.setdefault(i, {})[key] = str(val)
+    engine.close_dispatcher()
+    return rows
+
+
+def list_interfaces(host, community, port=161):
+    """Every interface a device reports: index, name, speed and description, for writing a path file."""
+    return asyncio.run(_list(host, community, port))
+
+
 class SnmpSource:
     def __init__(self, hops, timeout=2, retries=1):
         self.hops = hops

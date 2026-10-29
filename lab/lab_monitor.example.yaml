@@ -1,0 +1,12 @@
+# Copy to lab/lab_monitor.yaml. Watches the lab feed live while you switch faults on and off:
+#   python -m visikit.monitor --config lab/lab_monitor.yaml
+# Then open the dashboard's Monitor page with:  set VISILOOP_MONITOR_DB=lab\lab_monitor.db
+interval_seconds: 30
+database: lab/lab_monitor.db
+alerts: {console: true, log_file: lab/lab_alerts.log}
+explain: false            # true adds a Muse Spark explanation to each DEGRADED alert (about US$0.01 each)
+feeds:
+  - name: lab-ids
+    tool: IDS
+    path: lab/lab_path.yaml
+    snmp: true

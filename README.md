@@ -226,7 +226,7 @@ python -m visikit.monitor --config my_monitor.yaml               # real feeds, r
 
 ![Monitor page](docs/monitor.png)
 
-**Lab kit** (`lab/`): twelve tests, one fault each, set up on purpose on real lab TAPs, switches and brokers, with a
+**Lab kit** (`lab/`): fifteen tests (one fault each, a fix verified on real equipment, and two multi-link tests), set up on purpose on a Catalyst 9300, a Cubro EXA48800 and Cubro copper, optical and multi-link TAPs (see `lab/LAB_SETUP.md`), with a
 capture script and a scorer, to prove every check on real traffic. Lab traffic only. See [lab/README.md](lab/README.md).
 
 ## VisiKit: the plug-in framework
