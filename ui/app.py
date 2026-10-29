@@ -202,7 +202,7 @@ st.header("2 · Diagnose")
 detectors, _ = load_plugins()
 by_fault = {f["fault"]: f for f in before}
 PER_ROW = 5
-names = sorted(detectors)
+names = sorted(n for n, cls in detectors.items() if getattr(cls, "source", "pcap") == "pcap")   # counter checks: Monitor page
 for row in range(0, len(names), PER_ROW):
     for col, name in zip(st.columns(PER_ROW), names[row:row + PER_ROW]):
         f = by_fault.get(name)

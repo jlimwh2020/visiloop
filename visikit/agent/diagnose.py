@@ -13,7 +13,7 @@ import os
 import re
 import time
 
-from visikit.core.registry import load_plugins
+from visikit.core.registry import applicable, load_plugins
 from visikit.core.schema import FeedContext
 from visikit.profiles import load_profile
 
@@ -23,7 +23,7 @@ PRICE_IN, PRICE_OUT = 1.25 / 1e6, 4.25 / 1e6       # US$ per token (muse-spark)
 MAX_TURNS = 6
 
 FIX_ACTIONS = ["dedup", "aggregate", "replace_span_with_tap", "load_balance", "filter", "slice", "vlan", "decrypt_advice",
-               "disable_slicing", "strip_tunnel", "mtu_advice", "none"]
+               "disable_slicing", "strip_tunnel", "mtu_advice", "check_link", "tool_capacity", "none"]
 
 SYSTEM = (
     "You are VisiLoop, a network visibility assistant used by the network owner's own "
@@ -83,6 +83,7 @@ def make_client():
 def diagnose(ctx: FeedContext, client=None, model: str = MODEL, verbose: bool = False) -> dict:
     """Run the agent on one feed. Returns the diagnosis dict plus a `_meta` block."""
     detectors, _ = load_plugins()
+    detectors = {k: v for k, v in detectors.items() if applicable(v, ctx)}
     client = client or make_client()
     check_results = {}                      # fault -> list of finding dicts (ground truth for the guard)
 

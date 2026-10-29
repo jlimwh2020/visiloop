@@ -21,13 +21,15 @@ class Truncated:
     def run(self, ctx: FeedContext) -> list[Finding]:
         if not ctx.profile.needs_full_payload:
             return []
-        rows = fields(ctx.pcap, ["frame.number", "frame.len", "ip.len"])
+        rows = fields(ctx.pcap, ["frame.number", "frame.len", "ip.len", "ipv6.plen"])
         if not rows:
             return []
         sliced, lengths = [], []
         for row in rows:
-            row += [""] * (3 - len(row))
-            frame, flen, iplen = row
+            row += [""] * (4 - len(row))
+            frame, flen, iplen, plen6 = row
+            if not iplen and plen6:
+                iplen = str(int(plen6) + 40)              # IPv6: payload length + fixed header
             # The outer IP header states the packet's real length; a frame shorter than that was cut
             if iplen and int(iplen) > int(flen) - ETH_HEADER:
                 sliced.append(int(frame))

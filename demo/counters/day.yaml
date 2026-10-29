@@ -1,0 +1,15 @@
+# A simulated morning for the demo IDS feed (times in seconds from 08:00).
+feed: ids-1
+description: SPAN overload during a backup window, then a failing optic into the broker
+traffic: {gbps: 0.45, avg_packet_bytes: 700}
+path:
+  - {name: "CORE-SW-01 Gi1/0/1 (mirrored)", role: span_source, device: CORE-SW-01, port: Gi1/0/1, speed_gbps: 10, mirrors: both}
+  - {name: "CORE-SW-01 Gi1/0/48 (SPAN destination)", role: span_dest, device: CORE-SW-01, port: Gi1/0/48, speed_gbps: 1}
+  - {name: "NPB-01 port 1 (input)", role: broker_in, device: NPB-01, port: "1", speed_gbps: 10}
+  - {name: "NPB-01 port 5 (to IDS)", role: broker_out, device: NPB-01, port: "5", speed_gbps: 1}
+  - {name: "IDS eth1", role: tool_in, device: "IDS (Suricata)", port: eth1, speed_gbps: 1}
+events:
+  - {at: 1200, kind: surge, gbps: 1.3}        # 08:20 backup traffic starts: mirrored load exceeds the 1G SPAN destination
+  - {at: 2400, kind: surge, gbps: 0.5}        # 08:40 backup ends
+  - {at: 3300, kind: crc_errors, hop: "NPB-01 port 1 (input)", rate: 0.0008}   # 08:55 an optic starts failing
+  - {at: 4500, kind: crc_errors, hop: "NPB-01 port 1 (input)", rate: 0.0}      # 09:15 optic replaced

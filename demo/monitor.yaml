@@ -1,0 +1,12 @@
+# Continuous-mode demo: the IDS feed from the demo diagram, simulated.
+# python -m visikit.monitor --config demo/monitor.yaml --fast
+interval_seconds: 60
+database: demo/monitor_demo.db
+start_epoch: 1793232000          # replay starts 08:00 (fast mode only)
+alerts: {console: true}
+explain: false
+feeds:
+  - name: ids-1
+    tool: IDS
+    path: demo/counters/day.yaml
+    snmp: false

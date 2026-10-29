@@ -202,6 +202,12 @@ def pin_findings(inv, findings, tool_type):
         elif fault == "oversize":
             boxes = brokers[:1]
             reason = f"jumbo frames exceed the {label(tool)} port's maximum frame size and are dropped"
+        elif fault in ("path_loss", "link_errors"):
+            where = (f.get("location", "") if isinstance(f, dict) else f.location) or ""
+            dev = where.split(" ")[0].lower()
+            boxes = [d["box"] for d in inv["devices"] if dev and dev in d.get("label", "").lower().replace(" ", "-")
+                     or dev and dev in d.get("label", "").lower()]
+            reason = (f"packets lost at {where}" if fault == "path_loss" else f"damaged frames on the link into {where}")
         elif fault == "encrypted_share":
             boxes = [tool] if tool is not None else []
             reason = f"{label(tool)} cannot inspect most of its traffic"

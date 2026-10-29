@@ -1,0 +1,128 @@
+# VisiLoop lab test plan: one test per fault, set up on purpose on lab equipment.
+#
+# Setup is written vendor-neutrally: use the equivalent setting on your TAP, switch and
+# packet broker. The capture laptop plays the security tool: it is plugged into the broker
+# tool port (or the switch SPAN destination) and records what a tool would receive.
+#
+# LAB TRAFFIC ONLY. Never capture customer, production or personal traffic.
+#
+# Fields:
+#   tool       tool profile VisiLoop judges the feed against (IDS, NDR, APM, SIEM)
+#   vlans      VLANs the tool must see (leave [] if the lab traffic is untagged)
+#   expect     faults VisiLoop should report ([] = healthy)
+#   seconds    how long to capture
+#   setup      what to configure before capturing
+#   traffic    what to run while capturing
+#   restore    what to undo afterwards
+#   ingress    true: also capture the lossless broker input (TAP output) on a second
+#              interface, so VisiLoop can verify its fixes on real traffic
+
+defaults:
+  tool: IDS
+  vlans: []
+  seconds: 60
+  traffic: >-
+    Standard lab mix for the whole capture: web browsing from the lab client to the lab
+    web server (HTTP and HTTPS), a few DNS lookups, and a file download of about 50 MB.
+
+tests:
+  - id: L01_baseline
+    expect: []
+    ingress: true
+    setup: >-
+      Passive TAP on the client-server link. Broker maps both TAP legs (A->B and B->A)
+      to the tool port. No slicing, no VLAN stripping, no deduplication needed.
+    restore: "Keep this setup: it is the starting point for most tests."
+
+  - id: L02_span_rx_only
+    expect: [one_way]
+    ingress: true
+    setup: >-
+      Instead of the TAP, feed the broker from a switch SPAN session on the client-facing
+      port, mirroring received traffic only (RX / ingress only). Broker maps it to the tool port.
+    restore: Set the SPAN session back to both directions (or remove it).
+
+  - id: L03_overlapping_inputs
+    expect: [duplicates]
+    setup: >-
+      Map BOTH the TAP legs and a SPAN session (both directions) of the same link to the
+      tool port, with deduplication off. Every packet now arrives twice.
+    restore: Remove the SPAN input from the map (or turn deduplication on).
+
+  - id: L04_span_oversubscribed
+    expect: [packet_drops]
+    seconds: 90
+    setup: >-
+      SPAN several busy ports (both directions) to a single 1G SPAN destination, so the
+      mirrored total exceeds 1 Gbps. Feed it to the tool port.
+    traffic: >-
+      Run iperf3 between two lab hosts on the spanned ports for the whole capture
+      (iperf3 -c <server> -t 90 -P 4), plus the standard web mix.
+    restore: Reduce the SPAN session to a single port.
+
+  - id: L05_burst
+    expect: [tool_overload]
+    setup: >-
+      TAP feed as in L01, tool port at 1G. Make sure the lab link carries more than 1 Gbps
+      during the bursts (10G link, or several 1G sources).
+    traffic: >-
+      Every 10 seconds, a 2-second burst: iperf3 -c <server> -t 2 -b 3G -P 8 (or your
+      traffic generator's burst profile at 2-3x the tool port speed).
+    restore: Stop the burst traffic.
+
+  - id: L06_vlan_stripped
+    tool: IDS
+    vlans: [10, 20]
+    expect: [missing_vlan]
+    ingress: true
+    setup: >-
+      Lab traffic tagged: client on VLAN 10, server on VLAN 20, TAP on the trunk. Configure
+      the broker to strip VLAN tags on the tool port.
+    restore: Turn VLAN stripping off (preserve tags).
+
+  - id: L07_slicing
+    expect: [truncated]
+    ingress: true
+    setup: >-
+      TAP feed as in L01. Enable packet slicing on the tool port at 128 bytes.
+    restore: Turn slicing off.
+
+  - id: L08_tunnel
+    expect: [tunnel]
+    setup: >-
+      Remote SPAN: an ERSPAN (or GRE / VXLAN) session from a lab switch, terminating on the
+      broker, with tunnel header stripping OFF, mapped to the tool port.
+    restore: Turn tunnel header stripping on (or remove the session).
+
+  - id: L09_jumbo
+    expect: [oversize]
+    setup: >-
+      Set MTU 9000 on the lab client and server and the lab link (jumbo frames). TAP feed
+      as in L01 to the tool port.
+    traffic: >-
+      The 50 MB download and an iperf3 run (iperf3 -c <server> -t 30) between the two
+      jumbo hosts, plus the standard web mix.
+    restore: Set the MTU back to 1500 on the hosts and link.
+
+  - id: L10_encrypted
+    expect: [encrypted_share]
+    setup: TAP feed as in L01.
+    traffic: >-
+      HTTPS only: download the 50 MB file over HTTPS several times and browse the HTTPS site.
+      No plain HTTP during this capture.
+    restore: Nothing to undo.
+
+  - id: L11_combined
+    expect: [one_way, truncated]
+    ingress: true
+    setup: >-
+      RX-only SPAN as in L02, AND slicing at 128 bytes on the tool port as in L07.
+    restore: Undo both.
+
+  - id: L12_siem_tolerates_slicing
+    tool: SIEM
+    expect: []
+    setup: >-
+      Slicing at 128 bytes on the tool port, judged as a SIEM feed. A SIEM does not need the
+      payload, so VisiLoop must NOT report slicing.
+    restore: Turn slicing off.

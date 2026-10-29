@@ -1,0 +1,36 @@
+feed: ids-1
+traffic:
+  gbps: 0.45
+  avg_packet_bytes: 700
+path:
+- name: CORE-SW-01 Gi1/0/1 (mirrored)
+  role: span_source
+  device: CORE-SW-01
+  port: Gi1/0/1
+  speed_gbps: 10
+  mirrors: both
+- name: CORE-SW-01 Gi1/0/48 (SPAN destination)
+  role: span_dest
+  device: CORE-SW-01
+  port: Gi1/0/48
+  speed_gbps: 1
+- name: NPB-01 port 1 (input)
+  role: broker_in
+  device: NPB-01
+  port: '1'
+  speed_gbps: 10
+- name: NPB-01 port 5 (to IDS)
+  role: broker_out
+  device: NPB-01
+  port: '5'
+  speed_gbps: 1
+- name: IDS eth1
+  role: tool_in
+  device: IDS (Suricata)
+  port: eth1
+  speed_gbps: 1
+events:
+- at: 0
+  kind: surge
+  gbps: 1.4
+description: span oversubscribed

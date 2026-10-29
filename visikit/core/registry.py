@@ -18,6 +18,12 @@ def fix(cls):
     return cls
 
 
+def applicable(cls, ctx) -> bool:
+    """A check runs on a capture (the default) or on interface counters; skip it when that data is missing."""
+    source = getattr(cls, "source", "pcap")
+    return bool(ctx.counters) if source == "counters" else bool(ctx.pcap)
+
+
 def load_plugins():
     """Import every module in visikit.detectors and visikit.fixes."""
     for pkg_name in ("visikit.detectors", "visikit.fixes"):

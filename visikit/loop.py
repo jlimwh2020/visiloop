@@ -16,7 +16,7 @@ import os
 import tempfile
 from dataclasses import replace
 
-from visikit.core.registry import load_plugins
+from visikit.core.registry import applicable, load_plugins
 from visikit.core.schema import FeedContext
 from visikit.profiles import load_profile
 
@@ -28,7 +28,7 @@ MAX_ROUNDS = 3
 def check_all(ctx, only=None, skip=()):
     detectors, _ = load_plugins()
     return [f for name, cls in detectors.items() if (only is None or name in only) and name not in skip
-            for f in cls().run(ctx)]
+            and applicable(cls, ctx) for f in cls().run(ctx)]
 
 
 def _plan(ctx, findings, workdir):
@@ -125,7 +125,8 @@ def remediate(ctx, findings, workdir):
         fix_reports.append({**fx.to_dict(), "status": status, "round": rnd})
 
     from visikit.core.tools import data_bytes
-    bytes_before, bytes_after = data_bytes(ctx.pcap), sum(data_bytes(p) for p in pcaps)
+    bytes_before = data_bytes(ctx.pcap) if ctx.pcap else 0
+    bytes_after = sum(data_bytes(p) for p in pcaps if p)
     advice_set = set(advice_all)
     new_faults = sorted(remaining - before - advice_set)
     unresolved = sorted((remaining & before) - advice_set)

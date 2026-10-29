@@ -26,8 +26,11 @@ class OneWay:
         senders = defaultdict(set)
         first_frame = {}
         # occurrence "l": the inner IP address, so tunnelled traffic is judged by its real endpoints
-        for frame, stream, src in fields(ctx.pcap, ["frame.number", "tcp.stream", "ip.src"], "tcp", occurrence="l"):
-            senders[stream].add(src)
+        # Each side is an IP address and port, so two programs on one host (or behind one NAT address) count as two sides
+        for row in fields(ctx.pcap, ["frame.number", "tcp.stream", "ip.src", "ipv6.src", "tcp.srcport"], "tcp", occurrence="l"):
+            row += [""] * (5 - len(row))
+            frame, stream, src4, src6, sport = row
+            senders[stream].add((src4 or src6, sport))
             first_frame.setdefault(stream, int(frame))
         if not senders:
             return []

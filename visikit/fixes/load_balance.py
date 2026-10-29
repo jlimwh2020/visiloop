@@ -8,7 +8,7 @@ import math
 import os
 import zlib
 
-from scapy.all import IP, TCP, UDP, PcapReader, PcapWriter
+from scapy.all import IP, IPv6, TCP, UDP, PcapReader, PcapWriter
 
 from visikit.core.registry import fix
 from visikit.core.schema import Fix
@@ -22,7 +22,7 @@ def _innermost_ip(pkt):
     """The innermost IP header, so tunnelled traffic is spread by its real flows."""
     ip, layer = None, pkt
     while layer is not None and layer.__class__.__name__ != "NoPayload":
-        if isinstance(layer, IP):
+        if isinstance(layer, (IP, IPv6)):
             ip = layer
         layer = layer.payload
     return ip
@@ -35,7 +35,7 @@ def _port_of(pkt, n):
     l4 = ip[TCP] if TCP in ip else ip[UDP] if UDP in ip else None
     sp, dp = (l4.sport, l4.dport) if l4 else (0, 0)
     a, b = sorted([(ip.src, sp), (ip.dst, dp)])
-    return zlib.crc32(f"{a}{b}{ip.proto}".encode()) % n
+    return zlib.crc32(f"{a}{b}{getattr(ip, 'proto', getattr(ip, 'nh', 0))}".encode()) % n
 
 
 def split(pcap, n, workdir, tag="lb"):

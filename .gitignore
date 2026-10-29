@@ -5,3 +5,5 @@ __pycache__/
 bench/cases/
 bench/out/
 bench/suite/cases/
+lab/captures/
+lab/results.json

@@ -21,6 +21,7 @@ class FeedContext:
     pcap: str                       # path to a capture taken from the tool's input
     profile: ToolProfile
     ingress: str | None = None      # lossless capture of what the broker receives from its TAPs (optional)
+    counters: object = None         # PathCounters: interface counters along the feed's path (optional)
 
 
 @dataclass
@@ -33,6 +34,7 @@ class Finding:
     evidence: list[int] = field(default_factory=list)   # frame numbers proving it
     detail: str = ""                # short machine-written description
     explanation: str = ""           # filled in later by the Muse Spark agent
+    location: str = ""              # where on the path the fault is (device and port), when known
 
     def to_dict(self):
         return asdict(self)

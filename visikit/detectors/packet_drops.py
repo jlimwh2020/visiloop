@@ -21,23 +21,31 @@ ETH_HEADER = 14
 
 
 def has_sliced_frames(pcap):
-    rows = fields(pcap, ["frame.len", "ip.len"], "ip")
-    return any(len(r) > 1 and r[1] and int(r[1]) > int(r[0]) - ETH_HEADER for r in rows)
+    rows = fields(pcap, ["frame.len", "ip.len", "ipv6.plen"], "ip or ipv6")
+    for r in rows:
+        r += [""] * (3 - len(r))
+        stated = int(r[1]) if r[1] else (int(r[2]) + 40 if r[2] else 0)
+        if stated > int(r[0]) - ETH_HEADER:
+            return True
+    return False
 
 
 def gap_analysis(pcap):
     """Frames showing missing data, judged by IP-stated segment lengths. Returns (flagged, tcp_total)."""
     names = ["frame.number", "tcp.stream", "ip.src", "tcp.seq", "tcp.ack", "tcp.flags.syn", "tcp.flags.fin",
-             "tcp.flags.ack", "ip.len", "ip.hdr_len", "tcp.hdr_len"]
+             "tcp.flags.ack", "ip.len", "ip.hdr_len", "tcp.hdr_len", "ipv6.src", "ipv6.plen", "tcp.srcport"]
     rows = fields(pcap, names, "tcp", occurrence="l")
     next_seq = {}                      # (stream, sender) -> highest sequence end seen
     flagged = []
     sides = defaultdict(set)
     for r in rows:
         r += [""] * (len(names) - len(r))
-        frame, stream, src, seq, ack, syn, fin, has_ack, iplen, iphl, tcphl = r
+        frame, stream, src, seq, ack, syn, fin, has_ack, iplen, iphl, tcphl, src6, plen6, sport = r
+        if not iplen and plen6:                       # IPv6: payload length covers TCP header + data
+            iplen, iphl = plen6, "0"
         if not seq or not iplen:
             continue
+        src = f"{src or src6}:{sport}"
         seq, payload = int(seq), int(iplen) - int(iphl) - int(tcphl)
         end = seq + payload + (syn in ("1", "True")) + (fin in ("1", "True"))
         key = (stream, src)
