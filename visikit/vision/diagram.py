@@ -228,7 +228,10 @@ STATUS_COLOUR = {
 
 
 def _colour(pin):
-    return STATUS_COLOUR.get(pin.get("status", "fault"), FAULT_COLOUR)
+    status = pin.get("status", "fault")
+    if status.startswith("advice"):
+        return STATUS_COLOUR["advice (cannot be verified offline)"]
+    return STATUS_COLOUR.get(status, FAULT_COLOUR)
 
 
 def render(image_path, inv, pins, out_path=None, title=None):

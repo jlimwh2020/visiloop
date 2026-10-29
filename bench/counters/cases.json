@@ -1,0 +1,6426 @@
+{
+ "version": 1,
+ "seed": 7,
+ "cases": [
+  {
+   "name": "c001_broker",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c001_broker",
+    "traffic": {
+     "gbps": 1.924,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 3 (input)",
+      "rate": 1.6531417613741572e-06
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "VF-1 5"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c002_link_span",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c002_link_span",
+    "traffic": {
+     "gbps": 1.374,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "rate": 0.029832943413396516
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48",
+      "NPB-01 1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c003_mild",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c003_mild",
+    "traffic": {
+     "gbps": 0.592,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "rate": 0.00031089150999232283
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c004_nic",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c004_nic",
+    "traffic": {
+     "gbps": 0.624,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 0.017957199420058394
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c005_nic",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c005_nic",
+    "traffic": {
+     "gbps": 0.522,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.04439650153238997
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c006_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c006_nic",
+    "traffic": {
+     "gbps": 0.189,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.036567140958699076
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c007_nic_crc",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c007_nic_crc",
+    "traffic": {
+     "gbps": 2.261,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.0011692180966164293
+     },
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 0.01793443669244878
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c008_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c008_nic",
+    "traffic": {
+     "gbps": 0.42,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.021144702439923117
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c009_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c009_healthy",
+    "traffic": {
+     "gbps": 0.497,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c010_broker",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c010_broker",
+    "traffic": {
+     "gbps": 20.149,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "VF-1 1/5"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c011_healthy",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c011_healthy",
+    "traffic": {
+     "gbps": 0.549,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c012_broker_nic",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c012_broker_nic",
+    "traffic": {
+     "gbps": 2.027,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 0.04900203500665371
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "VF-1 5"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c013_healthy",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c013_healthy",
+    "traffic": {
+     "gbps": 0.385,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c014_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c014_healthy",
+    "traffic": {
+     "gbps": 0.496,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c015_broker",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c015_broker",
+    "traffic": {
+     "gbps": 2.489,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 12"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c016_crc",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c016_crc",
+    "traffic": {
+     "gbps": 0.456,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.0011014294800534927
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c017_span_nic",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c017_span_nic",
+    "traffic": {
+     "gbps": 1.732,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.041037060600351095
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c018_nic",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c018_nic",
+    "traffic": {
+     "gbps": 0.534,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.02594092470625482
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c019_link_nic",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c019_link_nic",
+    "traffic": {
+     "gbps": 0.217,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.03872733028242824
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "NPB-01 port 12 (to IDS)",
+      "rate": 0.023389043527601825
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "NPB-01 12",
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c020_mild",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c020_mild",
+    "traffic": {
+     "gbps": 0.38,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "rate": 0.00026498993212982643
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c021_link",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c021_link",
+    "traffic": {
+     "gbps": 0.458,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "rate": 0.02915435437040402
+     },
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.00021229054199290833
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48",
+      "NPB-01 1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c022_span_link",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c022_span_link",
+    "traffic": {
+     "gbps": 2.061,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to IDS)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "rate": 0.03555835711976677
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48",
+      "BROKER-A 1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c023_nic_broker",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c023_nic_broker",
+    "traffic": {
+     "gbps": 18.455,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.01921909073937367
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 5"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c024_mild",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c024_mild",
+    "traffic": {
+     "gbps": 0.635,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1 (input)",
+      "rate": 1.1947706241518158e-06
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c025_healthy",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c025_healthy",
+    "traffic": {
+     "gbps": 0.357,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c026_span",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c026_span",
+    "traffic": {
+     "gbps": 2.598,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c027_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c027_healthy",
+    "traffic": {
+     "gbps": 0.747,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c028_crc_span",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c028_crc_span",
+    "traffic": {
+     "gbps": 2.727,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 3 (input)",
+      "rate": 0.0013958098808496992
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 3"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c029_nic",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c029_nic",
+    "traffic": {
+     "gbps": 0.32,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.013151568540033479
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c030_link",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c030_link",
+    "traffic": {
+     "gbps": 1.74,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "VF-1 port 1/5 (to SIEM)",
+      "rate": 0.037454778021318746
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "VF-1 1/5",
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c031_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c031_nic",
+    "traffic": {
+     "gbps": 0.35,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.014683150382413149
+     },
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 3 (input)",
+      "rate": 2.4968596297933486e-06
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c032_broker_nic",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c032_broker_nic",
+    "traffic": {
+     "gbps": 1.918,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.007493048934652051
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "NPB-01 12"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c033_link_crc",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c033_link_crc",
+    "traffic": {
+     "gbps": 0.387,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1/1 (input)",
+      "rate": 0.004865852689937244
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "rate": 0.014488985215268996
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "NPB-01 1/1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48",
+      "NPB-01 1/1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c034_mild",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c034_mild",
+    "traffic": {
+     "gbps": 0.244,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 1.666678307646108e-05
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c035_crc",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c035_crc",
+    "traffic": {
+     "gbps": 6.207,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.0003145615267887707
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c036_nic_broker",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c036_nic_broker",
+    "traffic": {
+     "gbps": 23.105,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.04817822322041721
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 5"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c037_healthy",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c037_healthy",
+    "traffic": {
+     "gbps": 0.734,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c038_link_span",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c038_link_span",
+    "traffic": {
+     "gbps": 2.039,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "rate": 0.00660677405829338
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48",
+      "NPB-01 1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c039_nic_crc",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c039_nic_crc",
+    "traffic": {
+     "gbps": 0.353,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 3 (input)",
+      "rate": 0.004687646270673211
+     },
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.005787700511749827
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 3"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c040_crc",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c040_crc",
+    "traffic": {
+     "gbps": 0.683,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1/1 (input)",
+      "rate": 0.00444562458211273
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "NPB-01 1/1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c041_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c041_nic",
+    "traffic": {
+     "gbps": 0.241,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.020478206589257544
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "rate": 6.965527670013128e-07
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c042_nic_span",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c042_nic_span",
+    "traffic": {
+     "gbps": 2.219,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 0.021231919576553234
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c043_span_crc",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c043_span_crc",
+    "traffic": {
+     "gbps": 2.592,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "APM eth1",
+      "rate": 0.004432906122074689
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c044_link",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c044_link",
+    "traffic": {
+     "gbps": 0.182,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "rate": 0.011025851750319091
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48",
+      "VF-1 3"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c045_crc",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c045_crc",
+    "traffic": {
+     "gbps": 0.406,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 3 (input)",
+      "rate": 0.0032517046614894203
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 3"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c046_broker",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c046_broker",
+    "traffic": {
+     "gbps": 2.156,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "NPB-01 5"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c047_crc_link",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c047_crc_link",
+    "traffic": {
+     "gbps": 0.44,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NDR eth1",
+      "rate": 0.0042585500135292175
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "rate": 0.008980609979595572
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "NDR eth1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48",
+      "VF-1 1/1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c048_nic",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c048_nic",
+    "traffic": {
+     "gbps": 0.249,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.04873493835846616
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c049_nic_span",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c049_nic_span",
+    "traffic": {
+     "gbps": 2.29,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.02877139142627343
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c050_mild",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c050_mild",
+    "traffic": {
+     "gbps": 0.798,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "rate": 0.0003835759887586743
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c051_broker_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c051_broker_nic",
+    "traffic": {
+     "gbps": 11.414,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to APM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 10
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.02742396101220089
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "NPB-01 12"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c052_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c052_healthy",
+    "traffic": {
+     "gbps": 0.386,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c053_healthy",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c053_healthy",
+    "traffic": {
+     "gbps": 0.294,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c054_healthy",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c054_healthy",
+    "traffic": {
+     "gbps": 0.185,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c055_broker",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c055_broker",
+    "traffic": {
+     "gbps": 29.953,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "VF-1 1/5"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c056_mild",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c056_mild",
+    "traffic": {
+     "gbps": 0.221,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1/1 (input)",
+      "rate": 8.394192847780056e-07
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c057_span",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c057_span",
+    "traffic": {
+     "gbps": 2.129,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 10
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c058_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c058_nic",
+    "traffic": {
+     "gbps": 0.672,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.007790175389988106
+     },
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1 (input)",
+      "rate": 2.6956553669039078e-06
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c059_crc",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c059_crc",
+    "traffic": {
+     "gbps": 0.746,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.0002188578542134893
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "rate": 0.00028622847484581964
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c060_nic_crc",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c060_nic_crc",
+    "traffic": {
+     "gbps": 0.685,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 3 (input)",
+      "rate": 0.0030755457331023976
+     },
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.01975099149164488
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "NPB-01 3"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c061_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c061_healthy",
+    "traffic": {
+     "gbps": 0.792,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c062_span",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c062_span",
+    "traffic": {
+     "gbps": 1.546,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c063_span_crc",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c063_span_crc",
+    "traffic": {
+     "gbps": 1.547,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "SIEM eth1",
+      "rate": 0.004432422315680118
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c064_mild",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c064_mild",
+    "traffic": {
+     "gbps": 0.153,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 1 (input)",
+      "rate": 2.5216690923638003e-06
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c065_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c065_healthy",
+    "traffic": {
+     "gbps": 5.42,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c066_healthy",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c066_healthy",
+    "traffic": {
+     "gbps": 0.175,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c067_healthy",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c067_healthy",
+    "traffic": {
+     "gbps": 0.506,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c068_span",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c068_span",
+    "traffic": {
+     "gbps": 1.638,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 1/1 (input)",
+      "rate": 9.370856600702754e-07
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c069_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c069_nic",
+    "traffic": {
+     "gbps": 0.736,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.024068966210702567
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c070_crc",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c070_crc",
+    "traffic": {
+     "gbps": 0.753,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 1 (input)",
+      "rate": 0.0008148454480240506
+     },
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 6.871412076204951e-05
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "BROKER-A 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c071_healthy",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c071_healthy",
+    "traffic": {
+     "gbps": 0.545,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to APM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c072_healthy",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c072_healthy",
+    "traffic": {
+     "gbps": 0.689,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c073_broker",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c073_broker",
+    "traffic": {
+     "gbps": 26.497,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.00033699399756628647
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "VF-1 5"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c074_healthy",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c074_healthy",
+    "traffic": {
+     "gbps": 0.427,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c075_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c075_nic",
+    "traffic": {
+     "gbps": 0.646,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to APM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.0400988701124017
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c076_nic_link",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c076_nic_link",
+    "traffic": {
+     "gbps": 0.577,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.006829323423204315
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "rate": 0.006865328314452775
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48",
+      "VF-1 1/1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c077_span",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c077_span",
+    "traffic": {
+     "gbps": 2.641,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to IDS)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c078_crc_link",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c078_crc_link",
+    "traffic": {
+     "gbps": 0.55,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.001663479832739443
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "rate": 0.01235028098194696
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48",
+      "VF-1 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c079_crc",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c079_crc",
+    "traffic": {
+     "gbps": 0.489,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 1/1 (input)",
+      "rate": 0.0013349548128655368
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "BROKER-A 1/1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c080_crc_link",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c080_crc_link",
+    "traffic": {
+     "gbps": 0.633,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to APM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1 (input)",
+      "rate": 0.0015522786693061817
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "NPB-01 port 5 (to APM)",
+      "rate": 0.017573404759497778
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "NPB-01 1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "NPB-01 5",
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c081_crc_span",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c081_crc_span",
+    "traffic": {
+     "gbps": 2.341,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.0003665258505405177
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "LEAF-07 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c082_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c082_healthy",
+    "traffic": {
+     "gbps": 0.238,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c083_broker_nic",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c083_broker_nic",
+    "traffic": {
+     "gbps": 1.207,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 0.04193963084597068
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 1/5"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c084_link_nic",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c084_link_nic",
+    "traffic": {
+     "gbps": 1.9,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.006135135801654253
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "NPB-01 port 5 (to NDR)",
+      "rate": 0.014170433882498598
+     },
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1 (input)",
+      "rate": 3.7050283237686225e-08
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "NPB-01 5",
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c085_broker_link",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c085_broker_link",
+    "traffic": {
+     "gbps": 22.893,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 1/5 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "BROKER-A port 1/5 (to NDR)",
+      "rate": 0.03662373484153374
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 1/5"
+     ]
+    },
+    {
+     "kind": "link_loss",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 1/5",
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c086_span",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c086_span",
+    "traffic": {
+     "gbps": 2.524,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c087_span_crc",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c087_span_crc",
+    "traffic": {
+     "gbps": 2.819,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 1 (input)",
+      "rate": 0.004729019687175847
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "BROKER-A 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c088_healthy",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c088_healthy",
+    "traffic": {
+     "gbps": 3.02,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "LEAF-07 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "LEAF-07",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "LEAF-07 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "LEAF-07",
+      "port": "Gi1/0/48",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c089_broker_nic",
+   "tool": "NDR",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c089_broker_nic",
+    "traffic": {
+     "gbps": 13.027,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to NDR)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NDR eth1",
+      "role": "tool_in",
+      "device": "NDR",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "NDR eth1",
+      "rate": 0.046802697608482144
+     },
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "BROKER-A port 1 (input)",
+      "rate": 2.1022194481357775e-06
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "broker_congestion",
+     "check": "path_loss",
+     "where": [
+      "BROKER-A 5"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "NDR eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c090_mild",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c090_mild",
+    "traffic": {
+     "gbps": 0.729,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "NPB-01 port 1 (input)",
+      "rate": 2.6391438216222582e-06
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c091_span",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c091_span",
+    "traffic": {
+     "gbps": 1.352,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "CORE-SW-01 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "CORE-SW-01 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "CORE-SW-01",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "BROKER-A port 3 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "CORE-SW-01 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c092_mild",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c092_mild",
+    "traffic": {
+     "gbps": 0.459,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "rate": 0.0002473103426267353
+     }
+    ]
+   },
+   "faults": [],
+   "expected": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c093_nic_span",
+   "tool": "IDS",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c093_nic_span",
+    "traffic": {
+     "gbps": 2.673,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DIST-SW-02 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DIST-SW-02",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to IDS)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 1
+     },
+     {
+      "name": "IDS eth1",
+      "role": "tool_in",
+      "device": "IDS",
+      "port": "eth1",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "IDS eth1",
+      "rate": 0.03085434102931248
+     },
+     {
+      "at": 0,
+      "kind": "link_loss",
+      "hop": "DIST-SW-02 Gi1/0/48 (SPAN destination)",
+      "rate": 5.196229325405533e-07
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DIST-SW-02 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "IDS eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c094_span",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c094_span",
+    "traffic": {
+     "gbps": 1.639,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 9.261102228854777e-05
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c095_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c095_healthy",
+    "traffic": {
+     "gbps": 4.108,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "BROKER-A port 1/1 (input)",
+      "role": "broker_in",
+      "device": "BROKER-A",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "BROKER-A port 5 (to SIEM)",
+      "role": "broker_out",
+      "device": "BROKER-A",
+      "port": "5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c096_span_nic",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c096_span_nic",
+    "traffic": {
+     "gbps": 2.967,
+     "avg_packet_bytes": 400
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "rx"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1/1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1/1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "12",
+      "speed_gbps": 10
+     },
+     {
+      "name": "SIEM eth1",
+      "role": "tool_in",
+      "device": "SIEM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "SIEM eth1",
+      "rate": 0.033383481208316246
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "span_oversubscribed",
+     "check": "path_loss",
+     "where": [
+      "DC-CORE-1 Gi1/0/48"
+     ]
+    },
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "SIEM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c097_nic",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c097_nic",
+    "traffic": {
+     "gbps": 5.265,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "VF-1 port 3 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 1/5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "1/5",
+      "speed_gbps": 10
+     },
+     {
+      "name": "APM eth1",
+      "role": "tool_in",
+      "device": "APM",
+      "port": "eth1",
+      "speed_gbps": 10
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "nic_overrun",
+      "hop": "APM eth1",
+      "rate": 0.010672567077222604
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "nic_overrun",
+     "check": "path_loss",
+     "where": [
+      "APM eth1"
+     ]
+    }
+   ],
+   "expected": [
+    "path_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c098_healthy",
+   "tool": "SIEM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c098_healthy",
+    "traffic": {
+     "gbps": 0.255,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "NPB-01 port 3 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "3",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 12 (to SIEM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "12",
+      "speed_gbps": 10
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c099_healthy",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c099_healthy",
+    "traffic": {
+     "gbps": 0.667,
+     "avg_packet_bytes": 700
+    },
+    "path": [
+     {
+      "name": "TAP-01",
+      "role": "tap",
+      "device": "TAP-01",
+      "port": ""
+     },
+     {
+      "name": "NPB-01 port 1 (input)",
+      "role": "broker_in",
+      "device": "NPB-01",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "NPB-01 port 5 (to APM)",
+      "role": "broker_out",
+      "device": "NPB-01",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": []
+   },
+   "faults": [],
+   "expected": [],
+   "mild": []
+  },
+  {
+   "name": "c100_crc",
+   "tool": "APM",
+   "seconds": 60,
+   "scenario": {
+    "feed": "c100_crc",
+    "traffic": {
+     "gbps": 0.705,
+     "avg_packet_bytes": 1000
+    },
+    "path": [
+     {
+      "name": "DC-CORE-1 Gi1/0/1 (mirrored)",
+      "role": "span_source",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/1",
+      "speed_gbps": 10,
+      "mirrors": "both"
+     },
+     {
+      "name": "DC-CORE-1 Gi1/0/48 (SPAN destination)",
+      "role": "span_dest",
+      "device": "DC-CORE-1",
+      "port": "Gi1/0/48",
+      "speed_gbps": 1
+     },
+     {
+      "name": "VF-1 port 1 (input)",
+      "role": "broker_in",
+      "device": "VF-1",
+      "port": "1",
+      "speed_gbps": 10
+     },
+     {
+      "name": "VF-1 port 5 (to APM)",
+      "role": "broker_out",
+      "device": "VF-1",
+      "port": "5",
+      "speed_gbps": 1
+     }
+    ],
+    "events": [
+     {
+      "at": 0,
+      "kind": "crc_errors",
+      "hop": "VF-1 port 1 (input)",
+      "rate": 0.003497852820828673
+     }
+    ]
+   },
+   "faults": [
+    {
+     "kind": "crc_errors",
+     "check": "link_errors",
+     "where": [
+      "VF-1 1"
+     ]
+    }
+   ],
+   "expected": [
+    "link_errors"
+   ],
+   "mild": []
+  }
+ ]
+}

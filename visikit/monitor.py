@@ -159,6 +159,14 @@ def run(config_path, cycles=None, fast=False, database=None):
     interval = float(cfg.get("interval_seconds", 60))
     db = sqlite3.connect(database or cfg.get("database", "monitor.db"))
     db.executescript(SCHEMA)
+    if fast:
+        # A replay starts the simulated day again: clear earlier replays of these feeds, and stop at the
+        # end of the scenario (default 100 cycles) instead of running for ever
+        for feed in feeds:
+            for table in ("cycles", "findings", "alerts"):
+                db.execute(f"DELETE FROM {table} WHERE feed = ?", (feed.name,))
+        db.commit()
+        cycles = cycles or int(cfg.get("replay_cycles", 100))
     alerter = Alerter(cfg.get("alerts"))
     workdir = tempfile.mkdtemp(prefix="visiloop_monitor_")
     clock = time.time() if not fast else cfg.get("start_epoch", 1793232000)   # fast mode: a simulated day
@@ -209,7 +217,8 @@ def main():
     ap = argparse.ArgumentParser(description="VisiLoop continuous monitoring")
     ap.add_argument("--config", required=True)
     ap.add_argument("--cycles", type=int, help="stop after this many cycles (default: run until stopped)")
-    ap.add_argument("--fast", action="store_true", help="replay simulated feeds without waiting (demo and testing)")
+    ap.add_argument("--fast", action="store_true",
+                    help="replay simulated feeds without waiting; stops after the scenario (100 cycles by default)")
     ap.add_argument("--database", help="override the config's database file")
     a = ap.parse_args()
     run(a.config, a.cycles, a.fast, a.database)

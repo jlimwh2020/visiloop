@@ -116,7 +116,9 @@ def remediate(ctx, findings, workdir):
 
     fix_reports = []
     for plugin, fx, rnd in planned_all:
-        if fx.fault in advice_all:
+        if fx.fault in advice_all and getattr(plugin, "fault", "") in ("path_loss", "link_errors"):
+            status = "advice (confirm by reading the counters after the change)"
+        elif fx.fault in advice_all:
             status = "advice (cannot be verified offline)"
         elif fx.fault in remaining:
             status = "not fixed"

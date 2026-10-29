@@ -1,0 +1,2261 @@
+{
+ "generated": "2026-10-29 09:53",
+ "rows": [
+  {
+   "name": "c001_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c002_link_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "LEAF-07 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c003_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c004_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "SIEM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c005_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "IDS eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c006_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c007_nic_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "SIEM eth1",
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c008_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c009_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c010_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 1/5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c011_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c012_broker_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c013_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c014_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c015_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "BROKER-A 12"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c016_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c017_span_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "CORE-SW-01 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c018_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NDR eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c019_link_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "IDS eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c020_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c021_link",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NPB-01 1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "link_loss"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c022_span_link",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "LEAF-07 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c023_nic_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "BROKER-A 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c024_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c025_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c026_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "LEAF-07 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c027_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c028_crc_span",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "CORE-SW-01 Gi1/0/48",
+    "link_errors": "VF-1 3"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c029_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NDR eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c030_link",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "SIEM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c031_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c032_broker_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NPB-01 12"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c033_link_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NPB-01 1/1",
+    "link_errors": "NPB-01 1/1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c034_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c035_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c036_nic_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "BROKER-A 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c037_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c038_link_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DIST-SW-02 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c039_nic_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "IDS eth1",
+    "link_errors": "VF-1 3"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c040_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "NPB-01 1/1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c041_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c042_nic_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DIST-SW-02 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c043_span_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DC-CORE-1 Gi1/0/48",
+    "link_errors": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c044_link",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 3"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c045_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "VF-1 3"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c046_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NPB-01 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c047_crc_link",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 1/1",
+    "link_errors": "NDR eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c048_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NDR eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c049_nic_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DC-CORE-1 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c050_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c051_broker_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NPB-01 12"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c052_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c053_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c054_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c055_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 1/5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c056_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c057_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DIST-SW-02 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c058_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c059_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c060_nic_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "IDS eth1",
+    "link_errors": "NPB-01 3"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c061_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c062_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DC-CORE-1 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c063_span_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DIST-SW-02 Gi1/0/48",
+    "link_errors": "SIEM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c064_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c065_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c066_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c067_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c068_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "CORE-SW-01 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c069_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c070_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "BROKER-A 1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c071_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c072_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c073_broker",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c074_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c075_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c076_nic_link",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 1/1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c077_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "CORE-SW-01 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c078_crc_link",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "VF-1 1",
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c079_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "BROKER-A 1/1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c080_crc_link",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1",
+    "link_errors": "NPB-01 1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c081_crc_span",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "LEAF-07 Gi1/0/48",
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c082_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c083_broker_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "BROKER-A 1/5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c084_link_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "NDR eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun",
+    "link_loss"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c085_broker_link",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "BROKER-A 1/5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "link_loss"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c086_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "CORE-SW-01 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c087_span_crc",
+   "expected": [
+    "link_errors",
+    "path_loss"
+   ],
+   "found": [
+    "link_errors",
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DIST-SW-02 Gi1/0/48",
+    "link_errors": "BROKER-A 1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ],
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "crc_errors"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c088_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c089_broker_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "BROKER-A 5"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "load_balance"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "broker_congestion",
+    "nic_overrun"
+   ],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c090_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "crc_errors"
+   ]
+  },
+  {
+   "name": "c091_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "CORE-SW-01 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c092_mild",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c093_nic_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DIST-SW-02 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "nic_overrun"
+   ],
+   "mild": [
+    "link_loss"
+   ]
+  },
+  {
+   "name": "c094_span",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DC-CORE-1 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed"
+   ],
+   "mild": [
+    "nic_overrun"
+   ]
+  },
+  {
+   "name": "c095_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c096_span_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "DC-CORE-1 Gi1/0/48"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "replace_span_with_tap"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "span_oversubscribed",
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c097_nic",
+   "expected": [
+    "path_loss"
+   ],
+   "found": [
+    "path_loss"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "path_loss": "APM eth1"
+   },
+   "fixes": [
+    [
+     "path_loss",
+     "tool_capacity"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "nic_overrun"
+   ],
+   "mild": []
+  },
+  {
+   "name": "c098_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c099_healthy",
+   "expected": [],
+   "found": [],
+   "exact": true,
+   "located": true,
+   "locations": {},
+   "fixes": [],
+   "fixes_ok": true,
+   "faults": [],
+   "mild": []
+  },
+  {
+   "name": "c100_crc",
+   "expected": [
+    "link_errors"
+   ],
+   "found": [
+    "link_errors"
+   ],
+   "exact": true,
+   "located": true,
+   "locations": {
+    "link_errors": "VF-1 1"
+   },
+   "fixes": [
+    [
+     "link_errors",
+     "check_link"
+    ]
+   ],
+   "fixes_ok": true,
+   "faults": [
+    "crc_errors"
+   ],
+   "mild": []
+  }
+ ]
+}

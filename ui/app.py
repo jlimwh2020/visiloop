@@ -31,6 +31,16 @@ NICE = {
     "duplicates": "Duplicates", "one_way": "One-way traffic", "packet_drops": "Packet drops",
     "tool_overload": "Tool overload", "encrypted_share": "Encrypted share", "missing_vlan": "Missing VLANs",
     "truncated": "Packet slicing", "tunnel": "Tunnel headers", "oversize": "Oversize frames",
+    "path_loss": "Loss along the path", "link_errors": "Link errors",
+}
+COUNTER_SCENARIOS = {
+    "None": None,
+    "Simulated: healthy path": "healthy",
+    "Simulated: SPAN destination overloaded": "span_oversubscribed",
+    "Simulated: broker tool port congested": "broker_congestion",
+    "Simulated: failing optic into the broker": "crc_errors",
+    "Simulated: tool capture card overrun": "tool_overrun",
+    "Simulated: loss on the broker-to-tool link": "link_loss",
 }
 ACTION_NICE = {
     "dedup": "Enable deduplication", "aggregate": "Aggregate both TAP legs",
@@ -38,6 +48,7 @@ ACTION_NICE = {
     "vlan": "Preserve VLAN tags", "decrypt_advice": "Add a decryption point",
     "disable_slicing": "Turn off packet slicing", "strip_tunnel": "Strip tunnel headers",
     "mtu_advice": "Raise the MTU to 9216", "slice": "Trim frames to fit the tool",
+    "check_link": "Check the cable and optics", "tool_capacity": "Add tool capacity",
 }
 
 st.set_page_config(page_title="VisiLoop", page_icon="🔁", layout="wide")
@@ -79,10 +90,24 @@ def prove_cached(before_pcap, after_pcaps):
 
 
 @st.cache_data(show_spinner=False)
-def run_cached(pcap, ingress, tool, vlans, live_agent, recorded_json, _mtime):
-    ctx = FeedContext("feed-1", pcap, load_profile(tool, list(vlans)), ingress)
+def run_cached(pcap, ingress, tool, vlans, live_agent, recorded_json, _mtime, counter_scenario=None):
+    counters = None
+    if counter_scenario:
+        from visikit.counters.simulator import Simulator
+        counters = Simulator(os.path.join(ROOT, "demo", "counters", f"{counter_scenario}.yaml")).measure(60)
+    ctx = FeedContext("feed-1", pcap, load_profile(tool, list(vlans)), ingress, counters=counters)
     recorded = json.loads(recorded_json) if recorded_json else None
-    return run_loop(ctx, use_agent=live_agent, workdir=tempfile.mkdtemp(dir=TMP), diagnosis=recorded)
+    report = run_loop(ctx, use_agent=live_agent, workdir=tempfile.mkdtemp(dir=TMP), diagnosis=recorded)
+    if counters:
+        rows = []
+        for h in counters.hops:
+            d = counters.delta(h)
+            if d is not None:
+                rows.append({"Hop": h.name, "Packets in": f"{d.in_pkts:,}", "Packets out": f"{d.out_pkts:,}",
+                             "Discarded": f"{d.in_discards + d.out_discards:,}", "Damaged": f"{d.in_errors:,}",
+                             "Gbps": round(counters.gbps(max(d.in_octets, d.out_octets)), 2)})
+        report["hops"] = rows
+    return report
 
 
 # ---------------- sidebar ----------------
@@ -116,6 +141,11 @@ else:
 tool = st.sidebar.selectbox("Tool on this feed", ["IDS", "NDR", "APM", "SIEM"])
 vlans = tuple(int(v) for v in st.sidebar.text_input("Required VLANs", "10,20").split(",") if v.strip())
 
+counter_label = st.sidebar.selectbox("Path counters (where is the loss?)", list(COUNTER_SCENARIOS),
+                                     help="Interface counters along the feed's path, from switches and brokers. "
+                                          "Here simulated; on a real network read over SNMP.")
+counter_scenario = COUNTER_SCENARIOS[counter_label]
+
 dsrc = st.sidebar.radio("Network diagram", ["Demo diagram", "Upload", "None"], horizontal=True)
 diagram = DEMO_DIAGRAM if dsrc == "Demo diagram" else None
 if dsrc == "Upload":
@@ -139,18 +169,18 @@ st.markdown("**See → Diagnose → Fix → Prove.** Checks whether a security t
 
 if go:
     st.session_state["args"] = (pcap, ingress, tool, vlans, use_agent, diagram, use_ids, case_name,
-                                (tool, vlans) == demo_profile)
+                                (tool, vlans) == demo_profile, counter_scenario)
 args = st.session_state.get("args")
 if not args:
     st.info("Choose a capture and a diagram in the sidebar, then click **Run VisiLoop**.")
     st.stop()
-pcap, ingress, tool, vlans, use_agent, diagram, use_ids, case_name, demo_settings = args
+pcap, ingress, tool, vlans, use_agent, diagram, use_ids, case_name, demo_settings, counter_scenario = args
 
 # Recorded Muse Spark runs only apply to demo cases with the settings they were recorded with
 recorded_json = None if use_agent or not demo_settings else load_recorded(case_name)
 with st.spinner("Checking the feed, planning fixes and proving them..."):
     try:
-        report = run_cached(pcap, ingress, tool, vlans, use_agent, recorded_json, os.path.getmtime(pcap))
+        report = run_cached(pcap, ingress, tool, vlans, use_agent, recorded_json, os.path.getmtime(pcap), counter_scenario)
     except Exception as e:
         st.error(f"VisiLoop could not finish: {e}")
         st.stop()
@@ -202,15 +232,25 @@ st.header("2 · Diagnose")
 detectors, _ = load_plugins()
 by_fault = {f["fault"]: f for f in before}
 PER_ROW = 5
-names = sorted(n for n, cls in detectors.items() if getattr(cls, "source", "pcap") == "pcap")   # counter checks: Monitor page
+names = sorted(n for n, cls in detectors.items()
+               if getattr(cls, "source", "pcap") == "pcap" or (counter_scenario and cls.source == "counters"))
 for row in range(0, len(names), PER_ROW):
     for col, name in zip(st.columns(PER_ROW), names[row:row + PER_ROW]):
         f = by_fault.get(name)
         with col:
             if f:
-                st.error(f"**{NICE.get(name, name)}**\n\n{f['metric']:.1%} (limit {f['threshold']:.0%})")
+                fmt = lambda v: f"{v:.1%}" if v >= 0.01 or v == 0 else f"{v * 100:.3f}".rstrip("0").rstrip(".") + "%"
+                where = f"\n\nat {f['location']}" if f.get("location") else ""
+                st.error(f"**{NICE.get(name, name)}**\n\n{fmt(f['metric'])} (limit {fmt(f['threshold'])}){where}")
             else:
                 st.success(f"**{NICE.get(name, name)}**\n\nhealthy")
+
+if report.get("hops"):
+    with st.expander("Path counters: hop by hop over 60 seconds", expanded=any(f["fault"] in ("path_loss", "link_errors")
+                                                                               for f in before)):
+        st.dataframe(report["hops"], hide_index=True, width="stretch")
+        st.caption("Comparing neighbouring hops shows where packets disappear. Simulated here; on a real network "
+                   "VisiLoop reads these over SNMP (python -m visikit.counters --snmp).")
 
 if not before:
     st.success(f"This {tool} receives complete, correct traffic. Nothing to fix.")
@@ -255,7 +295,7 @@ for fx in report["fixes"]:
 
 # ---- 4. Prove ----
 st.header("4 · Prove")
-status_icon = {"verified fixed": "✅", "advice (cannot be verified offline)": "🟠", "not fixed": "❌"}
+status_icon = {"verified fixed": "✅", "not fixed": "❌"}
 c1, c2 = st.columns([3, 2])
 with c1:
     if inv:
@@ -266,7 +306,8 @@ with c1:
 with c2:
     for fx in report["fixes"]:
         rnd = f" (round {fx['round']})" if report.get("rounds", 1) > 1 else ""
-        st.markdown(f"{status_icon.get(fx['status'], '')} **{ACTION_NICE.get(fx['action'], fx['action'])}**{rnd}: {fx['status']}")
+        icon = status_icon.get(fx["status"], "🟠" if fx["status"].startswith("advice") else "")
+        st.markdown(f"{icon} **{ACTION_NICE.get(fx['action'], fx['action'])}**{rnd}: {fx['status']}")
     if report.get("revealed"):
         st.info("The first fixes revealed " + ", ".join(NICE.get(f, f).lower() for f in report["revealed"])
                 + ", which the original feed was hiding, so VisiLoop planned another round of fixes.")
@@ -275,7 +316,8 @@ with c2:
         st.success(f"Every fault is fixed. The {tool} now receives complete, correct traffic.")
     elif result.startswith("healthy except"):
         st.warning("All simulated faults are fixed. Remaining items are advice that needs a change on the "
-                   "customer's side to verify (a decryption point or the tool's MTU).")
+                   "customer's side to verify (a decryption point, the tool's MTU, or a cable, port or "
+                   "tool change confirmed by reading the counters again).")
     else:
         st.error("Some faults remain after the fixes. Review the details below.")
     st.markdown(f"**Tool ports after the fix:** {report['tool_ports_after']}")

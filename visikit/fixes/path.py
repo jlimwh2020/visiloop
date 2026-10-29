@@ -26,7 +26,7 @@ class PathLossFix:
     def config(self, ctx, finding):
         w = _worst(ctx, {"span_oversubscribed", "egress_discards", "ingress_discards", "link_loss"}) or {}
         kind, where = w.get("kind"), finding.location or w.get("hop", "")
-        if kind == "span_oversubscribed":
+        if kind == "span_oversubscribed" or (kind == "egress_discards" and w.get("role") == "span_dest"):
             action, params = "replace_span_with_tap", {
                 "where": where, "why": "the SPAN destination port cannot carry everything mirrored into it",
                 "offered_gbps": w.get("offered_gbps"),
