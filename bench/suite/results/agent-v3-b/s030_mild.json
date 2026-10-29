@@ -1,0 +1,26 @@
+{
+ "feed": "s030_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s030_mild. Traffic is complete and correct: bidirectional, full payload, no duplicates, drops, overload, VLAN gaps, encryption excess, truncation, tunnels or oversize frames.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3187,
+  "tokens_out": 756,
+  "cost_usd": 0.0072,
+  "seconds": 6.2,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,98 @@
+{
+ "feed": "s149_double",
+ "status": "degraded",
+ "summary": "Feed s149_double to IDS is degraded: 2 high-severity faults detected - 9.6% TCP packet drops and 63.9% VXLAN-encapsulated traffic. IDS requires both directions and full payload but is missing segments and cannot inspect inner traffic.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror oversubscription or packet broker ingress buffer drops before the IDS - 254 of 2644 TCP packets (9.6%) show gaps/retransmissions indicating missing data in transit, well above 1% threshold. Tool overload is healthy, so loss is upstream of the tool port.",
+   "impact_on_tool": "IDS TCP stream reassembly fails, signatures and anomaly detection miss attacks across gaps, causing false negatives and incomplete session logging.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_point": "aggregation/core uplink"
+    },
+    "why": "Passive TAP delivers lossless, line-rate copy unlike SPAN which drops under load; eliminates upstream packet loss before broker/IDS."
+   },
+   "evidence_frames": [
+    26,
+    27,
+    43,
+    44,
+    82,
+    85,
+    87,
+    88,
+    171,
+    175,
+    212,
+    217,
+    226,
+    227,
+    301,
+    303,
+    304,
+    318,
+    321,
+    334
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic without stripping outer header - 1779 of 2782 frames (63.9%) remain inside VXLAN, so IDS only sees outer VTEP/IP/UDP.",
+   "impact_on_tool": "IDS cannot parse inner Ethernet/IP/TCP and payload for 63.9% of traffic; detection rules, IDS signatures and application decoding fail on encapsulated traffic, blinding visibility to east-west/lateral movement.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Stripping VXLAN at the broker exposes inner frames to the IDS which needs full payload inspection, restoring L2-L7 detection coverage without changing tool."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3429,
+  "tokens_out": 1985,
+  "cost_usd": 0.01272,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-29"
+ }
+}

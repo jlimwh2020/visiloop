@@ -1,0 +1,120 @@
+{
+ "feed": "s184_triple",
+ "status": "degraded",
+ "summary": "Feed s184_triple to IDS is degraded: 6.6% jumbo frames dropped at 1518B NIC, 3.0% TCP packet loss, and 10.2% duplicates. IDS needs both directions and full payload, so oversize and loss cause blind spots for signature matching and stream reassembly.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network forwards jumbo frames up to 8058 bytes while the IDS 1Gbps capture port is limited to 1518 bytes and does not support jumbo. 218 of 3309 frames (6.6%) exceed the tool MTU and are silently dropped by the NIC.",
+   "impact_on_tool": "IDS is blind to 6.6% of traffic. Because this IDS needs full payload for signature and exploit detection, dropped jumbo frames cannot be recovered by slicing; attacks hidden in large frames, file transfers and lateral movement will be missed.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_mtu": 1518,
+     "largest_seen": 8058,
+     "options": [
+      "enable_jumbo_9000_on_ids_nic_and_broker_egress",
+      "enforce_1518_mtu_upstream"
+     ]
+    },
+    "why": "Trimming/slicing is not an option for this IDS (needs full payload). Must either enable jumbo (~9000B) end-to-end to the tool or enforce 1518B MTU upstream so frames are not dropped at ingress."
+   },
+   "evidence_frames": [
+    11,
+    12,
+    14,
+    15,
+    85,
+    86,
+    90,
+    93,
+    200,
+    201,
+    202,
+    204,
+    205,
+    206,
+    208,
+    209,
+    236,
+    237,
+    238,
+    240
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet loss before the tool - likely SPAN/mirror drops or packet broker buffer oversubscription. TCP sequence gaps detected in 95 of 3148 TCP packets (3.0%) exceeding 1% threshold, indicating random drops in the visibility path.",
+   "impact_on_tool": "IDS cannot reliably reassemble TCP streams; 3% missing data causes incomplete flows, missed exploit payloads split across segments, and false negatives for C2/exfiltration detection.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace": "SPAN_with_passive_TAP",
+     "check_broker_buffers": true,
+     "ensure_egress_bandwidth_gbps": 1
+    },
+    "why": "SPAN drops packets under load and broker buffers overflow. Passive TAP plus lossless broker delivery eliminates pre-tool gaps and restores complete TCP streams for IDS analysis."
+   },
+   "evidence_frames": [
+    49,
+    50,
+    64,
+    65,
+    92,
+    95,
+    271,
+    272,
+    424,
+    425,
+    482,
+    483,
+    495,
+    499,
+    716,
+    717,
+    772,
+    777,
+    791,
+    792
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Broker is aggregating multiple TAP/SPAN feeds covering same traffic without deduplication, or a SPAN configuration mirrors same packet twice. 339 of 3309 packets (10.2%) are duplicates, double the 5% threshold.",
+   "impact_on_tool": "IDS wastes cycles inspecting same packet twice, inflates flow/alert counts, confuses TCP reassembly and thresholds, and can mask true anomalies while reducing effective inspection capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "packet_hash",
+     "location": "packet_broker_egress_to_ids"
+    },
+    "why": "Enable broker deduplication to forward only one copy of each packet so IDS sees accurate traffic volume and correct state tracking."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3536,
+  "tokens_out": 3268,
+  "cost_usd": 0.01831,
+  "seconds": 18.3,
+  "recorded_at": "2026-10-29"
+ }
+}

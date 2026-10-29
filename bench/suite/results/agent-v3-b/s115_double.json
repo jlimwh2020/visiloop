@@ -1,0 +1,79 @@
+{
+ "feed": "s115_double",
+ "status": "degraded",
+ "summary": "Feed s115_double is degraded: IDS is silently dropping 14.8% of frames as oversize (up to 8058B vs 1518B port limit) and receiving 9.6% duplicates, creating visibility gaps and wasted processing.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Aggregation of same traffic from multiple TAP/SPAN ingress ports without packet-broker deduplication. 214 of 2230 packets (9.6%) exceed 5% threshold, indicating the same packet is forwarded twice to the IDS feed.",
+   "impact_on_tool": "IDS wastes CPU/memory re-processing duplicates, inflates flow/event counts, skews analytics and can cause false correlations; sustained duplicates increase risk of overload and missed true positives.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable broker-based deduplication on the aggregate feed to drop duplicate packets before delivery to the 1Gbps IDS port, restoring accurate traffic volume without losing unique packets."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "MTU mismatch: upstream network is sending jumbo frames up to 8058 bytes while the IDS ingress port max is 1518 bytes. 331 of 2230 frames (14.8%) exceed the limit, well above 1% threshold.",
+   "impact_on_tool": "IDS NIC drops all oversized frames silently - 14.8% traffic loss. Because this IDS needs_full_payload=true, payload is lost entirely, creating a large blind spot where large-payload attacks, data exfiltration, and jumbo-encapsulated threats evade detection and stateful inspection breaks.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "suggested_action": "enable 9000B jumbo support on IDS NIC/port or normalize upstream MTU to 1500B"
+    },
+    "why": "Tool requires full payload so broker slicing/trimming to 1518B is not an option (would break IDS detection). Must fix at network/tool layer: either enable jumbo frames end-to-end to the IDS or reduce upstream MTU/encapsulation size to fit 1518B."
+   },
+   "evidence_frames": [
+    7,
+    8,
+    9,
+    11,
+    12,
+    38,
+    39,
+    41,
+    67,
+    69,
+    70,
+    73,
+    74,
+    76,
+    77,
+    87,
+    88,
+    90,
+    91,
+    93
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3401,
+  "tokens_out": 2285,
+  "cost_usd": 0.01396,
+  "seconds": 12.1,
+  "recorded_at": "2026-10-29"
+ }
+}

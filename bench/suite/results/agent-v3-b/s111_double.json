@@ -1,0 +1,99 @@
+{
+ "feed": "s111_double",
+ "status": "degraded",
+ "summary": "Feed s111_double to IDS is degraded: 17.6% of TCP sessions are one-way and 13.2% of frames are sliced to 192 bytes, both break IDS state tracking and payload inspection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is not aggregating both directions of bidirectional flows to the same IDS tool port. Likely asymmetric routing or hash-based load-balancing/SPAN aggregation is sending client->server and server->client to different outputs, so only one side arrives at s111_double.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP state tracking, stream reassembly and signature correlation. With 24/136 sessions (17.6%) one-way, IDS cannot validate handshakes, misses request/response exploits and generates inaccurate detections.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "use_5tuple_bidirectional_hash": true
+    },
+    "why": "Aggregating both directions with a bidirectional 5-tuple hash ensures the IDS sees complete sessions for stateful detection."
+   },
+   "evidence_frames": [
+    125,
+    203,
+    309,
+    349,
+    392,
+    476,
+    703,
+    726,
+    736,
+    810,
+    887,
+    912,
+    964,
+    1022,
+    1071,
+    1094,
+    1499,
+    1542,
+    1577,
+    1688
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker has packet slicing/snaplen enabled truncating frames to ~192 bytes, likely to save bandwidth or fit tool port capacity. 257/1948 frames (13.2%) are cut short.",
+   "impact_on_tool": "IDS needs full payload (needs_full_payload=true) for deep packet inspection and signature matching. Slicing removes application-layer payload, so exploits, malware, and C2 inside truncated packets are invisible to the IDS.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518,
+     "disable_slicing_for_ids": true
+    },
+    "why": "Disabling slicing restores full 1518-byte frames so IDS receives complete L7 payload for detection."
+   },
+   "evidence_frames": [
+    9,
+    11,
+    16,
+    22,
+    25,
+    30,
+    42,
+    45,
+    46,
+    48,
+    50,
+    53,
+    83,
+    84,
+    86,
+    96,
+    100,
+    102,
+    114,
+    115
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3436,
+  "tokens_out": 2031,
+  "cost_usd": 0.01293,
+  "seconds": 11.1,
+  "recorded_at": "2026-10-29"
+ }
+}

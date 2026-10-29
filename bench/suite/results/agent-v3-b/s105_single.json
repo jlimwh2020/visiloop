@@ -1,0 +1,46 @@
+{
+ "feed": "s105_single",
+ "status": "degraded",
+ "summary": "Feed s105_single to 10 Gbps NDR is degraded due to tool overload: 1ms microbursts peak at 19.33 Gbps (193% of port capacity) across 2 intervals, causing indiscriminate drops. All other visibility checks (duplicates, encryption, VLANs, one-way, oversize, drops, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering aggregated traffic to a single 10 Gbps NDR port without load-balancing. Burst analysis shows 19.33 Gbps in 1ms intervals (193% of capacity, threshold 80%), so the tool port is physically oversubscribed during bursts.",
+   "impact_on_tool": "NDR will randomly drop packets due to port buffer overrun. As NDR requires both directions and full payload, drops cause incomplete flows, missed detections, broken reassembly and reduced detection coverage even though traffic is otherwise correct.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow-aware 5-tuple hash",
+     "tool_ports": 2,
+     "target_utilization": 0.7
+    },
+    "why": "Distribute flows across 2+ NDR ports (or a load-balanced tool group) with flow-aware hashing to keep per-port peaks below ~70-80% of 10 Gbps, eliminating burst drops while preserving both directions of each flow to the same tool instance for NDR analysis."
+   },
+   "evidence_frames": [
+    1,
+    5067
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3264,
+  "tokens_out": 1653,
+  "cost_usd": 0.01111,
+  "seconds": 10.3,
+  "recorded_at": "2026-10-29"
+ }
+}

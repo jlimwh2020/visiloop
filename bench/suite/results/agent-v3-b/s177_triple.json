@@ -1,0 +1,121 @@
+{
+ "feed": "s177_triple",
+ "status": "degraded",
+ "summary": "Feed s177_triple is degraded: 3 faults detected - 99.4% encrypted traffic exceeds NDR 90% tolerance, 13.38 Gbps microbursts overload 10 Gbps tool port (134% capacity), and 28.1% ERSPAN-tunneled traffic obscures inner flows.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Near-total encryption (99.39% of bytes) - traffic is forwarded as TLS/encrypted without decryption or cleartext feed. NDR tolerates ~90% encrypted but this feed is almost entirely opaque.",
+   "impact_on_tool": "NDR requires full payload for detection and cannot inspect encrypted payloads; with 99%+ encrypted, behavioral and signature detection is blind, drastically reducing detection coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "packet_broker_or_tls_proxy",
+     "policy": "decrypt_relevant_TLS_or_send_copy_of_cleartext_to_NDR",
+     "preserve_privacy": true
+    },
+    "why": "NDR needs cleartext payload per profile (needs_full_payload=true); decrypting at broker/proxy or forwarding decrypted copy restores inspection capability without exceeding 90% encrypted threshold."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is sending microbursts of 13.38 Gbps in 1ms intervals to a single 10 Gbps NDR port - 134% of line rate over 2 intervals. Aggregate rate exceeds tool port capacity, likely due to no load balancing or rate limiting.",
+   "impact_on_tool": "NDR port is oversubscribed; bursts will cause buffer drops at NIC/broker egress, leading to missed packets, broken flows, and missed detections despite packet_drops check still healthy at capture point.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target": "NDR_cluster",
+     "hash": "5-tuple",
+     "links": 2,
+     "port_speed_gbps": 10
+    },
+    "why": "Distribute 13+ Gbps across 2x10G NDR members or add load-balancing group to keep per-port utilization below 80% threshold and prevent burst drops."
+   },
+   "evidence_frames": [
+    1,
+    3232
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "28.1% of frames (2214/7876) arrive encapsulated in ERSPAN from packet broker/SPAN source. Broker is forwarding tunneled traffic without stripping outer header.",
+   "impact_on_tool": "NDR must parse inner headers to correlate flows; if not configured for ERSPAN, it sees only tunnel endpoints, misses inner IP/ports and application detection, and wastes cycles on outer encapsulation.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "protocol": "ERSPAN",
+     "strip_at": "packet_broker",
+     "forward": "inner_payload_with_metadata"
+    },
+    "why": "Stripping ERSPAN at the packet broker presents native inner frames to NDR, restoring full L2-L7 visibility and reducing overhead while preserving tunnel metadata if needed."
+   },
+   "evidence_frames": [
+    67,
+    69,
+    71,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    83,
+    84,
+    88,
+    89,
+    91,
+    94,
+    97,
+    99,
+    102,
+    103
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3529,
+  "tokens_out": 2018,
+  "cost_usd": 0.01299,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-29"
+ }
+}

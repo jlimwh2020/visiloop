@@ -1,0 +1,115 @@
+{
+ "feed": "s161_triple",
+ "status": "degraded",
+ "summary": "Feed s161_triple is degraded: 3 faults found - 91% encrypted traffic exceeds IDS 60% tolerance, 10.8% oversize frames dropped by 1518-byte IDS port, and 17.4% duplicates. IDS is blind to most payloads and losing large frames.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "91% of bytes are encrypted (vs 60% IDS tolerance). Traffic is delivered encrypted with no upstream decryption or cleartext mirror, so IDS sees only TLS/encrypted payloads.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection but cannot inspect encrypted content; ~91% of traffic is opaque, drastically reducing detection coverage and allowing threats to hide in encrypted flows.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker",
+     "method": "decrypt_or_forward_cleartext_copy"
+    },
+    "why": "IDS needs cleartext payload to inspect; decrypt at broker or mirror cleartext from TLS-intercept proxy before IDS, respecting privacy/policy, to bring encrypted share below 60%."
+   },
+   "evidence_frames": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "347 of 3224 frames (10.8%) exceed IDS 1518-byte MTU, largest 8058 bytes. Likely jumbo frames or encapsulated traffic not normalized for this 1 Gbps IDS port.",
+   "impact_on_tool": "IDS NIC silently drops oversized frames, causing ~10.8% traffic loss. IDS misses attacks carried in large frames. Tool needs full payload so broker slicing/trimming to 1518 is not an option.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "target_mtu_bytes": 1518,
+     "normalize_at": "packet_broker",
+     "alternative": "upgrade_ids_port_to_jumbo"
+    },
+    "why": "Normalize MTU at packet broker (reassemble/fragment handling or filter jumbo sources) or upgrade IDS interface to support jumbo frames; do not slice as IDS requires full payload."
+   },
+   "evidence_frames": [
+    39,
+    40,
+    42,
+    44,
+    95,
+    96,
+    97,
+    98,
+    103,
+    104,
+    107,
+    108,
+    146,
+    148,
+    156,
+    157,
+    161,
+    178,
+    179,
+    181
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "562 of 3224 packets (17.4%) are duplicates, well above 5% threshold. Typical cause is aggregating multiple SPAN/mirror sessions or overlapping TAP feeds without broker deduplication.",
+   "impact_on_tool": "Wastes IDS 1Gbps processing budget, inflates flow/packet counts, skews analytics and can cause false positives or missed correlations while reducing effective detection capacity.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "location": "packet_broker_ingress",
+     "window_ms": 50
+    },
+    "why": "Enable packet broker deduplication to deliver single copy of each packet to IDS, eliminating 17% overhead."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3529,
+  "tokens_out": 2472,
+  "cost_usd": 0.01492,
+  "seconds": 13.2,
+  "recorded_at": "2026-10-29"
+ }
+}

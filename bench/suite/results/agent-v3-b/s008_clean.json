@@ -1,0 +1,26 @@
+{
+ "feed": "s008_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s008_clean. NDR receives complete, correct bidirectional traffic with full payload, no drops, duplicates, truncation, VLAN gaps, tunnels, or overload. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3180,
+  "tokens_out": 715,
+  "cost_usd": 0.00701,
+  "seconds": 6.3,
+  "recorded_at": "2026-10-29"
+ }
+}

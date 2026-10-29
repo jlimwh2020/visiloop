@@ -1,0 +1,95 @@
+{
+ "feed": "s156_double",
+ "status": "degraded",
+ "summary": "Feed s156_double to IDS is degraded: 10.4% TCP packet loss (genuine drops, not slicing) and 14.8% truncated frames to 192 bytes prevent full payload inspection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Genuine packet loss in the visibility path - 310 of 2985 TCP packets (10.4%) show gaps in TCP sequence. Check ruled out slicing as cause by measuring IP length, so drops are real. Most likely SPAN/mirror oversubscription or packet broker buffer drops under burst, not tool overload (tool_overload healthy) or slicing.",
+   "impact_on_tool": "IDS cannot reassemble TCP streams, misses signatures across missing segments, creates false negatives and broken flow state; detection coverage severely reduced.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "TAP provides lossless, line-rate copy vs SPAN which drops when oversubscribed; eliminates broker/SPAN buffer loss before IDS. If TAP already in use, add aggregation/filtering to reduce burst loss."
+   },
+   "evidence_frames": [
+    31,
+    32,
+    33,
+    34,
+    50,
+    51,
+    52,
+    59,
+    60,
+    76,
+    91,
+    92,
+    93,
+    145,
+    148,
+    149,
+    195,
+    200,
+    202,
+    231
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing enabled - 456 of 3077 frames (14.8%) cut short, most to 192 bytes snaplen. Broker is truncating payload to save bandwidth/tool capacity.",
+   "impact_on_tool": "IDS needs full payload (tool profile: needs_full_payload=true) for signature matching and protocol parsing; truncated payload blinds IDS to exploits, malware and C2 in upper layers.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 0
+    },
+    "why": "IDS requires full packet payload for detection; disable slicing or set snaplen >=1518 to forward complete frames to IDS."
+   },
+   "evidence_frames": [
+    11,
+    18,
+    19,
+    22,
+    23,
+    34,
+    36,
+    61,
+    73,
+    78,
+    89,
+    101,
+    117,
+    120,
+    122,
+    123,
+    131,
+    133,
+    141,
+    148
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3471,
+  "tokens_out": 1968,
+  "cost_usd": 0.0127,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-29"
+ }
+}

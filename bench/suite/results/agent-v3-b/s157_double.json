@@ -1,0 +1,89 @@
+{
+ "feed": "s157_double",
+ "status": "degraded",
+ "summary": "IDS feed s157_double is degraded: 8.4% of frames exceed IDS 1518B MTU and are dropped by NIC, plus 2.56 Gbps microbursts overload the 1 Gbps IDS port (256% capacity). Both cause silent packet loss and detection gaps.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Upstream network is using jumbo frames up to 8058 bytes and packet broker is forwarding them unchanged to a standard 1518B IDS port without jumbo-frame support or MTU normalization.",
+   "impact_on_tool": "IDS NIC drops 137 of 1634 frames (8.4%) that exceed 1518B. IDS requires full payload so it loses entire flows/payloads, creating blind spots for exploit and malware detection; slicing/trimming is not an option.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "oversize_share": 0.0838,
+     "enable_jumbo": true
+    },
+    "why": "Tool needs full payload so do not slice. Either enable jumbo frames (e.g., 9000B) end-to-end on broker egress and IDS NIC, or enforce 1518B MTU upstream with proper fragmentation to prevent NIC drops."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    21,
+    22,
+    24,
+    25,
+    202,
+    203,
+    205,
+    208,
+    262,
+    263,
+    265,
+    266,
+    268,
+    332,
+    335,
+    339,
+    341
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating too much traffic onto a single 1 Gbps IDS port without load-balancing or rate-control, producing 1ms microbursts up to 2.56 Gbps.",
+   "impact_on_tool": "IDS port is overrun at 256% capacity across 6 intervals, causing random packet drops, TCP reassembly failures, missed signatures and degraded detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 2.559,
+     "overloaded_intervals": 6,
+     "suggested_min_ports": 3
+    },
+    "why": "Distribute feed via broker load-balancing across 3x 1G IDS ports or upgrade to 10G to keep peak utilization below 80% and prevent burst drops."
+   },
+   "evidence_frames": [
+    1,
+    288,
+    584,
+    794,
+    1090,
+    1409
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3433,
+  "tokens_out": 2416,
+  "cost_usd": 0.01456,
+  "seconds": 12.9,
+  "recorded_at": "2026-10-29"
+ }
+}

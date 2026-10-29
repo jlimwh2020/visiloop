@@ -1,0 +1,95 @@
+{
+ "feed": "s123_double",
+ "status": "degraded",
+ "summary": "Feed s123_double to NDR is degraded: 100% VXLAN encapsulation (3177/3177 frames) hides inner traffic and 97.3% encrypted bytes exceeds 90% tolerance, leaving NDR with only outer headers/metadata and severely limiting detection coverage.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic without stripping - 100% of frames arrive inside VXLAN. Source is likely a VTEP SPAN or broker tunnel-forwarding policy passing encapsulation straight to tool port.",
+   "impact_on_tool": "NDR sees only outer VXLAN/IP/UDP headers; inner Ethernet/IP/TCP and L7 payload are opaque so flow correlation, behavioral analytics and signature matching fail on all encapsulated traffic.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN"
+    },
+    "why": "Stripping VXLAN headers at the packet broker exposes inner L2-L7 frames to the NDR, restoring full parsing and detection without changing the TAP/SPAN source."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "97.26% of bytes are encrypted (threshold 90% for this NDR). Traffic is predominantly TLS and no decryption/key-sharing is performed before the NDR feed.",
+   "impact_on_tool": "NDR needs full payload for deep inspection; with payload opaque it is limited to metadata/flow analysis and misses payload-based threats, C2, and exploit detection.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "Selective, policy-compliant TLS decryption or key/log forwarding before the NDR (decrypt zone on broker) is needed to provide cleartext where legally permitted and restore payload visibility."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3435,
+  "tokens_out": 1979,
+  "cost_usd": 0.0127,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-29"
+ }
+}

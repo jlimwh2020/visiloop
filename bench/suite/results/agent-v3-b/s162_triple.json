@@ -1,0 +1,139 @@
+{
+ "feed": "s162_triple",
+ "status": "degraded",
+ "summary": "Feed s162_triple to IDS is degraded: 50% of packets missing required VLAN 20, 5.3% jumbo frames (up to 8104B) dropped by 1518B IDS port, and 27.7% VXLAN-encapsulated traffic opaque to IDS.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker is stripping 802.1Q tags or VLAN 20 is pruned/filtered before the tool port; 50% of packets arrive untagged and VLAN 20 is never seen despite being required.",
+   "impact_on_tool": "IDS has no visibility into VLAN 20 - misses half the traffic, breaks VLAN-based detection/policy and creates blind spot for lateral movement on VLAN 20.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "restore_vlan_ids": [
+      20
+     ],
+     "preserve_tags": true
+    },
+    "why": "IDS requires VLANs 10 and 20 for correct classification; broker must preserve/restore 802.1Q tags for VLAN 20 on egress to tool."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    15,
+    18,
+    21,
+    22,
+    23,
+    25,
+    26,
+    29,
+    32,
+    35,
+    36,
+    37,
+    39
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network/broker delivering jumbo/VXLAN-encapsulated frames up to 8104 bytes to a 1Gbps IDS port limited to 1518 bytes. Broker is not handling MTU mismatch and IDS NIC drops oversize frames.",
+   "impact_on_tool": "IDS NIC silently drops 5.3% (114/2141) of frames that exceed 1518B, so IDS never inspects them. Because IDS needs full payload for signature matching, payload trimming/slicing is not viable and those flows are missed.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_seen_bytes": 8104,
+     "enable_jumbo_on_tool": true,
+     "recommended_mtu": 9216
+    },
+    "why": "Tool needs full payload so slicing would break detection; fix is to enable jumbo frames/increase MTU on IDS port/NIC or reduce MTU upstream, not slice."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    10,
+    12,
+    22,
+    23,
+    25,
+    26,
+    296,
+    297,
+    299,
+    300,
+    302,
+    345,
+    346,
+    348,
+    349,
+    351,
+    447
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "27.7% of traffic (593/2141) is VXLAN-encapsulated and packet broker is forwarding outer tunnel headers without stripping. Likely VXLAN overlay from virtualized/DC fabric passed straight to tool.",
+   "impact_on_tool": "IDS sees only outer VXLAN/IP/UDP headers, not inner Ethernet/IP payload, so it cannot apply signatures or detect threats inside 27.7% of traffic.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at_broker": true
+    },
+    "why": "Stripping VXLAN at the packet broker exposes inner packets for IDS inspection, restoring detection coverage for overlay traffic."
+   },
+   "evidence_frames": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3600,
+  "tokens_out": 2498,
+  "cost_usd": 0.01512,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-29"
+ }
+}

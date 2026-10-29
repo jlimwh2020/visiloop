@@ -1,0 +1,99 @@
+{
+ "feed": "s153_double",
+ "status": "degraded",
+ "summary": "Feed s153_double to IDS is degraded: 51.8% of TCP sessions are one-way and 16.9% of frames are sliced to 256 bytes. IDS requires bidirectional traffic and full payload for stateful inspection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is forwarding only one direction of traffic. 103 of 199 TCP sessions (51.8%) show only one side, well above 10% threshold. Typical cause is SPAN configured as TX or RX only, ingress-only TAP, or broker policy/filter that does not aggregate both directions of a flow to the same IDS tool port, or asymmetric routing where only one path is tapped.",
+   "impact_on_tool": "IDS needs both directions (needs_both_directions=true) for TCP reassembly, flow state tracking and signature correlation. With half the sessions one-way, the IDS cannot validate handshakes, track state, or detect bidirectional exploits, causing missed detections and inaccurate alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_by_flow_5tuple": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS port so the IDS sees client->server and server->client together for stateful analysis."
+   },
+   "evidence_frames": [
+    1,
+    21,
+    111,
+    112,
+    126,
+    190,
+    224,
+    231,
+    242,
+    301,
+    314,
+    323,
+    330,
+    434,
+    462,
+    484,
+    498,
+    506,
+    529,
+    551
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/packet trimming is enabled and cutting frames to ~256 bytes. 391 of 2319 frames (16.9%) are truncated, exceeding 5% threshold. This is a broker optimization to save bandwidth but removes L7 payload.",
+   "impact_on_tool": "IDS needs full payload (needs_full_payload=true) for deep packet inspection and signature matching. Truncation at 256 bytes strips HTTP bodies, exploit payloads, and file transfers, so IDS will miss payload-based attacks and cannot perform full stream reassembly.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 256,
+     "required_payload": "full"
+    },
+    "why": "Disable slicing/trimming for this IDS feed so full packets are delivered; IDS cannot detect threats without complete payload. If bandwidth is constrained, use filtering instead of slicing."
+   },
+   "evidence_frames": [
+    13,
+    14,
+    19,
+    36,
+    41,
+    44,
+    48,
+    51,
+    52,
+    56,
+    61,
+    65,
+    67,
+    68,
+    70,
+    73,
+    76,
+    94,
+    98,
+    99
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3437,
+  "tokens_out": 1936,
+  "cost_usd": 0.01252,
+  "seconds": 11.0,
+  "recorded_at": "2026-10-29"
+ }
+}

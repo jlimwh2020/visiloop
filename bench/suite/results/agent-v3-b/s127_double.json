@@ -1,0 +1,101 @@
+{
+ "feed": "s127_double",
+ "status": "degraded",
+ "summary": "IDS s127_double is degraded: 4.2% of frames are dropped as oversize (>1518B) and 28.6% are opaque inside ERSPAN tunnels, both reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding jumbo/encapsulated frames up to 8108 bytes to a 1Gbps IDS port with 1518-byte MTU. 142/3381 frames (4.2%) exceed the NIC limit and are dropped in hardware.",
+   "impact_on_tool": "IDS silently misses 4.2% of traffic, including large frames that often carry data exfiltration or exploit payloads; with needs_full_payload=true detection is blind to those flows.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8108,
+     "suggested_tool_mtu": 9216
+    },
+    "why": "Tool requires full payload so broker slicing/trimming to 1518B is not an option. Increase IDS NIC and broker egress MTU to jumbo (9000-9216) or reduce upstream MTU to prevent NIC drops without payload loss."
+   },
+   "evidence_frames": [
+    159,
+    160,
+    163,
+    164,
+    166,
+    192,
+    194,
+    199,
+    200,
+    202,
+    203,
+    299,
+    302,
+    304,
+    307,
+    309,
+    395,
+    396,
+    398,
+    399
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "28.6% of traffic (968/3381 frames) arrives encapsulated in ERSPAN. Broker is forwarding tunnel-encapsulated frames without decapsulation/stripping.",
+   "impact_on_tool": "IDS sees only outer ERSPAN/IP/GRE headers, not inner Ethernet/IP and L7 payload, so signatures and anomaly detection cannot fire on 28.6% of traffic.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "share": 0.2863
+    },
+    "why": "Stripping ERSPAN at the packet broker exposes inner frames to the IDS, restoring full L2-L7 inspection without requiring IDS to decode tunnels."
+   },
+   "evidence_frames": [
+    101,
+    103,
+    104,
+    105,
+    106,
+    109,
+    110,
+    113,
+    114,
+    116,
+    119,
+    121,
+    122,
+    123,
+    125,
+    126,
+    135,
+    136,
+    137,
+    138
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3463,
+  "tokens_out": 2381,
+  "cost_usd": 0.01445,
+  "seconds": 12.4,
+  "recorded_at": "2026-10-29"
+ }
+}

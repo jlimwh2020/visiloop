@@ -1,0 +1,117 @@
+{
+ "feed": "s178_triple",
+ "status": "degraded",
+ "summary": "Feed s178_triple is degraded with 3 active faults: 17.1 Gbps bursts overloading 10 Gbps NDR port (171%), 19.0% frames sliced to 192 bytes removing payload, and 98.9% encrypted traffic exceeding 90% NDR tolerance. All reduce NDR detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Almost all traffic (98.9%) is TLS/encrypted and is being forwarded as-is with no decryption/visibility zone before the NDR. Packet broker has no SSL visibility or selective decrypt policy, so NDR receives opaque payloads.",
+   "impact_on_tool": "NDR is blind to payload content - cannot do deep inspection, JA3, certificate analysis, or detect malware/C2 inside encryption. Exceeds NDR's 90% encrypted tolerance, severely limiting detection coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "policy": "decrypt_relevant_TLS_at_broker_or_forward_to_decryption_zone",
+     "preserve_privacy": true
+    },
+    "why": "NDR needs cleartext payload for detection; decrypting relevant traffic (or feeding decrypted copy) restores visibility while staying within privacy policy. Do not decrypt blindly - use selective policy."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps NDR port is fed bursty aggregate traffic peaking at 17.10 Gbps in 1ms intervals (171% of capacity). No load-balancing or aggregation shaping on packet broker; bursts directly hit tool port.",
+   "impact_on_tool": "NDR will drop packets at ingress during bursts, causing missed flows, incomplete TCP reassembly, and missed detections. Sustained overload also risks tool crash or backpressure.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "5-tuple_hash",
+     "target_ports": 2,
+     "port_speed_gbps": 10
+    },
+    "why": "Distribute bursts across 2+ NDR ports/instances with flow-aware hashing to keep per-port load <80% and preserve both directions of each flow for NDR state tracking."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snaplen is enabled and truncating frames to ~192 bytes (1399/7351 frames = 19.0% truncated). Likely configured to save bandwidth/tool load but incompatible with this NDR.",
+   "impact_on_tool": "NDR needs full payload (tool profile: needs_full_payload=true) for signature matching, file extraction, and anomaly detection. Sliced frames lose L7 payload, causing false negatives and broken reassembly.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen_bytes": 9216,
+     "scope": "feed_s178_triple"
+    },
+    "why": "Disable slicing or set snaplen to NDR max 9216 bytes so full payload is delivered; use filtering or load-balancing instead of slicing to handle overload."
+   },
+   "evidence_frames": [
+    4,
+    24,
+    26,
+    27,
+    35,
+    48,
+    50,
+    56,
+    67,
+    69,
+    77,
+    79,
+    91,
+    94,
+    96,
+    99,
+    111,
+    113,
+    118,
+    119
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3528,
+  "tokens_out": 2550,
+  "cost_usd": 0.01525,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-29"
+ }
+}

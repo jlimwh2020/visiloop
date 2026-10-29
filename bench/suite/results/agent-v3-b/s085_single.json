@@ -1,0 +1,47 @@
+{
+ "feed": "s085_single",
+ "status": "degraded",
+ "summary": "Feed s085_single to IDS is degraded: peak 3.70 Gbps in 1ms burst overwhelms 1 Gbps IDS port (370% of capacity, 2 overloaded intervals). All other checks (duplicates, one-way, truncation, VLAN, tunnels, encryption, drops, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding full aggregate traffic without load-balancing to a single 1 Gbps IDS port. Sustained bursts of 3.70 Gbps exceed line rate and port buffers, causing ingress drops. Threshold is 0.8 (80%) utilization, measured 3.696x.",
+   "impact_on_tool": "IDS will drop packets at ingress during bursts, breaking TCP reassembly and signature matching. IDS requires both directions and full payload, so overload creates blind spots and missed detections exactly when traffic is heaviest.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 3.7,
+     "hash": "5-tuple",
+     "suggested_ports": 4
+    },
+    "why": "Distribute flows across an IDS cluster with flow-aware 5-tuple hashing to keep per-port utilization below 80% and preserve both directions of each flow on the same tool, preventing drops while maintaining detection coverage."
+   },
+   "evidence_frames": [
+    1,
+    984
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3263,
+  "tokens_out": 1842,
+  "cost_usd": 0.01191,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

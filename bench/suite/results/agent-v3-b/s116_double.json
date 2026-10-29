@@ -1,0 +1,82 @@
+{
+ "feed": "s116_double",
+ "status": "degraded",
+ "summary": "Feed s116_double is degraded: IDS 1 Gbps port is hit by 3.80 Gbps microbursts (380% capacity) causing 3.5% genuine TCP packet loss (54/1552). Slicing ruled out as cause - drops are buffer overruns from overload, blinding IDS detection.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is aggregating too much traffic onto a single 1 Gbps IDS port without load-balancing. 1ms microbursts peak at 3.80 Gbps (380% of port capacity, 2 overloaded intervals), overflowing broker egress / IDS ingress buffers.",
+   "impact_on_tool": "IDS port cannot ingest bursts, buffers overflow and traffic is dropped before inspection. IDS misses exploits, loses state, and detection coverage collapses during bursts.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 4,
+     "target_capacity_gbps": 1
+    },
+    "why": "Hash-based load balancing across 3-4 IDS ports/instances spreads 3.8 Gbps bursts so no single 1 Gbps port exceeds 80% capacity, eliminating burst drops while preserving flow symmetry required by IDS."
+   },
+   "evidence_frames": [
+    1,
+    1028
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Genuine packet loss, not slicing artifact. Check measured TCP segments by IP header length and ruled out slicing. 3.48% loss (54 of 1552 TCP packets) is downstream effect of the 3.8 Gbps overload - port buffers tail-drop packets during bursts.",
+   "impact_on_tool": "IDS with needs_both_directions=true and needs_full_payload=true loses TCP sequence continuity. Reassembly fails, signatures and anomaly detection miss attacks, and 3.5% of flows have blind spots.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "tool_ports": 4
+    },
+    "why": "Same overload root cause; distributing traffic via load-balanced tool group prevents buffer overruns that create TCP gaps, restoring complete flows to IDS without filtering needed traffic."
+   },
+   "evidence_frames": [
+    138,
+    140,
+    142,
+    144,
+    236,
+    237,
+    320,
+    321,
+    378,
+    379,
+    380,
+    416,
+    417,
+    575,
+    576,
+    577,
+    578,
+    695,
+    696,
+    698
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3426,
+  "tokens_out": 2451,
+  "cost_usd": 0.0147,
+  "seconds": 12.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "feed": "s126_double",
+ "status": "degraded",
+ "summary": "Feed s126_double to SIEM is degraded: 9.3% duplicate packets and 2.2% TCP packet drops detected. Other visibility checks (VLAN, one-way, truncation, tunnels, encryption, overload, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "9.3% duplicates (265/2858, threshold 5%) indicates the packet broker is forwarding the same packet twice - typically aggregating both sides of a link or two SPAN/mirror sources without deduplication. Feed name 's126_double' suggests dual-feed aggregation without dedup enabled.",
+   "impact_on_tool": "SIEM wastes ingest, storage and license on duplicate events, inflates event counts, skews correlation/analytics and can cause false positives while obscuring true rates. SIEM does not need both directions or full payload, so duplicates provide no value.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "5-tuple-plus-timestamp"
+    },
+    "why": "Enable packet-broker deduplication on the aggregation point for s126_double to suppress identical packets arriving within a short window before forwarding to the 1G SIEM port."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "2.2% of TCP packets (61/2798) show sequence gaps indicating packets lost in the visibility path - typically SPAN oversubscription, packet broker buffer exhaustion during microbursts, or congested broker-to-tool link.",
+   "impact_on_tool": "SIEM misses event/flow segments causing incomplete correlations, missed detections and gaps in forensic timeline. Even though SIEM tolerates one-way and truncated payload, missing packets still create blind spots for detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_group": "siem_pool",
+     "hash": "5-tuple"
+    },
+    "why": "Add buffering and distribute load to prevent broker drops; dedup will also reduce load by ~9%. If source is SPAN, investigate SPAN drop counters and consider replace_span_with_tap for lossless capture."
+   },
+   "evidence_frames": [
+    85,
+    91,
+    178,
+    182,
+    295,
+    296,
+    378,
+    379,
+    623,
+    625,
+    656,
+    657,
+    685,
+    686,
+    698,
+    699,
+    834,
+    835,
+    836,
+    938
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3367,
+  "tokens_out": 2773,
+  "cost_usd": 0.01599,
+  "seconds": 14.4,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s089_single",
+ "status": "degraded",
+ "summary": "Feed s089_single to IDS is degraded due to significant packet loss (7.8% of TCP packets show missing data, threshold 1%). All other visibility checks (duplicates, encryption, VLANs, one-way, oversize, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream capture loss - 198 of 2542 TCP packets (7.79%) show sequence gaps/retransmissions indicating missing originals. Tool overload check is healthy and port is 1Gbps, so loss is not tool-side discard but upstream SPAN/mirror oversubscription or packet broker buffer exhaustion during bursts, which drops packets best-effort under load.",
+   "impact_on_tool": "IDS needs both directions and full payload for TCP stream reassembly and signature matching. 7.8% missing segments breaks flows, prevents payload inspection, causes missed detections/false negatives and allows evasion, severely reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "SPAN/mirror ports drop packets when oversubscribed; a passive TAP with proper packet broker aggregation provides lossless, line-rate copy to the 1Gbps IDS port. If TAP already present, audit broker drops/burst buffers and add filtering to fit tool capacity."
+   },
+   "evidence_frames": [
+    23,
+    26,
+    41,
+    42,
+    99,
+    100,
+    139,
+    142,
+    162,
+    163,
+    172,
+    174,
+    175,
+    203,
+    204,
+    234,
+    235,
+    273,
+    274,
+    281
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3306,
+  "tokens_out": 2018,
+  "cost_usd": 0.01271,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

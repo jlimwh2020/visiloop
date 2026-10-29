@@ -1,0 +1,26 @@
+{
+ "feed": "s012_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s012_clean. Traffic is complete and correct: no duplicates, drops, truncation, one-way flows, tunnels, VLAN stripping, oversize, or overload detected. NDR requirements (bidirectional, full payload) are met.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3175,
+  "tokens_out": 774,
+  "cost_usd": 0.00726,
+  "seconds": 5.7,
+  "recorded_at": "2026-10-29"
+ }
+}

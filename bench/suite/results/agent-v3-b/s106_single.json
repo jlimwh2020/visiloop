@@ -1,0 +1,65 @@
+{
+ "feed": "s106_single",
+ "status": "degraded",
+ "summary": "Feed s106_single is degraded: 7.9% of frames (226/2859, up to 8058 bytes) exceed the IDS 1518-byte MTU and are dropped at the NIC, creating a detection blind spot. Slicing is not viable because the IDS requires full payload.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo frames (up to 8058 bytes) from jumbo-enabled upstream segments to a 1 Gbps IDS port limited to 1518-byte standard Ethernet MTU. 226 of 2859 frames (7.9%) exceed the limit and are dropped at ingress by the IDS NIC before inspection.",
+   "impact_on_tool": "IDS silently loses 7.9% of traffic. Because it needs full payload for signature and anomaly detection, affected flows are incompletely inspected, causing missed exploits, evasion via large frames, and incomplete forensic evidence.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "observed_max_bytes": 8058,
+     "oversize_share": 0.079,
+     "suggested_tool_mtu": 9000
+    },
+    "why": "Tool needs full payload so broker-side slicing/trimming to 1518 bytes would break IDS detection. Fix requires MTU alignment: enable jumbo frame support (>=9000 bytes) on IDS NIC/tool port, or normalize MTU upstream, so large frames are delivered intact without NIC drops."
+   },
+   "evidence_frames": [
+    26,
+    27,
+    29,
+    30,
+    42,
+    43,
+    45,
+    46,
+    49,
+    130,
+    131,
+    133,
+    134,
+    136,
+    209,
+    210,
+    212,
+    213,
+    225,
+    226
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3340,
+  "tokens_out": 2126,
+  "cost_usd": 0.01321,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-29"
+ }
+}

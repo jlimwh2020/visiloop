@@ -1,0 +1,119 @@
+{
+ "feed": "s170_triple",
+ "status": "degraded",
+ "summary": "Feed s170_triple is degraded: 3 faults detected - 12.4% duplicates, VLANs 10/20 completely stripped (100% untagged), and 3.5% TCP packet drops causing incomplete sessions for NDR requiring full payload and both directions.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP/SPAN is stripping 802.1Q tags - 100% of packets are untagged and required VLANs 10 and 20 are not seen. Likely broker VLAN stripping enabled or SPAN/trunk not configured to forward/pass through VLANs 10,20.",
+   "impact_on_tool": "NDR cannot segment or correlate traffic by VLAN 10/20, breaks tenant/zone-aware detection, lateral movement and policy violation detection fails for those segments.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough"
+    },
+    "why": "NDR profile requires VLANs 10,20 for coverage. Configure broker ingress and egress to preserve 802.1Q and ensure TAP/SPAN trunks forward VLANs 10,20 to restore segmentation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Visibility fabric is dropping packets before NDR - 96 of 2705 TCP packets (3.5%) show gaps/retransmissions exceeding 1% threshold. Tool overload is healthy, so drops are upstream: SPAN oversubscription or packet broker buffer/egress oversubscription during bursts.",
+   "impact_on_tool": "NDR with needs_full_payload=true and needs_both_directions=true cannot reassemble TCP streams, misses payload for IDS signatures, file extraction and anomaly detection, creates blind spots and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5tuple",
+     "group": "ndr_pool",
+     "preserve_flow": true
+    },
+    "why": "Distribute load across NDR pool or broker egress ports with flow-aware hashing to eliminate buffer drops and ensure complete TCP sessions reach the NDR without gaps."
+   },
+   "evidence_frames": [
+    26,
+    27,
+    273,
+    276,
+    381,
+    384,
+    415,
+    417,
+    445,
+    446,
+    592,
+    593,
+    607,
+    608,
+    631,
+    632,
+    764,
+    765,
+    767,
+    768
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets delivered multiple times - 347 of 2800 packets (12.4%) are duplicates exceeding 5% threshold. Likely aggregation of overlapping SPAN/mirror sessions (ingress+egress mirrored) or multiple TAPs feeding same broker port without deduplication.",
+   "impact_on_tool": "Wastes 10G NDR capacity and storage, inflates flow counts and alerts, can confuse NDR stream reassembly and analytics and mask true packet drop rate.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to drop identical packets within a short window before delivery to NDR, restoring accurate traffic volume and freeing capacity for real traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3505,
+  "tokens_out": 2925,
+  "cost_usd": 0.01681,
+  "seconds": 16.0,
+  "recorded_at": "2026-10-29"
+ }
+}

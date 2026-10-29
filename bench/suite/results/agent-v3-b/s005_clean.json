@@ -1,0 +1,26 @@
+{
+ "feed": "s005_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed 's005_clean'. Traffic is complete and correct for SIEM requirements (one-way and truncated payload acceptable). No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3175,
+  "tokens_out": 821,
+  "cost_usd": 0.00746,
+  "seconds": 5.2,
+  "recorded_at": "2026-10-29"
+ }
+}

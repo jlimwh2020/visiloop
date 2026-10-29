@@ -1,0 +1,64 @@
+{
+ "feed": "s098_single",
+ "status": "degraded",
+ "summary": "Feed s098_single to IDS is degraded: 92.3% of bytes are encrypted vs 60% tolerance, blinding payload inspection. All other visibility checks (duplicates, VLANs, one-way, oversize, drops, overload, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "92.3% of traffic is TLS/encrypted and is being forwarded opaque to the IDS with no prior decryption at the packet broker. IDS requires cleartext payload for signature matching and exceeds its 60% encrypted tolerance.",
+   "impact_on_tool": "IDS cannot inspect payloads for ~92% of bytes; signatures, exploit detection and file extraction fail, drastically reducing detection coverage despite needing full payload and bidirectional flow.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "encrypted_share": 0.9231,
+     "threshold": 0.6,
+     "location": "packet_broker"
+    },
+    "why": "IDS needs cleartext to detect threats. Add selective TLS decryption/visibility (e.g., inline decrypt or out-of-band SSL visibility appliance) before the IDS, or route this encrypted feed to a metadata/encrypted-traffic-analysis tool and send only decrypted/cleartext flows to this IDS."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3307,
+  "tokens_out": 1452,
+  "cost_usd": 0.0103,
+  "seconds": 8.9,
+  "recorded_at": "2026-10-29"
+ }
+}

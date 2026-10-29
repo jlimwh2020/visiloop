@@ -1,0 +1,42 @@
+{
+ "feed": "s062_single",
+ "status": "degraded",
+ "summary": "IDS feed s062_single is degraded due to 28.9% duplicate packets (864 of 2989, threshold 5%). All other checks (one-way, truncated, drops, overload, encrypted_share, missing_vlan, tunnel, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding the same packet twice - classic SPAN/TAP aggregation duplication. Likely both sides of a link or multiple SPANs aggregated to single IDS port without deduplication, resulting in 28.9% duplicates.",
+   "impact_on_tool": "IDS requires full payload and both directions for stateful signature matching. Duplicates waste IDS CPU/capacity on redundant inspection, inflates flow/alert counts, can cause state-table issues and mask true attacks, reducing detection coverage and increasing false positives.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "hash"
+    },
+    "why": "Enable packet-broker deduplication on feed s062_single to drop identical packets seen within a short window before delivery to the 1G IDS port. Eliminates 28.9% waste without losing unique traffic."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3231,
+  "tokens_out": 1595,
+  "cost_usd": 0.01082,
+  "seconds": 10.3,
+  "recorded_at": "2026-10-29"
+ }
+}

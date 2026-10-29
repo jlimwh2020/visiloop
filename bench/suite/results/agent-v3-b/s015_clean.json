@@ -1,0 +1,26 @@
+{
+ "feed": "s015_clean",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for NDR feed s015_clean. Tool receives complete, correct traffic: bidirectional flows present, full payload intact, no duplicates/drops/overload, VLANs 10,20 present, no excessive encryption, no oversize/truncation/tunnel issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 911,
+  "cost_usd": 0.00785,
+  "seconds": 6.8,
+  "recorded_at": "2026-10-29"
+ }
+}

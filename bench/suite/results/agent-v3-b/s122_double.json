@@ -1,0 +1,95 @@
+{
+ "feed": "s122_double",
+ "status": "degraded",
+ "summary": "Feed s122_double is degraded: 72.9% encrypted traffic exceeds IDS 60% tolerance and 4.3% of frames exceed IDS 1518-byte MTU and are dropped. IDS requires full payload, so coverage is reduced on both fronts.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "Traffic mix upstream is encryption-heavy (TLS/QUIC) with 72.9% of bytes encrypted. No decryption is performed before the packet broker forwards to the IDS, so the IDS only sees ciphertext.",
+   "impact_on_tool": "IDS cannot inspect payloads or apply signatures to encrypted bytes; with 73% encrypted vs 60% tolerance, detection is blind to the majority of traffic and misses malware/C2/exfiltration inside TLS.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "IDS needs cleartext for full-payload inspection. Provide a decrypted copy via a central SSL visibility appliance or selective decryption policy before the IDS, or route high-encryption flows to a tool with decryption capability."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    33,
+    34,
+    35,
+    36
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Source/aggregation network is sending jumbo frames up to 8058 bytes and the packet broker is forwarding them unchanged to a 1G IDS port limited to 1518 bytes. 91 of 2093 frames (4.3%) exceed the limit.",
+   "impact_on_tool": "IDS NIC drops oversize frames silently, creating a 4.3% visibility gap. Because this IDS needs_full_payload=true, broker-side slicing/trimming to 1518 bytes would also break detection and is not an option.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518
+    },
+    "why": "Frames must fit the IDS MTU without losing payload. Enable jumbo-frame support on the IDS if possible, or adjust broker MTU handling to avoid delivering >1518B frames to this 1G port; do not use slicing due to full-payload requirement."
+   },
+   "evidence_frames": [
+    174,
+    175,
+    177,
+    178,
+    180,
+    206,
+    207,
+    209,
+    210,
+    486,
+    487,
+    489,
+    490,
+    492,
+    706,
+    707,
+    709,
+    710,
+    734,
+    735
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3459,
+  "tokens_out": 2347,
+  "cost_usd": 0.0143,
+  "seconds": 12.9,
+  "recorded_at": "2026-10-29"
+ }
+}

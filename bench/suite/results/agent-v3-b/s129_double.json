@@ -1,0 +1,102 @@
+{
+ "feed": "s129_double",
+ "status": "degraded",
+ "summary": "Feed s129_double to NDR is degraded: 98.9% encrypted bytes exceeds 90% tolerance and 60.1% of frames are ERSPAN-encapsulated, both blinding payload inspection and flow parsing.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Nearly all traffic (98.86% of bytes) is TLS/encrypted with no decryption in the visibility path. The packet broker is forwarding wire-encrypted traffic directly to the NDR without a SSL visibility/decryption appliance or decrypted mirror.",
+   "impact_on_tool": "NDR requires full payload for deep packet inspection, JA3, file extraction and anomaly detection. With 99% encrypted, it sees only headers and cannot detect C2, exfiltration, or lateral movement inside encrypted sessions.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "ssl_visibility_or_broker_decrypt",
+     "tunnel_type": "TLS",
+     "decrypt_location": "before_ndr",
+     "feed_decrypted_copy": true
+    },
+    "why": "NDR needs cleartext payload; decrypting once at the visibility layer (or feeding a decrypted copy) restores detection coverage while keeping wire encryption intact."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    17,
+    19,
+    22,
+    23,
+    24
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "60.1% of frames (1218/2027) arrive inside ERSPAN tunnel encapsulation. The packet broker/SPAN source is forwarding ERSPAN-encapsulated traffic without stripping the outer header before delivery to the tool port.",
+   "impact_on_tool": "NDR parses outer ERSPAN/IP/GRE headers instead of inner original Ethernet/IP/TCP headers, breaking flow correlation, application identification, and detection rules; adds overhead and may cause missed detections or mis-attributed flows.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "deliver": "inner_payload_only"
+    },
+    "why": "Stripping ERSPAN at the packet broker exposes the true inner L2-L7 headers so the NDR can correctly reassemble flows and apply its detection logic."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3439,
+  "tokens_out": 2038,
+  "cost_usd": 0.01296,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-29"
+ }
+}

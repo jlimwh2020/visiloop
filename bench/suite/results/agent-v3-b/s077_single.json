@@ -1,0 +1,42 @@
+{
+ "feed": "s077_single",
+ "status": "degraded",
+ "summary": "Feed s077_single to IDS is degraded due to 17.8% duplicate packets (736/4124). All other visibility checks (one-way, VLANs, encryption, truncation, tunnels, drops, overload, oversize) are healthy, but duplicates waste IDS resources and reduce detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets are arriving via multiple SPAN/mirror or TAP paths aggregated through the packet broker without deduplication. The broker is forwarding both copies of packets seen at different switch hops to the single IDS tool port.",
+   "impact_on_tool": "IDS with full-payload inspection wastes CPU/memory re-processing identical packets, inflates flow and alert counts, and risks missing true threats due to resource contention and state-table bloat.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication (hash-based, ~10ms window) on the feed to s077_single so only one copy of each packet is delivered to the IDS, restoring accurate traffic representation without overloading the tool."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3241,
+  "tokens_out": 1591,
+  "cost_usd": 0.01081,
+  "seconds": 9.6,
+  "recorded_at": "2026-10-29"
+ }
+}

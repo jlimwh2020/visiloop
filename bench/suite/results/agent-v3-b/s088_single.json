@@ -1,0 +1,60 @@
+{
+ "feed": "s088_single",
+ "status": "degraded",
+ "summary": "SIEM feed s088_single is degraded due to genuine packet loss: 3.0% of TCP packets (87/2949) show missing data. Slicing was ruled out as cause. All other visibility checks (duplicates, encryption, VLAN, one-way, oversize, tool overload, truncation, tunnel) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream capture/forwarding loss, not slicing artifact. Frames were validated via IP header length so slicing is ruled out. 2.95% loss exceeds 1% threshold, consistent with SPAN/mirror buffer overflow or packet broker egress congestion dropping packets before they reach the SIEM's 1G port.",
+   "impact_on_tool": "SIEM will have gaps in flow and event correlation - missing TCP segments cause incomplete sessions, missed alerts and incomplete forensic timeline even though SIEM does not require full payload or bidirectional traffic.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "SPAN/mirror ports have small buffers and drop under bursts with no backpressure. Replacing SPAN with passive TAP plus broker aggregation provides lossless capture and eliminates the 3% gaps. If TAP already in use, add load-balancing or filtering at the broker to relieve egress congestion toward the 1G SIEM port."
+   },
+   "evidence_frames": [
+    78,
+    79,
+    105,
+    125,
+    126,
+    127,
+    258,
+    434,
+    435,
+    436,
+    588,
+    590,
+    733,
+    734,
+    735,
+    736,
+    769,
+    770,
+    851,
+    852
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3338,
+  "tokens_out": 2767,
+  "cost_usd": 0.01593,
+  "seconds": 13.9,
+  "recorded_at": "2026-10-29"
+ }
+}

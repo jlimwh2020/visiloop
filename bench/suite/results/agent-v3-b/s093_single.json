@@ -1,0 +1,62 @@
+{
+ "feed": "s093_single",
+ "status": "degraded",
+ "summary": "Feed s093_single is degraded: 10.2% of frames (333/3260) exceed the SIEM's 1518-byte MTU and are dropped by its NIC, causing significant visibility loss.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding jumbo/encapsulated frames up to 8058 bytes without adjustment, exceeding the SIEM's 1 Gbps port limit of 1518 bytes. The SIEM NIC drops oversize frames at ingress before analysis.",
+   "impact_on_tool": "SIEM loses ~10.2% of traffic (333 of 3260 frames) - those events never reach detection/analytics, creating blind spots and reduced coverage.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518
+    },
+    "why": "SIEM needs_full_payload=false, so trimming/slicing frames to 1518 bytes on the packet broker preserves headers needed for SIEM correlation while ensuring frames fit the tool port and are not dropped."
+   },
+   "evidence_frames": [
+    22,
+    23,
+    25,
+    52,
+    53,
+    56,
+    58,
+    72,
+    74,
+    75,
+    76,
+    79,
+    80,
+    81,
+    142,
+    143,
+    145,
+    146,
+    148,
+    149
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3345,
+  "tokens_out": 2106,
+  "cost_usd": 0.01313,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

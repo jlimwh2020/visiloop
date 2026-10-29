@@ -1,0 +1,26 @@
+{
+ "feed": "s200_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s200_tool_aware. Tool receives complete, correct bidirectional traffic with no drops, overload, truncation, duplicates, tunnels, VLAN stripping, oversize, or encryption issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3177,
+  "tokens_out": 849,
+  "cost_usd": 0.00758,
+  "seconds": 5.6,
+  "recorded_at": "2026-10-29"
+ }
+}

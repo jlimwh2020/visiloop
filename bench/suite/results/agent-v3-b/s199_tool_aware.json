@@ -1,0 +1,26 @@
+{
+ "feed": "s199_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed. SIEM feed s199_tool_aware is delivering complete, correct traffic within tool tolerances (1 Gbps, 1518B MTU). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 827,
+  "cost_usd": 0.0075,
+  "seconds": 5.7,
+  "recorded_at": "2026-10-29"
+ }
+}

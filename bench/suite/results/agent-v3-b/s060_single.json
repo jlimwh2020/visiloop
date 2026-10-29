@@ -1,0 +1,65 @@
+{
+ "feed": "s060_single",
+ "status": "degraded",
+ "summary": "IDS s060_single is degraded due to oversize frames: 4.8% of frames (157/3292, up to 8058 bytes) exceed the IDS 1G port MTU of 1518 bytes and are dropped by the NIC, creating detection blind spots. No other visibility faults detected.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Network path is carrying jumbo frames (observed up to 8058 bytes) while the IDS tool port is standard 1518-byte Ethernet only. The packet broker is forwarding them unchanged, so the IDS NIC drops them at ingress as oversize/invalid.",
+   "impact_on_tool": "IDS silently drops ~4.8% of frames before inspection. As this IDS needs full payload for signature matching, those flows are not inspected, allowing potential evasions and reducing detection coverage.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "observed_max_bytes": 8058,
+     "recommended_mtu": 9216,
+     "target": "IDS port and packet broker egress toward IDS"
+    },
+    "why": "Tool requires full payload so slicing/trimming to 1518 bytes is not an option. Must increase MTU capability on the IDS NIC (enable jumbo frames to 9000/9216) and ensure broker egress MTU matches, or normalize MTU upstream to <=1518 if jumbo is not intended. This prevents NIC-level drops without losing payload needed for detection."
+   },
+   "evidence_frames": [
+    125,
+    126,
+    128,
+    342,
+    344,
+    350,
+    606,
+    607,
+    609,
+    610,
+    612,
+    740,
+    743,
+    746,
+    747,
+    749,
+    750,
+    945,
+    946,
+    948
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3342,
+  "tokens_out": 1888,
+  "cost_usd": 0.0122,
+  "seconds": 12.8,
+  "recorded_at": "2026-10-29"
+ }
+}

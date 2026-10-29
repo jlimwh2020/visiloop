@@ -1,0 +1,67 @@
+{
+ "feed": "s055_single",
+ "status": "degraded",
+ "summary": "SIEM feed s055_single is degraded: 100% of packets are untagged and required VLANs 10, 20 are completely missing. All other checks (duplicates, encryption, one-way, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream TAP/SPAN is stripping 802.1Q tags before delivery. 100% untagged with 0% of required VLANs 10, 20 observed indicates the ingress trunk is not passed through or the broker egress is set to access/untagged mode or VLAN stripping is enabled.",
+   "impact_on_tool": "SIEM loses VLAN/segment context for VLANs 10 and 20. Cannot filter, correlate, or attribute events by tenant/zone, reducing detection coverage and breaking VLAN-based use cases and compliance reporting, even though SIEM does not require full payload or bidirectional flow.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough"
+    },
+    "why": "Preserving/restoring 802.1Q tags for VLANs 10 and 20 on the broker egress to the SIEM restores segment visibility so the SIEM can correctly classify and detect on those VLANs."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3305,
+  "tokens_out": 1967,
+  "cost_usd": 0.01249,
+  "seconds": 9.9,
+  "recorded_at": "2026-10-29"
+ }
+}

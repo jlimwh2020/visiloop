@@ -1,0 +1,64 @@
+{
+ "feed": "s051_single",
+ "status": "degraded",
+ "summary": "Feed s051_single to APM is degraded due to VXLAN encapsulation: 61.2% (1722/2813) frames are tunneled. All other visibility checks (duplicates, one-way, drops, overload, truncated, oversize, VLAN, encrypted share) are healthy, but APM cannot parse inner flows while encapsulated.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic (1722 frames) without decapsulation/stripping. APM is receiving the overlay (outer VTEP headers) instead of the inner tenant Ethernet/IP/TCP headers, indicating missing 'strip VXLAN header' policy on the broker ingress/egress.",
+   "impact_on_tool": "APM sees only outer tunnel headers and cannot decode inner application transactions, TCP handshakes, or latency metrics. With 61.2% of traffic opaque, application performance monitoring, transaction tracing, and error detection are blind for majority of flows despite APM not requiring full payload.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "location": "packet_broker",
+     "preserve_inner_vlan": true
+    },
+    "why": "Stripping VXLAN at the packet broker exposes inner L2-L4 headers so APM can correlate flows and measure application latency without needing to understand overlay encapsulation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3312,
+  "tokens_out": 1765,
+  "cost_usd": 0.01164,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-29"
+ }
+}

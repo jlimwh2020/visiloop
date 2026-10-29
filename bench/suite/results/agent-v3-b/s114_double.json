@@ -1,0 +1,99 @@
+{
+ "feed": "s114_double",
+ "status": "degraded",
+ "summary": "Feed s114_double is degraded for IDS: 28.9% of frames truncated to 256 bytes and 58.0% still ERSPAN-encapsulated. IDS requires full payload and inner headers, so both faults severely reduce detection coverage.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker has payload slicing/truncation enabled at 256 bytes, likely to save bandwidth to the 1Gbps IDS port. 513 of 1773 frames (28.9%) are forwarded cut short instead of full 1518 byte frames.",
+   "impact_on_tool": "IDS needs_full_payload=true for signature matching, protocol decoding and file/exploit detection. Truncated payloads hide application content, so IDS will miss payload-based alerts and create incomplete flow reassembly.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 256,
+     "required_max_bytes": 1518
+    },
+    "why": "IDS cannot inspect truncated packets; disable slicing on this feed to deliver full payload. Use filtering or load balancing instead if 1G port is oversubscribed."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    9,
+    10,
+    18,
+    22,
+    27,
+    29,
+    30,
+    35,
+    36,
+    39,
+    51,
+    52,
+    54,
+    55,
+    57,
+    58,
+    68
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic sourced via ERSPAN SPAN session is forwarded through broker without decapsulation. 1029 of 1773 frames (58.0%) still carry ERSPAN encapsulation, so tool sees outer tunnel headers not inner original packets.",
+   "impact_on_tool": "IDS parses outer ERSPAN/IP/GRE instead of inner Ethernet/IP 5-tuple. It cannot correlate flows, apply signatures, or detect lateral movement on 58% of traffic - effectively blind to majority of feed.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "tunnel_count": 1029
+    },
+    "why": "Configure packet broker to strip ERSPAN headers and forward inner original packets so IDS sees true endpoints and payloads for detection."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3437,
+  "tokens_out": 2513,
+  "cost_usd": 0.01498,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,93 @@
+{
+ "feed": "s144_double",
+ "status": "degraded",
+ "summary": "IDS feed s144_double is degraded with 2 high-severity faults: 8.5% jumbo frames (up to 8058B) exceed the 1Gbps IDS port's 1518B MTU and are dropped at NIC, and microbursts peak at 2.78 Gbps (278% of port capacity) causing overload drops. Both cause packet loss before IDS inspection, severely reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network forwards jumbo frames up to 8058 bytes but the IDS tool port/NIC is limited to standard 1518-byte Ethernet MTU without jumbo support. Packet broker passes frames unchanged, so the IDS NIC drops them on ingress.",
+   "impact_on_tool": "IDS drops 163 of 1908 frames (8.5%) at the NIC before inspection. As this IDS needs full payload, it is blind to large-frame flows and will miss exploits/malware carried in those packets.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "current_max_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "recommended_mtu": 9000,
+     "enable_jumbo_on_tool_nic": true
+    },
+    "why": "Tool requires full payload so slicing/trimming to 1518B is not an option. Enable 9000B jumbo MTU on IDS NIC/capture stack and ensure packet broker preserves jumbo frames, or filter/redirect jumbo flows to a jumbo-capable tool port."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    19,
+    20,
+    22,
+    46,
+    47,
+    49,
+    50,
+    68,
+    70,
+    76,
+    137,
+    138,
+    140,
+    141,
+    233,
+    234,
+    236
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "All traffic is aggregated to a single 1 Gbps IDS port without load balancing. Bursty traffic creates 1ms microbursts peaking at 2.78 Gbps (278% of capacity) across 9 intervals, exceeding the 80% overload threshold.",
+   "impact_on_tool": "IDS port buffers overflow and drops packets during bursts. Flow reassembly fails, IDS misses attacks under load, and detection coverage is incomplete precisely when traffic volume is highest.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_port_speed_gbps": 1,
+     "peak_burst_gbps": 2.78,
+     "suggested_tool_ports": 3,
+     "hash": "5-tuple",
+     "burst_threshold_gbps": 0.8
+    },
+    "why": "Distribute traffic across 3+ IDS ports or upgrade to 10Gbps tool port with 5-tuple load balancing to absorb 2.78 Gbps bursts and keep per-port utilization below 80%."
+   },
+   "evidence_frames": [
+    1,
+    197,
+    507,
+    699,
+    993,
+    1257,
+    1403,
+    1527,
+    1795
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3445,
+  "tokens_out": 2693,
+  "cost_usd": 0.01575,
+  "seconds": 12.6,
+  "recorded_at": "2026-10-29"
+ }
+}

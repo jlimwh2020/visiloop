@@ -1,0 +1,65 @@
+{
+ "feed": "s107_single",
+ "status": "degraded",
+ "summary": "APM feed s107_single is degraded due to 2.3% packet loss (57/2513 TCP packets with gaps) exceeding 1% threshold; all other visibility checks (duplicates, one-way, truncation, tunnels, VLAN, encryption, oversize, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Upstream loss in SPAN/packet-broker path - 2.27% of TCP packets show missing data/retransmission gaps (57 of 2513). Tool overload check is healthy, so loss is not APM ingest overload but SPAN oversubscription or packet broker buffer exhaustion/burst drops before the tool.",
+   "impact_on_tool": "APM needs both directions for transaction tracing (needs_both_directions=true). Missing segments cause incomplete flows, inaccurate latency/response-time calculations, inflated retransmission metrics, and missed or mis-attributed application performance anomalies.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "feed": "s107_single",
+     "source_type": "SPAN",
+     "target_type": "passive TAP",
+     "broker_action": "enable flow-aware load balancing and increase buffer"
+    },
+    "why": "SPAN drops packets when oversubscribed/bursty; passive TAP provides lossless line-rate copy. Adding broker buffering/load-balancing prevents the 2%+ gaps and restores complete bidirectional TCP streams required for accurate APM detection. If TAP already in use, apply load_balance across APM cluster/broker ports."
+   },
+   "evidence_frames": [
+    218,
+    220,
+    285,
+    286,
+    299,
+    301,
+    404,
+    405,
+    480,
+    481,
+    512,
+    515,
+    691,
+    693,
+    718,
+    719,
+    800,
+    802,
+    824,
+    830
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3299,
+  "tokens_out": 2968,
+  "cost_usd": 0.01674,
+  "seconds": 15.0,
+  "recorded_at": "2026-10-29"
+ }
+}

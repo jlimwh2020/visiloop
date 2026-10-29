@@ -1,0 +1,101 @@
+{
+ "feed": "s155_double",
+ "status": "degraded",
+ "summary": "Feed s155_double is degraded for IDS: 29.1% of frames are sliced to ~192 bytes (IDS requires full payload) and 80.2% of bytes are encrypted exceeding the 60% tolerance, both severely limiting detection coverage.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Traffic mix is ~80% TLS/encrypted with no upstream decryption; packet broker is forwarding encrypted sessions directly to IDS which can only tolerate ~60% encrypted. IDS has no visibility into payload without SSL visibility.",
+   "impact_on_tool": "IDS is blind to ~80% of payload bytes - cannot apply signatures, detect exploits, C2 or data exfiltration inside TLS; effectively only metadata analysis possible, major detection gap.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker_egress",
+     "solution": "ssl_visibility_appliance",
+     "policy": "decrypt_selectively_and_forward_cleartext_to_IDS"
+    },
+    "why": "IDS needs cleartext payload for signature matching; decrypting out-of-band via visibility appliance restores inspection capability while respecting privacy policy for selective decryption."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    35,
+    36,
+    37
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker has packet slicing / snap-length enabled truncating frames to ~192 bytes (795/2729 frames, 29.1% >5% threshold). Likely configured to save bandwidth/tool capacity but incompatible with IDS full-payload requirement.",
+   "impact_on_tool": "IDS requires full payload for signature and anomaly detection; sliced packets lose L7 content, reassembly fails, and most rules will not fire - IDS will miss exploits and produce incomplete events.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518,
+     "feed": "s155_double",
+     "tool": "IDS"
+    },
+    "why": "Disable slicing / set snaplen to 1518+ (or 9000 if jumbo) for this IDS feed so full payload is delivered; if bandwidth is constrained, use filtering or dedicated tool port instead of slicing."
+   },
+   "evidence_frames": [
+    4,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    23,
+    24,
+    27,
+    29,
+    30,
+    38,
+    40,
+    41,
+    43,
+    51,
+    53,
+    54,
+    57
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3430,
+  "tokens_out": 2111,
+  "cost_usd": 0.01326,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

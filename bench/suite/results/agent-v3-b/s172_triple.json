@@ -1,0 +1,126 @@
+{
+ "feed": "s172_triple",
+ "status": "degraded",
+ "summary": "Feed s172_triple to APM is degraded: 100% VLAN tags missing (VLAN 10,20 required), microbursts overload 10G port at 133% (13.30 Gbps), and 27.9% traffic remains ERSPAN-encapsulated. APM loses segmentation, drops during bursts, and cannot parse tunneled flows.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker/aggregation is systematically stripping 802.1Q tags - 100% of 8286 frames arrive untagged while APM requires VLANs 10 and 20. Likely 'strip dot1q' or 'pop VLAN on ingress' enabled on broker ingress or SPAN source forwarding untagged.",
+   "impact_on_tool": "APM cannot segment or filter by VLAN 10/20 (app tiers/tenants); all transactions collapse to untagged/default, breaking per-VLAN SLAs, dashboards and alerting and reducing detection coverage to 0% for VLAN-aware policies.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "mode": "retain_tags_at_broker_egress"
+    },
+    "why": "Restore and forward original 802.1Q tags to the APM so it can correctly classify traffic by VLAN 10/20."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps APM port is fed bursty aggregate peaking at 13.30 Gbps in 1ms intervals (133% of capacity, 2 overloaded intervals). No load-balancing or rate-shaping in front of tool, so microbursts exceed line rate.",
+   "impact_on_tool": "APM NIC buffers overflow during bursts causing indiscriminate packet drops, incomplete TCP transactions, missed retransmits and skewed latency/throughput calculations; APM under-reports errors despite needing both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_ports": 2,
+     "hash": "5-tuple",
+     "preserve_bidirectional": true,
+     "target_utilization": 0.8
+    },
+    "why": "Spread flows across 2x10G APM ports with 5-tuple bidirectional hashing to keep per-port peaks <80% and prevent burst drops while keeping both directions of each flow together for APM."
+   },
+   "evidence_frames": [
+    1,
+    3162
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "27.9% of frames (2310/8286) arrive inside ERSPAN tunnel - remote SPAN/ERSPAN is forwarded through broker without decapsulation. Broker is not configured to strip ERSPAN/GRE.",
+   "impact_on_tool": "APM sees only outer ERSPAN/IP/GRE headers, not inner Ethernet/IP/TCP and application headers, so 28% of transactions cannot be decoded for response time, error rate or Top-N analysis.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "protocols": [
+      "ERSPAN"
+     ],
+     "strip_at": "packet_broker",
+     "expose_inner": true
+    },
+    "why": "Terminate/strip ERSPAN at the packet broker to present inner packets to APM for full L2-L7 parsing without requiring tool-side tunnel support."
+   },
+   "evidence_frames": [
+    73,
+    75,
+    76,
+    78,
+    80,
+    81,
+    83,
+    84,
+    87,
+    88,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3528,
+  "tokens_out": 2856,
+  "cost_usd": 0.01655,
+  "seconds": 16.7,
+  "recorded_at": "2026-10-29"
+ }
+}

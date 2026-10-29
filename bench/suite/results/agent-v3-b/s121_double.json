@@ -1,0 +1,97 @@
+{
+ "feed": "s121_double",
+ "status": "degraded",
+ "summary": "Feed s121_double to SIEM is degraded: 70.6% of traffic is VXLAN-encapsulated and opaque to the tool, and 2.9% of frames exceed the 1518-byte MTU and are dropped by the SIEM NIC.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic (1428 of 2023 frames, 70.6%) without stripping the outer header. Likely VXLAN/ERSPAN mirroring from switches is passed straight through to the tool port.",
+   "impact_on_tool": "SIEM sees only outer tunnel headers, not inner IP/TCP and application headers, so flow correlation, application identification and detection rules fail on the majority of traffic.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN"
+    },
+    "why": "Stripping VXLAN on the packet broker exposes inner L2-L7 headers so the SIEM can parse and correlate flows without needing tunnel-aware decoding."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "58 of 2023 frames (2.9%, largest 8108 bytes) exceed the SIEM's 1518-byte MTU, likely jumbo frames plus VXLAN overhead. Broker is not trimming frames to fit the 1 Gbps tool port.",
+   "impact_on_tool": "SIEM NIC silently drops oversized frames, creating 2.9% blind spot and incomplete event logging; dropped frames are not analyzed.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518
+    },
+    "why": "SIEM needs_full_payload=false, so slicing/trimming to 1518 bytes on the broker preserves headers for detection while ensuring frames are accepted by the tool port. Also reduces load after tunnel stripping."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    10,
+    12,
+    287,
+    288,
+    290,
+    347,
+    348,
+    350,
+    352,
+    354,
+    553,
+    554,
+    556,
+    557,
+    741,
+    742,
+    744
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3483,
+  "tokens_out": 2462,
+  "cost_usd": 0.01482,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,62 @@
+{
+ "feed": "s056_single",
+ "status": "degraded",
+ "summary": "Feed s056_single is degraded: 22.7% of frames truncated (mostly to 128 bytes) violates NDR full-payload requirement. All other checks (duplicates, encryption, VLANs, one-way, oversize, drops, overload, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker slicing/truncation is enabled and cutting frames to ~128 bytes (likely snaplen/slicing policy to save bandwidth). 420 of 1849 frames (22.7%) exceed 5% threshold.",
+   "impact_on_tool": "NDR needs full payload for deep packet inspection, signature matching, and anomaly detection. With only headers/128 bytes, payload-based detections, file extraction, and L7 analysis will fail or produce false negatives.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 128
+    },
+    "why": "NDR profile requires needs_full_payload=true. Disable slicing/snaplen on the broker port/policy for s056_single to forward full frames up to 9216 bytes so NDR receives complete payloads."
+   },
+   "evidence_frames": [
+    4,
+    7,
+    9,
+    10,
+    12,
+    25,
+    29,
+    40,
+    53,
+    56,
+    59,
+    71,
+    72,
+    74,
+    77,
+    90,
+    93,
+    103,
+    104,
+    106
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3313,
+  "tokens_out": 1563,
+  "cost_usd": 0.01078,
+  "seconds": 8.9,
+  "recorded_at": "2026-10-29"
+ }
+}

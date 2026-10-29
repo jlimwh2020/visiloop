@@ -1,0 +1,63 @@
+{
+ "feed": "s108_single",
+ "status": "degraded",
+ "summary": "Feed s108_single is degraded: NDR requires bidirectional traffic but 73.5% of TCP sessions (147/200) are one-way only. All other visibility checks (duplicates, encryption, VLANs, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN is delivering only one direction for most flows. 147 of 200 TCP sessions show traffic in a single direction (73.5% vs 10% threshold), typical of a SPAN port configured with 'rx' or 'tx' only, a single-sided TAP, or a broker policy that forwards only one side of an asymmetric path without bidirectional aggregation.",
+   "impact_on_tool": "NDR needs both directions for TCP handshake/reassembly, state tracking, and anomaly detection. With 73.5% one-way sessions the NDR cannot reconstruct flows, will miss lateral movement, C2, data exfiltration and generate false negatives/incomplete session records.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "aggregate_both_directions_per_flow": true
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow (client->server and server->client) to the same NDR tool port, or replace unidirectional SPAN with dual-direction TAP aggregation, so NDR receives complete bidirectional sessions for detection."
+   },
+   "evidence_frames": [
+    18,
+    75,
+    84,
+    92,
+    104,
+    113,
+    121,
+    129,
+    149,
+    157,
+    160,
+    192,
+    201,
+    210,
+    217,
+    224,
+    236,
+    244,
+    249,
+    263
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3300,
+  "tokens_out": 1682,
+  "cost_usd": 0.01127,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-29"
+ }
+}

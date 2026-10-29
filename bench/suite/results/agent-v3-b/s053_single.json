@@ -1,0 +1,67 @@
+{
+ "feed": "s053_single",
+ "status": "degraded",
+ "summary": "APM feed s053_single is degraded: required VLAN 20 is missing (50% packets untagged) while all other visibility checks (duplicates, one-way, truncation, drops, overload, tunnels, encryption, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or TAP ingress is stripping 802.1Q tags or trunk is misconfigured as access/untagged. Required VLAN 20 is not forwarded to the APM tool port, resulting in 50% untagged packets instead of tagged VLAN 20 traffic.",
+   "impact_on_tool": "APM requires both VLANs 10 and 20 for tier/segment-aware performance monitoring. Missing VLAN 20 blinds the APM to half the application traffic, breaks transaction correlation by segment, and prevents accurate latency/error attribution per VLAN.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "trunk_mode": "passthrough"
+    },
+    "why": "Configure packet broker ingress/egress to preserve and passthrough 802.1Q tags for VLANs 10 and 20 end-to-end to the APM, ensuring VLAN 20 is not stripped or filtered."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    17,
+    20,
+    23,
+    24,
+    25,
+    27,
+    30,
+    33,
+    36,
+    37,
+    38,
+    40
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3306,
+  "tokens_out": 1861,
+  "cost_usd": 0.01204,
+  "seconds": 9.2,
+  "recorded_at": "2026-10-29"
+ }
+}

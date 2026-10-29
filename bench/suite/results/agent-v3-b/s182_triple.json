@@ -1,0 +1,96 @@
+{
+ "feed": "s182_triple",
+ "status": "degraded",
+ "summary": "Feed s182_triple to 10Gbps APM is degraded: 53.3% one-way TCP sessions breaks bidirectional transaction correlation, 15.34 Gbps microbursts overload the tool port (153% capacity), and 9.1% duplicates waste capacity and skew APM metrics.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is not aggregating both directions of flows to the same APM tool port - likely asymmetric routing with separate TAP/SPAN inputs or per-direction load-balancing without symmetric hashing, so only one side of 270/507 sessions reaches the tool.",
+   "impact_on_tool": "APM requires both directions (needs_both_directions=true) to correlate request/response and measure latency; 53.3% one-way sessions means broken transaction traces, inaccurate response times, and missed application performance detections.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "symmetric_hash": "5-tuple"
+    },
+    "why": "Aggregate both directions of each flow to the same APM port using symmetric 5-tuple hashing on the packet broker to restore full bidirectional visibility."
+   },
+   "evidence_frames": [
+    3,
+    56,
+    87,
+    93,
+    119,
+    127,
+    131,
+    153,
+    191,
+    249,
+    297,
+    351,
+    376,
+    398,
+    444,
+    452,
+    461,
+    481,
+    506,
+    532
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microburst of 15.34 Gbps in 1ms exceeds the APM's 10 Gbps port capacity (153% load) - packet broker is forwarding too much aggregate traffic to a single tool port without load-balancing or filtering.",
+   "impact_on_tool": "APM port overrun causes buffer drops and missed packets during bursts, leading to incomplete transactions and gaps in APM coverage despite no drops detected in capture window yet.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target_per_port_gbps": 10,
+     "hash": "symmetric_5tuple",
+     "tool_group_size": 2
+    },
+    "why": "Distribute traffic across 2+ APM ports with symmetric load-balancing to keep per-port rate <80% of 10Gbps and preserve bidirectional flow integrity while handling bursts."
+   },
+   "evidence_frames": [
+    1
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "9.1% duplicate packets (570/6265) indicates same traffic arriving via multiple TAP/SPAN feeds aggregated without deduplication on the packet broker, or SPAN duplicate forwarding.",
+   "impact_on_tool": "APM wastes CPU/storage processing duplicates, inflates transaction counts and latency calculations, and duplicates exacerbate the 15.34 Gbps overload on the 10Gbps port.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 5,
+     "mode": "header_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop identical packets within a short window before delivery to the APM, cutting ~9% load and correcting metrics."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3449,
+  "tokens_out": 2422,
+  "cost_usd": 0.0146,
+  "seconds": 13.8,
+  "recorded_at": "2026-10-29"
+ }
+}

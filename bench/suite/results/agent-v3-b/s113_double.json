@@ -1,0 +1,95 @@
+{
+ "feed": "s113_double",
+ "status": "degraded",
+ "summary": "Feed s113_double is degraded: 78.3% encrypted traffic exceeds IDS 60% tolerance and 8.3% of frames are sliced to 256 bytes, preventing full-payload inspection required by this IDS.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "78.3% of bytes are encrypted (TLS/HTTPS) vs 60% IDS tolerance. Traffic is forwarded through packet broker without SSL decryption/visibility, so IDS sees only encrypted payloads.",
+   "impact_on_tool": "IDS cannot perform signature and anomaly detection on encrypted payloads; detection coverage drops sharply and encrypted attacks/malware will be missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "IDS needs cleartext payload for detection. Decrypt relevant TLS flows via dedicated SSL visibility appliance or broker decryption feature before forwarding to IDS, or filter to only decryptable/policy-required traffic to stay under 60% encrypted share."
+   },
+   "evidence_frames": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    13,
+    15,
+    17,
+    19,
+    21,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker is slicing packets to 256 bytes snaplen (143/1728 frames = 8.3% truncated, threshold 5%). Likely configured to save bandwidth/tool capacity, but this IDS requires full payload.",
+   "impact_on_tool": "IDS needs full payload for signature matching and reassembly. Sliced frames lose application payload, causing missed exploits, incomplete flows, and false negatives.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 1518
+    },
+    "why": "Disable slicing/truncation on the broker port feeding this IDS and forward full 1518-byte frames so IDS receives complete L7 payload for inspection."
+   },
+   "evidence_frames": [
+    43,
+    45,
+    78,
+    100,
+    135,
+    168,
+    185,
+    211,
+    227,
+    232,
+    243,
+    261,
+    285,
+    290,
+    301,
+    326,
+    332,
+    346,
+    357,
+    381
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3438,
+  "tokens_out": 1883,
+  "cost_usd": 0.0123,
+  "seconds": 9.6,
+  "recorded_at": "2026-10-29"
+ }
+}

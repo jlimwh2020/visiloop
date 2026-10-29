@@ -1,0 +1,85 @@
+{
+ "feed": "s128_double",
+ "status": "degraded",
+ "summary": "Feed s128_double is degraded: 100% of packets missing required VLANs 10/20 (tags stripped) and 27.22 Gbps microbursts overload the 10 Gbps APM port (272% capacity), causing segmentation blindness and burst packet loss.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or upstream SPAN/TAP is stripping 802.1Q tags before delivery. 100% of packets arrived untagged despite APM requiring VLANs 10 and 20, typical when broker egress is set to strip tags or SPAN is configured as access port.",
+   "impact_on_tool": "APM cannot segment traffic by VLAN 10/20 for application/tenant isolation; per-VLAN latency, error rates and transaction traces are misclassified or invisible, reducing detection coverage for VLAN-specific performance issues.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true
+    },
+    "why": "Configure packet broker to preserve and forward 802.1Q tags for VLANs 10 and 20 to the APM so it can correctly classify and monitor segmented traffic."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Single 10 Gbps APM port fed without load balancing; 1 ms microburst peaked at 27.22 Gbps (272% of capacity, >80% threshold), exceeding port line rate and broker egress buffers.",
+   "impact_on_tool": "APM ingress drops packets during bursts, causing incomplete transaction traces, skewed latency/error metrics, and missed APM alerts due to random loss under overload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "burst_gbps": 27.22,
+     "mode": "flow_hash",
+     "threshold_gbps": 8.0
+    },
+    "why": "Distribute traffic across multiple APM ports/tool group via packet broker flow-hash load balancing to keep per-port utilization below 80% and absorb microbursts without drops."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3385,
+  "tokens_out": 2322,
+  "cost_usd": 0.0141,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

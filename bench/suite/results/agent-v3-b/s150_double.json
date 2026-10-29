@@ -1,0 +1,102 @@
+{
+ "feed": "s150_double",
+ "status": "degraded",
+ "summary": "Feed s150_double to IDS is degraded: 14.5% of frames exceed IDS MTU (1518B) and are dropped by NIC, and traffic bursts to 3.05 Gbps overload the 1 Gbps tool port. Both cause silent packet loss and reduced IDS detection coverage.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network/packet broker is forwarding jumbo frames up to 8058 bytes while IDS port MTU is 1518 bytes. Broker is passing frames unchanged with no MTU handling, so NIC drops them on ingress.",
+   "impact_on_tool": "IDS NIC drops 466 of 3218 frames (14.5%) that exceed 1518B. Since IDS needs full payload for signature matching, those flows are invisible - missed exploits, C2 and data exfiltration in large frames.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "enable_jumbo_on_tool": true
+    },
+    "why": "Tool requires full payload so slicing/trimming is not an option. Either enable jumbo frames (9000B+) on IDS NIC and broker egress, or enforce 1518B MTU upstream to avoid silent NIC drops."
+   },
+   "evidence_frames": [
+    8,
+    10,
+    15,
+    17,
+    19,
+    22,
+    24,
+    70,
+    71,
+    73,
+    74,
+    117,
+    118,
+    120,
+    121,
+    123,
+    149,
+    150,
+    152,
+    164
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate/burst bandwidth (3.05 Gbps in 1ms) far exceeds single 1 Gbps IDS port capacity. No load balancing or burst buffering in front of tool; 24 intervals overloaded.",
+   "impact_on_tool": "IDS port buffers overflow and drops packets during bursts (305% of capacity). IDS loses flows randomly under load, causing missed detections, broken TCP reassembly and false negatives during attacks/peaks.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 3.05,
+     "suggested_ports": 4,
+     "hash": "5-tuple"
+    },
+    "why": "Distribute traffic across multiple 1 Gbps tool ports (or upgrade to 10 Gbps) with 5-tuple load balancing to keep per-port utilization <80% and absorb microbursts without drops."
+   },
+   "evidence_frames": [
+    79,
+    176,
+    337,
+    411,
+    497,
+    584,
+    733,
+    875,
+    949,
+    1073,
+    1167,
+    1275,
+    1550,
+    1823,
+    2002,
+    2093,
+    2243,
+    2518,
+    2681,
+    2730
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3494,
+  "tokens_out": 2086,
+  "cost_usd": 0.01323,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-29"
+ }
+}

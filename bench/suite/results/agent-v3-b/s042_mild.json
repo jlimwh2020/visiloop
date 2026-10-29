@@ -1,0 +1,26 @@
+{
+ "feed": "s042_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s042_mild. Tool receives complete, correct traffic with no packet broker impairments detected.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3180,
+  "tokens_out": 798,
+  "cost_usd": 0.00737,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-29"
+ }
+}

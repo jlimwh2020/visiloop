@@ -1,0 +1,136 @@
+{
+ "feed": "s174_triple",
+ "status": "degraded",
+ "summary": "IDS s174_triple is degraded: 67.5% of TCP sessions are one-way (needs both directions), 4.3% of frames exceed IDS 1518-byte MTU and are dropped by NIC, and 2.4% of TCP packets show gaps from capture drops. IDS requires full payload and bidirectional streams for reassembly and signature matching.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Feed delivers only one direction for 129 of 191 TCP sessions (67.5% >10% threshold). Most likely SPAN/mirror configured on a single direction, asymmetric routing with single-sided TAP, or packet broker policy/filter forwarding only client->server and not aggregating both sides.",
+   "impact_on_tool": "IDS needs both directions to reassemble TCP streams, track state, and match request+response signatures. With two-thirds of sessions one-way, stateful detection, exploit verification, and file extraction will fail, causing high false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "aggregate_at": "packet_broker"
+    },
+    "why": "IDS profile needs_both_directions=true. Broker must aggregate both directions of each flow into this single IDS feed so sessions are complete."
+   },
+   "evidence_frames": [
+    1,
+    9,
+    31,
+    39,
+    46,
+    76,
+    84,
+    107,
+    114,
+    153,
+    160,
+    167,
+    179,
+    187,
+    198,
+    222,
+    230,
+    238,
+    265,
+    336
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "87 of 2035 frames (4.3%) exceed the IDS 1Gbps port MTU of 1518 bytes, largest observed 8058 bytes. Network/broker is forwarding jumbo frames that the IDS NIC silently drops. Tool needs full payload so broker slicing/trimming is not viable.",
+   "impact_on_tool": "IDS is blind to 4.3% of frames. Dropped jumbo frames often carry large payloads, file transfers, or tunneled traffic - attacker can evade detection by using large frames. IDS also loses coverage for those flows.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "tool_needs_full_payload": true
+    },
+    "why": "Cannot use slice/trim because IDS needs full payload. Must either enable jumbo-frame support end-to-end to IDS (NIC/broker/tool config for 9k MTU) or reduce MTU upstream and ensure broker does not forward frames larger than 1518 to this 1G port."
+   },
+   "evidence_frames": [
+    61,
+    62,
+    64,
+    65,
+    67,
+    96,
+    97,
+    99,
+    100,
+    143,
+    144,
+    146,
+    148,
+    208,
+    210,
+    212,
+    213,
+    216,
+    217,
+    295
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "46 of 1881 TCP packets (2.4%) show gaps/retransmissions indicating missing data in transit. Pattern consistent with SPAN/mirror oversubscription or packet broker buffer drops under burst, not tool overload (tool_overload healthy).",
+   "impact_on_tool": "Gaps break TCP reassembly and stream reconstruction. IDS will miss signatures that span dropped segments, fail to extract files, and generate incomplete flow logs, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "replace_source": "SPAN/mirror",
+     "target": "TAP"
+    },
+    "why": "SPAN drops packets under load/bursts. Replacing SPAN with physical TAP and lossless broker delivery eliminates capture drops before the IDS."
+   },
+   "evidence_frames": [
+    24,
+    25,
+    78,
+    134,
+    136,
+    146,
+    147,
+    377,
+    378,
+    408,
+    410,
+    426,
+    579,
+    580,
+    581,
+    769,
+    774,
+    844,
+    889,
+    890
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3589,
+  "tokens_out": 2696,
+  "cost_usd": 0.01594,
+  "seconds": 14.1,
+  "recorded_at": "2026-10-29"
+ }
+}

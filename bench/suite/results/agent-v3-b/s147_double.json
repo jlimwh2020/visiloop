@@ -1,0 +1,104 @@
+{
+ "feed": "s147_double",
+ "status": "degraded",
+ "summary": "Feed s147_double to NDR is degraded: VLAN 20 completely missing (49% untagged) and 7.0% TCP packet loss detected. Both faults blind NDR detection for VLAN 20 and break stream reassembly.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or aggregation TAP is stripping 802.1Q tags or VLAN 20 is filtered/not trunked to the broker. Required VLAN 20 not seen at all and 49% of packets are untagged, indicating tag preservation is disabled or an allow-list is dropping VLAN 20.",
+   "impact_on_tool": "NDR requires VLANs 10,20 for tenant/segment attribution. Without VLAN 20 tags it cannot isolate or correlate traffic for that segment, creating a complete visibility blind spot and breaking VLAN-aware detection policies.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "forward_vlans": [
+      10,
+      20
+     ],
+     "mode": "passthrough"
+    },
+    "why": "Preserve 802.1Q tags end-to-end and ensure trunk/broker filter forwards both required VLANs so NDR receives correct segmentation."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    10,
+    12,
+    13,
+    16,
+    19,
+    21,
+    23,
+    24,
+    25,
+    27,
+    28,
+    30,
+    31,
+    34,
+    37
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream drops before the NDR - most likely SPAN oversubscription/buffer exhaustion or packet-broker ingress drops. 171 of 2435 TCP packets (7.0%) show gaps/retransmissions exceeding 1% threshold, while tool_overload is healthy, pointing to SPAN/broker loss not tool NIC overload.",
+   "impact_on_tool": "NDR needs both directions and full payload for stream reassembly. 7% missing data causes incomplete flows, failed reassembly, missed signatures and increased false negatives - attacker traffic can evade detection.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_type": "passive",
+     "feed": "s147_double",
+     "use_packet_broker_buffering": true
+    },
+    "why": "Replace lossy SPAN with passive TAP and properly buffered broker aggregation to eliminate oversubscription drops and deliver lossless traffic within NDR 10Gbps/9216B limits."
+   },
+   "evidence_frames": [
+    23,
+    26,
+    114,
+    115,
+    128,
+    130,
+    140,
+    142,
+    165,
+    168,
+    183,
+    184,
+    198,
+    199,
+    267,
+    268,
+    314,
+    315,
+    316,
+    317
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3426,
+  "tokens_out": 2221,
+  "cost_usd": 0.01372,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-29"
+ }
+}

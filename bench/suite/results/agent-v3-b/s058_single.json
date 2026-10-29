@@ -1,0 +1,63 @@
+{
+ "feed": "s058_single",
+ "status": "degraded",
+ "summary": "Feed s058_single to NDR is degraded: 2.7% TCP packet drops (52/1956, threshold 1%) detected; all other checks (duplicates, one-way, truncated, oversize, tunnel, VLAN, encryption, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Packet broker/TAP dropping packets under load: 2.66% of TCP packets show gaps (52/1956) indicating ingress oversubscription, microbursts exceeding the 10 Gbps tool port/buffer capacity, or fabric/SPAN congestion causing tail drops before the NDR.",
+   "impact_on_tool": "NDR needs both directions and full payload for TCP stream reassembly and detection. Missing segments break reassembly, create incomplete flows, and cause missed signatures/anomalies and reduced detection coverage (false negatives).",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "hash": "5-tuple",
+     "target": "add_tool_ports_or_broker_capacity"
+    },
+    "why": "Flow-aware load balancing across multiple 10G tool ports/cards eliminates single-port congestion and buffer exhaustion while preserving bidirectional flow integrity and full payload required by NDR, unlike filtering/slicing which would further reduce visibility."
+   },
+   "evidence_frames": [
+    44,
+    45,
+    46,
+    48,
+    116,
+    117,
+    118,
+    225,
+    226,
+    252,
+    254,
+    380,
+    381,
+    454,
+    456,
+    466,
+    467,
+    476,
+    477,
+    493
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3302,
+  "tokens_out": 1841,
+  "cost_usd": 0.01195,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,131 @@
+{
+ "feed": "s175_triple",
+ "status": "degraded",
+ "summary": "Feed s175_triple is degraded with 3 faults: 25.5% one-way TCP sessions, 6.8% genuine packet drops, and 11.0% frames truncated to 256B. All three break IDS requirements for bidirectional, full-payload inspection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Traffic is not aggregated bidirectionally before the IDS. 37 of 145 TCP sessions (25.5%) show only one direction, indicating asymmetric routing with separate TAP/SPAN feeds not joined or a single-direction SPAN/mirror.",
+   "impact_on_tool": "IDS needs both directions to track TCP state, reassemble streams and detect exploits. One-way visibility causes missed handshakes, broken flow reassembly, and high false-negative rate for IDS signatures.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "aggregate_both_directions": true
+    },
+    "why": "IDS profile requires both directions. Aggregate client-to-server and server-to-client for same flow onto this single IDS feed at the packet broker to restore full session visibility."
+   },
+   "evidence_frames": [
+    3,
+    6,
+    54,
+    77,
+    92,
+    120,
+    131,
+    134,
+    146,
+    168,
+    215,
+    378,
+    503,
+    506,
+    554,
+    624,
+    669,
+    678,
+    721,
+    799
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Genuine packet loss in the visibility path, not caused by slicing (verified via IP header length). 124 of 1836 TCP packets (6.8%) show gaps/sequence holes, typical of SPAN/mirror oversubscription, buffer exhaustion, or broker egress drops. Tool overload is healthy, so loss is upstream of the IDS.",
+   "impact_on_tool": "IDS loses TCP segments, fails to reassemble payloads, misses attack signatures that span multiple packets, and generates incomplete flow logs. 6.8% loss far exceeds 1% threshold for reliable detection.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "Replace lossy SPAN/mirror with physical TAP and ensure packet broker has sufficient buffer/capacity. TAP provides lossless copy and eliminates SPAN drop behavior under load."
+   },
+   "evidence_frames": [
+    44,
+    45,
+    86,
+    87,
+    89,
+    90,
+    115,
+    282,
+    285,
+    287,
+    292,
+    293,
+    316,
+    317,
+    319,
+    321,
+    331,
+    334,
+    335,
+    337
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/snaplen configured to ~256 bytes. 213 of 1930 frames (11.0%) are cut short, most to 256 bytes, stripping L7 payload.",
+   "impact_on_tool": "IDS needs full payload for signature matching and exploit detection. Truncated frames hide HTTP bodies, TLS handshakes, and attack payloads, causing IDS to miss application-layer threats.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "required_snaplen": 1518
+    },
+    "why": "Disable slicing or increase snaplen to at least 1518 bytes (tool max_frame_bytes) for this IDS feed so full payload is delivered for inspection."
+   },
+   "evidence_frames": [
+    10,
+    15,
+    38,
+    43,
+    45,
+    66,
+    69,
+    96,
+    136,
+    148,
+    156,
+    159,
+    180,
+    181,
+    183,
+    184,
+    197,
+    200,
+    212,
+    233
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3593,
+  "tokens_out": 2446,
+  "cost_usd": 0.01489,
+  "seconds": 11.1,
+  "recorded_at": "2026-10-29"
+ }
+}

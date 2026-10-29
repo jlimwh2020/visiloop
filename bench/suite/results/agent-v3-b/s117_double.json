@@ -1,0 +1,78 @@
+{
+ "feed": "s117_double",
+ "status": "degraded",
+ "summary": "Feed s117_double is degraded for APM: 56.2% of TCP sessions are one-way (tool requires both directions) and 11.3% of packets are duplicates. APM cannot correlate request/response and will miscalculate latency/availability.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of many flows is reaching the APM. Most likely the packet broker is not aggregating both sides of the conversation to the same tool port, or TAP/SPAN coverage is incomplete on the return path / asymmetric routing is not being combined. 72 of 128 sessions affected.",
+   "impact_on_tool": "APM needs both directions to pair requests with responses and measure transaction latency. With one-way traffic it sees incomplete transactions, cannot compute response times, inflates error rates and misses performance degradations.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_both_directions_to_same_tool": true,
+     "aggregate_asymmetric_paths": true
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow (both TAPs/SPANs and both sides of asymmetric paths) to the same APM tool port so request/response pairs are complete."
+   },
+   "evidence_frames": [
+    1,
+    11,
+    47,
+    57,
+    75,
+    168,
+    226,
+    271,
+    275,
+    284,
+    297,
+    305,
+    313,
+    385,
+    387,
+    450,
+    460,
+    486,
+    510,
+    521
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "11.3% duplicate packets (181/1605) indicates the same packet is being delivered twice, typically from aggregating two SPANs/TAPs that see the same traffic without broker deduplication, or a loop/SPAN duplication.",
+   "impact_on_tool": "APM will double-count transactions, skew latency and throughput metrics, waste its 10G capacity and storage, and can trigger false alerts on retransmits/errors even though payload inspection is not required.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication on feed s117_double to suppress identical packets arriving within a short window before forwarding to the APM."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3368,
+  "tokens_out": 2107,
+  "cost_usd": 0.01316,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-29"
+ }
+}

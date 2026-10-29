@@ -1,0 +1,104 @@
+{
+ "feed": "s138_double",
+ "status": "degraded",
+ "summary": "Feed s138_double is degraded for APM: 50% of packets missing required VLAN 20 (untagged) and 63.8% remain ERSPAN-encapsulated, preventing correct VLAN-aware correlation and L7 decoding.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 is not arriving tagged - 50% of packets are untagged. Most likely the ingress SPAN/TAP trunk is not forwarding VLAN 20 or the packet broker is stripping 802.1Q tags on ingress/egress instead of preserving them.",
+   "impact_on_tool": "APM requires VLANs 10 and 20 for segmentation. Traffic from VLAN 20 is invisible or misclassified, breaking service maps, per-VLAN latency/SLA calculations and filtering for that tenant/segment.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "required_vlans": [
+      10,
+      20
+     ],
+     "preserve_dot1q": true,
+     "vlan_id": 20
+    },
+    "why": "Restore and preserve 802.1Q tags for VLANs 10 and 20 through the broker to the APM so it can correctly classify and monitor both segments."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    8,
+    10,
+    11,
+    12,
+    14,
+    17,
+    20,
+    23,
+    24,
+    25,
+    27,
+    30,
+    33,
+    36,
+    37,
+    38,
+    40
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "63.8% of frames (1305/2047) arrive inside ERSPAN encapsulation. Broker is forwarding ERSPAN from the source without terminating/decapsulating before delivery to the tool.",
+   "impact_on_tool": "APM sees outer ERSPAN headers instead of inner application traffic. It cannot parse inner L3-L7 headers, so transaction decoding, flow correlation and latency measurements fail and tool cycles are wasted on tunnel overhead.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "deliver": "inner_packet"
+    },
+    "why": "Terminate ERSPAN at the packet broker and deliver only the inner native frames so APM can decode applications and measure performance correctly."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3440,
+  "tokens_out": 2154,
+  "cost_usd": 0.01345,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

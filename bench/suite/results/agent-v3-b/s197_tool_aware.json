@@ -1,0 +1,26 @@
+{
+ "feed": "s197_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks healthy for SIEM feed s197_tool_aware. Tool receives complete, correct traffic within its requirements (one-way OK, no payload/VLAN/encryption constraints, 1 Gbps port, 1518B MTU). No packet broker changes needed.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 827,
+  "cost_usd": 0.0075,
+  "seconds": 4.9,
+  "recorded_at": "2026-10-29"
+ }
+}

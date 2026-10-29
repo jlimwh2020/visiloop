@@ -1,0 +1,99 @@
+{
+ "feed": "s146_double",
+ "status": "degraded",
+ "summary": "Feed s146_double is degraded: 82% encrypted bytes exceeds IDS 60% tolerance and 7.4% frames exceed 1518B MTU and are dropped by IDS NIC.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "82% of bytes are encrypted (TLS) vs IDS tolerance of 60%. Traffic is not being decrypted before the IDS, so payload is opaque.",
+   "impact_on_tool": "IDS cannot inspect payloads for signatures/behavioral detection; 82% of traffic is blind, severely reducing detection coverage for encrypted attacks/C2.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "share": 0.8204,
+     "threshold": 0.6
+    },
+    "why": "IDS needs cleartext payload but cannot decrypt itself; decrypt upstream (e.g., SSL visibility appliance/packet broker decryption) or feed decrypted copy, respecting privacy/policy, to restore inspection."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "242 of 3254 frames (7.4%) exceed IDS port MTU of 1518 bytes, largest 8058 bytes. Likely jumbo frames or tunnel/SPAN overhead not normalized; IDS NIC drops oversize frames.",
+   "impact_on_tool": "IDS silently drops 7.4% of frames due to MTU exceedance, creating coverage holes. Because this IDS needs full payload, slicing/trimming is not viable and attacks in large frames are missed.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_seen": 8058
+    },
+    "why": "Tool requires full payload so cannot use slicing to fit MTU. Normalize MTU end-to-end: increase IDS NIC MTU to support jumbos (e.g., 9000+) or configure packet broker to fragment/normalize oversize frames to 1518B before delivery."
+   },
+   "evidence_frames": [
+    162,
+    163,
+    165,
+    166,
+    168,
+    234,
+    235,
+    237,
+    238,
+    295,
+    296,
+    298,
+    299,
+    301,
+    304,
+    334,
+    335,
+    337,
+    338,
+    340
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3467,
+  "tokens_out": 1886,
+  "cost_usd": 0.01235,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

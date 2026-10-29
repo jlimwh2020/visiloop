@@ -1,0 +1,101 @@
+{
+ "feed": "s112_double",
+ "status": "degraded",
+ "summary": "Feed s112_double to IDS is degraded: 9.5% of frames exceed the IDS 1518B MTU and are dropped by the NIC, and 70.7% of traffic is still GRE-encapsulated, hiding inner payload from inspection. Both faults cause significant detection blind spots.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Upstream network/broker delivering jumbo frames up to 8096B to a 1Gbps IDS port limited to 1518B without MTU normalization. 240 of 2529 frames (9.5%) exceed the tool's max_frame_bytes, indicating jumbo-enabled segments or broker egress not enforcing MTU.",
+   "impact_on_tool": "IDS NIC silently drops 9.5% of frames before inspection. Because this IDS needs full payload for signature matching, trimming/slicing is not viable and those flows go completely uninspected, allowing evasion.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_observed_bytes": 8096,
+     "feed": "s112_double"
+    },
+    "why": "Tool needs full payload so slicing would break detection. Fix MTU end-to-end or configure packet broker to enforce 1518B egress MTU (fragment, filter or normalize jumbos) so frames are deliverable to the IDS NIC instead of being dropped."
+   },
+   "evidence_frames": [
+    28,
+    29,
+    31,
+    102,
+    103,
+    105,
+    152,
+    153,
+    158,
+    159,
+    181,
+    182,
+    184,
+    185,
+    187,
+    188,
+    246,
+    247,
+    249,
+    250
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker forwarding GRE-encapsulated traffic directly to IDS without decapsulation. 1788 of 2529 frames (70.7%) are GRE-wrapped, indicating missing strip-tunnel policy on the broker egress to this IDS.",
+   "impact_on_tool": "IDS sees only outer GRE/IP headers, not inner IP/TCP and application payload. Protocol parsing, signature matching and IOC detection fail on 70.7% of traffic, drastically reducing detection coverage.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "GRE",
+     "strip_at": "packet_broker",
+     "feed": "s112_double"
+    },
+    "why": "Stripping GRE at the packet broker exposes inner packets for full IDS inspection while preserving encapsulation for other tools if needed. This restores visibility without requiring IDS to decode tunnels."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3469,
+  "tokens_out": 2471,
+  "cost_usd": 0.01484,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-29"
+ }
+}

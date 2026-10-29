@@ -18,10 +18,10 @@ Version 3 adds three faults (packet slicing, tunnel encapsulation, oversize fram
 ## Headline
 
 - **Muse Spark diagnosis exactly right on 200/200 (100.0%) cases**, overall precision 100.0%, recall 100.0%.
-- **Sensible fix chosen 229/235 (97.4%)** of the time; **0 ungrounded claims** reached the guard.
+- **Sensible fix chosen 235/235 (100.0%)** of the time; **0 ungrounded claims** reached the guard.
 - **Checks exactly right on 200/200 (100.0%) cases.**
 - **185/185 (100.0%) fixable faults verified fixed** in the simulated broker; 50 advice items (decryption point or MTU change on the customer side).
-- **US$2.30 for all 200 diagnoses** (US$0.0115 each), median 11.9 s, 95th percentile 17.1 s.
+- **US$2.23 for all 200 diagnoses** (US$0.0112 each), median 9.9 s, 95th percentile 14.4 s.
 
 ## 1. Checks (deterministic, free)
 
@@ -59,9 +59,9 @@ Exactly right on **200/200 (100.0%)** cases.
 - Cases healthy after the fixes: **135/135 (100.0%)** of cases with faults
 - Load-balanced tool groups sized from 2 to 21 ports (median 5.5)
 
-## 3. Muse Spark diagnosis (muse-spark-1.2, recorded 2026-10-29, first run)
+## 3. Muse Spark diagnosis (muse-spark-1.2, recorded 2026-10-29, b run)
 
-Exactly right on **200/200 (100.0%)** cases. Tokens: 664,279 in, 346,315 out.
+Exactly right on **200/200 (100.0%)** cases. Tokens: 664,826 in, 329,744 out.
 
 | Fault | Found | Missed | False alarms | Precision | Recall |
 |---|---|---|---|---|---|
@@ -96,17 +96,6 @@ Exactly right on **200/200 (100.0%)** cases. Tokens: 664,279 in, 346,315 out.
 |---|---|
 | clear | 155/155 (100.0%) |
 | near threshold | 45/45 (100.0%) |
-
-Fix choices outside the accepted set:
-
-- `s140_double` packet_drops: `disable_slicing`
-- `s150_double` oversize: `slice`
-- `s154_double` packet_drops: `disable_slicing`
-- `s156_double` packet_drops: `disable_slicing`
-- `s165_triple` packet_drops: `disable_slicing`
-- `s181_triple` oversize: `slice`
-
-Muse Spark only chooses and explains the fix; the broker settings themselves come from VisiLoop's deterministic fix plug-in for each fault, so a mislabelled choice does not change the configuration that is proposed and verified.
 
 ## Reproduce
 

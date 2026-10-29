@@ -1,0 +1,99 @@
+{
+ "feed": "s140_double",
+ "status": "degraded",
+ "summary": "Feed s140_double is degraded for NDR: 8.7% TCP packet loss (genuine drops, not slicing) and 12.4% frames sliced to ~256 bytes. Both break full-payload flow reassembly required by this NDR, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Genuine packet loss in the visibility path - 170 of 1959 TCP packets (8.7%, threshold 1%) show gaps via TCP sequence analysis. Slicing was ruled out by IP-length validation, so this is not an artifact. Most likely SPAN/mirror oversubscription or packet broker buffer drops under burst, before the tool.",
+   "impact_on_tool": "NDR cannot reassemble flows or perform stream reassembly and signature matching; missing segments cause incomplete sessions, missed detections and false negatives for lateral movement/exfiltration. High severity for NDR that needs both directions and full payload.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_location": "access/uplink feeding s140_double",
+     "tap_type": "passive optical/TAP aggregation"
+    },
+    "why": "TAP delivers line-rate, lossless copy without SPAN buffer drops or oversubscription. Eliminates the 8.7% gaps at the source; if TAP already in use, add aggregation and load_balance/filter to prevent broker drops."
+   },
+   "evidence_frames": [
+    20,
+    77,
+    78,
+    79,
+    80,
+    109,
+    110,
+    111,
+    121,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    155,
+    156,
+    170,
+    171
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing enabled - 261 of 2105 frames (12.4%, threshold 5%) cut short, most to 256 bytes. Broker is truncating payload to save bandwidth/tool load, but this NDR profile requires full payload.",
+   "impact_on_tool": "NDR loses L7 payload beyond 256 bytes; cannot do deep packet inspection, file extraction, or exploit detection. Truncated flows appear as incomplete and evade NDR analytics.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "current_slice_bytes": 256,
+     "target": "disable slicing for NDR feed s140_double"
+    },
+    "why": "NDR needs_full_payload=true. Disabling slicing restores full packets for detection. If bandwidth to 10G tool port is constrained, use selective filter or dedicated NDR feed instead of global slicing."
+   },
+   "evidence_frames": [
+    9,
+    22,
+    44,
+    65,
+    66,
+    68,
+    69,
+    78,
+    79,
+    81,
+    92,
+    95,
+    124,
+    125,
+    156,
+    167,
+    171,
+    179,
+    196,
+    200
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3475,
+  "tokens_out": 2456,
+  "cost_usd": 0.01478,
+  "seconds": 12.5,
+  "recorded_at": "2026-10-29"
+ }
+}

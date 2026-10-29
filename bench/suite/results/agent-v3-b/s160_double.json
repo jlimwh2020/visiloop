@@ -1,0 +1,80 @@
+{
+ "feed": "s160_double",
+ "status": "degraded",
+ "summary": "Feed s160_double is degraded: IDS receives 12.6% duplicate packets and 19.4% one-way TCP sessions (26/134), preventing complete bidirectional flow reassembly and reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "12.6% duplicates (283/2243 packets, threshold 5%) indicates overlapping SPAN sessions or dual TAP feeds aggregated without deduplication on the packet broker, forwarding the same packet twice to the IDS port.",
+   "impact_on_tool": "IDS wastes CPU/capacity on duplicate processing, inflates flow/packet counters, risks false positives and missed true positives due to state confusion and reduced headroom for real traffic.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "enable": true,
+     "window_ms": 10,
+     "mode": "packet_broker_dedup"
+    },
+    "why": "Broker-level deduplication removes identical packets seen within a short window from overlapping SPAN/TAP sources before delivery, eliminating 12.6% waste without losing unique traffic."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "19.4% of TCP sessions are one-way (26/134, threshold 10%) - broker is not aggregating both directions of a flow to this IDS port. Likely separate ingress/egress SPANs or asymmetric routing with per-direction forwarding or incorrect load-balancing hash splitting client->server and server->client across different tool ports.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly and stateful signature detection. One-way visibility blinds stream reassembly, allows evasion, and causes missed exploits, callbacks, and incomplete session logging.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash": "5-tuple",
+     "deliver_both_directions_to_same_tool_port": true
+    },
+    "why": "Aggregating both directions of each 5-tuple flow to the same IDS port restores full bidirectional sessions required for stateful IDS detection."
+   },
+   "evidence_frames": [
+    3,
+    148,
+    173,
+    189,
+    266,
+    506,
+    624,
+    669,
+    732,
+    912,
+    922,
+    931,
+    1018,
+    1026,
+    1403,
+    1448,
+    1517,
+    1526,
+    1617,
+    1629
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3374,
+  "tokens_out": 1999,
+  "cost_usd": 0.01271,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s047_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for NDR feed s047_mild. Traffic is bidirectional, full-payload, correctly sized (within 9216B), without drops, duplicates, truncation, tunnels, VLAN stripping, or overload - NDR has complete, correct traffic for detection.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3178,
+  "tokens_out": 830,
+  "cost_usd": 0.0075,
+  "seconds": 7.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "feed": "s079_single",
+ "status": "degraded",
+ "summary": "Feed s079_single is degraded: 98.5% of bytes are encrypted, exceeding the NDR's 90% tolerance. All other visibility checks (duplicates, VLANs, directionality, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Near-total encryption (98.54% of bytes) - traffic is predominantly TLS/encrypted flows with no decryption before the packet broker egress. NDR tolerates ~90% encrypted but this feed exceeds it.",
+   "impact_on_tool": "NDR requires full payload for detection and cannot inspect encrypted payloads. At 98.5% encrypted, deep packet inspection, signature matching, and anomaly detection are blinded, drastically reducing detection coverage for C2, exfiltration and lateral movement.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "NDR needs cleartext payload; decrypting relevant TLS at a visibility/decryption zone or forwarding already-decrypted traffic from a TLS-intercept proxy restores inspection capability without changing TAP/SPAN."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3307,
+  "tokens_out": 1330,
+  "cost_usd": 0.00979,
+  "seconds": 8.2,
+  "recorded_at": "2026-10-29"
+ }
+}

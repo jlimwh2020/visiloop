@@ -1,0 +1,63 @@
+{
+ "feed": "s083_single",
+ "status": "degraded",
+ "summary": "Feed s083_single to IDS is degraded: 8.6% TCP packet loss (186/2165 packets) exceeds 1% threshold. All other visibility checks (duplicates, encryption, VLANs, one-way, oversize, truncation, tunnels, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream capture loss before the IDS - most commonly SPAN/mirror port oversubscription or packet broker buffer exhaustion under burst load. SPAN ports drop packets when switch CPU/buffers are busy and have no lossless buffering, creating gaps in the TCP sequence seen at the tool.",
+   "impact_on_tool": "IDS requires both directions and full payload for stream reassembly and signature matching. With 8.6% missing TCP segments, the IDS cannot reliably reassemble flows, misses exploits split across missing packets, generates incomplete alerts and false negatives, and loses detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_point": "uplink/core",
+     "tap_type": "passive_fiber_or_copper"
+    },
+    "why": "Replace lossy SPAN/mirror with passive TAP (and ensure packet broker has adequate buffering) to provide lossless, line-rate copy to the 1 Gbps IDS port. If TAP already in use, add broker-level buffering/QoS and filter irrelevant traffic to prevent broker drops."
+   },
+   "evidence_frames": [
+    31,
+    34,
+    59,
+    61,
+    89,
+    92,
+    124,
+    125,
+    150,
+    151,
+    153,
+    154,
+    166,
+    167,
+    201,
+    203,
+    210,
+    211,
+    213,
+    215
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3300,
+  "tokens_out": 2107,
+  "cost_usd": 0.01308,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

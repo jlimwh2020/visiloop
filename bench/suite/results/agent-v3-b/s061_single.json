@@ -1,0 +1,62 @@
+{
+ "feed": "s061_single",
+ "status": "degraded",
+ "summary": "Feed s061_single to SIEM is degraded: 3.9% of frames (77/1998) exceed the tool's 1518-byte MTU and are dropped by its NIC, causing visibility gaps. No other faults detected.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Network is forwarding jumbo frames (up to 8058 bytes) to a 1Gbps SIEM port limited to 1518 bytes. The packet broker is passing frames through unchanged, so the SIEM NIC drops any frame >1518 bytes at ingress.",
+   "impact_on_tool": "SIEM loses ~3.9% of frames entirely - events, flows and alerts contained in those large frames are never ingested, reducing detection coverage and creating blind spots for large transfers.",
+   "recommended_fix": {
+    "action": "slice",
+    "params": {
+     "bytes": 1518
+    },
+    "why": "SIEM needs_both_directions=false and needs_full_payload=false per tool profile, so payload can be trimmed. Slicing frames to 1518 bytes on the packet broker ensures they fit the tool's MTU and are no longer dropped, without impacting SIEM detection which does not require full payload."
+   },
+   "evidence_frames": [
+    19,
+    20,
+    22,
+    23,
+    25,
+    26,
+    222,
+    223,
+    225,
+    226,
+    228,
+    305,
+    306,
+    308,
+    309,
+    311,
+    487,
+    489,
+    491,
+    494
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3354,
+  "tokens_out": 1693,
+  "cost_usd": 0.01139,
+  "seconds": 9.0,
+  "recorded_at": "2026-10-29"
+ }
+}

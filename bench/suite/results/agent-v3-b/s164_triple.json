@@ -1,0 +1,122 @@
+{
+ "feed": "s164_triple",
+ "status": "degraded",
+ "summary": "Feed s164_triple to NDR is degraded with 3 high-severity faults: 95.2% ERSPAN-encapsulated traffic blinding inspection, 21.72 Gbps microbursts overloading 10 Gbps NDR port (217% capacity), and 17.8% of TCP sessions one-way breaking reassembly.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN aggregation is not preserving flow symmetry: 95 of 535 TCP sessions (17.8% >10% threshold) show only one direction. Likely asymmetric routing with per-direction hashing or SPAN missing egress direction, sending client->server and server->client to different tools.",
+   "impact_on_tool": "NDR needs_both_directions=true for TCP reassembly, state tracking and anomaly detection. One-way flows cannot be reassembled, causing missed detections, incomplete flow records and inaccurate NDR scoring.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash_mode": "symmetric_5_tuple",
+     "aggregate_both_directions_to_same_tool": true
+    },
+    "why": "Use flow-aware symmetric hashing/aggregation at packet broker so both directions of each 5-tuple are forwarded to this same NDR instance, restoring full session visibility."
+   },
+   "evidence_frames": [
+    33,
+    36,
+    37,
+    109,
+    131,
+    301,
+    354,
+    426,
+    516,
+    539,
+    567,
+    576,
+    654,
+    731,
+    893,
+    1080,
+    1163,
+    1359,
+    1411,
+    1431
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Aggregate throughput bursts to 21.72 Gbps in 1ms intervals vs NDR port_speed_gbps=10, exceeding capacity by 217% (threshold 80%). No load-balancing or rate-limiting in front of tool; 2 intervals overloaded.",
+   "impact_on_tool": "NDR NIC buffers overflow and drops packets during bursts despite upstream capture showing no drops. Results in random packet loss, missed signatures, truncated flows and degraded detection coverage under load.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 10,
+     "peak_gbps": 21.72,
+     "method": "flow_aware_hash",
+     "target_utilization": 0.7,
+     "required_ports": 3
+    },
+    "why": "Distribute traffic with flow-aware load balancing across 2-3 NDR ports/nodes (or 10G x3) to keep per-port utilization <70-80% while preserving bidirectional flow symmetry."
+   },
+   "evidence_frames": [
+    1,
+    5483
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "7165 of 7527 frames (95.2% >10% threshold) arrive inside ERSPAN tunnel. Packet broker is forwarding encapsulated ERSPAN without decapsulation/termination.",
+   "impact_on_tool": "NDR sees only outer ERSPAN/IP/GRE headers, not inner original Ethernet/IP/TCP payload. L2-L7 parsing, application identification and detection signatures fail on 95% of traffic; NDR is effectively blind.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "forward": "inner_payload_only"
+    },
+    "why": "Terminate/strip ERSPAN at packet broker and forward only decapsulated inner frames to NDR so it receives true endpoints and full payload for inspection (needs_full_payload=true)."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3529,
+  "tokens_out": 2494,
+  "cost_usd": 0.01501,
+  "seconds": 16.5,
+  "recorded_at": "2026-10-29"
+ }
+}

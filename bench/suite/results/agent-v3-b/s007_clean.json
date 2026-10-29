@@ -1,0 +1,26 @@
+{
+ "feed": "s007_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed s007_clean. Tool receives complete, correct traffic with no packet broker issues detected.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3183,
+  "tokens_out": 811,
+  "cost_usd": 0.00743,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-29"
+ }
+}

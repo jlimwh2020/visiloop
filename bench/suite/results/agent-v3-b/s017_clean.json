@@ -1,0 +1,26 @@
+{
+ "feed": "s017_clean",
+ "status": "healthy",
+ "summary": "All visibility checks passed for SIEM feed s017_clean. No duplicates, drops, overload, truncation, tunnels, VLAN gaps, one-way, oversize, or encryption issues detected. Traffic is complete and correct for SIEM requirements.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3185,
+  "tokens_out": 854,
+  "cost_usd": 0.00761,
+  "seconds": 5.3,
+  "recorded_at": "2026-10-29"
+ }
+}

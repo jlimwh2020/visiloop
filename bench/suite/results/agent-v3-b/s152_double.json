@@ -1,0 +1,96 @@
+{
+ "feed": "s152_double",
+ "status": "degraded",
+ "summary": "IDS feed s152_double is degraded: 79% encrypted traffic exceeds 60% IDS tolerance and 2.6% of frames exceed 1518B MTU and are dropped by IDS NIC.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "79% of bytes are encrypted (TLS/QUIC) with no broker-side decryption or clear-text feed, exceeding IDS tolerance of 60%. Traffic is forwarded as-is from TAP/SPAN without SSL visibility.",
+   "impact_on_tool": "IDS requires full payload for signature matching but cannot inspect encrypted payloads; detection coverage is severely reduced and encrypted C2/exfiltration will be missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {},
+    "why": "IDS needs clear-text payload; add SSL visibility/decryption at packet broker or mirror already-decrypted traffic to this IDS feed, respecting privacy/policy controls."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "medium",
+   "root_cause": "Upstream network/broker is delivering jumbo/encapsulated frames up to 8058 bytes to a 1 Gbps IDS port limited to 1518 bytes. 63 of 2403 frames (2.6%) exceed MTU and are dropped by the NIC.",
+   "impact_on_tool": "IDS silently drops 2.6% of frames, creating a blind spot; attackers can evade detection using large frames. Slicing/trimming is not viable because this IDS needs full payload.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_observed": 8058
+    },
+    "why": "Do not slice - IDS needs full payload. Enable jumbo-frame support on IDS NIC/port or normalize MTU/strip encapsulation upstream so frames fit 1518B without truncation."
+   },
+   "evidence_frames": [
+    138,
+    141,
+    145,
+    146,
+    217,
+    218,
+    221,
+    247,
+    248,
+    250,
+    251,
+    275,
+    276,
+    278,
+    279,
+    281,
+    282,
+    460,
+    461,
+    463
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3463,
+  "tokens_out": 2016,
+  "cost_usd": 0.0129,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "feed": "s145_double",
+ "status": "degraded",
+ "summary": "Feed s145_double to NDR is degraded: 9.1% duplicates and 18.6% one-way TCP sessions. NDR requires bidirectional full-payload visibility - one-way breaks session reassembly and detection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating overlapping sources (e.g., SPANs from both sides of a link or overlapping TAP/SPAN feeds) without deduplication. Same packet arrives via two paths and is forwarded twice to the NDR, measured as 223/2459 duplicates (9.1% > 5% threshold).",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate packets, inflates flow/connection counts, skews analytics and can trigger false positives or missed detections due to reassembly confusion.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet-hash"
+    },
+    "why": "Enable packet-broker deduplication (hash-based, ~10ms window) after aggregation and before delivery to NDR to suppress duplicates while preserving one copy of each packet."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Only one direction of TCP sessions is reaching the NDR (29/156 sessions one-way, 18.6%). Most likely SPAN configured for RX-only/TX-only, asymmetric routing with tap only on one path, or packet-broker load-balancing/filter splitting directions across different tool ports instead of aggregating both directions to this NDR.",
+   "impact_on_tool": "NDR needs_both_directions=true for TCP reassembly, protocol decoding and attack detection. One-way sessions cannot be reassembled, so detection coverage drops, alerts are missed and investigations lack return traffic.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "symmetric_hash": "5-tuple"
+    },
+    "why": "Configure packet broker to aggregate both directions of each flow to the same NDR port. If load-balancing to multiple NDRs, use symmetric 5-tuple flow hashing so forward and reverse of a session go to the same tool; verify SPAN/TAP covers both directions of asymmetric paths."
+   },
+   "evidence_frames": [
+    23,
+    217,
+    224,
+    241,
+    299,
+    347,
+    348,
+    427,
+    636,
+    661,
+    668,
+    747,
+    907,
+    1068,
+    1242,
+    1318,
+    1411,
+    1438,
+    1462,
+    1470
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3372,
+  "tokens_out": 2402,
+  "cost_usd": 0.01442,
+  "seconds": 13.5,
+  "recorded_at": "2026-10-29"
+ }
+}

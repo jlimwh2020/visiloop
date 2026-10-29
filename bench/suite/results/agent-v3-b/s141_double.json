@@ -1,0 +1,78 @@
+{
+ "feed": "s141_double",
+ "status": "degraded",
+ "summary": "Feed s141_double to IDS is degraded: 18.3% duplicate packets (350/1917) and 70.1% ERSPAN tunnel encapsulation (1344/1917) prevent complete, correct inspection. IDS requires full payload visibility without encapsulation.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding ERSPAN-encapsulated traffic directly to the IDS without decapsulation. 70.1% of frames are still inside ERSPAN, indicating the broker is configured to pass the tunnel through rather than strip it before delivery.",
+   "impact_on_tool": "IDS cannot parse inner L3-L7 headers and payload while encapsulated; signatures, protocol decoders and stream reassembly fail on 70% of traffic, creating a major detection blind spot despite needing full payload.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Stripping ERSPAN at the packet broker exposes the original inner packets so the IDS can inspect payload and apply signatures correctly."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Same packets delivered twice due to aggregation of overlapping SPAN/mirror sources or dual TAP feeds without deduplication on the broker (feed name 'double' suggests dual-feed). 18.3% exceeds 5% threshold.",
+   "impact_on_tool": "IDS wastes cycles re-inspecting duplicates, inflates event counts and connection tables, confuses TCP stream reassembly and can cause false positives or missed detections due to state bloat.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to deliver only one copy of each packet, restoring accurate traffic rates and freeing IDS resources for real detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3367,
+  "tokens_out": 1808,
+  "cost_usd": 0.01189,
+  "seconds": 10.1,
+  "recorded_at": "2026-10-29"
+ }
+}

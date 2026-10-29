@@ -1,0 +1,63 @@
+{
+ "feed": "s064_single",
+ "status": "degraded",
+ "summary": "Feed s064_single to IDS is degraded: 21.8% of TCP sessions (41/188) are one-way, exceeding 10% threshold. IDS requires bidirectional traffic for reassembly. All other visibility checks (drops, overload, truncation, duplicates, tunnels, VLAN, encryption, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction for ~22% of flows. Most likely cause is incomplete aggregation - TAP/SPAN source covers only one side of asymmetrically routed path, or broker policy/filter is forwarding only client-to-server (or server-to-client) to this IDS port so return traffic never arrives. Not caused by drops or overload (both healthy).",
+   "impact_on_tool": "IDS needs_both_directions=true and needs_full_payload=true for TCP stream reassembly, state tracking and signature matching. With one-way sessions the IDS cannot reconstruct flows, misses exploits, C2 and lateral movement, and produces incomplete session logs leading to false negatives.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "aggregate_both_directions": true,
+     "ensure_flow_affinity": true
+    },
+    "why": "Aggregate both forward and reverse directions from all relevant TAP/SPAN sources and forward with 5-tuple flow affinity to this IDS port. This restores bidirectional session visibility required for IDS detection without creating duplicates or overload."
+   },
+   "evidence_frames": [
+    22,
+    30,
+    64,
+    76,
+    146,
+    156,
+    347,
+    370,
+    481,
+    519,
+    801,
+    874,
+    930,
+    938,
+    962,
+    1010,
+    1031,
+    1052,
+    1060,
+    1074
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3307,
+  "tokens_out": 2178,
+  "cost_usd": 0.01339,
+  "seconds": 12.3,
+  "recorded_at": "2026-10-29"
+ }
+}

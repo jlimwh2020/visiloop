@@ -1,0 +1,26 @@
+{
+ "feed": "s026_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed 's026_mild'. Tool receives complete, correct traffic with no duplicates, drops, overload, truncation, tunnels, VLAN stripping, one-way flows, oversize frames, or excessive encryption. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3179,
+  "tokens_out": 890,
+  "cost_usd": 0.00776,
+  "seconds": 6.2,
+  "recorded_at": "2026-10-29"
+ }
+}

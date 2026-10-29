@@ -1,0 +1,117 @@
+{
+ "feed": "s173_triple",
+ "status": "degraded",
+ "summary": "IDS feed s173_triple is degraded: 25.4% duplicates, 100% VLAN tags stripped (VLANs 10,20 missing), and 1.3% TCP gaps indicating packet drops. IDS requires full payload and both directions with VLAN awareness - duplicates waste capacity and trigger duplicate alerts, missing VLANs blind VLAN-specific detection, and gaps break stream reassembly.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Traffic from same link is being aggregated from multiple TAP/SPAN sources or both sides of a link without packet broker deduplication. 1130 of 4450 packets (25.4%) are duplicates, well above 5% threshold.",
+   "impact_on_tool": "IDS wastes cycles processing same packet twice, inflates event counts, causes duplicate alerts, and risks missing real attacks due to cache/state exhaustion; needs_full_payload analysis is degraded.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "header_hash"
+    },
+    "why": "Enable broker deduplication to drop duplicate packets before IDS. 25% duplicates is far above tolerance and directly reduces detection capacity."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN is stripping 802.1Q tags. 100% of packets are untagged and required VLANs 10 and 20 never appear, indicating 'strip VLAN' or 'remove tag on egress' is enabled on broker egress toward IDS.",
+   "impact_on_tool": "IDS cannot apply VLAN-aware policies or detect lateral movement/segmentation violations for VLANs 10,20. All VLAN-based detection and filtering for this IDS is blind.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_dot1q": true,
+     "forward_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Configure broker egress to preserve 802.1Q tags and forward VLANs 10,20 to IDS so it can enforce VLAN-specific rules."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "medium",
+   "root_cause": "Visibility path is dropping packets - 55 of 4349 TCP packets (1.3%) show gaps/retransmissions above 1% threshold. Likely broker egress buffer drops/microbursts or SPAN oversubscription, not tool overload (tool_overload healthy). Duplicates at 25% may be exacerbating bursts.",
+   "impact_on_tool": "IDS stream reassembly fails with missing segments; needs_full_payload and needs_both_directions true, so dropped packets cause missed exploits, incomplete file extraction, and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "group": "ids_pool",
+     "hash": "5-tuple"
+    },
+    "why": "Distribute load and add buffering via load-balanced IDS pool or fix SPAN oversubscription; also enable dedup first to reduce burst load causing drops."
+   },
+   "evidence_frames": [
+    275,
+    278,
+    295,
+    297,
+    299,
+    745,
+    746,
+    911,
+    915,
+    932,
+    933,
+    944,
+    947,
+    1069,
+    1077,
+    1460,
+    1461,
+    1490,
+    1494,
+    1523
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3507,
+  "tokens_out": 2999,
+  "cost_usd": 0.01713,
+  "seconds": 17.3,
+  "recorded_at": "2026-10-29"
+ }
+}

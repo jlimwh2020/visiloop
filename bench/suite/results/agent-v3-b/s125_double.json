@@ -1,0 +1,79 @@
+{
+ "feed": "s125_double",
+ "status": "degraded",
+ "summary": "Feed s125_double is degraded: 8.4% duplicate packets and 97.2% encrypted bytes exceed NDR tolerance (90%). NDR will waste capacity on duplicates and is blind to most payloads.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "Almost all traffic (97.2%) is TLS-encrypted with no upstream decryption. NDR requires full payload inspection but receives opaque ciphertext, exceeding its 90% encrypted tolerance.",
+   "impact_on_tool": "NDR cannot inspect payloads for IDS signatures, malware, C2 or data exfiltration; detection coverage drops to metadata-only (JA3, SNI, flow sizes) and most threats will be missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "location": "packet_broker_or_out_of_band",
+     "method": "ssl_visibility_appliance_with_selective_decrypt_and_forward_cleartext_to_NDR"
+    },
+    "why": "Decrypting once at the visibility layer restores cleartext payload to the NDR while keeping keys centralized; selective decrypt (bypass banking/health) maintains privacy and keeps encrypted share below 90%."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    21,
+    22,
+    23,
+    24,
+    25
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating the same traffic from two SPAN/mirror sources or both sides of a TAP without deduplication - 152 of 1811 packets (8.4%) are exact duplicates, above 5% threshold.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate flows, inflates flow counts and alerts, skews analytics and can cause false-positive correlation and missed true positives due to reassembly confusion.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash",
+     "location": "packet_broker_egress_to_NDR"
+    },
+    "why": "Enabling broker-based deduplication within a 5-10ms window removes SPAN-induced copies before the 10G NDR port, restoring accurate single-copy traffic without loss."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3370,
+  "tokens_out": 1866,
+  "cost_usd": 0.01214,
+  "seconds": 10.6,
+  "recorded_at": "2026-10-29"
+ }
+}

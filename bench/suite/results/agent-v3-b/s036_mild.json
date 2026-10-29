@@ -1,0 +1,26 @@
+{
+ "feed": "s036_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for s036_mild. NDR receives complete, correct traffic with no duplicates, drops, overload, truncation, one-way, VLAN, tunnel, oversize, or encryption issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3189,
+  "tokens_out": 897,
+  "cost_usd": 0.0078,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-29"
+ }
+}

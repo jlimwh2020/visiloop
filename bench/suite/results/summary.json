@@ -148,7 +148,7 @@
  "agent": {
   "tool_aware": {
    "exact": 200,
-   "fix_sensible": 229,
+   "fix_sensible": 235,
    "fix_total": 235,
    "one_way_optional_cases": [],
    "summaries": {}
@@ -228,40 +228,9 @@
    }
   },
   "failures": [],
-  "fix_sensible": 229,
+  "fix_sensible": 235,
   "fix_total": 235,
-  "bad_fixes": [
-   [
-    "s140_double",
-    "packet_drops",
-    "disable_slicing"
-   ],
-   [
-    "s150_double",
-    "oversize",
-    "slice"
-   ],
-   [
-    "s154_double",
-    "packet_drops",
-    "disable_slicing"
-   ],
-   [
-    "s156_double",
-    "packet_drops",
-    "disable_slicing"
-   ],
-   [
-    "s165_triple",
-    "packet_drops",
-    "disable_slicing"
-   ],
-   [
-    "s181_triple",
-    "oversize",
-    "slice"
-   ]
-  ],
+  "bad_fixes": [],
   "ungrounded_dropped": 0,
   "omitted_vs_checks": [],
   "by_kind": {
@@ -318,14 +287,14 @@
     45
    ]
   },
-  "cost_usd": 2.3022,
-  "cost_per_case": 0.0115,
-  "seconds_median": 11.95,
-  "seconds_p95": 17.1,
-  "tokens_in": 664279,
-  "tokens_out": 346315,
+  "cost_usd": 2.2324,
+  "cost_per_case": 0.0112,
+  "seconds_median": 9.9,
+  "seconds_p95": 14.4,
+  "tokens_in": 664826,
+  "tokens_out": 329744,
   "model": "muse-spark-1.2",
   "recorded": "2026-10-29",
-  "run": "first"
+  "run": "b"
  }
 }

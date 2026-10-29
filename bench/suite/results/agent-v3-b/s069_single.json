@@ -1,0 +1,42 @@
+{
+ "feed": "s069_single",
+ "status": "degraded",
+ "summary": "SIEM feed s069_single is degraded due to 19.0% duplicate packets (679/3573), well above 5% threshold. All other visibility checks (one-way, truncation, drops, overload, VLAN, encryption, tunnels, oversize) are healthy. Duplicates waste SIEM EPS/license and can skew correlation.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is aggregating the same traffic from multiple capture points (e.g., overlapping SPANs or SPAN+TAP on same link) without deduplication, forwarding identical copies to the single SIEM tool port.",
+   "impact_on_tool": "SIEM does not need full payload or bidirectional flow but duplicates inflate EPS, storage and license consumption by ~19%, cause duplicate events/alerts and skew analytics/correlation without improving detection coverage.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication on feed s069_single to drop identical packets within a short window before forwarding to the 1G SIEM port, eliminating the 19% overhead while preserving unique events."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3234,
+  "tokens_out": 1431,
+  "cost_usd": 0.01012,
+  "seconds": 8.6,
+  "recorded_at": "2026-10-29"
+ }
+}

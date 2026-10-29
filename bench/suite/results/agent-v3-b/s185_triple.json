@@ -1,0 +1,139 @@
+{
+ "feed": "s185_triple",
+ "status": "degraded",
+ "summary": "IDS feed s185_triple is degraded: 83.3% encrypted traffic exceeds 60% IDS tolerance, VLAN 20 is missing (48% untagged), and 9.1% TCP packet loss detected. IDS requires full payload and both VLANs 10/20 for complete detection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "83.3% of bytes are encrypted (threshold 60% for this IDS). Traffic is predominantly TLS/encrypted without broker-side decryption or selective bypass, leaving IDS with no cleartext payload to inspect.",
+   "impact_on_tool": "IDS is blind to payload-based signatures and anomaly detection for ~83% of traffic; malware, C2, and exploit detection coverage severely reduced despite needing full payload.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "decrypt_location": "packet_broker",
+     "policy": "decrypt_relevant_TLS_selectively"
+    },
+    "why": "IDS needs cleartext to detect threats; decrypting relevant TLS at the broker (or steering encrypted flows to a decrypt-capable path) brings encrypted share below 60% tolerance while respecting privacy policy."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 not seen on feed; 48% of packets are untagged. Indicates VLAN tags stripped by TAP/SPAN or packet broker (trunk misconfigured as access, or broker set to strip tags) before delivery to IDS.",
+   "impact_on_tool": "IDS loses segmentation context and misses all VLAN 20 traffic; required VLANs are [10,20] so ~50% of intended coverage is absent, breaking VLAN-based policies and detection for that segment.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "fix_point": "packet_broker_egress"
+    },
+    "why": "Preserving 802.1Q tags and forwarding both VLANs 10 and 20 to the IDS restores required visibility and allows correct VLAN-aware detection."
+   },
+   "evidence_frames": [
+    2,
+    4,
+    8,
+    9,
+    10,
+    12,
+    16,
+    17,
+    19,
+    21,
+    24,
+    27,
+    29,
+    30,
+    31,
+    33,
+    36,
+    39,
+    41,
+    43
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "9.1% of TCP packets (264/2900) show gaps/retransmission holes, well above 1% threshold. Pattern indicates packet broker buffer exhaustion or SPAN oversubscription dropping packets before IDS, not IDS overload (tool_overload healthy).",
+   "impact_on_tool": "IDS suffers incomplete TCP stream reassembly, missed flows and evasion risk; 9% loss causes false negatives and broken detection for stateful signatures requiring both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "strategy": "flow_based_load_balance",
+     "port_speed_gbps": 1
+    },
+    "why": "Distributing load via flow-aware load balancing (or filtering irrelevant traffic) prevents broker drops and keeps loss below 1% for reliable IDS stream reconstruction at 1Gbps."
+   },
+   "evidence_frames": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    17,
+    29,
+    32,
+    43,
+    44,
+    45,
+    63,
+    65,
+    103,
+    106,
+    135,
+    136,
+    144,
+    147,
+    149
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3553,
+  "tokens_out": 2322,
+  "cost_usd": 0.01431,
+  "seconds": 13.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,124 @@
+{
+ "feed": "s181_triple",
+ "status": "degraded",
+ "summary": "IDS feed s181_triple is degraded: 28.5% one-way TCP sessions, 11% jumbo frames exceeding IDS MTU, and 3.42 Gbps microbursts overloading 1 Gbps port causing detection blind spots.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "35 of 123 TCP sessions (28.5%) show only one direction, exceeding 10% threshold. Most likely SPAN/mirror configured for single direction, asymmetric routing with single-sided TAP, or packet broker hash splitting client/server directions to different tool ports without bidirectional aggregation.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly and stateful detection. One-way traffic prevents stream reassembly, flow tracking, and signature matching - IDS will miss exploits, C2, and produce false negatives on 28% of sessions.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "mode": "aggregate both directions to same IDS port/group"
+    },
+    "why": "IDS is stateful and needs client+server packets on same port to reassemble. Aggregate both directions via packet broker flow-aware hashing or TAP aggregation to deliver complete sessions."
+   },
+   "evidence_frames": [
+    1,
+    131,
+    190,
+    213,
+    283,
+    317,
+    343,
+    395,
+    418,
+    442,
+    475,
+    607,
+    649,
+    656,
+    681,
+    763,
+    882,
+    905,
+    913,
+    992
+   ]
+  },
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "185 of 1675 frames (11.0%) exceed IDS port MTU of 1518 bytes, largest 8058 bytes. Network is forwarding jumbo frames (likely 9000 MTU DC/storage traffic) while IDS 1G NIC is standard Ethernet MTU and drops oversize frames at ingress.",
+   "impact_on_tool": "NIC drops 11% of frames before IDS inspection. IDS has complete blind spot for jumbo payloads and cannot detect exploits in large frames. Tool needs full payload so slicing/trimming is not an option.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "tool_max_mtu": 1518,
+     "largest_observed_bytes": 8058,
+     "required_mtu": 9000
+    },
+    "why": "Cannot use slicing because IDS needs_full_payload=true. Must enable jumbo support (9000 MTU) on IDS NIC/tool or normalize MTU upstream, or filter/forward jumbos to a jumbo-capable IDS instance."
+   },
+   "evidence_frames": [
+    13,
+    14,
+    16,
+    32,
+    34,
+    37,
+    39,
+    58,
+    59,
+    61,
+    62,
+    72,
+    73,
+    75,
+    76,
+    78,
+    79,
+    123,
+    124,
+    126
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Peak 3.42 Gbps in 1ms burst vs 1 Gbps IDS port (342% of capacity, 6 overloaded intervals). Sustained microbursts exceed tool port speed due to no load balancing or rate limiting on packet broker egress.",
+   "impact_on_tool": "IDS port buffers overflow and drops packets during bursts. Results in missed detection, broken TCP reassembly, and gaps in IDS coverage precisely during high-traffic attack windows.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_port_gbps": 1,
+     "peak_observed_gbps": 3.42,
+     "intervals_overloaded": 6,
+     "strategy": "horizontal load balance or upgrade port"
+    },
+    "why": "Distribute 3.42 Gbps bursts across multiple 1 Gbps IDS ports via packet broker load-balancing (flow-aware) or upgrade to 10 Gbps tool port to eliminate drops and preserve full payload to IDS."
+   },
+   "evidence_frames": [
+    1,
+    250,
+    537,
+    772,
+    1137,
+    1339
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3560,
+  "tokens_out": 2572,
+  "cost_usd": 0.01538,
+  "seconds": 14.7,
+  "recorded_at": "2026-10-29"
+ }
+}

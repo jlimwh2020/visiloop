@@ -1,0 +1,99 @@
+{
+ "feed": "s143_double",
+ "status": "degraded",
+ "summary": "Feed s143_double to IDS is degraded: 21.5% of TCP sessions are one-way (IDS requires bidirectional) and 58.0% of frames are VXLAN-encapsulated, hiding inner traffic from inspection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding only one direction of many flows to this IDS tool port - likely asymmetric routing not aggregated or SPAN/TAP feeds from opposite directions sent to different tools without flow-aware aggregation.",
+   "impact_on_tool": "IDS needs_both_directions=true for stateful TCP reassembly and signature matching; 41 of 191 sessions (21.5%) are unidirectional so IDS cannot reconstruct streams, misses handshakes, and will fail to detect attacks that span request/response.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "flow_affinity": true
+    },
+    "why": "Aggregate both directions of each flow to the same IDS tool port with flow-aware hashing so the IDS sees complete bidirectional sessions for stateful detection."
+   },
+   "evidence_frames": [
+    30,
+    94,
+    101,
+    134,
+    137,
+    257,
+    281,
+    304,
+    449,
+    467,
+    609,
+    623,
+    704,
+    711,
+    763,
+    988,
+    995,
+    1085,
+    1187,
+    1288
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Traffic is forwarded encapsulated in VXLAN (1515 of 2610 frames, 58%) and not stripped by the packet broker before delivery, so the IDS sees only outer tunnel headers.",
+   "impact_on_tool": "IDS with needs_full_payload=true cannot inspect inner L2-L7 headers/payloads or apply signatures; tunneled traffic bypasses detection, creating major coverage blind spot.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "strip_at": "packet_broker"
+    },
+    "why": "Terminate/strip VXLAN headers on the packet broker and forward inner frames to the IDS so it can parse inner IP/TCP and payloads for detection."
+   },
+   "evidence_frames": [
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    61,
+    62,
+    64,
+    66,
+    67,
+    70,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3434,
+  "tokens_out": 1710,
+  "cost_usd": 0.01156,
+  "seconds": 9.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s188_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s188_tool_aware. Traffic is complete and correct for APM requirements (bidirectional, payload handling, VLANs, tunnels, drops, duplicates, sizing). No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 761,
+  "cost_usd": 0.00722,
+  "seconds": 6.3,
+  "recorded_at": "2026-10-29"
+ }
+}

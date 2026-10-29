@@ -1,0 +1,64 @@
+{
+ "feed": "s066_single",
+ "status": "degraded",
+ "summary": "Feed s066_single is degraded: 20.6% of TCP sessions are one-way (35/170 exceeds 10% threshold). NDR requires bidirectional traffic for session reassembly. All other checks (duplicates, encryption, VLAN, oversize, drops, overload, truncation, tunnel) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker/TAP is delivering only one direction for ~1 in 5 sessions to this NDR port. Most likely SPAN/mirror is configured for a single direction, or the broker is splitting client->server and server->client across different tool ports / not aggregating asymmetric paths to s066_single. SPAN oversubscription can also appear as one-way.",
+   "impact_on_tool": "NDR needs_both_directions=true and needs_full_payload=true to reassemble TCP, track state, and detect C2, lateral movement and exfiltration. With 20.6% one-way flows the NDR creates incomplete flow records, cannot correlate request/response, and will miss detections / generate false incomplete-handshake alerts.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "feed": "s066_single",
+     "ensure_bidirectional_aggregation": true,
+     "hashing": "symmetric_5tuple"
+    },
+    "why": "Aggregate both directions of each 5-tuple to the same NDR tool port using symmetric hashing and verify TAP/SPAN captures both RX and TX. Restores complete bidirectional sessions required for NDR detection coverage."
+   },
+   "evidence_frames": [
+    6,
+    26,
+    149,
+    166,
+    304,
+    324,
+    346,
+    385,
+    407,
+    461,
+    561,
+    600,
+    712,
+    729,
+    753,
+    792,
+    966,
+    1299,
+    1336,
+    1343
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3312,
+  "tokens_out": 2381,
+  "cost_usd": 0.01426,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-29"
+ }
+}

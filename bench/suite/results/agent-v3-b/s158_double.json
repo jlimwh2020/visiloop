@@ -1,0 +1,77 @@
+{
+ "feed": "s158_double",
+ "status": "degraded",
+ "summary": "Feed s158_double to IDS is degraded: 15.6% duplicate packets and 25.5% truncated frames (sliced to ~128 bytes). Slicing breaks full-payload inspection required by IDS, duplicates waste capacity and risk reassembly errors.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding the same packet twice - typically aggregating two SPAN/mirror sessions or two TAP feeds that see the same traffic without deduplication enabled. 586 of 3765 packets (15.6%) exceed 5% threshold.",
+   "impact_on_tool": "IDS wastes CPU processing duplicates, inflates flow/event counts, corrupts TCP stream reassembly and can cause missed detections or false positives.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable broker deduplication to drop second copy within short window before delivery to 1Gbps IDS port, ensuring single copy per packet."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "truncated",
+   "severity": "high",
+   "root_cause": "Packet broker has packet slicing/truncation enabled at ~128 bytes to save bandwidth. 959 of 3765 frames (25.5%) are cut short, but this IDS needs_full_payload=true for signature matching.",
+   "impact_on_tool": "IDS cannot inspect application payload beyond L2-L4 headers; payload-based signatures, exploit detection, and file extraction fail, creating major detection blind spot.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "target_snaplen": 1518
+    },
+    "why": "Disable slicing for this IDS feed and forward full 1518B frames so IDS receives complete payload for detection; use filtering or load_balance instead of slicing to fit 1Gbps tool port if needed."
+   },
+   "evidence_frames": [
+    18,
+    19,
+    21,
+    23,
+    24,
+    47,
+    49,
+    52,
+    57,
+    59,
+    74,
+    75,
+    78,
+    79,
+    88,
+    89,
+    94,
+    95,
+    103,
+    105
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3363,
+  "tokens_out": 1790,
+  "cost_usd": 0.01181,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

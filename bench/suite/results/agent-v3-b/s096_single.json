@@ -1,0 +1,64 @@
+{
+ "feed": "s096_single",
+ "status": "degraded",
+ "summary": "Feed s096_single to NDR is degraded due to VXLAN encapsulation: 18.2% of frames (501/2754) arrive inside VXLAN VNI 501, hiding inner traffic from inspection. All other visibility checks (duplicates, one-way, drops, overload, truncation, VLAN, encryption, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic (VNI 501) without stripping the outer header. NDR is receiving the outer VXLAN/UDP/IP wrapper instead of the original inner Ethernet/IP frames.",
+   "impact_on_tool": "NDR cannot parse inner L2-L7 headers and payload for 18.2% of traffic, reducing detection coverage for lateral movement and C2 inside the overlay. Correlation and payload analysis fail on encapsulated frames despite NDR needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "vni": 501,
+     "location": "packet_broker"
+    },
+    "why": "Stripping VXLAN at the packet broker exposes the original inner frames so the NDR can inspect payload and headers with its existing parsers, restoring visibility for the 18.2% currently opaque without changing TAP/SPAN."
+   },
+   "evidence_frames": [
+    117,
+    120,
+    122,
+    124,
+    128,
+    130,
+    131,
+    133,
+    135,
+    136,
+    138,
+    140,
+    142,
+    146,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3315,
+  "tokens_out": 1420,
+  "cost_usd": 0.01018,
+  "seconds": 8.6,
+  "recorded_at": "2026-10-29"
+ }
+}

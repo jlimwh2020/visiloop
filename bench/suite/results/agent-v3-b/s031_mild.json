@@ -1,0 +1,26 @@
+{
+ "feed": "s031_mild",
+ "status": "healthy",
+ "summary": "Feed s031_mild to APM is healthy: all 9 visibility checks passed (duplicates, encrypted_share, missing_vlan, one_way, oversize, packet_drops, tool_overload, truncated, tunnel). Tool requirements (bidirectional flow, VLANs 10/20, 10Gbps port, 9216B MTU) are met with complete, correct traffic delivery.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3183,
+  "tokens_out": 1221,
+  "cost_usd": 0.00917,
+  "seconds": 7.5,
+  "recorded_at": "2026-10-29"
+ }
+}

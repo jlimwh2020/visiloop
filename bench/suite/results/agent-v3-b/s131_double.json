@@ -1,0 +1,77 @@
+{
+ "feed": "s131_double",
+ "status": "degraded",
+ "summary": "Feed s131_double is degraded: 20.5% duplicate packets and 14.0% truncated/sliced frames (to 128B). Duplicates waste NDR capacity and distort detection; slicing removes payload this NDR requires for full inspection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker is forwarding the same packets twice without deduplication - typical when aggregating multiple SPAN/mirror sessions or dual TAP feeds covering the same link and merging them to one tool port without dedup enabled.",
+   "impact_on_tool": "NDR wastes CPU/storage processing 798 duplicate packets (20.5%), inflates flow/connection counts, skews analytics and can cause missed detections due to state-table bloat and false correlation.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "method": "hash"
+    },
+    "why": "Enable packet-broker deduplication (hash-based, ~10ms window) upstream of the NDR to deliver one copy of each packet while preserving both directions."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "Packet broker slicing/packet truncation is enabled and cutting frames to ~128 bytes snaplen to save bandwidth, but this NDR profile needs_full_payload=true.",
+   "impact_on_tool": "NDR cannot perform deep-packet inspection or payload-based threat detection on 543 frames (14.0%); signatures, exploit and malware detection will fail on sliced traffic.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen": 9216
+    },
+    "why": "Disable slicing for this NDR feed and forward full frames up to the tool's 9216B MTU so the NDR receives complete L4+ payload for analysis."
+   },
+   "evidence_frames": [
+    7,
+    14,
+    23,
+    28,
+    38,
+    49,
+    66,
+    69,
+    80,
+    113,
+    115,
+    118,
+    119,
+    129,
+    133,
+    137,
+    141,
+    153,
+    155,
+    157
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3381,
+  "tokens_out": 1885,
+  "cost_usd": 0.01224,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-29"
+ }
+}

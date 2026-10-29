@@ -1,0 +1,67 @@
+{
+ "feed": "s086_single",
+ "status": "degraded",
+ "summary": "Feed s086_single to IDS is degraded: 50% of packets are untagged and required VLAN 20 is completely missing, leaving the IDS blind to half the segmented traffic.",
+ "findings": [
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Upstream TAP/SPAN or packet broker port is stripping 802.1Q tags (likely access-mode port or 'strip VLAN header' enabled) or trunk not forwarding VLAN 20. 50% untagged with VLAN 20 absent indicates broker is delivering VLAN 20 traffic without tags or dropping its tag, making it indistinguishable.",
+   "impact_on_tool": "IDS requires VLANs 10 and 20 for segmentation-aware detection. Missing VLAN 20 means no visibility into that segment - IDS cannot apply VLAN-specific policies, correlate lateral movement, or detect attacks in VLAN 20; 50% untagged traffic reduces detection coverage and causes misclassification.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "trunk_mode": true
+    },
+    "why": "IDS needs both VLAN 10 and 20 tags preserved end-to-end. Configuring the TAP/broker ingress and egress as 802.1Q trunk with tag preservation restores VLAN 20 visibility and allows correct per-VLAN detection."
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    9,
+    12,
+    15,
+    18,
+    19,
+    20,
+    22,
+    23,
+    25,
+    26,
+    29,
+    32,
+    35,
+    36,
+    37,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3298,
+  "tokens_out": 1875,
+  "cost_usd": 0.01209,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

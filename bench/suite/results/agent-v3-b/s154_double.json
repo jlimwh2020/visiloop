@@ -1,0 +1,97 @@
+{
+ "feed": "s154_double",
+ "status": "degraded",
+ "summary": "Feed s154_double to IDS is degraded: 10.4% oversize frames exceed IDS 1518B port MTU and are dropped by NIC, and 10.1% TCP packets show genuine gaps from upstream capture loss. Both cause incomplete traffic to IDS which requires full payload and bidirectional visibility.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Network is forwarding jumbo frames up to 8058 bytes (likely 9000B MTU or tunnel encapsulation) while the IDS 1G tool port only supports 1518 bytes. NIC drops oversize frames on ingress.",
+   "impact_on_tool": "IDS loses 227/2185 frames (10.4%) entirely before inspection. Because IDS needs full payload for signature matching, it is blind to attacks and data exfiltration carried in those large frames.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "current_largest": 8058,
+     "suggested_mtu": 1500
+    },
+    "why": "Tool requires full payload so broker slicing to 1518B is not an option. Must either enable jumbo-frame support on IDS NIC/switch port (e.g., 9216B) or normalize MTU upstream to 1500B to prevent NIC drop."
+   },
+   "evidence_frames": [
+    51,
+    52,
+    53,
+    54,
+    57,
+    59,
+    72,
+    74,
+    83,
+    86,
+    96,
+    97,
+    99,
+    100,
+    102,
+    156,
+    157,
+    159,
+    160,
+    188
+   ]
+  },
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream SPAN/mirror or packet broker buffer is dropping packets under load. 212/2101 TCP packets (10.1%) have sequence gaps measured via IP header length, so slicing is ruled out - loss is genuine capture loss before the tool.",
+   "impact_on_tool": "IDS receives incomplete TCP streams and cannot reliably reassemble sessions or detect exploits. Results in missed detections, broken stream reassembly, and false negatives for IDS signatures requiring both directions.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {},
+    "why": "TAP provides lossless, line-rate capture versus SPAN which drops when oversubscribed. Replacing SPAN with TAP (and ensuring broker has sufficient buffer/capacity) eliminates the 10% packet loss before the IDS."
+   },
+   "evidence_frames": [
+    7,
+    8,
+    23,
+    24,
+    49,
+    51,
+    53,
+    55,
+    72,
+    77,
+    79,
+    80,
+    81,
+    82,
+    83,
+    85,
+    139,
+    187,
+    188,
+    192
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3503,
+  "tokens_out": 2372,
+  "cost_usd": 0.01446,
+  "seconds": 13.9,
+  "recorded_at": "2026-10-29"
+ }
+}

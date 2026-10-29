@@ -1,0 +1,65 @@
+{
+ "feed": "s081_single",
+ "status": "degraded",
+ "summary": "IDS feed s081_single is degraded: 11.3% of frames (256/2266, up to 8058 bytes) exceed the IDS 1G port MTU of 1518 bytes and are dropped at the NIC before inspection. No other faults detected.",
+ "findings": [
+  {
+   "fault": "oversize",
+   "severity": "high",
+   "root_cause": "Feed carries jumbo frames up to 8058 bytes but the IDS ingress port and/or packet broker egress is still set to standard 1518-byte MTU without jumbo support. The NIC therefore drops any frame larger than 1518 bytes.",
+   "impact_on_tool": "IDS never sees 11.3% of traffic - frames are discarded at the NIC before IDS processing. Because this IDS needs full payload for signature matching, this creates a large blind spot and missed detections, especially for large transfers.",
+   "recommended_fix": {
+    "action": "mtu_advice",
+    "params": {
+     "max_frame_bytes": 1518,
+     "largest_observed_bytes": 8058,
+     "recommended_mtu_bytes": 9000,
+     "target": "IDS ingress port and packet broker egress toward IDS"
+    },
+    "why": "Tool needs full payload so slicing/trimming to 1518B would break detection. Enabling jumbo frames (MTU 9000+) end-to-end on the broker egress and IDS port allows large frames to be delivered intact without NIC drops."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    9,
+    10,
+    12,
+    52,
+    53,
+    55,
+    85,
+    86,
+    88,
+    89,
+    91,
+    92,
+    119,
+    120,
+    122,
+    123,
+    125,
+    126
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3336,
+  "tokens_out": 1946,
+  "cost_usd": 0.01244,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

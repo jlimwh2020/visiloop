@@ -1,0 +1,86 @@
+{
+ "feed": "s124_double",
+ "status": "degraded",
+ "summary": "Feed s124_double to NDR is degraded: 29.95 Gbps microbursts overload 10 Gbps tool port (299% capacity) and 99.2% of traffic is encrypted exceeding 90% tolerance, leaving NDR blind and dropping traffic.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "99.2% of bytes are encrypted (TLS) vs NDR tolerance of 90%. Traffic is not being decrypted before the packet broker forwards to the NDR - no SSL visibility/decryption zone is in path, so broker is forwarding ciphertext.",
+   "impact_on_tool": "NDR requires full payload for detection but receives opaque ciphertext; payload inspection, JA3/JA4, file extraction and IDS signatures fail, drastically reducing detection coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "where": "before_packet_broker_or_inline_decryption_zone",
+     "protocols": [
+      "TLS 1.2",
+      "TLS 1.3"
+     ],
+     "preserve_privacy": "decrypt_once_feed_clear_to_NDR"
+    },
+    "why": "Decrypting (or selective TLS 1.2 decryption with key sharing) before the NDR restores payload visibility so NDR analytics can inspect flows; without it NDR is blind despite receiving both directions."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is bursting 29.95 Gbps in 1ms intervals into a single 10 Gbps NDR port (299% of capacity). Single-tool feed with no load balancing or aggregation shaping causes microburst overload.",
+   "impact_on_tool": "NDR port buffers overflow and drops packets randomly; TCP reassembly fails, flows appear incomplete, alerts are missed and NDR reports gaps. Even with both directions present, analysis is incomplete.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow_hash_5tuple",
+     "outputs": 3,
+     "capacity_per_tool_gbps": 10,
+     "preserve_flow_order": true
+    },
+    "why": "Hash-based load balancing across 3x10G NDR instances/ports (or 2x with burst buffering) keeps per-port utilization <80% and preserves flow symmetry, eliminating drops while maintaining both directions per flow."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3382,
+  "tokens_out": 1908,
+  "cost_usd": 0.01234,
+  "seconds": 11.4,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,136 @@
+{
+ "feed": "s163_triple",
+ "status": "degraded",
+ "summary": "Feed s163_triple to IDS is degraded: 6.6% TCP packet loss (high), 73.6% encrypted bytes exceeds 60% IDS tolerance, and 29.1% VXLAN-encapsulated traffic is not stripped. IDS requires full payload and both directions - drops and encapsulation cause missed detections, encryption blinds payload inspection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker/SPAN is dropping packets before the IDS - 210 of 3180 TCP packets show gaps/retransmissions (6.6% vs 1% threshold). Tool overload check is healthy, so loss is upstream of the tool, likely SPAN oversubscription or broker egress congestion/policing.",
+   "impact_on_tool": "IDS misses TCP segments and cannot reassemble flows or match signatures; 6.6% loss causes severe false negatives and broken stream reassembly for this IDS that needs full payload and both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target": "IDS_pool",
+     "hash": "5-tuple"
+    },
+    "why": "Distribute load and reduce per-egress burst drops at the packet broker; if SPAN-sourced, replace SPAN with TAP and use broker load-balancing to keep loss <1% for reliable IDS detection."
+   },
+   "evidence_frames": [
+    6,
+    7,
+    80,
+    81,
+    98,
+    99,
+    122,
+    126,
+    129,
+    131,
+    198,
+    200,
+    202,
+    204,
+    220,
+    221,
+    226,
+    229,
+    293,
+    294
+   ]
+  },
+  {
+   "fault": "encrypted_share",
+   "severity": "medium",
+   "root_cause": "74% of bytes are TLS/encrypted vs 60% IDS tolerance. Traffic is predominantly encrypted and forwarded without broker-based decryption or selective forwarding to a decryption zone.",
+   "impact_on_tool": "IDS that needs full payload is blind to 74% of bytes - cannot inspect encrypted payloads for exploits/malware/C2, sharply reducing detection coverage to metadata only.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "method": "decrypt_at_broker_or_out_of_band",
+     "policy": "decrypt_selectively_and_forward_in_clear_to_IDS"
+    },
+    "why": "IDS cannot detect threats inside encrypted sessions without cleartext; decrypt once at visibility layer (or via dedicated TLS inspection) and forward cleartext to IDS, respecting privacy/policy."
+   },
+   "evidence_frames": [
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "29.1% of frames (942/3238) arrive inside VXLAN encapsulation that the packet broker is not stripping. IDS sees outer VXLAN/IP/UDP headers only.",
+   "impact_on_tool": "IDS cannot parse inner L2-L7 headers or apply signatures to encapsulated traffic; VXLAN-hidden lateral movement, C2, and exploits are missed and correlation fails.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "where": "packet_broker",
+     "preserve_outer_headers": false
+    },
+    "why": "Strip VXLAN at the packet broker to expose inner Ethernet/IP payload to IDS for full signature matching, while optionally forwarding outer headers as metadata."
+   },
+   "evidence_frames": [
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    126,
+    127,
+    129,
+    130,
+    131,
+    132,
+    181,
+    186,
+    189,
+    191,
+    193,
+    194,
+    196,
+    197
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3553,
+  "tokens_out": 2480,
+  "cost_usd": 0.01498,
+  "seconds": 18.2,
+  "recorded_at": "2026-10-29"
+ }
+}

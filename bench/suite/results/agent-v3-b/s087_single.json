@@ -1,0 +1,63 @@
+{
+ "feed": "s087_single",
+ "status": "degraded",
+ "summary": "Feed s087_single is degraded: 20.7% GRE-tunneled traffic (356/1719 frames) is forwarded without decapsulation, hiding inner flows from APM. All other checks (duplicates, drops, truncation, one-way, VLAN, encryption, oversize, overload) are healthy.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding GRE-encapsulated traffic as-is without stripping the outer GRE header. 20.7% exceeds 10% threshold, indicating tunnel decapsulation is not enabled on this APM feed.",
+   "impact_on_tool": "APM cannot parse inner L3-L7 headers and transactions inside GRE; application response time, transaction tracing and dependency mapping will be incomplete or missed for ~1 in 5 flows.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "GRE",
+     "location": "packet_broker"
+    },
+    "why": "Stripping GRE at the packet broker exposes inner IPv4/IPv6 and TCP payload to the APM so it can correctly classify applications and measure performance without needing tunnel-aware parsing."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    9,
+    11,
+    12,
+    14,
+    16,
+    18,
+    21,
+    23,
+    25,
+    26,
+    27,
+    66,
+    67,
+    68,
+    69
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3305,
+  "tokens_out": 1532,
+  "cost_usd": 0.01064,
+  "seconds": 8.0,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "feed": "s186_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks healthy for SIEM feed s186_tool_aware. Tool requires unidirectional traffic only and tolerates truncated payloads/encryption; no drops, overload, duplicates, VLAN, tunnel, oversize or truncation faults detected. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3181,
+  "tokens_out": 930,
+  "cost_usd": 0.00793,
+  "seconds": 5.8,
+  "recorded_at": "2026-10-29"
+ }
+}

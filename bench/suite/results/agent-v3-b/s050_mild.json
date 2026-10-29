@@ -1,0 +1,26 @@
+{
+ "feed": "s050_mild",
+ "status": "healthy",
+ "summary": "All visibility checks passed for IDS feed 's050_mild'. No duplicates, drops, truncation, one-way, tunnel, VLAN, oversize, overload or excessive encryption detected. Traffic is complete and correct for IDS detection coverage.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3179,
+  "tokens_out": 838,
+  "cost_usd": 0.00754,
+  "seconds": 6.7,
+  "recorded_at": "2026-10-29"
+ }
+}

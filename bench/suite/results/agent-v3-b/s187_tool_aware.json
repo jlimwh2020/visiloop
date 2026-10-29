@@ -1,0 +1,26 @@
+{
+ "feed": "s187_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM feed s187_tool_aware. Tool receives complete, correct bidirectional traffic with no duplicates, drops, overload, truncation, tunnels, VLAN or encryption issues. No packet broker changes required.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3186,
+  "tokens_out": 903,
+  "cost_usd": 0.00782,
+  "seconds": 6.2,
+  "recorded_at": "2026-10-29"
+ }
+}

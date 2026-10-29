@@ -1,0 +1,26 @@
+{
+ "feed": "s192_tool_aware",
+ "status": "healthy",
+ "summary": "All visibility checks passed for APM on s192_tool_aware. Traffic is complete and correct with no duplicates, drops, truncation, tunnels, VLAN stripping, one-way flows, oversize frames, overload, or excessive encryption.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3184,
+  "tokens_out": 784,
+  "cost_usd": 0.00731,
+  "seconds": 5.5,
+  "recorded_at": "2026-10-29"
+ }
+}

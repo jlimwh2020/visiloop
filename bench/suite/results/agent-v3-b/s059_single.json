@@ -1,0 +1,45 @@
+{
+ "feed": "s059_single",
+ "status": "degraded",
+ "summary": "Feed s059_single to APM is degraded due to tool overload: 31.56 Gbps microburst exceeds 10 Gbps APM port capacity (316% load). No other visibility faults detected.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering full-rate traffic with 31.56 Gbps 1ms bursts directly to a single 10 Gbps APM port without load-balancing or aggregation. Burst is 3.16x port capacity.",
+   "impact_on_tool": "APM will drop packets at ingress during bursts, causing missed transactions, inaccurate latency/apdex calculations, and incomplete flow records despite needing both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "ports": 4,
+     "hash": "5-tuple",
+     "capacity_gbps": 10
+    },
+    "why": "Distribute 31+ Gbps bursts across 4x10G APM ports (or 2x25G) with flow-aware hashing to keep both directions together and stay under 80% per-port utilization, preventing burst drops."
+   },
+   "evidence_frames": [
+    1
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3271,
+  "tokens_out": 1340,
+  "cost_usd": 0.00978,
+  "seconds": 9.8,
+  "recorded_at": "2026-10-29"
+ }
+}

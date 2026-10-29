@@ -1,0 +1,63 @@
+{
+ "feed": "s052_single",
+ "status": "degraded",
+ "summary": "IDS feed s052_single is degraded: 9.0% TCP packet loss (143/1583 packets) exceeds 1% threshold, causing incomplete flows for IDS inspection. All other visibility checks (duplicates, one-way, truncation, tunnels, VLAN, encryption, oversize, tool overload) are healthy.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Upstream SPAN/mirror or packet broker is dropping packets under load - 9% of TCP packets show gaps/retransmissions indicating buffer exhaustion or oversubscription before the IDS. Tool overload check is healthy, so loss is not at IDS ingress policer but in the SPAN/broker path.",
+   "impact_on_tool": "IDS needs full payload and both directions for TCP stream reassembly and signature matching. Missing segments break reassembly, cause false negatives and missed exploit/C2 detection, directly reducing detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "target": "SPAN/mirror source for s052_single",
+     "tap_type": "passive optical/copper TAP with packet broker buffering"
+    },
+    "why": "TAP provides lossless, out-of-band copy unlike SPAN which drops when source exceeds destination or switch buffers fill. Replacing SPAN with TAP and feeding via broker with adequate buffering eliminates the 9% loss and restores complete TCP streams for IDS."
+   },
+   "evidence_frames": [
+    89,
+    91,
+    112,
+    115,
+    128,
+    129,
+    150,
+    153,
+    184,
+    187,
+    188,
+    190,
+    257,
+    258,
+    339,
+    340,
+    359,
+    361,
+    376,
+    378
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3300,
+  "tokens_out": 1802,
+  "cost_usd": 0.01178,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-29"
+ }
+}

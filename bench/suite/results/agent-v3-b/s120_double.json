@@ -1,0 +1,85 @@
+{
+ "feed": "s120_double",
+ "status": "degraded",
+ "summary": "Feed s120_double to IDS is degraded: 21.8% of TCP sessions are one-way (exceeds 10% threshold) and tool port is overloaded by 35% bursts (1.35 Gbps vs 1 Gbps). IDS stateful detection is impaired and bursts will cause drops at the IDS NIC.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is not aggregating both directions of a flow to the same IDS tool port. 27 of 124 TCP sessions (21.8%) show only one direction, typical of asymmetric routing combined with single-direction SPAN/TAP forwarding or per-direction load-balancing that hashes client->server and server->client to different tools.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP reassembly, stream tracking and signature matching. With one side missing, sessions stay half-open, state tables fill, and attacks that span request/response or require server response verification are missed - high false-negative risk.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "hash_mode": "bidirectional_5tuple"
+    },
+    "why": "Aggregate both directions of each flow to the same IDS port using a bidirectional 5-tuple hash on the packet broker so the IDS sees complete sessions for stateful inspection."
+   },
+   "evidence_frames": [
+    21,
+    79,
+    272,
+    282,
+    421,
+    457,
+    535,
+    629,
+    919,
+    994,
+    1227,
+    1247,
+    1249,
+    1262,
+    1275,
+    1282,
+    1371,
+    1432,
+    1466,
+    1509
+   ]
+  },
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Microbursts exceed the IDS 1 Gbps port capacity. Peak measured 1.35 Gbps in 1ms intervals (135% of capacity, 4 overloaded intervals). Even though broker shows no drops, the tool NIC itself will drop during bursts.",
+   "impact_on_tool": "IDS with 1 Gbps port cannot ingest 1.35 Gbps bursts; packets are dropped at ingress before analysis. With needs_full_payload=true, any loss breaks detection, causes missed alerts and incomplete forensic evidence.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 1.35,
+     "strategy": "bidirectional_hash_load_balance",
+     "add_tool_ports": 1
+    },
+    "why": "Distribute traffic across 2+ IDS ports/instances with bidirectional-aware hashing to keep per-port utilization below 80% and preserve both directions per flow while eliminating burst drops."
+   },
+   "evidence_frames": [
+    1,
+    365,
+    713,
+    1074
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3404,
+  "tokens_out": 1988,
+  "cost_usd": 0.0127,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

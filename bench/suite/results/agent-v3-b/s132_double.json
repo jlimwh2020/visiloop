@@ -1,0 +1,103 @@
+{
+ "feed": "s132_double",
+ "status": "degraded",
+ "summary": "Feed s132_double to NDR is degraded: 98.5% encrypted traffic exceeds 90% tolerance and VLAN 20 is missing (50% untagged), severely limiting payload inspection and segmentation visibility.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "98.5% of bytes are encrypted (TLS) forwarded without broker-side decryption or selective handling, exceeding the NDR's 90% encrypted tolerance. Indicates broker is mirroring predominantly encrypted flows as-is.",
+   "impact_on_tool": "NDR requires full payload for deep inspection and behavioral detection; with almost all payload opaque, detection coverage collapses and threats inside encrypted sessions are missed.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "max_encrypted_share": 0.9,
+     "method": "compliant_tls_decryption_or_selective_forwarding"
+    },
+    "why": "NDR cannot analyze encrypted payloads - provide cleartext via compliant decryption (with key escrow/privacy controls) or filter/route so inspectable traffic is within tolerance"
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Required VLAN 20 never observed and 50% of packets are untagged, indicating packet broker is stripping 802.1Q tags or ingress/egress ports are not configured as trunks to preserve VLANs 10 and 20.",
+   "impact_on_tool": "NDR loses tenant/segment context for VLAN 20 and half the traffic; VLAN-aware policies, attribution, and detection for that segment fail, creating a blind spot.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_vlan_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ],
+     "ensure_trunk": true
+    },
+    "why": "Restore and preserve 802.1Q tags through the broker so NDR receives correctly tagged traffic for both required VLANs and can apply segment-aware detection"
+   },
+   "evidence_frames": [
+    2,
+    5,
+    6,
+    7,
+    10,
+    11,
+    13,
+    16,
+    17,
+    18,
+    20,
+    23,
+    25,
+    28,
+    31,
+    34,
+    35,
+    36,
+    38,
+    39
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3423,
+  "tokens_out": 2204,
+  "cost_usd": 0.01365,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-29"
+ }
+}

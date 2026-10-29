@@ -1,0 +1,63 @@
+{
+ "feed": "s084_single",
+ "status": "degraded",
+ "summary": "IDS feed s084_single is degraded due to VXLAN encapsulation: 23.1% of frames (580/2506) arrive inside VXLAN tunnel (VNI 580) and cannot be inspected by the IDS. All other checks (duplicates, encrypted share, VLANs, one-way, oversize, drops, overload, truncation) are healthy.",
+ "findings": [
+  {
+   "fault": "tunnel",
+   "severity": "medium",
+   "root_cause": "Packet broker is forwarding VXLAN-encapsulated traffic (VNI 580) directly to the IDS without decapsulation. IDS sees only outer VXLAN/UDP/IP headers and cannot parse inner Ethernet/IP payload for signatures.",
+   "impact_on_tool": "IDS is blind to inner payload on ~23% of traffic; signature matching and anomaly detection fail on encapsulated flows, reducing detection coverage and causing missed alerts despite needing full payload.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "VXLAN",
+     "vni": 580
+    },
+    "why": "Stripping VXLAN header on the packet broker exposes inner L2-L7 headers/payload so the IDS can inspect traffic natively without tunnel-aware decoding."
+   },
+   "evidence_frames": [
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3308,
+  "tokens_out": 1700,
+  "cost_usd": 0.01136,
+  "seconds": 8.3,
+  "recorded_at": "2026-10-29"
+ }
+}

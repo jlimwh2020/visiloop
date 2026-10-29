@@ -1,0 +1,26 @@
+{
+ "feed": "s020_clean",
+ "status": "healthy",
+ "summary": "Feed 's020_clean' is healthy for SIEM delivery: all 9 visibility checks passed (duplicates, encrypted_share, missing_vlan, one_way, oversize, packet_drops, tool_overload, truncated, tunnel). No packet broker changes needed - traffic is complete and correct for this SIEM's requirements.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3180,
+  "tokens_out": 983,
+  "cost_usd": 0.00815,
+  "seconds": 5.6,
+  "recorded_at": "2026-10-29"
+ }
+}

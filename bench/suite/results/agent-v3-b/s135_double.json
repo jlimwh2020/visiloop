@@ -1,0 +1,100 @@
+{
+ "feed": "s135_double",
+ "status": "degraded",
+ "summary": "Feed s135_double to SIEM is degraded: 4.2% TCP packet loss and 76.7% ERSPAN-encapsulated traffic detected. Tool is not overloaded and no other faults found, but drops and unstripped tunnels reduce SIEM detection coverage.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "SPAN/mirror or packet broker buffer drops under load - 117 of 2811 TCP packets (4.2%, threshold 1%) show gaps/retransmissions indicating missing data before the SIEM. Tool overload check is healthy, so loss is in the visibility path, not tool ingress policing.",
+   "impact_on_tool": "SIEM receives incomplete flows and missing events; correlation and alerting miss data, detection coverage reduced and investigations have gaps even though SIEM does not require both directions or full payload.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "source": "SPAN/mirror",
+     "replacement": "passive TAP"
+    },
+    "why": "TAP provides lossless, line-rate copy vs SPAN which drops under burst load; eliminates the 4% packet loss observed and ensures complete records to SIEM."
+   },
+   "evidence_frames": [
+    36,
+    42,
+    48,
+    49,
+    115,
+    116,
+    156,
+    161,
+    279,
+    280,
+    312,
+    313,
+    315,
+    317,
+    325,
+    326,
+    364,
+    365,
+    379,
+    380
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "Packet broker forwarding ERSPAN-encapsulated traffic directly to tool without stripping - 2279 of 2971 frames (76.7%, threshold 10%) are ERSPAN. SIEM sees outer tunnel headers instead of inner original IP/TCP.",
+   "impact_on_tool": "SIEM cannot parse inner 5-tuple, application and user context; rules and correlation fail on encapsulated traffic, 76% of traffic is effectively blind for detection despite SIEM not needing full payload.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "forward_inner": true
+    },
+    "why": "Stripping ERSPAN at the packet broker restores original Ethernet/IP headers so SIEM can decode, filter and correlate the inner flows without extra tool load."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3445,
+  "tokens_out": 2467,
+  "cost_usd": 0.01479,
+  "seconds": 12.3,
+  "recorded_at": "2026-10-29"
+ }
+}

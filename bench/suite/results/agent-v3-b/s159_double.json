@@ -1,0 +1,99 @@
+{
+ "feed": "s159_double",
+ "status": "degraded",
+ "summary": "Feed s159_double to NDR is degraded: 34.6% of TCP sessions are one-way and 14.7% of frames are sliced to ~192 bytes. NDR requires bidirectional traffic and full payload for stream reassembly and detection.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "47 of 136 TCP sessions (34.6%) show traffic in only one direction, well above 10% threshold. Most likely asymmetric routing combined with single-direction SPAN or packet broker not aggregating both directions of a flow to the same NDR tool port (hash/load-balance split).",
+   "impact_on_tool": "NDR needs both directions to reassemble TCP streams, track state, and detect intrusions. One-way visibility breaks handshake analysis, flow correlation, and lateral-movement/C2 detection, causing missed detections and incomplete session records.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "aggregate_both_directions_to_same_tool": true
+    },
+    "why": "Aggregate both directions of each flow/session to the same NDR port so the NDR sees client and server sides together for stateful analysis."
+   },
+   "evidence_frames": [
+    64,
+    71,
+    160,
+    234,
+    289,
+    340,
+    367,
+    375,
+    382,
+    430,
+    454,
+    498,
+    508,
+    530,
+    538,
+    582,
+    590,
+    676,
+    747,
+    916
+   ]
+  },
+  {
+   "fault": "truncated",
+   "severity": "medium",
+   "root_cause": "264 of 1792 frames (14.7%) are cut short, most to 192 bytes snaplen, indicating packet broker slicing/packet truncation is enabled on this feed.",
+   "impact_on_tool": "NDR needs full payload for DPI, signature matching, file extraction and anomaly detection. Slicing at 192 bytes strips L7 payload, blinding the NDR to exploits, malware transfers and application-layer indicators.",
+   "recommended_fix": {
+    "action": "disable_slicing",
+    "params": {
+     "snaplen_bytes": 9216,
+     "disable_slicing": true
+    },
+    "why": "Disable slicing / set snaplen to tool MTU (9216 bytes) so the NDR receives complete frames and full payload for detection."
+   },
+   "evidence_frames": [
+    7,
+    9,
+    10,
+    12,
+    13,
+    24,
+    27,
+    38,
+    41,
+    43,
+    53,
+    54,
+    56,
+    57,
+    59,
+    86,
+    89,
+    104,
+    105,
+    107
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3439,
+  "tokens_out": 1916,
+  "cost_usd": 0.01244,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "feed": "s142_double",
+ "status": "degraded",
+ "summary": "Feed s142_double is degraded: 51.1% of TCP sessions are one-way (67/131) and 11.6% of packets are duplicates (206/1775), preventing NDR from reconstructing full sessions.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering only one direction of many TCP flows to this NDR tool port. Most likely asymmetric routing with ingress from two different TAP/SPAN points not aggregated, or per-packet load-balancing splitting directions across different tools. NDR requires both directions (profile needs_both_directions=true).",
+   "impact_on_tool": "NDR cannot reassemble TCP streams, misses handshakes and stateful detection, generates false one-way flow alerts and loses ~51% session visibility for threat detection.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional": true,
+     "hash_by": "5-tuple"
+    },
+    "why": "Aggregate both directions of each 5-tuple to the same NDR tool port so bidirectional sessions are restored for stateful analysis."
+   },
+   "evidence_frames": [
+    1,
+    9,
+    18,
+    88,
+    98,
+    106,
+    114,
+    171,
+    179,
+    195,
+    203,
+    211,
+    218,
+    248,
+    295,
+    321,
+    333,
+    356,
+    364,
+    372
+   ]
+  },
+  {
+   "fault": "duplicates",
+   "severity": "medium",
+   "root_cause": "11.6% duplicate packets indicates same packet arriving via two paths - typically SPAN/mirror duplication or TAP aggregation from both sides of a link without deduplication enabled on the packet broker.",
+   "impact_on_tool": "NDR wastes CPU/storage on duplicate processing, inflates flow/packet counts, skews analytics and can cause false positives or missed detections due to sequence confusion.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "5-tuple-plus-seq"
+    },
+    "why": "Enable packet broker deduplication within a short window to strip identical packets before delivery while preserving one correct copy for the NDR."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3361,
+  "tokens_out": 1858,
+  "cost_usd": 0.0121,
+  "seconds": 9.9,
+  "recorded_at": "2026-10-29"
+ }
+}

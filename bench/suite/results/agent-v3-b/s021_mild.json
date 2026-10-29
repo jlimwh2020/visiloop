@@ -1,0 +1,26 @@
+{
+ "feed": "s021_mild",
+ "status": "healthy",
+ "summary": "All 9 visibility checks passed for IDS feed s021_mild. Tool receives complete, correct traffic with both directions, full payload, required VLANs, and within performance limits.",
+ "findings": [],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3185,
+  "tokens_out": 756,
+  "cost_usd": 0.00719,
+  "seconds": 6.0,
+  "recorded_at": "2026-10-29"
+ }
+}

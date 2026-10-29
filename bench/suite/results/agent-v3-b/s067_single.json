@@ -1,0 +1,63 @@
+{
+ "feed": "s067_single",
+ "status": "degraded",
+ "summary": "Feed s067_single is degraded: 36.3% of TCP sessions (62/171) are one-way, so IDS lacks return traffic for stateful analysis. All other visibility checks (duplicates, encryption, VLAN, drops, overload, truncation, tunnels, oversize) are healthy.",
+ "findings": [
+  {
+   "fault": "one_way",
+   "severity": "high",
+   "root_cause": "Packet broker / SPAN is forwarding only one direction of bidirectional flows to this single tool port. 62 of 171 TCP sessions show traffic in only one direction (36.3% > 10% threshold), consistent with a SPAN/mirror configured for Tx or Rx only, a broker filter/policy forwarding a single direction, or asymmetric routing without proper aggregation to the same IDS port.",
+   "impact_on_tool": "IDS requires both directions (needs_both_directions=true) for TCP state tracking, stream reassembly, and request/response signature matching. With only one side visible, the IDS cannot build full sessions, will miss exploits that span both directions, generates incomplete flows and reduces detection coverage significantly.",
+   "recommended_fix": {
+    "action": "aggregate",
+    "params": {
+     "ensure_bidirectional_aggregation": true,
+     "symmetric_hash": true
+    },
+    "why": "Aggregate both directions (client->server and server->client) of each flow to the same IDS tool port and use symmetric hashing if load-balancing. If sourced from SPAN, verify SPAN includes both Tx and Rx or preferably replace with TAP aggregation to guarantee complete bidirectional visibility."
+   },
+   "evidence_frames": [
+    47,
+    146,
+    182,
+    192,
+    250,
+    252,
+    282,
+    292,
+    300,
+    310,
+    333,
+    358,
+    365,
+    372,
+    407,
+    480,
+    537,
+    611,
+    614,
+    647
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3297,
+  "tokens_out": 1789,
+  "cost_usd": 0.01172,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-29"
+ }
+}

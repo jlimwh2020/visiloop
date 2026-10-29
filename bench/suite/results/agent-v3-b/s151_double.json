@@ -1,0 +1,109 @@
+{
+ "feed": "s151_double",
+ "status": "degraded",
+ "summary": "Feed s151_double to NDR is degraded: 5.6% TCP packet loss (159/2860) exceeds 1% threshold and 94.0% of frames are GRE-encapsulated, hiding inner traffic from NDR that requires both directions and full payload for detection.",
+ "findings": [
+  {
+   "fault": "packet_drops",
+   "severity": "high",
+   "root_cause": "Packet broker or SPAN buffer oversubscription causing ~5.6% TCP sequence gaps. Tool overload check is healthy, so drops occur before the tool (broker ingress/SPAN), not at NDR ingress policer.",
+   "impact_on_tool": "NDR cannot reassemble TCP streams, misses payload and flow state, leading to missed detections, broken session reconstruction, and false negatives despite needing full payload and bidirectional flows.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow_hash",
+     "tool_ports": 2,
+     "hash_fields": [
+      "ip_src",
+      "ip_dst",
+      "port_src",
+      "port_dst",
+      "protocol"
+     ]
+    },
+    "why": "Distribute flows across multiple 10G NDR interfaces to eliminate broker drops while preserving flow affinity required for bidirectional NDR analysis. If source is SPAN, also migrate to TAP with aggregation."
+   },
+   "evidence_frames": [
+    29,
+    30,
+    42,
+    43,
+    67,
+    70,
+    71,
+    72,
+    74,
+    132,
+    133,
+    171,
+    179,
+    183,
+    184,
+    193,
+    196,
+    225,
+    227,
+    271
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "2780 of 2958 frames (94.0%) arrive inside GRE tunnel and are forwarded encapsulated. Packet broker is not stripping GRE, so NDR sees only outer tunnel headers.",
+   "impact_on_tool": "NDR sees only outer GRE/IP headers and cannot parse inner IP/TCP/UDP or application payload, blinding detection for 94% of traffic despite needing full payload inspection.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_types": [
+      "GRE"
+     ],
+     "strip_outer": true,
+     "preserve_inner": true
+    },
+    "why": "Terminate/strip GRE at packet broker and forward inner packets to NDR so it can perform full L3-L7 inspection and bidirectional flow correlation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3442,
+  "tokens_out": 2486,
+  "cost_usd": 0.01487,
+  "seconds": 13.7,
+  "recorded_at": "2026-10-29"
+ }
+}

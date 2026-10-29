@@ -1,0 +1,47 @@
+{
+ "feed": "s080_single",
+ "status": "degraded",
+ "summary": "Feed s080_single is degraded: SIEM 1 Gbps port severely overloaded by 4.33 Gbps microbursts (433% of capacity, 2 intervals). All other checks (duplicates, encryption, VLAN, one-way, oversize, drops, truncation, tunnels) are healthy.",
+ "findings": [
+  {
+   "fault": "tool_overload",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering aggregate/bursty traffic directly to a single 1 Gbps SIEM port without load balancing or rate control. Peak measured 4.33 Gbps in 1 ms bursts exceeds port capacity by 433% (threshold 0.8 Gbps), causing 2 overloaded intervals.",
+   "impact_on_tool": "SIEM ingress buffers overflow and tail-drop packets indiscriminately during bursts. Results in missed events/logs, incomplete correlation, and reduced detection coverage despite SIEM not requiring both directions or full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port_speed_gbps": 1,
+     "peak_gbps": 4.33,
+     "hash": "5-tuple",
+     "suggested_ports": 5
+    },
+    "why": "Distribute traffic across 5x1G or 10G load-balanced SIEM ingress ports/cluster using 5-tuple hashing so no single port exceeds ~80% utilization, eliminating burst drops and preserving complete event delivery."
+   },
+   "evidence_frames": [
+    1,
+    1132
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3264,
+  "tokens_out": 1887,
+  "cost_usd": 0.0121,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

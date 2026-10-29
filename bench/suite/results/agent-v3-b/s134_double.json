@@ -1,0 +1,101 @@
+{
+ "feed": "s134_double",
+ "status": "degraded",
+ "summary": "Feed s134_double to IDS is degraded: 80.6% encrypted traffic exceeds 60% IDS tolerance and 30.6% ERSPAN-tunneled frames hide inner payloads, both blinding signature and payload inspection.",
+ "findings": [
+  {
+   "fault": "encrypted_share",
+   "severity": "high",
+   "root_cause": "81% of bytes are encrypted (TLS/encrypted) vs IDS tolerance of 60%. Traffic is not being decrypted before the IDS, so payload is opaque.",
+   "impact_on_tool": "IDS needs full payload for signature matching; with 80.6% encrypted it cannot inspect content, missing intrusions, malware and C2 inside encrypted streams.",
+   "recommended_fix": {
+    "action": "decrypt_advice",
+    "params": {
+     "current_share": 0.8057,
+     "threshold": 0.6,
+     "location": "packet_broker"
+    },
+    "why": "Decrypt or selectively forward decrypted traffic via packet broker TLS visibility solution so IDS receives cleartext it can analyze; alternatively filter/route encrypted traffic to dedicated decryption zone."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+   ]
+  },
+  {
+   "fault": "tunnel",
+   "severity": "high",
+   "root_cause": "30.6% of frames (606/1983) arrive encapsulated in ERSPAN tunnel. Packet broker is forwarding ERSPAN without stripping header, so IDS sees outer tunnel only.",
+   "impact_on_tool": "IDS parses outer ERSPAN header and misses inner L2-L7 headers and payload; flow correlation, signatures and detection for tunneled traffic fail, creating 30% visibility gap.",
+   "recommended_fix": {
+    "action": "strip_tunnel",
+    "params": {
+     "tunnel_type": "ERSPAN",
+     "strip_at": "packet_broker",
+     "share": 0.3056
+    },
+    "why": "Configure packet broker to terminate/strip ERSPAN encapsulation and present inner original frames to IDS so it can parse true endpoints and payloads."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3419,
+  "tokens_out": 1806,
+  "cost_usd": 0.01195,
+  "seconds": 10.4,
+  "recorded_at": "2026-10-29"
+ }
+}

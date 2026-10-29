@@ -1,0 +1,81 @@
+{
+ "feed": "s148_double",
+ "status": "degraded",
+ "summary": "Feed s148_double to IDS is degraded: 24.5% duplicate packets (617/2516) and 100% loss of required VLAN tags (10, 20) - all packets untagged. IDS wastes capacity on duplicates and loses segmentation context for detection.",
+ "findings": [
+  {
+   "fault": "duplicates",
+   "severity": "high",
+   "root_cause": "Packet broker aggregating multiple SPAN/mirror or TAP feeds without deduplication, forwarding same packet copies twice. 24.5% duplicates far exceeds 5% threshold (617 of 2516 packets).",
+   "impact_on_tool": "IDS wastes CPU and buffer reprocessing duplicates, inflates flow/event counts, risks state-table exhaustion and TCP reassembly errors, causing missed detections and false positives.",
+   "recommended_fix": {
+    "action": "dedup",
+    "params": {
+     "window_ms": 10,
+     "mode": "packet_hash"
+    },
+    "why": "Enable packet-broker deduplication to drop duplicate copies before IDS ingress and restore 1:1 traffic fidelity."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "missing_vlan",
+   "severity": "high",
+   "root_cause": "Upstream TAP/SPAN or packet broker is stripping 802.1Q tags. Required VLANs 10 and 20 not seen at all; 100% of packets are untagged, indicating tag removal not selective filtering.",
+   "impact_on_tool": "IDS loses VLAN segmentation context for VLANs 10 and 20, cannot apply VLAN-aware policies or detect lateral movement within those segments, effectively blind to those tenants.",
+   "recommended_fix": {
+    "action": "vlan",
+    "params": {
+     "preserve_tags": true,
+     "required_vlans": [
+      10,
+      20
+     ]
+    },
+    "why": "Configure SPAN/TAP and packet broker to preserve/pass-through 802.1Q tags for VLANs 10,20 so IDS receives correct segmentation."
+   },
+   "evidence_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "duplicates",
+   "encrypted_share",
+   "missing_vlan",
+   "one_way",
+   "oversize",
+   "packet_drops",
+   "tool_overload",
+   "truncated",
+   "tunnel"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 3369,
+  "tokens_out": 2197,
+  "cost_usd": 0.01355,
+  "seconds": 12.2,
+  "recorded_at": "2026-10-29"
+ }
+}
