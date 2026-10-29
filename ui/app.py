@@ -49,6 +49,7 @@ ACTION_NICE = {
     "disable_slicing": "Turn off packet slicing", "strip_tunnel": "Strip tunnel headers",
     "mtu_advice": "Raise the MTU to 9216", "slice": "Trim frames to fit the tool",
     "check_link": "Check the cable and optics", "tool_capacity": "Add tool capacity",
+    "upgrade_port": "Upgrade the tool port to match the tool",
 }
 
 st.set_page_config(page_title="VisiLoop", page_icon="🔁", layout="wide")

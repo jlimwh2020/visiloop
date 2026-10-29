@@ -95,10 +95,13 @@ def analyse(pc: PathCounters, loss_threshold=0.001, util_threshold=0.8):
         # drops counted by the device itself
         if h.role in ("span_dest", "broker_out"):
             util = pc.gbps(x.out_octets) / x.speed_gbps if x.speed_gbps else 0
+            # Offered load = what was sent plus what was discarded (discards are counted in packets,
+            # so scale the sent bytes by the packet ratio)
+            offered = pc.gbps(x.out_octets) * (x.out_pkts + x.out_discards) / x.out_pkts if x.out_pkts else 0
             add("egress_discards", h, x.out_discards, x.out_pkts + x.out_discards,
-                f"{h.name} discarded {x.out_discards:,} packets on output (average load {util:.0%} of "
-                f"{x.speed_gbps:g} Gbps; bursts are higher)", offered_gbps=round(pc.gbps(x.out_octets), 3),
-                speed_gbps=x.speed_gbps)
+                f"{h.name} discarded {x.out_discards:,} packets on output: about {offered:.2f} Gbps offered to a "
+                f"{x.speed_gbps:g} Gbps port (average load {util:.0%}; bursts are higher)",
+                offered_gbps=round(offered, 3), speed_gbps=x.speed_gbps)
         if h.role in ("broker_in", "tool_in"):
             add("ingress_discards", h, x.in_discards, x.in_pkts + x.in_discards,
                 f"{h.name} discarded {x.in_discards:,} packets it received"

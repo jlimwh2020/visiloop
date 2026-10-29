@@ -29,7 +29,7 @@ from visikit.profiles import load_profile                   # noqa: E402
 RES = os.path.join(HERE, "results")
 # Fixes a visibility engineer would accept, by kind of problem
 GOOD = {"span_oversubscribed": {"replace_span_with_tap", "filter"},
-        "broker_congestion": {"load_balance", "filter", "slice"},
+        "broker_congestion": {"load_balance", "filter", "slice", "upgrade_port"},
         "nic_overrun": {"tool_capacity", "load_balance"},
         "link_loss": {"check_link"},
         "crc_errors": {"check_link"}}
@@ -59,10 +59,9 @@ def main():
     os.makedirs(os.path.join(RES, "agent"), exist_ok=True)
     client = None
     if a.agent:
-        if not os.environ.get("MODEL_API_KEY"):
-            sys.exit("MODEL_API_KEY is not set. Run set_key.py first, then open a new terminal.")
         from visikit.agent.diagnose import diagnose, make_client
-        client = make_client()
+        # Only needed for paths without a recorded result; re-scoring recorded results needs no key
+        client = make_client() if os.environ.get("MODEL_API_KEY") else "no-key"
 
     rows, spent = [], 0.0
     for c in cases:
@@ -82,6 +81,8 @@ def main():
             if os.path.exists(path):
                 with open(path) as f:
                     d = json.load(f)
+            elif client == "no-key":
+                sys.exit("MODEL_API_KEY is not set and some paths have no recorded result. Run set_key.py first.")
             elif spent + 0.03 <= a.max_usd:
                 d = diagnose(ctx, client=client)
                 d["_meta"]["recorded_at"] = time.strftime("%Y-%m-%d")

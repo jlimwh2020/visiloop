@@ -33,11 +33,22 @@ class PathLossFix:
                 "alternative": "mirror fewer ports or one direction per session, or use a faster SPAN destination"}
         elif kind == "egress_discards" and w.get("role") == "broker_out":
             speed = w.get("speed_gbps") or ctx.profile.max_rate_gbps
-            ports = max(2, math.ceil((w.get("offered_gbps") or 0) / (TARGET * speed)) + 1)
-            action, params = "load_balance", {
-                "where": where, "ports": ports, "port_speed_gbps": speed, "hash": "symmetric_5tuple",
-                "why": "the broker tool port is congested; average load understates the bursts, so one spare port is added",
-                "alternative": f"one {math.ceil((w.get('offered_gbps') or 0) / TARGET / 10) * 10 or 10:g} Gbps tool port"}
+            offered = w.get("offered_gbps") or 0
+            tool_speed = ctx.profile.max_rate_gbps
+            ports = max(2, math.ceil(offered / (TARGET * speed)) + 1)
+            if tool_speed > speed and offered <= TARGET * tool_speed:
+                # Tool-aware: the tool can take a faster port, so match it instead of building a tool group
+                action, params = "upgrade_port", {
+                    "where": where, "from_gbps": speed, "to_gbps": tool_speed, "offered_gbps": round(offered, 2),
+                    "why": f"the {ctx.profile.tool_type} accepts {tool_speed:g} Gbps but its broker port runs at "
+                           f"{speed:g} Gbps; a matching port carries the {offered:.2f} Gbps offered with headroom",
+                    "alternative": f"load balance across {ports} x {speed:g} Gbps tool ports"}
+            else:
+                action, params = "load_balance", {
+                    "where": where, "ports": ports, "port_speed_gbps": speed, "hash": "symmetric_5tuple",
+                    "offered_gbps": round(offered, 2),
+                    "why": "the broker tool port is congested; average load understates the bursts, so one spare port is added",
+                    "alternative": f"one {math.ceil(offered / TARGET / 10) * 10 or 10:g} Gbps tool port"}
         elif kind == "ingress_discards" and w.get("role") == "tool_in":
             action, params = "tool_capacity", {
                 "where": where, "why": "the tool's capture interface drops what it receives",

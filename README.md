@@ -15,7 +15,7 @@ VisiLoop is an AI visibility engineer built on Meta's models. It closes the loop
 | Step | What happens |
 |---|---|
 | **See** | SAM 3.1 finds every device on the customer's network diagram; Muse Spark reads it into an inventory, including which way each TAP or SPAN mirrors. |
-| **Diagnose** | Nine checks measure the tool's feed. A Muse Spark agent calls them as tools, explains the root cause and pins each fault onto the diagram. |
+| **Diagnose** | Nine checks measure the tool's feed, and two more read interface counters along its path to find where loss happens. A Muse Spark agent calls them as tools, explains the root cause and pins each fault onto the diagram. |
 | **Fix** | Each fault gets a vendor-neutral packet broker change with settings calculated from the measurements. |
 | **Prove** | A simulated broker applies the fixes and every tool port is re-checked. Suricata then shows the alert the tool was missing. |
 
@@ -49,7 +49,7 @@ flowchart LR
 |---|---|
 | **SAM 3.1** | Segments every device box on the diagram, giving exact positions for pinning faults. |
 | **Muse Spark (vision)** | Reads the diagram with numbered boxes (set-of-marks prompting) into a structured inventory: device types, link speeds, capture points and the direction each mirrors. |
-| **Muse Spark (agent)** | Calls the nine checks and the tool profile as tools, in parallel, and returns a structured diagnosis: root cause, impact on the tool, recommended fix and evidence packets. |
+| **Muse Spark (agent)** | Calls the checks (from a capture, from counters, or both) and the tool profile as tools, in parallel, and returns a structured diagnosis: root cause, impact on the tool, recommended fix and evidence packets. |
 | **Muse Code** | Used during development. |
 
 ## Results
@@ -101,6 +101,27 @@ independently of VisiLoop's checks. Full details: [bench/suite/RESULTS.md](bench
 
 Earlier results: [v1](bench/suite/results/RESULTS_v1.md), [v2](bench/suite/results/RESULTS_v2.md),
 [v3 first run](bench/suite/results/RESULTS_v3_first_run.md).
+
+### Counter benchmark: where is the loss? 100 paths (29 Oct 2026)
+
+Simulated feed paths (SPAN or TAP into a broker, with or without the tool's own counters, 1G or 10G ports), each
+with up to two faults: SPAN oversubscription, broker congestion, damaged frames, tool capture overrun and loss on a
+link, plus below-threshold noise. The answer key records each fault and where it is. Muse Spark diagnoses from
+counters alone, with no capture. Full details: [bench/counters/RESULTS.md](bench/counters/RESULTS.md).
+
+| What | Result |
+|---|---|
+| Counter checks: right fault at the right device and port | **100/100**; quiet on all 31 healthy or noise-only paths |
+| VisiLoop's fix suited to where the problem is | **69/69** |
+| Muse Spark diagnosis from counters alone | **69/69** exactly right, **0** ungrounded claims |
+| Muse Spark fix choice | **68/69**; the one difference was a better fix (below) |
+| Cost | **US$0.89** for 69 diagnoses |
+
+**Muse Spark improved a fix again.** For a congested 1 Gbps broker port feeding an NDR, it recommended upgrading
+the port to 10 Gbps, because the NDR's profile accepts 10 Gbps, instead of building a tool group of 1G ports.
+That is simpler and better, so VisiLoop's own fix is now tool-aware in the same way: it upgrades the port when the
+tool can take it, and load-balances otherwise. Reviewing that case also showed tool groups were sized from the
+traffic the port delivered rather than the traffic offered to it; they are now sized from the offered load.
 
 ### Diagram stress test: 36 diagrams, 9 styles (28 Oct 2026)
 
@@ -170,7 +191,7 @@ Every check is tool-aware: it is judged against what that tool type needs (`visi
 | Packet slicing | Frames shorter than their IP header states | over 5%, for tools that need the full payload | turn slicing off |
 | Tunnel headers | Traffic still inside ERSPAN, GRE or VXLAN | over 10% | strip tunnel headers |
 | Oversize frames | Frames above the tool port's maximum frame size | over 1% | trim to fit (SIEM, APM), or raise the MTU (advice) |
-| Loss along the path | Interface counters at each hop: SPAN source and destination, broker in and out, tool | over 0.1% at one place | depends on where: TAP instead of SPAN, sized tool group, tool capacity, check the link |
+| Loss along the path | Interface counters at each hop: SPAN source and destination, broker in and out, tool | over 0.1% at one place | depends on where: TAP instead of SPAN, a port matching the tool or a sized tool group, tool capacity, check the link |
 | Link errors | Damaged frames (CRC) received at a hop | over 0.001% | replace the cable or optic, check duplex |
 
 The fix loop applies the fixes in a simulated broker and re-checks the result: port capacity per tool port,
@@ -188,6 +209,10 @@ of a feed's path and compares neighbours, so a finding names the device and port
 python -m visikit.counters --path demo/counters/span_oversubscribed.yaml          # simulated scenarios in demo/counters/
 python -m visikit.counters --path my_path.yaml --snmp --seconds 60 --tool IDS      # real devices
 ```
+
+In the dashboard, the sidebar's **Path counters** option adds a simulated counter scenario to any case, so a
+capture finding and a located counter finding appear side by side, with a hop-by-hop counter table and pins on the
+diagram.
 
 **Continuous mode** checks every feed on a schedule (counters every cycle, an optional short capture every few
 cycles), keeps history in SQLite, and alerts when a feed degrades or recovers: console, log file, or a Teams /
