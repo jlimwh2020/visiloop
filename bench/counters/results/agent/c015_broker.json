@@ -1,0 +1,37 @@
+{
+ "feed": "c015_broker",
+ "status": "degraded",
+ "summary": "Feed c015_broker to NDR is severely degraded: 59.82% packet loss due to egress congestion on BROKER-A port 12. 1 Gbps delivery port is saturated (100% avg, bursts higher) while NDR can handle 10 Gbps.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "BROKER-A port 12 egress port to NDR is undersized/oversubscribed: running at 100% of 1 Gbps average with bursts above line rate, causing the packet broker to tail-drop 15,953,520 packets (59.82% loss). Tool is 10 Gbps-capable but broker handoff is only 1 Gbps.",
+   "impact_on_tool": "NDR loses ~60% of traffic, creating massive blind spot. Flow records and detections will be incomplete, state tracking breaks, and both-directions visibility required by NDR cannot be assured.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "location": "BROKER-A 12",
+     "current_gbps": 1,
+     "recommended_gbps": 10,
+     "alternative": "load_balance across multiple 1/10G ports or filter to reduce load"
+    },
+    "why": "Upgrade broker egress to match NDR 10 Gbps port speed to eliminate output discards; if immediate upgrade not possible, load-balance or filter to keep offered load <70% of egress capacity and absorb bursts."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2237,
+  "tokens_out": 1826,
+  "cost_usd": 0.01056,
+  "seconds": 8.4,
+  "recorded_at": "2026-10-29"
+ }
+}

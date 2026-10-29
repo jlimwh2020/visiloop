@@ -1,0 +1,37 @@
+{
+ "feed": "c049_nic_span",
+ "status": "degraded",
+ "summary": "Feed c049_nic_span is severely degraded: 56.33% packet loss due to SPAN oversubscription (2.29 Gbps mirrored into 1 Gbps destination) plus 2.88% loss at IDS eth1. IDS receives only ~43% of intended traffic, breaking detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription at DC-CORE-1: source Gi1/0/1 mirrors 42,937,440 packets (2.29 Gbps) into destination Gi1/0/48 which is only 1 Gbps. Switch discards 24,187,500 packets on output (56.33% lost, average load 100% with higher bursts). Downstream IDS eth1 (1 Gbps per tool profile) also discards 539,460 packets (2.88% of what arrived) because capture interface cannot keep up with bursts.",
+   "impact_on_tool": "IDS (needs both directions and full payload) misses >56% of traffic before it arrives, plus additional tool drops. Random SPAN drops break flow reassembly, miss both directions of sessions, cause signature misses and false negatives. Effective detection coverage <44%.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "span_source": "DC-CORE-1 Gi1/0/1",
+     "span_destination": "DC-CORE-1 Gi1/0/48",
+     "proposed_tap_location": "passive TAP on DC-CORE-1 Gi1/0/1",
+     "broker_requirement": "connect TAP to packet broker with 10G capture, then load_balance or filter to fit 1G IDS capacity - e.g., load-balance 2.29 Gbps across 3x 1G IDS or upgrade IDS to 10G"
+    },
+    "why": "TAP forwards 100% losslessly unlike SPAN which drops when mirrored rate exceeds destination rate. Packet broker buffers microbursts and can distribute/filter the 2.29 Gbps aggregate so neither the switch SPAN port nor the 1G IDS interface is oversubscribed, restoring complete traffic to IDS."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2352,
+  "tokens_out": 3635,
+  "cost_usd": 0.01839,
+  "seconds": 15.4,
+  "recorded_at": "2026-10-29"
+ }
+}

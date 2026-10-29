@@ -1,0 +1,51 @@
+{
+ "feed": "c060_nic_crc",
+ "status": "degraded",
+ "summary": "IDS feed c060_nic_crc is degraded: NPB-01 port 3 is delivering 15,780 CRC-damaged frames (0.307% error rate) and IDS eth1 is discarding 1.97% (101,100 packets) due to capture overload, both causing incomplete traffic for IDS detection.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "NPB-01 port 3 (input) is receiving damaged frames with CRC/alignment errors at 0.307% (15,780 frames, 307x threshold of 0.001%), indicating a physical layer fault on the link into the packet broker such as faulty cable/optic, dirty connector, or duplex mismatch.",
+   "impact_on_tool": "IDS receives corrupted frames that fail FCS validation and are dropped before analysis, creating blind spots and wasted processing; IDS with needs_full_payload=true cannot inspect damaged payloads, reducing detection coverage.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "NPB-01 3",
+     "port": "NPB-01 port 3 (input)"
+    },
+    "why": "Physical errors must be fixed at source - no broker feature can repair CRC errors. Clean/reseat/replace cable and optic, verify speed/duplex on both ends, and re-check error counters."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "IDS eth1 capture interface is oversubscribed and discarding 101,100 packets (1.97% loss, 19x threshold of 0.1%) because offered traffic exceeds the 1 Gbps tool's capture/processing capacity.",
+   "impact_on_tool": "IDS loses ~2% of packets after delivery, causing incomplete flows, missed signatures, and evasion risk; with needs_both_directions and needs_full_payload, any loss breaks stateful detection and file extraction.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "IDS eth1",
+     "current_speed_gbps": 1,
+     "loss_pct": 1.97
+    },
+    "why": "Tool NIC/host cannot keep up with load. Increase capture capacity via host tuning (RSS, buffers, driver), upgrade NIC/link speed, or load_balance/filter traffic across multiple IDS instances to fit 1G capacity."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2319,
+  "tokens_out": 2405,
+  "cost_usd": 0.01312,
+  "seconds": 11.5,
+  "recorded_at": "2026-10-29"
+ }
+}

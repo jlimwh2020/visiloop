@@ -1,0 +1,39 @@
+{
+ "feed": "c017_span_nic",
+ "status": "degraded",
+ "summary": "SPAN oversubscription at CORE-SW-01 Gi1/0/48 causes 42.26% loss before NDR (1.73 Gbps mirrored into 1 Gbps SPAN destination) plus 4.10% drops at NDR eth1; NDR receives only ~57% of intended traffic, severely degrading detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "CORE-SW-01 SPAN destination Gi1/0/48 is oversubscribed: 18,557,040 packets (1.73 Gbps) mirrored from Gi1/0/1 must egress a 1 Gbps SPAN destination port. Switch discarded 7,842,840 packets on output (42.26% lost, average load 100% of 1 Gbps, bursts higher). Downstream NDR eth1 additionally discarded 439,680 packets it did receive (4.10% lost) as capture interface could not keep up.",
+   "impact_on_tool": "NDR requires both directions and full payload on 10G port but receives only ~57% of traffic. ~42% of flows/packets never arrive plus additional ingest drops cause missed detections, broken flow reassembly, incomplete Zeek/Suricata logs and blind spots for lateral movement and exfiltration.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "switch": "CORE-SW-01",
+     "mirrored_source": "Gi1/0/1",
+     "span_destination": "Gi1/0/48",
+     "tool_port": "NDR eth1",
+     "tool_port_speed_gbps": 10,
+     "measured_mirrored_rate_gbps": 1.73
+    },
+    "why": "SPAN destination drops by design when mirrored rate exceeds destination capacity and cannot handle bursts. Passive TAP provides lossless out-of-band copy independent of switch resources and preserves both directions. Feed TAP via packet broker with adequate aggregation/buffering to the NDR's 10G port to eliminate the 42% SPAN loss and reduce downstream tool drops."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2364,
+  "tokens_out": 2814,
+  "cost_usd": 0.01491,
+  "seconds": 15.1,
+  "recorded_at": "2026-10-29"
+ }
+}

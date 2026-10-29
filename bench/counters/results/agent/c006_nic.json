@@ -1,0 +1,36 @@
+{
+ "feed": "c006_nic",
+ "status": "degraded",
+ "summary": "APM feed c006_nic is degraded: 3.65% packet loss (51,780 discards) at APM eth1 capture interface due to tool oversubscription. Link health is clean, so loss is not physical layer but tool cannot keep up with offered rate.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "APM eth1 capture pipeline/NIC buffers exhausted and discarded 51,780 packets it received (3.65% loss vs 0.1% threshold). Link errors are healthy, indicating loss is not FCS/cabling but egress oversubscription to the 10G APM port / tool host unable to drain packets fast enough.",
+   "impact_on_tool": "APM loses ~1 in 27 packets/flows; transaction latency, error rates, and distributed traces are incomplete, reducing detection coverage and root-cause accuracy for application performance issues.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "tool_group": "APM cluster",
+     "hash": "5-tuple",
+     "egress_speed_gbps": 10
+    },
+    "why": "Distribute c006_nic traffic across multiple APM tool ports/instances via packet broker load-balancing (or filter/slice if APM allows) to keep per-tool rate below 10G line rate and eliminate interface discards. If single APM must handle full feed, upgrade tool NIC to 25G and tune capture buffers/ring size and driver."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2224,
+  "tokens_out": 2340,
+  "cost_usd": 0.01273,
+  "seconds": 16.4,
+  "recorded_at": "2026-10-29"
+ }
+}

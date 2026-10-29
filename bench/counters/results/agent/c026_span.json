@@ -1,0 +1,37 @@
+{
+ "feed": "c026_span",
+ "status": "degraded",
+ "summary": "SIEM feed c026_span is losing 61.51% of packets due to SPAN oversubscription: 2.60 Gbps mirrored from LEAF-07 Gi1/0/1 into 1 Gbps SPAN destination LEAF-07 Gi1/0/48.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription at LEAF-07: SPAN session should copy 48,712,440 packets from LEAF-07 Gi1/0/1 (mirrored) but destination LEAF-07 Gi1/0/48 sent only 18,750,000. 2.60 Gbps mirrored into a 1 Gbps destination port, destination discarded 29,962,500 packets on output (average load 100% of 1 Gbps, bursts higher) = 61.51% loss. SPAN is best-effort copy and drops when ingress exceeds destination capacity.",
+   "impact_on_tool": "SIEM misses ~61.5% of events/flows - detection coverage severely degraded, correlation and alerting blind to majority of traffic despite SIEM tolerating single-direction and truncated payload (needs_both_directions=false, needs_full_payload=false).",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "mirrored_port": "LEAF-07 Gi1/0/1",
+     "span_destination": "LEAF-07 Gi1/0/48",
+     "tap_type": "passive TAP",
+     "broker_action": "filter/aggregate to fit 1 Gbps SIEM port"
+    },
+    "why": "TAP provides lossless, out-of-band copy unlike SPAN which drops under oversubscription. Replace SPAN with TAP at LEAF-07 Gi1/0/1 and front with packet broker to filter to SIEM-relevant traffic (SIEM does not need both directions or full payload) or aggregate/load-balance so sustained rate fits the 1 Gbps tool port; otherwise even a TAP will still overrun the 1 Gbps SIEM feed."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2321,
+  "tokens_out": 2052,
+  "cost_usd": 0.01162,
+  "seconds": 9.0,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "feed": "c051_broker_nic",
+ "status": "degraded",
+ "summary": "Feed c051_broker_nic is degraded: NPB-01 port 12 averaged 100% of 10 Gbps and discarded 12.39% on egress (15,149,940 pkts), plus APM eth1 discarded an additional 2.74% (2,938,260 pkts) as capture could not keep up. Sustained oversubscription with bursty loss.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "NPB-01 port 12 (to APM) is oversubscribed - average load 100% of 10 Gbps with bursts higher - causing 15,149,940 egress discards (12.39% lost). Downstream APM eth1 also discarded 2,938,260 packets it did receive (2.74% lost) indicating the tool's capture interface is overrun.",
+   "impact_on_tool": "APM loses ~12-15% of traffic before analysis plus additional loss at capture; transactions, latency/error metrics and dependency maps will be incomplete and bursty periods systematically under-represented, severely reducing detection/coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "device": "NPB-01",
+     "egress_port": "12",
+     "tool_port": "APM eth1",
+     "port_speed_gbps": 10,
+     "current_loss_broker_pct": 12.39,
+     "current_loss_tool_pct": 2.74,
+     "suggestion": "add 1-2x 10G APM ports to load-balance group or filter to APM-relevant flows to bring sustained load <70% per port"
+    },
+    "why": "Distributing the feed across multiple 10G tool ports (or filtering to only traffic APM needs - profile needs_full_payload=false) provides headroom for bursts and stops NPB egress drops and APM capture drops. Alternative is tool_capacity upgrade if load-balance not possible."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2279,
+  "tokens_out": 2595,
+  "cost_usd": 0.01388,
+  "seconds": 11.8,
+  "recorded_at": "2026-10-29"
+ }
+}

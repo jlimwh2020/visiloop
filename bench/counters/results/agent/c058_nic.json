@@ -1,0 +1,35 @@
+{
+ "feed": "c058_nic",
+ "status": "degraded",
+ "summary": "APM on c058_nic is discarding 0.78% of packets (56,040 drops on APM eth1) because capture interface cannot keep up; link is healthy but tool is oversubscribed.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "medium",
+   "root_cause": "APM eth1 is oversubscribed - the tool's capture interface/kernel cannot keep up with the delivered rate and is discarding packets (0.78% loss vs 0.001 threshold). check_link_errors is healthy, so this is not a physical link error but a capacity/delivery-rate issue at the tool.",
+   "impact_on_tool": "APM loses ~0.78% of packets/flows, causing incomplete transaction reconstruction, inaccurate latency and error-rate metrics, and missed application performance detections.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target": "APM eth1",
+     "method": "hash_based"
+    },
+    "why": "Distribute traffic across multiple APM capture ports/instances via packet broker load-balancing to bring per-interface rate within the 10G APM's sustainable capture capacity. Since APM needs_full_payload=false, broker-side slicing or filtering to reduce volume is also viable if load-balancing is not possible."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2225,
+  "tokens_out": 2958,
+  "cost_usd": 0.01535,
+  "seconds": 15.8,
+  "recorded_at": "2026-10-29"
+ }
+}

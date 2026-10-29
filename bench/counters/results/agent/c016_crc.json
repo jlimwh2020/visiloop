@@ -1,0 +1,35 @@
+{
+ "feed": "c016_crc",
+ "status": "degraded",
+ "summary": "Feed c016_crc to IDS is degraded due to high CRC/alignment errors on ingress link VF-1 port 1. 3,720 damaged frames (error rate 0.001088 > threshold 1e-05) indicate physical layer fault, causing corrupted traffic to IDS and reduced detection coverage. Path loss check is healthy.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "VF-1 port 1 (input) is receiving damaged frames with CRC/alignment errors (3,720 frames, error rate 0.001088 vs threshold 0.00001). Most likely root cause is a faulty cable, bad optic/SFP, or duplex/speed mismatch on the link into VF-1 port 1, corrupting frames before the packet broker can forward them.",
+   "impact_on_tool": "IDS requires complete, correct traffic with full payload and both directions. Corrupted frames are dropped or truncated by NIC/broker, so IDS misses payload for signature matching and flow reassembly, creating blind spots and allowing attacks to evade detection.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 1",
+     "port": "VF-1 port 1 (input)"
+    },
+    "why": "Fix physical layer first - inspect/replace cable and optics on VF-1 port 1, verify speed/duplex autonegotiation, check error counters, and re-test. No broker policy change will fix CRC-damaged frames; link must be clean to restore complete traffic to IDS."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2230,
+  "tokens_out": 1920,
+  "cost_usd": 0.01095,
+  "seconds": 9.0,
+  "recorded_at": "2026-10-29"
+ }
+}

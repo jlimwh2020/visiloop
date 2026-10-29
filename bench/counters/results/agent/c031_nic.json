@@ -1,0 +1,36 @@
+{
+ "feed": "c031_nic",
+ "status": "degraded",
+ "summary": "APM feed c031_nic is degraded: tool NIC eth1 is discarding 1.47% of packets (38,520 discards) due to capture overrun, while physical link is healthy. Visibility is incomplete.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Packet broker is delivering traffic at a rate/volume exceeding the APM's 10G capture interface capacity. APM eth1 NIC ring buffers overrun and discards 38,520 packets (1.47% loss, threshold 0.1%). Link errors are healthy, so loss is not L1/L2 errors but tool-side oversubscription.",
+   "impact_on_tool": "APM loses ~1.47% of flows/transactions. Results in gaps in latency/error-rate metrics, incomplete distributed traces, and missed performance anomalies; both-directions correlation required by APM is broken for dropped flows.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "mode": "flow_hash_5tuple",
+     "target_group": "APM_cluster",
+     "shards": 2
+    },
+    "why": "Distribute c031_nic traffic across 2+ APM ingress ports/instances with flow-aware hashing to keep per-interface rate below 10G and eliminate discards while preserving both directions per flow. APM needs_full_payload=false so complementary broker slicing/filtering can further reduce load if full payload not required."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2226,
+  "tokens_out": 3493,
+  "cost_usd": 0.01763,
+  "seconds": 21.1,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -18,4 +18,17 @@
 | nic overrun | 31/31 (100%) |
 | span oversubscribed | 21/21 (100%) |
 
+## Muse Spark diagnosis from counters
+
+| Measure | Result |
+|---|---|
+| Exactly the right faults | **69/69 (100%)** |
+| Fix suited to where the problem is | **68/69 (99%)** |
+| Ungrounded claims removed by the guard | 0 |
+| Cost | US$0.89 for 69 paths (US$0.0129 each) |
+
+Where Muse Spark differed:
+
+- `c015_broker` (broker_congestion): reported ['path_loss'], fixes {'path_loss': 'tool_capacity'}
+
 Reproduce: `python bench/counters/make_counter_suite.py` then `python bench/counters/run_counter_suite.py [--agent]`.

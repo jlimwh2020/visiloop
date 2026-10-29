@@ -1,0 +1,38 @@
+{
+ "feed": "c083_broker_nic",
+ "status": "degraded",
+ "summary": "SIEM feed c083_broker_nic is degraded by severe path loss: BROKER-A port 1/5 is saturated at 100% of 1 Gbps average (bursts higher) dropping 17.15% on egress, plus SIEM eth1 dropping an additional 4.19% on ingest due to capture overload.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Egress oversubscription at BROKER-A 1/5 to SIEM: average load is 100% of the 1 Gbps tool port so bursts are discarded (1,552,500 packets, 17.15% lost). Downstream the SIEM's own 1 Gbps capture interface (eth1) is also overrun and discarded 314,520 received packets (4.19% lost), indicating both broker egress congestion and tool ingest capacity exceeded.",
+   "impact_on_tool": "SIEM receives incomplete traffic (~21% combined loss). Events, flows and alerts will be missing or uncorrelated, creating blind spots and reducing detection coverage for security analytics.",
+   "recommended_fix": {
+    "action": "filter",
+    "params": {
+     "egress_port": "BROKER-A 1/5",
+     "tool_port_speed_gbps": 1,
+     "filter_mode": "SIEM-relevant only",
+     "preserve": "DNS, HTTP, TLS handshakes, authentication, firewall and proxy logs",
+     "drop_or_sample": "bulk data transfer, streaming, backup replication"
+    },
+    "why": "SIEM needs_full_payload=false and needs_both_directions=false per profile, so traffic can be filtered to security-relevant flows to fit the 1 Gbps tool port and stop both broker egress drops and SIEM eth1 ingest drops without upgrading hardware. If filtered load still exceeds 1 Gbps, add load_balance or tool_capacity upgrade."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2281,
+  "tokens_out": 2225,
+  "cost_usd": 0.01231,
+  "seconds": 11.7,
+  "recorded_at": "2026-10-29"
+ }
+}

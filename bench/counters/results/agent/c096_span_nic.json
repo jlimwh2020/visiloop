@@ -1,0 +1,42 @@
+{
+ "feed": "c096_span_nic",
+ "status": "degraded",
+ "summary": "High packet loss: 66.3% dropped at SPAN destination (2.97 Gbps mirrored into 1 Gbps port) plus 3.34% dropped at SIEM NIC. SIEM receives only ~33.7% of intended traffic, severely degraded detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription at DC-CORE-1 Gi1/0/48: SPAN session from DC-CORE-1 Gi1/0/1 should copy 55,631,220 packets (2.97 Gbps) but destination port is only 1 Gbps. Switch discarded 36,881,220 packets on output (66.30% lost, average load 100% of 1 Gbps, bursts higher). Additional bottleneck at SIEM eth1 which discarded 625,920 packets it did receive (3.34% lost) because capture interface cannot keep up.",
+   "impact_on_tool": "SIEM receives only 18,750,000 of 55,631,220 packets (~33.7%). ~66% blind spot for correlation/alerting; plus 3.34% additional loss at tool NIC causes incomplete events/flows and missed detections. Effective visibility for SIEM is severely degraded.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "span_source": "DC-CORE-1 Gi1/0/1",
+     "span_destination": "DC-CORE-1 Gi1/0/48",
+     "tap_type": "passive TAP",
+     "broker_required": true,
+     "broker_actions": [
+      "filter",
+      "slice"
+     ],
+     "target_rate_gbps": 1
+    },
+    "why": "SPAN drops packets when mirrored rate exceeds destination rate and has no buffering. TAP provides lossless copy. A packet broker after TAP can filter/slice (SIEM needs_full_payload=false, needs_both_directions=false) to reduce 2.97 Gbps to <1 Gbps to fit SIEM 1G port and eliminate both switch and tool drops."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2359,
+  "tokens_out": 3571,
+  "cost_usd": 0.01813,
+  "seconds": 13.6,
+  "recorded_at": "2026-10-29"
+ }
+}

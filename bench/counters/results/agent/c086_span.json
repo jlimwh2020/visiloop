@@ -1,0 +1,37 @@
+{
+ "feed": "c086_span",
+ "status": "degraded",
+ "summary": "SPAN destination oversubscribed: 2.52 Gbps mirrored from CORE-SW-01 Gi1/0/1 into 1 Gbps SPAN destination Gi1/0/48 causing 60.38% loss (16,328,520 of 27,042,840 packets discarded). NDR receives only 10,714,260 packets, severely degrading detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "CORE-SW-01 SPAN destination port Gi1/0/48 is oversubscribed and lossy by design. 2.52 Gbps of mirrored traffic from Gi1/0/1 is forced into a 1 Gbps SPAN destination (average load 100% of 1 Gbps, bursts higher). Switch discards excess on egress - 16,328,520 output discards, 60.38% loss. SPAN is best-effort copy with small buffers and drops under congestion, unlike a TAP.",
+   "impact_on_tool": "NDR (requires both directions and full payload, 10 Gbps port) receives only ~39.6% of traffic. 60% random packet loss breaks flow reassembly, TCP stream reconstruction, and signature matching. Detections for lateral movement, C2, exfiltration will be missed and both-direction correlation fails.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "CORE-SW-01 Gi1/0/1",
+     "tap_type": "passive_tap",
+     "broker_ingress_gbps": 10,
+     "destination_port": "CORE-SW-01 Gi1/0/48 replacement"
+    },
+    "why": "Physical TAP provides lossless, line-rate copy without SPAN oversubscription or CPU/buffer drops. Feed TAP via packet broker at 10G to match NDR's 10 Gbps tool port to eliminate the 2.52Gbps->1Gbps bottleneck and restore complete visibility."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2319,
+  "tokens_out": 2094,
+  "cost_usd": 0.0118,
+  "seconds": 8.2,
+  "recorded_at": "2026-10-29"
+ }
+}

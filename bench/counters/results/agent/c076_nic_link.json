@@ -1,0 +1,54 @@
+{
+ "feed": "c076_nic_link",
+ "status": "degraded",
+ "summary": "Path loss exceeds threshold (0.69% + 0.68% vs 0.1% threshold): 0.69% lost on link between LEAF-07 Gi1/0/48 SPAN destination and VF-1 1/1, plus 0.68% discarded at IDS eth1 capture interface. Link error counters healthy.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "medium",
+   "root_cause": "Physical transport loss between LEAF-07 Gi1/0/48 (SPAN destination, sent 4,327,500 packets) and VF-1 port 1/1 (received 4,297,740 packets) - 29,760 packets (0.69%) lost on cable/optic or via an unmonitored inline device between them.",
+   "impact_on_tool": "IDS misses ~0.69% of traffic before packet broker, creating blind spot; IDS cannot detect attacks in lost packets and flow records will be incomplete.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 1/1",
+     "link": "LEAF-07 Gi1/0/48 to VF-1 1/1",
+     "sent_packets": 4327500,
+     "received_packets": 4297740
+    },
+    "why": "Clean/replace fiber/cable and optics, check interface error counters (FCS, drops) on both ends, and verify no unmonitored device is bridging this link."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "medium",
+   "root_cause": "IDS eth1 capture interface discarded 29,340 packets (0.68% of received) because the tool's capture path could not keep up with offered rate.",
+   "impact_on_tool": "Even correctly forwarded traffic is dropped at IDS NIC before analysis; IDS with needs_full_payload and needs_both_directions will have incomplete sessions and missed detections.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "tool_port": "IDS eth1",
+     "discard_count": 29340,
+     "discard_rate": 0.0068,
+     "port_speed_gbps": 1
+    },
+    "why": "IDS is overrun at 1G: tune capture (increase ring buffers, enable AF_PACKET/DPDK, pin CPUs), or reduce load via packet broker filtering/load_balance, or upgrade tool capacity."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2289,
+  "tokens_out": 2796,
+  "cost_usd": 0.01474,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-29"
+ }
+}

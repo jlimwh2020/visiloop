@@ -1,0 +1,36 @@
+{
+ "feed": "c094_span",
+ "status": "degraded",
+ "summary": "SPAN destination oversubscribed: 1.64 Gbps mirrored into 1 Gbps port causing 38.99% packet loss (11,981,220 packets discarded). SIEM detection coverage severely degraded.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "DC-CORE-1 Gi1/0/48 SPAN destination is oversubscribed. The SPAN session mirrors ~1.64 Gbps from Gi1/0/1 (30,731,220 packets) into a 1 Gbps destination port that can only forward 18,750,000 packets. When the SPAN output buffer fills at 100% load (bursts higher), the switch discards excess packets on egress - 11,981,220 packets / 38.99% lost - before they reach the packet broker/SIEM. This is inherent SPAN behavior under oversubscription, not a link error.",
+   "impact_on_tool": "SIEM randomly loses ~39% of all packets/flows. Even though SIEM needs_both_directions=false and needs_full_payload=false, it still misses events, flow records and alerts. Correlation and detection are incomplete and bursty attacks are likely to be missed entirely.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "tap_location": "DC-CORE-1 Gi1/0/1",
+     "broker_policy": "filter to <1Gbps or load-balance/upgrade SIEM ingest to >=2Gbps",
+     "span_destination": "DC-CORE-1 Gi1/0/48"
+    },
+    "why": "TAP provides lossless, non-oversubscribed copy unlike SPAN which drops when mirrored rate exceeds destination rate. Because mirrored rate (1.64 Gbps) exceeds SIEM port speed (1 Gbps), place TAP plus packet broker in front of SIEM and either filter irrelevant traffic (SIEM tolerates partial payload) or load-balance/upgrade tool capacity to handle full rate, ensuring complete traffic reaches SIEM without SPAN-induced loss."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2321,
+  "tokens_out": 2903,
+  "cost_usd": 0.01524,
+  "seconds": 12.3,
+  "recorded_at": "2026-10-29"
+ }
+}

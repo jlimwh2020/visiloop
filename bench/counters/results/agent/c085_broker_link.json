@@ -1,0 +1,36 @@
+{
+ "feed": "c085_broker_link",
+ "status": "degraded",
+ "summary": "NDR feed c085_broker_link is severely degraded by packet loss: BROKER-A port 1/5 is discarding 56.32% of packets due to 10 Gbps egress saturation plus an additional 3.66% loss on the link to NDR eth1. NDR is missing >50% of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "BROKER-A port 1/5 (to NDR) is oversubscribed: average load 100% of 10 Gbps with bursts higher, causing the packet broker to discard 96,697,500 packets on output (56.32% loss). Additionally, 75,000,000 packets sent by the broker but only 72,253,200 seen on NDR eth1 indicates ~3.66% loss on the physical path between them (cable/optic/patch).",
+   "impact_on_tool": "NDR requires complete bidirectional traffic with full payload; missing >56% of packets breaks flow reassembly, state tracking and detection. Majority of sessions invisible, alerts and forensic coverage severely degraded.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port": "BROKER-A 1/5",
+     "target_group": "NDR eth1",
+     "add_ports": 1
+    },
+    "why": "Distribute the >10 Gbps aggregate across 2+ 10G tool ports (or upgrade to 25/40/100G) to eliminate egress queue drops, and simultaneously check/replace optics/cabling on BROKER-A 1/5 to NDR eth1 to fix the additional 3.66% link loss. If capacity cannot be added immediately, apply selective filtering to reduce load below 10 Gbps."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2300,
+  "tokens_out": 2188,
+  "cost_usd": 0.01217,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

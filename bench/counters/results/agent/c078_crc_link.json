@@ -1,0 +1,54 @@
+{
+ "feed": "c078_crc_link",
+ "status": "degraded",
+ "summary": "Feed c078_crc_link to APM is degraded: VF-1 port 1 ingress has high CRC/alignment errors (0.165%) and 1.24% packet loss on the link from DC-CORE-1 Gi1/0/48 SPAN destination. Both faults corrupt/lose traffic before the APM, breaking transaction visibility.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "VF-1 port 1 (input) received 6,720 damaged frames with CRC/alignment errors (0.165% vs 0.001% threshold). Classic Layer-1 fault on the ingress link into the packet broker - faulty/dirty cable or optic, or duplex mismatch corrupting frames in transit.",
+   "impact_on_tool": "APM receives corrupted frames that are dropped by NIC/broker ASIC; results in incomplete TCP reassembly, gaps in transaction traces, false retransmission/latency signals and reduced application performance coverage.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 port 1 (input)",
+     "metric": 0.00165,
+     "threshold": 1e-05,
+     "frames_damaged": 6720
+    },
+    "why": "Clean Layer-1 is prerequisite for APM accuracy - damaged frames cannot be analyzed and are discarded, so fixing cable/optic/duplex restores complete, correct traffic to the tool."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "1.24% loss on the wire between DC-CORE-1 Gi1/0/48 (SPAN destination) and VF-1 port 1 (input): 4,125,000 packets sent but only 4,073,940 received (~51,060 packets lost). Loss occurs before the visibility fabric due to faulty cable/optic, intermediate device, or SPAN oversubscription on that link.",
+   "impact_on_tool": "APM loses ~1 in 80 packets before analysis, causing broken flows, missed requests/responses, inaccurate response-time and availability calculations, and blind spots for intermittent application issues.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "link": "DC-CORE-1 Gi1/0/48 -> VF-1 port 1",
+     "packets_sent": 4125000,
+     "packets_received": 4073940,
+     "loss_percent": 1.24
+    },
+    "why": "APM needs lossless delivery for transaction reconstruction; repairing/replacing the inter-switch link and verifying SPAN destination capacity ensures the APM sees the full packet stream."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2362,
+  "tokens_out": 1990,
+  "cost_usd": 0.01141,
+  "seconds": 8.3,
+  "recorded_at": "2026-10-29"
+ }
+}

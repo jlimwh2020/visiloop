@@ -1,0 +1,36 @@
+{
+ "feed": "c004_nic",
+ "status": "degraded",
+ "summary": "SIEM feed c004_nic is degraded due to 1.80% packet loss at the tool (210,060 discards on SIEM eth1). Physical link is healthy, but SIEM capture interface cannot keep up, causing incomplete visibility.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SIEM eth1 is discarding packets it has already received because its 1Gbps capture interface/pipeline cannot keep up with the offered load from the packet broker (210,060 discards, 1.80% loss vs 0.1% threshold). Link error checks are healthy, so this is tool-side oversubscription/capture exhaustion, not cabling or optics.",
+   "impact_on_tool": "SIEM loses ~1.8% of packets before analysis, creating blind spots for correlation and detection. Events/alerts will be incomplete or missed, reducing detection coverage despite healthy TAP/SPAN path.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "SIEM eth1",
+     "current_speed_gbps": 1,
+     "suggested_action": "upgrade to 10Gbps capture or tune capture buffers and add broker-side filtering/slicing to fit 1Gbps"
+    },
+    "why": "Discards at the tool NIC mean the broker is delivering more traffic (pps/bps) than the 1G SIEM can ingest. Increasing tool ingest capacity and/or reducing load at the packet broker via filtering to SIEM-relevant traffic only or load-balancing will eliminate drops and restore complete SIEM visibility."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2224,
+  "tokens_out": 2761,
+  "cost_usd": 0.01451,
+  "seconds": 13.6,
+  "recorded_at": "2026-10-29"
+ }
+}

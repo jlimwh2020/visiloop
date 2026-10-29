@@ -1,0 +1,35 @@
+{
+ "feed": "c040_crc",
+ "status": "degraded",
+ "summary": "Feed c040_crc to SIEM is degraded due to high physical-layer errors on NPB-01 port 1/1. 56,880 CRC/alignment damaged frames (error rate 0.004442) will cause corrupted/dropped traffic to SIEM.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "NPB-01 port 1/1 (input) received 56,880 damaged frames with CRC/alignment errors exceeding threshold (0.004442 > 0.00001), indicating faulty cable/optic or duplex mismatch on the link into the packet broker",
+   "impact_on_tool": "SIEM receives corrupted and truncated frames that will be dropped by NIC/broker; results in missing events/flows, incomplete log correlation and reduced detection coverage even though SIEM does not require full payload or bidirectional traffic",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "NPB-01 1/1",
+     "port": "NPB-01 1/1"
+    },
+    "why": "Physical layer must be clean before any broker policy can help - replace cable/optic, verify duplex/speed negotiation, and re-check optics on NPB-01 1/1 to eliminate CRC errors at ingress"
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2234,
+  "tokens_out": 1648,
+  "cost_usd": 0.0098,
+  "seconds": 7.3,
+  "recorded_at": "2026-10-29"
+ }
+}

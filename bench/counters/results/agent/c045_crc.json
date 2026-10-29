@@ -1,0 +1,36 @@
+{
+ "feed": "c045_crc",
+ "status": "degraded",
+ "summary": "Feed c045_crc to APM is degraded due to high physical-layer errors on VF-1 port 3 input: 14,100 CRC/alignment damaged frames (0.324% error rate vs 1e-05 threshold). Corrupted traffic will be dropped before APM analysis, reducing coverage until link is repaired.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "VF-1 port 3 (input) received 14,100 damaged frames with CRC/alignment errors (metric 0.003241 vs threshold 1e-05), indicating a faulty cable, optic, or duplex mismatch on the link into VF-1.",
+   "impact_on_tool": "APM will drop corrupted frames, causing incomplete transactions, missing request/response pairs, and inaccurate latency/error metrics. APM needs both directions and cannot correctly measure performance on damaged/incomplete flows.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 3",
+     "device": "VF-1",
+     "port": "3"
+    },
+    "why": "Physical layer corruption cannot be fixed by packet broker policy; the faulty cable/optic/duplex on VF-1 port 3 must be inspected, reseated/replaced, and autonegotiation verified, then counters cleared to confirm error rate drops below threshold before APM coverage can be trusted."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2228,
+  "tokens_out": 2143,
+  "cost_usd": 0.01189,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

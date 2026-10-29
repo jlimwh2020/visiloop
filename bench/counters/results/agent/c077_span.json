@@ -1,0 +1,38 @@
+{
+ "feed": "c077_span",
+ "status": "degraded",
+ "summary": "62.1% packet loss on SPAN destination CORE-SW-01 Gi1/0/48: 2.64 Gbps mirrored from Gi1/0/1 into 1 Gbps IDS port, IDS severely blinded.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription at CORE-SW-01: session should copy 19,807,440 packets (2.64 Gbps) from mirrored port Gi1/0/1 to SPAN destination Gi1/0/48 (1 Gbps). Destination averaged 100% load and discarded 12,307,500 packets on output (62.14% lost, 7,500,000 sent vs 19,807,440 expected). SPAN has no buffering and drops under sustained oversubscription plus bursts.",
+   "impact_on_tool": "IDS needs both directions and full payload but misses 62% of packets. Stateful signatures, flow reassembly, and detection of exploits/C2/exfiltration fail with massive false negatives; IDS is effectively blind to more than half of traffic.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "CORE-SW-01 Gi1/0/1",
+     "tap_type": "passive fiber/copper TAP",
+     "broker_requirement": "packet broker to aggregate TAP feed and load-balance to IDS",
+     "required_capacity_gbps": 2.64,
+     "tool_port_speed_gbps": 1
+    },
+    "why": "TAP provides lossless, out-of-band copy unlike SPAN which discards when mirrored rate exceeds destination rate. Replacing SPAN with TAP plus a packet broker allows lossless capture of the full 2.64 Gbps and load-balancing/filtering across multiple 1 Gbps IDS ports or upgrading IDS to 10 Gbps, eliminating the 62% blind spot."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2317,
+  "tokens_out": 2821,
+  "cost_usd": 0.01489,
+  "seconds": 12.0,
+  "recorded_at": "2026-10-29"
+ }
+}

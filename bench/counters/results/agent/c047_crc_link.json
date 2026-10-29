@@ -1,0 +1,50 @@
+{
+ "feed": "c047_crc_link",
+ "status": "degraded",
+ "summary": "Feed c047_crc_link to NDR is degraded: high CRC/alignment error rate on NDR eth1 (0.425% damaged frames) and 0.90% packet loss on the link between CORE-SW-01 SPAN destination and VF-1 packet broker input. Both cause incomplete traffic to NDR and reduced detection coverage.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Physical layer fault on the ingress link into NDR eth1 causing CRC/alignment errors (19,860 damaged frames, 0.425% vs 0.001% threshold) - most likely faulty cable/optic, dirty connector, or duplex/speed mismatch.",
+   "impact_on_tool": "NDR NIC drops corrupted frames before analysis; results in truncated flows, failed TCP reassembly, missed signatures and behavioral detections, and gaps in forensic evidence. NDR requires full payload and both directions, so any corruption directly reduces detection fidelity.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "interface": "NDR eth1",
+     "location": "NDR eth1 ingress link"
+    },
+    "why": "Clean/replace cable and optics, check SFP diagnostics, verify speed/duplex and auto-negotiation on both ends, and re-test error counters to eliminate CRC errors before the NDR."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "medium",
+   "root_cause": "Packet loss on the path between CORE-SW-01 Gi1/0/48 (SPAN destination) and VF-1 port 1/1 (packet broker input): 4,714,260 sent vs 4,671,900 received (42,360 packets / 0.90% lost, threshold 0.1%) due to faulty cable/optic or an unmonitored intermediate device/tap on that link.",
+   "impact_on_tool": "NDR is missing ~0.9% of packets upstream of the broker, creating flow gaps and one-sided sessions. Even sub-1% loss degrades NDR detection (needs both directions and full payload) causing missed alerts and incomplete metadata.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "link": "CORE-SW-01 Gi1/0/48 -> VF-1 1/1",
+     "location": "VF-1 1/1"
+    },
+    "why": "Inspect and replace cable/optics between SPAN destination and broker input, verify interface counters/errors on both ends, remove any unmonitored device in path, and validate packet counts match after fix to ensure lossless delivery to NDR."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2356,
+  "tokens_out": 1830,
+  "cost_usd": 0.01072,
+  "seconds": 7.6,
+  "recorded_at": "2026-10-29"
+ }
+}

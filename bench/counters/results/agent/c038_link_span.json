@@ -1,0 +1,55 @@
+{
+ "feed": "c038_link_span",
+ "status": "degraded",
+ "summary": "Feed c038_link_span is severely degraded: SPAN destination oversubscribed (2.04 Gbps mirrored into 1 Gbps port) causing 50.96% loss at DIST-SW-02 Gi1/0/48 plus 0.66% loss on link to NPB-01. NDR receives only ~49% of packets, halving detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN destination oversubscription at DIST-SW-02 Gi1/0/48: SPAN session should copy 21,846,420 packets from Gi1/0/1 (2.04 Gbps) but Gi1/0/48 is only 1 Gbps and sent only 10,714,260 packets, discarding 11,132,100 packets on output (average load 100% of 1 Gbps, bursts higher) = 50.96% loss at source",
+   "impact_on_tool": "NDR (needs both directions and full payload, 10 Gbps port) receives less than half of required traffic. Flows truncated, sessions incomplete, IDS signatures and anomaly detection miss ~51% of packets, forensics unreliable and alerts suppressed",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "device": "DIST-SW-02",
+     "span_destination": "Gi1/0/48",
+     "mirrored_source": "Gi1/0/1",
+     "bottleneck_gbps": 1,
+     "mirrored_gbps": 2.04
+    },
+    "why": "Passive TAP delivers line-rate copy without SPAN buffer contention or 1G destination policing. Eliminates 51% oversubscription loss at source and preserves both directions/full payload needed by NDR; aggregate via NPB with adequate capacity (10G)."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "medium",
+   "root_cause": "Additional 0.66% loss on link between DIST-SW-02 Gi1/0/48 (SPAN destination) and NPB-01 port 1 (input): Gi1/0/48 sent 10,714,260 packets but NPB-01 port 1 saw only 10,643,460 (70,800 packets lost on cable/optic or unmonitored device)",
+   "impact_on_tool": "Further degrades NDR completeness after SPAN loss; adds gaps in already halved feed, causing additional flow reassembly failures and missed detections",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "from": "DIST-SW-02 Gi1/0/48",
+     "to": "NPB-01 port 1",
+     "loss_packets": 70800,
+     "loss_percent": 0.66
+    },
+    "why": "Link-level loss indicates physical layer or intermediate device issue (optic, cable, patch, media converter) that must be fixed after TAP replacement to ensure lossless delivery to NDR"
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2389,
+  "tokens_out": 2740,
+  "cost_usd": 0.01463,
+  "seconds": 10.5,
+  "recorded_at": "2026-10-29"
+ }
+}

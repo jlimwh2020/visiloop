@@ -1,0 +1,53 @@
+{
+ "feed": "c089_broker_nic",
+ "status": "degraded",
+ "summary": "NDR feed c089_broker_nic is severely degraded by packet loss: BROKER-A port 5 discarding 23.24% (56,755,680 pkts) at 100% avg 10G load with higher bursts, plus NDR eth1 discarding 4.68% (8,775,480 pkts) on capture. NDR is missing ~27% of traffic and cannot provide complete detection.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "BROKER-A port 5 (to NDR) is oversubscribed - average load 100% of 10 Gbps with bursts higher, causing egress queue drops of 56,755,680 packets (23.24% lost). This is broker output discard before traffic reaches the tool.",
+   "impact_on_tool": "NDR misses ~1 in 4 packets/flows; bidirectional flow reassembly fails, IDS signatures and anomaly detection miss attacks, forensics incomplete, especially during bursts when attacks likely hide.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "device": "BROKER-A",
+     "egress_port": "5",
+     "tool_interface": "NDR eth1",
+     "action_detail": "add 1-2x10G tool ports and configure symmetric 5-tuple hashing to NDR cluster"
+    },
+    "why": "Average load already at line-rate so any burst must drop. Load-balancing the aggregate across multiple 10G tool ports with flow-symmetric hashing keeps both directions of each flow together (required by NDR) while bringing per-port utilization below ~60% and eliminating broker egress drops. Apply selective filtering only after balancing if sustained load still >70%."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "NDR eth1 capture interface overrun discarding 8,775,480 packets it did receive (4.68% lost) - tool cannot keep up with delivered rate even before broker drops.",
+   "impact_on_tool": "Even traffic that survives the broker is not analyzed; NDR drops packets internally causing truncated flows, missed detections, and gaps in SIEM/NDR evidence.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "tool_interface": "NDR eth1",
+     "current_rate_gbps": 10,
+     "suggested": "add RSS queues, increase capture buffers, enable additional 10G interface via load_balance, or upgrade to 25G NIC/CPU"
+    },
+    "why": "Tool-side drops indicate capture pipeline bottleneck. Increasing capture capacity and spreading load across multiple interfaces/queues lets NDR ingest the full 10G+ aggregate without loss, required for full-payload NDR analysis."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2271,
+  "tokens_out": 3053,
+  "cost_usd": 0.01581,
+  "seconds": 13.9,
+  "recorded_at": "2026-10-29"
+ }
+}

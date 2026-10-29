@@ -1,0 +1,39 @@
+{
+ "feed": "c075_nic",
+ "status": "degraded",
+ "summary": "APM feed c075_nic is degraded: APM eth1 is discarding 4.01% (485,640 packets) because its capture interface cannot keep up. Link error checks are healthy, so loss is tool-side overload, not network corruption.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "APM eth1 capture pipeline overloaded - tool discarded 485,640 packets it received (4.01% loss, threshold 0.1%). Link is healthy, so this is not network loss but the APM NIC/tool cannot sustain the offered rate.",
+   "impact_on_tool": "APM missing ~4% of packets in both directions it requires; results in incomplete transaction traces, inaccurate latency/error rates, missed anomalies and gaps in service dependency maps",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "group": "apm_cluster",
+     "hash": "5-tuple",
+     "egress_ports": [
+      "apm1",
+      "apm2"
+     ]
+    },
+    "why": "Distribute c075_nic across multiple APM instances/ports via packet broker load-balancing (5-tuple hash preserves both directions per flow) to keep per-interface rate below 10Gbps and eliminate drops. Since APM needs_full_payload=false, adding slicing/filtering as secondary reduction is also safe if single tool must be retained."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2223,
+  "tokens_out": 2669,
+  "cost_usd": 0.01412,
+  "seconds": 13.4,
+  "recorded_at": "2026-10-29"
+ }
+}

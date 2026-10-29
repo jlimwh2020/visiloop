@@ -1,0 +1,54 @@
+{
+ "feed": "c033_link_crc",
+ "status": "degraded",
+ "summary": "Feed c033_link_crc to SIEM is degraded: NPB-01 port 1/1 shows high CRC/alignment errors (0.486%) and 1.45% packet loss between DC-CORE-1 SPAN destination and NPB input. Both indicate Layer 1 fault on the link into the packet broker causing corrupted and missing traffic before the SIEM.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Physical layer fault on NPB-01 port 1/1 (input) - 19,860 damaged frames with CRC/alignment errors (0.486% vs 0.001% threshold). Most likely faulty cable, bad optic, or duplex mismatch on the link into the broker corrupting frames on the wire.",
+   "impact_on_tool": "SIEM receives corrupted frames that are dropped by NIC/broker and never logged. Even though SIEM does not need full payload, FCS failures mean events are lost entirely, creating detection gaps and incomplete correlation.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "device": "NPB-01",
+     "port": "1/1",
+     "peer": "DC-CORE-1 Gi1/0/48",
+     "metric": 0.00486
+    },
+    "why": "No broker policy can recover frames already corrupted at ingress. Fix/replace cable/optic, check duplex/speed negotiation and error counters on both ends to eliminate CRC errors before forwarding to SIEM."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Loss on the link between DC-CORE-1 Gi1/0/48 (SPAN destination) and NPB-01 port 1/1 - SPAN sent 4,146,420 packets but broker saw only 4,086,300 (60,120 lost, 1.45% vs 0.1% threshold). Same faulty cable/optic, dirty fiber, or unmonitored patch causing drops between SPAN output and broker input.",
+   "impact_on_tool": "SIEM is blind to ~1.45% of SPAN traffic at random. Missing packets hide alerts, break flow/session reconstruction and reduce detection coverage for lateral movement and exfiltration.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "link": "DC-CORE-1 Gi1/0/48 -> NPB-01 1/1",
+     "sent": 4146420,
+     "received": 4086300,
+     "loss_pct": 1.45
+    },
+    "why": "Restore lossless delivery from SPAN destination to broker. Reseat/replace cable/optic, verify SPAN destination not oversubscribed/dropping, and if loss persists consider replacing SPAN with TAP for reliable capture."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2364,
+  "tokens_out": 2450,
+  "cost_usd": 0.01337,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-29 09:53",
+ "generated": "2026-10-29 10:15",
  "rows": [
   {
    "name": "c001_broker",
@@ -26,7 +26,21 @@
    ],
    "mild": [
     "crc_errors"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01393,
+    "seconds": 14.4,
+    "ungrounded": 0,
+    "summary": "IDS feed c001_broker is severely degraded: 48.02% packet loss due to egress oversubscription on VF-1 port 5. 1 Gbps IDS port is saturated (100% avg load, bursts higher) and discarded 17,324,940 packets."
+   }
   },
   {
    "name": "c002_link_span",
@@ -52,7 +66,21 @@
     "span_oversubscribed",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01187,
+    "seconds": 9.7,
+    "ungrounded": 0,
+    "summary": "SPAN destination oversubscription causing 27.22% loss plus 2.98% inter-device link loss; NDR missing ~29% of packets, severely degrading detection coverage."
+   }
   },
   {
    "name": "c003_mild",
@@ -91,7 +119,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01451,
+    "seconds": 13.6,
+    "ungrounded": 0,
+    "summary": "SIEM feed c004_nic is degraded due to 1.80% packet loss at the tool (210,060 discards on SIEM eth1). Physical link is healthy, but SIEM capture interface cannot keep up, causing incomplete visibility."
+   }
   },
   {
    "name": "c005_nic",
@@ -116,7 +158,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01226,
+    "seconds": 10.7,
+    "ungrounded": 0,
+    "summary": "Feed c005_nic is degraded: IDS eth1 is discarding 4.44% of packets (248,280 packets) because its 1G capture interface cannot keep up, causing detection gaps. Physical link is healthy."
+   }
   },
   {
    "name": "c006_nic",
@@ -141,7 +197,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01273,
+    "seconds": 16.4,
+    "ungrounded": 0,
+    "summary": "APM feed c006_nic is degraded: 3.65% packet loss (51,780 discards) at APM eth1 capture interface due to tool oversubscription. Link health is clean, so loss is not physical layer but tool cannot keep up with offered rate."
+   }
   },
   {
    "name": "c007_nic_crc",
@@ -174,7 +244,23 @@
     "crc_errors",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01038,
+    "seconds": 12.7,
+    "ungrounded": 0,
+    "summary": "Feed c007_nic_crc is degraded: VF-1 input is corrupting frames (CRC errors) and SIEM eth1 is dropping 1.79% of packets due to capture overrun. Both cause incomplete/incorrect traffic to SIEM and detection gaps."
+   }
   },
   {
    "name": "c008_nic",
@@ -199,7 +285,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01005,
+    "seconds": 10.8,
+    "ungrounded": 0,
+    "summary": "Feed c008_nic is degraded: APM eth1 is discarding 2.11% of packets (166,500) due to capture overload, despite healthy physical links. Tool is oversubscribed and missing traffic."
+   }
   },
   {
    "name": "c009_healthy",
@@ -236,7 +336,21 @@
    "faults": [
     "broker_congestion"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.0123,
+    "seconds": 13.6,
+    "ungrounded": 0,
+    "summary": "APM feed c010_broker is dropping 50.37% of packets at packet broker egress VF-1 1/5 due to sustained 10 Gbps saturation (bursts higher). Link is otherwise healthy. APM is missing half of transactions."
+   }
   },
   {
    "name": "c011_healthy",
@@ -274,7 +388,21 @@
     "broker_congestion",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "filter"
+    },
+    "fixes_ok": true,
+    "cost": 0.0143,
+    "seconds": 11.6,
+    "ungrounded": 0,
+    "summary": "SIEM feed c012_broker_nic is severely degraded by sustained oversubscription: VF-1 port 5 (1 Gbps to SIEM) is at 100% average load and dropping ~50.7% of packets, plus SIEM eth1 dropping another ~4.9% on ingress. SIEM is missing more than half of events."
+   }
   },
   {
    "name": "c013_healthy",
@@ -323,7 +451,21 @@
    "faults": [
     "broker_congestion"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": false,
+    "cost": 0.01056,
+    "seconds": 8.4,
+    "ungrounded": 0,
+    "summary": "Feed c015_broker to NDR is severely degraded: 59.82% packet loss due to egress congestion on BROKER-A port 12. 1 Gbps delivery port is saturated (100% avg, bursts higher) while NDR can handle 10 Gbps."
+   }
   },
   {
    "name": "c016_crc",
@@ -348,7 +490,21 @@
    "faults": [
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01095,
+    "seconds": 9.0,
+    "ungrounded": 0,
+    "summary": "Feed c016_crc to IDS is degraded due to high CRC/alignment errors on ingress link VF-1 port 1. 3,720 damaged frames (error rate 0.001088 > threshold 1e-05) indicate physical layer fault, causing corrupted traffic to IDS and reduced detection coverage. Path loss check is healthy."
+   }
   },
   {
    "name": "c017_span_nic",
@@ -374,7 +530,21 @@
     "span_oversubscribed",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01491,
+    "seconds": 15.1,
+    "ungrounded": 0,
+    "summary": "SPAN oversubscription at CORE-SW-01 Gi1/0/48 causes 42.26% loss before NDR (1.73 Gbps mirrored into 1 Gbps SPAN destination) plus 4.10% drops at NDR eth1; NDR receives only ~57% of intended traffic, severely degrading detection coverage."
+   }
   },
   {
    "name": "c018_nic",
@@ -399,7 +569,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01008,
+    "seconds": 8.7,
+    "ungrounded": 0,
+    "summary": "NDR on c018_nic is dropping 2.59% of packets at its capture interface (103,860 discards) due to overload, exceeding 0.1% threshold. Link is healthy but tool cannot keep up."
+   }
   },
   {
    "name": "c019_link_nic",
@@ -425,7 +609,21 @@
     "nic_overrun",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.0167,
+    "seconds": 13.8,
+    "ungrounded": 0,
+    "summary": "IDS feed c019_link_nic is degraded: ~6.2% total loss. IDS eth1 discarded 3.87% (153,840 pkts) due to capture overload and an additional 2.34% (95,220 pkts) lost on the wire between NPB-01 port 12 and IDS eth1. IDS requires both directions and full payload and will miss attacks with this loss."
+   }
   },
   {
    "name": "c020_mild",
@@ -466,7 +664,21 @@
    ],
    "mild": [
     "nic_overrun"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.0094,
+    "seconds": 6.5,
+    "ungrounded": 0,
+    "summary": "IDS feed c021_link has 2.92% packet loss on the path between SPAN destination and packet broker input, exceeding 0.1% threshold. IDS will miss attacks due to incomplete traffic."
+   }
   },
   {
    "name": "c022_span_link",
@@ -492,7 +704,21 @@
     "span_oversubscribed",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01183,
+    "seconds": 9.4,
+    "ungrounded": 0,
+    "summary": "SPAN destination LEAF-07 Gi1/0/48 is severely oversubscribed (2.06 Gbps mirrored into 1 Gbps) discarding 51.48% (7,957,500/15,457,440 packets) plus 3.56% loss on link to BROKER-A port 1. IDS receives only ~46.8% of intended traffic."
+   }
   },
   {
    "name": "c023_nic_broker",
@@ -518,7 +744,21 @@
     "broker_congestion",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01211,
+    "seconds": 11.6,
+    "ungrounded": 0,
+    "summary": "Feed c023_nic_broker is severely degraded: BROKER-A port 5 to NDR is saturated at 100% of 10 Gbps (bursts higher) discarding 45.81% (90,589,260 pkts) and NDR eth1 is also overrun discarding 1.92% (2,059,140 pkts). NDR is missing ~47% of traffic."
+   }
   },
   {
    "name": "c024_mild",
@@ -569,7 +809,21 @@
    "faults": [
     "span_oversubscribed"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01162,
+    "seconds": 9.0,
+    "ungrounded": 0,
+    "summary": "SIEM feed c026_span is losing 61.51% of packets due to SPAN oversubscription: 2.60 Gbps mirrored from LEAF-07 Gi1/0/1 into 1 Gbps SPAN destination LEAF-07 Gi1/0/48."
+   }
   },
   {
    "name": "c027_healthy",
@@ -614,7 +868,23 @@
     "span_oversubscribed",
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01299,
+    "seconds": 10.7,
+    "ungrounded": 0,
+    "summary": "IDS feed c028_crc_span is severely degraded: 63.33% SPAN loss from oversubscription (2.73 Gbps into 1 Gbps) plus CRC errors on ingress. IDS is blind to majority of traffic and receives corrupted frames, breaking detection."
+   }
   },
   {
    "name": "c029_nic",
@@ -639,7 +909,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01038,
+    "seconds": 8.4,
+    "ungrounded": 0,
+    "summary": "NDR on c029_nic is discarding 1.31% of packets (31,560 packets) at its capture interface NDR eth1, exceeding 0.1% threshold. Link is healthy, loss is at the tool itself due to capture overload, creating detection gaps."
+   }
   },
   {
    "name": "c030_link",
@@ -664,7 +948,21 @@
    "faults": [
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01128,
+    "seconds": 7.9,
+    "ungrounded": 0,
+    "summary": "SIEM feed c030_link is degraded: 3.75% packet loss on the link between VF-1 port 1/5 and SIEM eth1 (32,625,000 sent vs 31,402,980 received), well above 0.1% threshold."
+   }
   },
   {
    "name": "c031_nic",
@@ -691,7 +989,21 @@
    ],
    "mild": [
     "crc_errors"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01763,
+    "seconds": 21.1,
+    "ungrounded": 0,
+    "summary": "APM feed c031_nic is degraded: tool NIC eth1 is discarding 1.47% of packets (38,520 discards) due to capture overrun, while physical link is healthy. Visibility is incomplete."
+   }
   },
   {
    "name": "c032_broker_nic",
@@ -717,7 +1029,21 @@
     "broker_congestion",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01833,
+    "seconds": 20.3,
+    "ungrounded": 0,
+    "summary": "Feed c032_broker_nic is degraded: NPB-01 port 12 to IDS is saturated at 100% of 1 Gbps (bursts higher) causing 47.86% loss (9,835,680 discards) at broker plus 0.75% loss (80,280 discards) at IDS eth1. IDS is missing nearly half of traffic."
+   }
   },
   {
    "name": "c033_link_crc",
@@ -750,7 +1076,23 @@
     "crc_errors",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01337,
+    "seconds": 10.9,
+    "ungrounded": 0,
+    "summary": "Feed c033_link_crc to SIEM is degraded: NPB-01 port 1/1 shows high CRC/alignment errors (0.486%) and 1.45% packet loss between DC-CORE-1 SPAN destination and NPB input. Both indicate Layer 1 fault on the link into the packet broker causing corrupted and missing traffic before the SIEM."
+   }
   },
   {
    "name": "c034_mild",
@@ -789,7 +1131,21 @@
    "faults": [
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.00999,
+    "seconds": 8.2,
+    "ungrounded": 0,
+    "summary": "Feed c035_crc to APM is degraded: VF-1 port 1 input is delivering damaged frames (CRC/alignment errors) above threshold, causing incomplete traffic to APM."
+   }
   },
   {
    "name": "c036_nic_broker",
@@ -815,7 +1171,21 @@
     "broker_congestion",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01388,
+    "seconds": 11.3,
+    "ungrounded": 0,
+    "summary": "Feed c036_nic_broker is degraded: BROKER-A port 5 to NDR discarding 56.72% (98,287,500 pkts, avg 100% of 10 Gbps, bursts higher) plus NDR eth1 discarding 4.82% (3,613,320 pkts) - NDR missing majority of traffic due to egress congestion and capture overload"
+   }
   },
   {
    "name": "c037_healthy",
@@ -853,7 +1223,21 @@
     "span_oversubscribed",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01463,
+    "seconds": 10.5,
+    "ungrounded": 0,
+    "summary": "Feed c038_link_span is severely degraded: SPAN destination oversubscribed (2.04 Gbps mirrored into 1 Gbps port) causing 50.96% loss at DIST-SW-02 Gi1/0/48 plus 0.66% loss on link to NPB-01. NDR receives only ~49% of packets, halving detection coverage."
+   }
   },
   {
    "name": "c039_nic_crc",
@@ -886,7 +1270,23 @@
     "crc_errors",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01079,
+    "seconds": 8.8,
+    "ungrounded": 0,
+    "summary": "Feed c039_nic_crc is degraded: VF-1 port 3 input is corrupting frames with CRC/alignment errors (0.47% damaged) and IDS eth1 is discarding 0.58% of received packets due to capture overload. IDS is receiving incomplete and corrupted traffic, reducing detection coverage."
+   }
   },
   {
    "name": "c040_crc",
@@ -911,7 +1311,21 @@
    "faults": [
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.0098,
+    "seconds": 7.3,
+    "ungrounded": 0,
+    "summary": "Feed c040_crc to SIEM is degraded due to high physical-layer errors on NPB-01 port 1/1. 56,880 CRC/alignment damaged frames (error rate 0.004442) will cause corrupted/dropped traffic to SIEM."
+   }
   },
   {
    "name": "c041_nic",
@@ -938,7 +1352,21 @@
    ],
    "mild": [
     "link_loss"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01238,
+    "seconds": 10.9,
+    "ungrounded": 0,
+    "summary": "Feed c041_nic is degraded: APM eth1 is discarding 2.05% of packets (52,860 discards) because its capture pipeline cannot keep up. Link health is good, so loss is tool-side oversubscription causing incomplete APM visibility."
+   }
   },
   {
    "name": "c042_nic_span",
@@ -964,7 +1392,21 @@
     "span_oversubscribed",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01355,
+    "seconds": 13.7,
+    "ungrounded": 0,
+    "summary": "SPAN destination oversubscription causing 54.94% loss at switch plus 2.12% drops at SIEM NIC - SIEM receives only ~45% of intended traffic, severely degrading detection coverage."
+   }
   },
   {
    "name": "c043_span_crc",
@@ -997,7 +1439,23 @@
     "span_oversubscribed",
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01341,
+    "seconds": 13.7,
+    "ungrounded": 0,
+    "summary": "APM feed c043_span_crc is severely degraded: 61.42% SPAN loss due to oversubscription (2.59 Gbps mirrored into 1 Gbps destination) plus 0.44% CRC/alignment errors on APM eth1. APM is missing majority of transactions and receiving corrupted frames."
+   }
   },
   {
    "name": "c044_link",
@@ -1022,7 +1480,21 @@
    "faults": [
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.0104,
+    "seconds": 10.9,
+    "ungrounded": 0,
+    "summary": "Feed c044_link to NDR is degraded: 1.10% packet loss (1,928,460/1,950,000 received) on link LEAF-07 Gi1/0/48 (SPAN destination) -> VF-1 port 3 exceeds 0.1% threshold by 11x. Link error counters healthy, indicating loss on the interconnect (cable/optic/unmonitored device)."
+   }
   },
   {
    "name": "c045_crc",
@@ -1047,7 +1519,21 @@
    "faults": [
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01189,
+    "seconds": 10.2,
+    "ungrounded": 0,
+    "summary": "Feed c045_crc to APM is degraded due to high physical-layer errors on VF-1 port 3 input: 14,100 CRC/alignment damaged frames (0.324% error rate vs 1e-05 threshold). Corrupted traffic will be dropped before APM analysis, reducing coverage until link is repaired."
+   }
   },
   {
    "name": "c046_broker",
@@ -1072,7 +1558,21 @@
    "faults": [
     "broker_congestion"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01109,
+    "seconds": 9.3,
+    "ungrounded": 0,
+    "summary": "Feed c046_broker is degraded: NPB-01 port 5 to NDR is discarding 53.62% of packets (12,385,680 drops) due to 1 Gbps egress saturation (100% avg load, bursts higher). NDR is missing majority of traffic."
+   }
   },
   {
    "name": "c047_crc_link",
@@ -1105,7 +1605,23 @@
     "crc_errors",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01072,
+    "seconds": 7.6,
+    "ungrounded": 0,
+    "summary": "Feed c047_crc_link to NDR is degraded: high CRC/alignment error rate on NDR eth1 (0.425% damaged frames) and 0.90% packet loss on the link between CORE-SW-01 SPAN destination and VF-1 packet broker input. Both cause incomplete traffic to NDR and reduced detection coverage."
+   }
   },
   {
    "name": "c048_nic",
@@ -1130,7 +1646,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01343,
+    "seconds": 11.0,
+    "ungrounded": 0,
+    "summary": "NDR on c048_nic is discarding 4.87% of packets at NDR eth1 (90,960 packets, threshold 0.1%). Link is healthy but tool capture interface cannot keep up, causing significant detection coverage loss."
+   }
   },
   {
    "name": "c049_nic_span",
@@ -1156,7 +1686,21 @@
     "span_oversubscribed",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01839,
+    "seconds": 15.4,
+    "ungrounded": 0,
+    "summary": "Feed c049_nic_span is severely degraded: 56.33% packet loss due to SPAN oversubscription (2.29 Gbps mirrored into 1 Gbps destination) plus 2.88% loss at IDS eth1. IDS receives only ~43% of intended traffic, breaking detection coverage."
+   }
   },
   {
    "name": "c050_mild",
@@ -1196,7 +1740,21 @@
     "broker_congestion",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01388,
+    "seconds": 11.8,
+    "ungrounded": 0,
+    "summary": "Feed c051_broker_nic is degraded: NPB-01 port 12 averaged 100% of 10 Gbps and discarded 12.39% on egress (15,149,940 pkts), plus APM eth1 discarded an additional 2.74% (2,938,260 pkts) as capture could not keep up. Sustained oversubscription with bursty loss."
+   }
   },
   {
    "name": "c052_healthy",
@@ -1257,7 +1815,21 @@
    "faults": [
     "broker_congestion"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01749,
+    "seconds": 20.7,
+    "ungrounded": 0,
+    "summary": "Feed c055_broker to APM is degraded: 66.61% packet loss from egress congestion on VF-1 port 1/5. Tool port saturated at 100% of 10 Gbps (bursts higher) discarding 213,782,100 packets, APM missing majority of traffic."
+   }
   },
   {
    "name": "c056_mild",
@@ -1296,7 +1868,21 @@
    "faults": [
     "span_oversubscribed"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01365,
+    "seconds": 15.7,
+    "ungrounded": 0,
+    "summary": "IDS feed c057_span is severely degraded: SPAN destination is oversubscribed (2.13 Gbps mirrored into 1 Gbps port) causing 53.03% packet loss before traffic reaches the IDS."
+   }
   },
   {
    "name": "c058_nic",
@@ -1323,7 +1909,21 @@
    ],
    "mild": [
     "crc_errors"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01535,
+    "seconds": 15.8,
+    "ungrounded": 0,
+    "summary": "APM on c058_nic is discarding 0.78% of packets (56,040 drops on APM eth1) because capture interface cannot keep up; link is healthy but tool is oversubscribed."
+   }
   },
   {
    "name": "c059_crc",
@@ -1350,7 +1950,21 @@
    ],
    "mild": [
     "link_loss"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.00845,
+    "seconds": 7.1,
+    "ungrounded": 0,
+    "summary": "Feed c059_crc to SIEM is degraded due to physical layer errors on ingress: VF-1 port 1 received 1,740 CRC/alignment damaged frames (error rate 0.0218% > 0.001% threshold). No packet loss on path was detected."
+   }
   },
   {
    "name": "c060_nic_crc",
@@ -1383,7 +1997,23 @@
     "crc_errors",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01312,
+    "seconds": 11.5,
+    "ungrounded": 0,
+    "summary": "IDS feed c060_nic_crc is degraded: NPB-01 port 3 is delivering 15,780 CRC-damaged frames (0.307% error rate) and IDS eth1 is discarding 1.97% (101,100 packets) due to capture overload, both causing incomplete traffic for IDS detection."
+   }
   },
   {
    "name": "c061_healthy",
@@ -1420,7 +2050,21 @@
    "faults": [
     "span_oversubscribed"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01275,
+    "seconds": 10.1,
+    "ungrounded": 0,
+    "summary": "Feed c062_span is severely degraded by SPAN oversubscription: 35.3% packet loss (1.55 Gbps mirrored from DC-CORE-1 Gi1/0/1 into 1 Gbps SPAN destination Gi1/0/48). NDR receives incomplete traffic and detection coverage is compromised. Physical link shows no errors."
+   }
   },
   {
    "name": "c063_span_crc",
@@ -1453,7 +2097,23 @@
     "span_oversubscribed",
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.0192,
+    "seconds": 15.4,
+    "ungrounded": 0,
+    "summary": "SIEM feed c063_span_crc is degraded by 2 high-severity faults: 35.36% SPAN packet loss from oversubscription (1.55 Gbps into 1 Gbps) and 47,460 CRC/alignment errors on SIEM eth1. Combined, over one-third of traffic is lost before analysis and remaining frames are corrupted."
+   }
   },
   {
    "name": "c064_mild",
@@ -1530,7 +2190,21 @@
    ],
    "mild": [
     "crc_errors"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01251,
+    "seconds": 9.0,
+    "ungrounded": 0,
+    "summary": "Feed c068_span is degraded: 38.95% packet loss due to SPAN oversubscription (1.64 Gbps mirrored into 1 Gbps destination). NDR is missing over a third of traffic, severely reducing detection coverage."
+   }
   },
   {
    "name": "c069_nic",
@@ -1555,7 +2229,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01153,
+    "seconds": 9.5,
+    "ungrounded": 0,
+    "summary": "APM feed c069_nic is degraded: APM eth1 discarded 2.41% (189,780 packets) due to capture overload, well above 0.1% threshold. Link is healthy, so loss is at tool ingress."
+   }
   },
   {
    "name": "c070_crc",
@@ -1582,7 +2270,21 @@
    ],
    "mild": [
     "nic_overrun"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.00919,
+    "seconds": 7.9,
+    "ungrounded": 0,
+    "summary": "Feed c070_crc to APM is degraded due to physical layer errors on ingress to packet broker: 11,460 CRC/alignment damaged frames (error rate 0.000812 > threshold 1e-05) on BROKER-A port 1."
+   }
   },
   {
    "name": "c071_healthy",
@@ -1633,7 +2335,21 @@
    ],
    "mild": [
     "nic_overrun"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01122,
+    "seconds": 14.3,
+    "ungrounded": 0,
+    "summary": "IDS feed c073_broker is severely degraded: VF-1 port 5 is discarding 62.26% of packets due to sustained 10 Gbps congestion, so IDS misses majority of traffic and detection coverage is critically reduced."
+   }
   },
   {
    "name": "c074_healthy",
@@ -1670,7 +2386,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01412,
+    "seconds": 13.4,
+    "ungrounded": 0,
+    "summary": "APM feed c075_nic is degraded: APM eth1 is discarding 4.01% (485,640 packets) because its capture interface cannot keep up. Link error checks are healthy, so loss is tool-side overload, not network corruption."
+   }
   },
   {
    "name": "c076_nic_link",
@@ -1696,7 +2426,21 @@
     "nic_overrun",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01474,
+    "seconds": 10.9,
+    "ungrounded": 0,
+    "summary": "Path loss exceeds threshold (0.69% + 0.68% vs 0.1% threshold): 0.69% lost on link between LEAF-07 Gi1/0/48 SPAN destination and VF-1 1/1, plus 0.68% discarded at IDS eth1 capture interface. Link error counters healthy."
+   }
   },
   {
    "name": "c077_span",
@@ -1721,7 +2465,21 @@
    "faults": [
     "span_oversubscribed"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01489,
+    "seconds": 12.0,
+    "ungrounded": 0,
+    "summary": "62.1% packet loss on SPAN destination CORE-SW-01 Gi1/0/48: 2.64 Gbps mirrored from Gi1/0/1 into 1 Gbps IDS port, IDS severely blinded."
+   }
   },
   {
    "name": "c078_crc_link",
@@ -1754,7 +2512,23 @@
     "crc_errors",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01141,
+    "seconds": 8.3,
+    "ungrounded": 0,
+    "summary": "Feed c078_crc_link to APM is degraded: VF-1 port 1 ingress has high CRC/alignment errors (0.165%) and 1.24% packet loss on the link from DC-CORE-1 Gi1/0/48 SPAN destination. Both faults corrupt/lose traffic before the APM, breaking transaction visibility."
+   }
   },
   {
    "name": "c079_crc",
@@ -1779,7 +2553,21 @@
    "faults": [
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.00844,
+    "seconds": 5.9,
+    "ungrounded": 0,
+    "summary": "Feed c079_crc to SIEM is degraded due to physical layer errors on BROKER-A port 1/1 input. 6,960 CRC/alignment errors (0.13% error rate) indicate corrupted frames will be dropped before SIEM analysis, reducing detection coverage."
+   }
   },
   {
    "name": "c080_crc_link",
@@ -1812,7 +2600,23 @@
     "crc_errors",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01102,
+    "seconds": 9.9,
+    "ungrounded": 0,
+    "summary": "Feed c080_crc_link to APM is degraded: NPB-01 port 1 ingress has high CRC/alignment errors (0.154%, 7,320 damaged frames) and the final link NPB-01 port 5 -> APM eth1 is dropping 1.76% of packets (83,340 lost). Both are physical-layer losses that corrupt APM transaction visibility."
+   }
   },
   {
    "name": "c081_crc_span",
@@ -1845,7 +2649,23 @@
     "span_oversubscribed",
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap",
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01431,
+    "seconds": 11.9,
+    "ungrounded": 0,
+    "summary": "SIEM feed c081_crc_span is degraded: 57.28% packet loss from SPAN oversubscription (2.34 Gbps mirrored into 1 Gbps destination) plus ingress CRC errors causing corrupted frames."
+   }
   },
   {
    "name": "c082_healthy",
@@ -1883,7 +2703,21 @@
     "broker_congestion",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "filter"
+    },
+    "fixes_ok": true,
+    "cost": 0.01231,
+    "seconds": 11.7,
+    "ungrounded": 0,
+    "summary": "SIEM feed c083_broker_nic is degraded by severe path loss: BROKER-A port 1/5 is saturated at 100% of 1 Gbps average (bursts higher) dropping 17.15% on egress, plus SIEM eth1 dropping an additional 4.19% on ingest due to capture overload."
+   }
   },
   {
    "name": "c084_link_nic",
@@ -1911,7 +2745,21 @@
    ],
    "mild": [
     "crc_errors"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.01599,
+    "seconds": 13.4,
+    "ungrounded": 0,
+    "summary": "Feed c084_link_nic is degraded: NPB-01 port 5 sent 14,249,940 packets but NDR eth1 received only 14,048,040 (1.42% loss on the wire) plus 86,160 discards at NDR eth1 (0.61% capture loss), 14x over 0.1% budget. Link error counters are healthy, indicating loss is on the physical path/capture pipeline, not FCS errors."
+   }
   },
   {
    "name": "c085_broker_link",
@@ -1937,7 +2785,21 @@
     "broker_congestion",
     "link_loss"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "load_balance"
+    },
+    "fixes_ok": true,
+    "cost": 0.01217,
+    "seconds": 9.7,
+    "ungrounded": 0,
+    "summary": "NDR feed c085_broker_link is severely degraded by packet loss: BROKER-A port 1/5 is discarding 56.32% of packets due to 10 Gbps egress saturation plus an additional 3.66% loss on the link to NDR eth1. NDR is missing >50% of traffic."
+   }
   },
   {
    "name": "c086_span",
@@ -1962,7 +2824,21 @@
    "faults": [
     "span_oversubscribed"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.0118,
+    "seconds": 8.2,
+    "ungrounded": 0,
+    "summary": "SPAN destination oversubscribed: 2.52 Gbps mirrored from CORE-SW-01 Gi1/0/1 into 1 Gbps SPAN destination Gi1/0/48 causing 60.38% loss (16,328,520 of 27,042,840 packets discarded). NDR receives only 10,714,260 packets, severely degrading detection coverage."
+   }
   },
   {
    "name": "c087_span_crc",
@@ -1995,7 +2871,23 @@
     "span_oversubscribed",
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors",
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link",
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01178,
+    "seconds": 8.5,
+    "ungrounded": 0,
+    "summary": "NDR feed c087_span_crc is severely degraded: 64.5% packet loss from SPAN oversubscription (2.82 Gbps mirrored into 1 Gbps destination) plus 50,640 CRC/alignment errors on BROKER-A ingress. NDR is blind to majority of traffic and receiving corrupted frames."
+   }
   },
   {
    "name": "c088_healthy",
@@ -2035,7 +2927,21 @@
    ],
    "mild": [
     "crc_errors"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01581,
+    "seconds": 13.9,
+    "ungrounded": 0,
+    "summary": "NDR feed c089_broker_nic is severely degraded by packet loss: BROKER-A port 5 discarding 23.24% (56,755,680 pkts) at 100% avg 10G load with higher bursts, plus NDR eth1 discarding 4.68% (8,775,480 pkts) on capture. NDR is missing ~27% of traffic and cannot provide complete detection."
+   }
   },
   {
    "name": "c090_mild",
@@ -2074,7 +2980,21 @@
    "faults": [
     "span_oversubscribed"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01254,
+    "seconds": 10.2,
+    "ungrounded": 0,
+    "summary": "Feed c091_span is degraded: SPAN destination CORE-SW-01 Gi1/0/48 is oversubscribed (1.35 Gbps mirrored into 1 Gbps port) causing 26.04% packet loss (2.64M discards). IDS is missing over a quarter of traffic."
+   }
   },
   {
    "name": "c092_mild",
@@ -2116,7 +3036,21 @@
    ],
    "mild": [
     "link_loss"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01832,
+    "seconds": 15.3,
+    "ungrounded": 0,
+    "summary": "IDS feed c093_nic_span is severely degraded: 2.67 Gbps SPAN source oversubscribes 1 Gbps SPAN destination DIST-SW-02 Gi1/0/48 causing 62.59% pre-tool loss (31,368,720/50,118,720 packets discarded), plus IDS eth1 discards another 3.08% (578,460 packets) due to capture overrun. IDS is blind to majority of traffic."
+   }
   },
   {
    "name": "c094_span",
@@ -2143,7 +3077,21 @@
    ],
    "mild": [
     "nic_overrun"
-   ]
+   ],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01524,
+    "seconds": 12.3,
+    "ungrounded": 0,
+    "summary": "SPAN destination oversubscribed: 1.64 Gbps mirrored into 1 Gbps port causing 38.99% packet loss (11,981,220 packets discarded). SIEM detection coverage severely degraded."
+   }
   },
   {
    "name": "c095_healthy",
@@ -2181,7 +3129,21 @@
     "span_oversubscribed",
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "replace_span_with_tap"
+    },
+    "fixes_ok": true,
+    "cost": 0.01813,
+    "seconds": 13.6,
+    "ungrounded": 0,
+    "summary": "High packet loss: 66.3% dropped at SPAN destination (2.97 Gbps mirrored into 1 Gbps port) plus 3.34% dropped at SIEM NIC. SIEM receives only ~33.7% of intended traffic, severely degraded detection coverage."
+   }
   },
   {
    "name": "c097_nic",
@@ -2206,7 +3168,21 @@
    "faults": [
     "nic_overrun"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "path_loss"
+    ],
+    "exact": true,
+    "fixes": {
+     "path_loss": "tool_capacity"
+    },
+    "fixes_ok": true,
+    "cost": 0.01097,
+    "seconds": 9.2,
+    "ungrounded": 0,
+    "summary": "APM on c097_nic is dropping 1.07% of packets at its capture interface (421,380 discards on APM eth1) because the tool cannot keep up; link is healthy but APM visibility is degraded."
+   }
   },
   {
    "name": "c098_healthy",
@@ -2255,7 +3231,21 @@
    "faults": [
     "crc_errors"
    ],
-   "mild": []
+   "mild": [],
+   "agent": {
+    "reported": [
+     "link_errors"
+    ],
+    "exact": true,
+    "fixes": {
+     "link_errors": "check_link"
+    },
+    "fixes_ok": true,
+    "cost": 0.00882,
+    "seconds": 5.8,
+    "ungrounded": 0,
+    "summary": "Feed c100_crc is degraded: VF-1 port 1 (input) shows 18,480 CRC/alignment errors (0.3495% vs 0.001% threshold) indicating physical layer fault. APM will receive corrupted/incomplete traffic."
+   }
   }
  ]
 }

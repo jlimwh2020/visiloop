@@ -1,0 +1,35 @@
+{
+ "feed": "c079_crc",
+ "status": "degraded",
+ "summary": "Feed c079_crc to SIEM is degraded due to physical layer errors on BROKER-A port 1/1 input. 6,960 CRC/alignment errors (0.13% error rate) indicate corrupted frames will be dropped before SIEM analysis, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "BROKER-A port 1/1 (input) is receiving damaged frames with CRC/alignment errors at 0.001328 (threshold 1e-05) - typically a faulty cable, bad optic/SFP, or duplex/speed mismatch on the link into the packet broker.",
+   "impact_on_tool": "SIEM receives incomplete/corrupted traffic; damaged frames are discarded by networking stack, causing missing events/flows and reduced detection coverage even though SIEM does not require full payload or bidirectional traffic.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "BROKER-A 1/1",
+     "port": "BROKER-A 1/1 (input)"
+    },
+    "why": "Physical layer must be clean before any broker policy tuning; replace/reseat cable and optic on BROKER-A 1/1, verify speed/duplex and autoneg settings match far end, clear counters and re-check error rate drops below 1e-05."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2232,
+  "tokens_out": 1329,
+  "cost_usd": 0.00844,
+  "seconds": 5.9,
+  "recorded_at": "2026-10-29"
+ }
+}

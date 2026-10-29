@@ -1,0 +1,36 @@
+{
+ "feed": "c046_broker",
+ "status": "degraded",
+ "summary": "Feed c046_broker is degraded: NPB-01 port 5 to NDR is discarding 53.62% of packets (12,385,680 drops) due to 1 Gbps egress saturation (100% avg load, bursts higher). NDR is missing majority of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "NPB-01 port 5 egress bandwidth saturated at 1 Gbps (average 100% utilization, bursts higher) causing output discards. Tool port is 10 Gbps capable, so broker egress is the bottleneck, not the tool link. Link errors check is healthy, confirming loss is due to congestion/drops not FCS/errors.",
+   "impact_on_tool": "NDR loses 53.62% of packets - detection coverage severely degraded. With needs_both_directions=true and needs_full_payload=true, missing packets breaks flow reassembly, IDS signatures and anomaly detection will miss attacks, produce incomplete sessions and false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "current_egress": "NPB-01:5 @ 1 Gbps",
+     "tool_capacity_gbps": 10,
+     "action_detail": "upgrade egress to 10 Gbps or add ports to LAG/load-balance group (e.g., add NPB-01:6 and hash on 5-tuple) to eliminate 1G bottleneck"
+    },
+    "why": "Egress port is persistently at 100% and discarding >50% during bursts. Increasing egress capacity to match the NDR's 10 Gbps port via LAG/load-balancing or 10G upgrade will stop discards without requiring filtering/slicing which would harm NDR payload visibility."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2238,
+  "tokens_out": 1951,
+  "cost_usd": 0.01109,
+  "seconds": 9.3,
+  "recorded_at": "2026-10-29"
+ }
+}

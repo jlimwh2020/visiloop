@@ -1,0 +1,36 @@
+{
+ "feed": "c012_broker_nic",
+ "status": "degraded",
+ "summary": "SIEM feed c012_broker_nic is severely degraded by sustained oversubscription: VF-1 port 5 (1 Gbps to SIEM) is at 100% average load and dropping ~50.7% of packets, plus SIEM eth1 dropping another ~4.9% on ingress. SIEM is missing more than half of events.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Egress port VF-1 port 5 is oversubscribed - average load at line-rate (100% of 1 Gbps) with bursts higher, causing broker output tail drops (11,003,520 packets, 50.67% lost). Downstream SIEM eth1 also cannot keep up and discards 525,000 received packets (4.90% lost), indicating both broker egress and tool ingress are overrun.",
+   "impact_on_tool": "SIEM misses ~50% of forwarded traffic plus additional ~5% at its own NIC. Detection coverage is halved, correlation and alerting are incomplete, and burst traffic/incidents are likely invisible.",
+   "recommended_fix": {
+    "action": "filter",
+    "params": {
+     "egress_port": "VF-1 5",
+     "target_rate_gbps": 1,
+     "filter_mode": "forward only SIEM-relevant traffic"
+    },
+    "why": "SIEM needs_full_payload=false and needs_both_directions=false, so volume can be safely reduced at the packet broker to fit the 1 Gbps tool port. Filtering to security-relevant flows/protocols or sampling will eliminate the 50% broker drops. If full traffic is required, use load_balance across multiple SIEM receivers or upgrade to 10 Gbps (tool_capacity)."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2275,
+  "tokens_out": 2695,
+  "cost_usd": 0.0143,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

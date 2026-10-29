@@ -1,0 +1,36 @@
+{
+ "feed": "c018_nic",
+ "status": "degraded",
+ "summary": "NDR on c018_nic is dropping 2.59% of packets at its capture interface (103,860 discards) due to overload, exceeding 0.1% threshold. Link is healthy but tool cannot keep up.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Traffic volume delivered to NDR eth1 exceeds the 10G capture pipeline capacity. The NIC/kernel is discarding packets before the NDR can analyze them (2.59% loss), not a link CRC or broker drop.",
+   "impact_on_tool": "NDR misses ~1 in 38 packets, breaking TCP reassembly, flow records and detection. Results in false negatives, missed C2/beaconing and incomplete forensic evidence despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "NDR eth1",
+     "loss_pct": 2.593,
+     "port_speed_gbps": 10
+    },
+    "why": "Discards are at the tool itself (could not keep up), not the network. Reduce load to this 10G interface via load_balance across multiple NDR instances/sensors, filter irrelevant traffic at packet broker, or upgrade tool capacity/NIC tuning (RSS, buffers, capture drivers) to handle peak rate."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2223,
+  "tokens_out": 1719,
+  "cost_usd": 0.01008,
+  "seconds": 8.7,
+  "recorded_at": "2026-10-29"
+ }
+}

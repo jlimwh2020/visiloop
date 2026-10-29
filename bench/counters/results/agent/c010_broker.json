@@ -1,0 +1,37 @@
+{
+ "feed": "c010_broker",
+ "status": "degraded",
+ "summary": "APM feed c010_broker is dropping 50.37% of packets at packet broker egress VF-1 1/5 due to sustained 10 Gbps saturation (bursts higher). Link is otherwise healthy. APM is missing half of transactions.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Packet broker egress port VF-1 1/5 to APM is oversubscribed: average load is 100% of 10 Gbps and bursts exceed line rate, so the broker is tail-dropping ~190M packets (50.37%) on output before delivery to tool.",
+   "impact_on_tool": "APM receives only ~49.6% of traffic. With needs_both_directions=true, missing packets break request/response pairing, causing incomplete transactions, inaccurate latency/error rates, and missed performance degradations/false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "port": "VF-1 1/5",
+     "current_speed_gbps": 10,
+     "mode": "flow-aware hashing preserving both directions",
+     "target_group": "APM tool group"
+    },
+    "why": "Distributing flows across 2-3x 10G APM ports (or upgrading to 25/40G) keeps per-port utilization <60-70% even during bursts and preserves bidirectional flow symmetry required by APM, eliminating the 50% broker discards without filtering needed traffic. Alternative is tool_capacity upgrade or filtering to only APM-relevant traffic if load balancing not possible."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2242,
+  "tokens_out": 2234,
+  "cost_usd": 0.0123,
+  "seconds": 13.6,
+  "recorded_at": "2026-10-29"
+ }
+}

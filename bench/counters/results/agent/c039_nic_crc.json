@@ -1,0 +1,50 @@
+{
+ "feed": "c039_nic_crc",
+ "status": "degraded",
+ "summary": "Feed c039_nic_crc is degraded: VF-1 port 3 input is corrupting frames with CRC/alignment errors (0.47% damaged) and IDS eth1 is discarding 0.58% of received packets due to capture overload. IDS is receiving incomplete and corrupted traffic, reducing detection coverage.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Physical layer fault on VF-1 port 3 (input) - 12,360 damaged frames with CRC/alignment errors (0.004669 > 1e-05 threshold) indicates faulty cable, bad optic/SFP, dirty fiber, or duplex mismatch on the link into the packet broker.",
+   "impact_on_tool": "IDS receives corrupted frames that fail FCS and are dropped or mis-decoded; TCP reassembly and signature matching fail, causing missed detections, false negatives and gaps in flow reconstruction.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 3",
+     "port": "VF-1 port 3 (input)"
+    },
+    "why": "Fix L1 errors at source before any broker processing - inspect/replace cable/optic, clean fiber, verify speed/duplex autoneg on both ends, check error counters clear to zero."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "medium",
+   "root_cause": "IDS eth1 capture interface overrun - tool discarded 15,240 packets (0.58% loss, threshold 0.1%) because its 1Gbps capture path could not keep up with the feed rate. Not a broker drop but end-tool overload.",
+   "impact_on_tool": "IDS with needs_both_directions and needs_full_payload loses random packets/flows; stateful detection, file extraction and alerting are incomplete, attacker traffic can evade detection due to missing packets.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "IDS eth1",
+     "loss_pct": 0.58
+    },
+    "why": "Reduce load to what IDS can handle: tune IDS capture (AF_PACKET/DPDK, ring buffers, pinning), filter to relevant traffic, or load-balance across multiple IDS instances/sensors, or upgrade to higher capture capacity NIC."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2319,
+  "tokens_out": 1857,
+  "cost_usd": 0.01079,
+  "seconds": 8.8,
+  "recorded_at": "2026-10-29"
+ }
+}

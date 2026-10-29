@@ -1,0 +1,55 @@
+{
+ "feed": "c043_span_crc",
+ "status": "degraded",
+ "summary": "APM feed c043_span_crc is severely degraded: 61.42% SPAN loss due to oversubscription (2.59 Gbps mirrored into 1 Gbps destination) plus 0.44% CRC/alignment errors on APM eth1. APM is missing majority of transactions and receiving corrupted frames.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "APM eth1 received 33,240 damaged frames (0.4432% CRC/alignment errors, threshold 0.001%) indicating faulty cable, optic, or duplex mismatch on the link into APM eth1. Physical layer corruption before the tool.",
+   "impact_on_tool": "APM discards damaged frames, corrupts TCP reassembly and transaction timing - latency, jitter and error-rate metrics are inaccurate and flows appear incomplete, reducing APM detection accuracy.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "interface": "APM eth1",
+     "metric": 0.004432,
+     "threshold": 1e-05,
+     "damaged_frames": 33240
+    },
+    "why": "L1 errors must be cleared first; no packet broker fix can recover frames already corrupted on the wire to the tool."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "DC-CORE-1 SPAN session oversubscribed: Gi1/0/1 source mirrored 19,440,000 packets (2.59 Gbps average) into Gi1/0/48 SPAN destination (1 Gbps). Destination sent only 7,500,000 packets and discarded 11,940,000 on output (61.42% loss, 100% average load, bursts higher). SPAN cannot buffer excess.",
+   "impact_on_tool": "APM blind to 61% of mirrored traffic despite 10 Gbps tool port capacity. Majority of transactions/flows missing, latency spikes and errors undetected, severely reduced visibility and detection coverage.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "switch": "DC-CORE-1",
+     "mirrored_port": "Gi1/0/1",
+     "span_destination": "Gi1/0/48",
+     "tool_port_speed_gbps": 10,
+     "required_capacity_gbps": 2.59
+    },
+    "why": "SPAN is lossy by design when source exceeds destination bandwidth. Replace with passive TAP and packet broker aggregation to deliver lossless 2.59 Gbps feed to the 10 Gbps APM port without drops."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2413,
+  "tokens_out": 2445,
+  "cost_usd": 0.01341,
+  "seconds": 13.7,
+  "recorded_at": "2026-10-29"
+ }
+}

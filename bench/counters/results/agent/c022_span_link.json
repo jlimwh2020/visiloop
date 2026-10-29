@@ -1,0 +1,37 @@
+{
+ "feed": "c022_span_link",
+ "status": "degraded",
+ "summary": "SPAN destination LEAF-07 Gi1/0/48 is severely oversubscribed (2.06 Gbps mirrored into 1 Gbps) discarding 51.48% (7,957,500/15,457,440 packets) plus 3.56% loss on link to BROKER-A port 1. IDS receives only ~46.8% of intended traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription and link loss: LEAF-07 Gi1/0/1 mirrors 15,457,440 packets (2.06 Gbps) but SPAN destination LEAF-07 Gi1/0/48 is only 1 Gbps and sent only 7,500,000 packets, discarding 7,957,500 on output (100% avg load, bursts higher) = 51.48% loss. Additional 3.56% loss between LEAF-07 Gi1/0/48 and BROKER-A port 1 (7,500,000 sent vs 7,233,300 received). SPAN cannot handle bursts and is fundamentally lossy when source exceeds destination.",
+   "impact_on_tool": "IDS needs both directions and full payload at 1 Gbps. Missing >51% of packets creates massive detection blind spot - attacks, exploits and C2 in dropped packets are invisible, state tracking fails, and IDS cannot reliably detect intrusions. Secondary 3.56% link loss adds further gaps.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "span_source": "LEAF-07 Gi1/0/1",
+     "span_destination": "LEAF-07 Gi1/0/48",
+     "broker_input": "BROKER-A port 1",
+     "required_capacity_gbps": 2.06
+    },
+    "why": "TAP provides lossless, line-rate copy independent of switch CPU/buffer and destination port speed. Replace SPAN with physical TAP at LEAF-07 Gi1/0/1 feeding via packet broker with sufficient capacity/aggregation (2.06 Gbps+ headroom) to eliminate 51% SPAN drop. Also remediate link between LEAF-07 Gi1/0/48 and BROKER-A port 1 (check optics/cabling) to fix 3.56% transport loss."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2388,
+  "tokens_out": 2081,
+  "cost_usd": 0.01183,
+  "seconds": 9.4,
+  "recorded_at": "2026-10-29"
+ }
+}

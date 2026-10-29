@@ -1,0 +1,37 @@
+{
+ "feed": "c073_broker",
+ "status": "degraded",
+ "summary": "IDS feed c073_broker is severely degraded: VF-1 port 5 is discarding 62.26% of packets due to sustained 10 Gbps congestion, so IDS misses majority of traffic and detection coverage is critically reduced.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Egress port VF-1:5 to IDS is persistently oversubscribed - averaging 100% of 10 Gbps with bursts higher - causing output queue tail drops. 123,727,500 packets discarded (62.26% loss) exceeds 0.1% threshold. Tool port is 1 Gbps per profile, so 10 Gbps aggregate cannot be delivered to single IDS port.",
+   "impact_on_tool": "IDS loses ~62% of packets including flows and payload needed for signature matching. Both-directions visibility and full-payload inspection required by IDS fails - attacks, C2, and exploits in dropped packets will be missed, state tracking breaks, and alerts are unreliable.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "egress_group": "VF-1:5+",
+     "hash": "5-tuple",
+     "target_tool_ports": 2,
+     "min_required_capacity_gbps": 10
+    },
+    "why": "Distribute 10G+ aggregate across multiple IDS ports/instances with 5-tuple hashing to keep flows intact, or upgrade IDS capacity/filter feed to fit 1G tool. Eliminates single-port congestion and restores complete traffic to IDS for detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2234,
+  "tokens_out": 1984,
+  "cost_usd": 0.01122,
+  "seconds": 14.3,
+  "recorded_at": "2026-10-29"
+ }
+}

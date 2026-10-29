@@ -1,0 +1,35 @@
+{
+ "feed": "c070_crc",
+ "status": "degraded",
+ "summary": "Feed c070_crc to APM is degraded due to physical layer errors on ingress to packet broker: 11,460 CRC/alignment damaged frames (error rate 0.000812 > threshold 1e-05) on BROKER-A port 1.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "medium",
+   "root_cause": "BROKER-A port 1 (input) is receiving damaged frames with CRC/alignment errors at 0.000812 rate, indicating a faulty cable, bad optic, or duplex mismatch on the link into the broker. 11,460 frames affected.",
+   "impact_on_tool": "APM will receive corrupted/truncated packets causing inaccurate transaction latency, false retransmission/timeout counts, and incomplete flow records, reducing detection coverage for performance issues.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "BROKER-A 1",
+     "port": "BROKER-A port 1 (input)"
+    },
+    "why": "Physical errors must be fixed at source before broker processing; replace/clean cable/optic and verify speed/duplex autonegotiation to stop CRC errors from corrupting APM visibility."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2228,
+  "tokens_out": 1506,
+  "cost_usd": 0.00919,
+  "seconds": 7.9,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,36 @@
+{
+ "feed": "c041_nic",
+ "status": "degraded",
+ "summary": "Feed c041_nic is degraded: APM eth1 is discarding 2.05% of packets (52,860 discards) because its capture pipeline cannot keep up. Link health is good, so loss is tool-side oversubscription causing incomplete APM visibility.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "APM eth1 NIC/host capture stack is oversubscribed and discarding packets after receipt. Broker is delivering more pps/bandwidth than the single 10G APM interface can process (2.05% loss vs 0.1% threshold). Not a link error or broker drop - discards counted at the tool interface itself.",
+   "impact_on_tool": "APM will have gaps in flow/transaction reconstruction, inaccurate latency and error-rate calculations, and missed application performance issues. ~1 in 50 packets lost randomly at the tool breaks both directions of monitored flows.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "APM eth1",
+     "loss_pct": 2.05,
+     "port_speed_gbps": 10
+    },
+    "why": "Loss is at the tool NIC (tool could not keep up), not in transit. Reduce offered load to this APM via packet-broker load_balance across multiple APM instances, filter to only APM-relevant traffic, or enable slicing (APM needs_full_payload=false) and/or upgrade APM capture capacity/NIC tuning."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2224,
+  "tokens_out": 2259,
+  "cost_usd": 0.01238,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-29"
+ }
+}

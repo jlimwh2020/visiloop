@@ -1,0 +1,37 @@
+{
+ "feed": "c030_link",
+ "status": "degraded",
+ "summary": "SIEM feed c030_link is degraded: 3.75% packet loss on the link between VF-1 port 1/5 and SIEM eth1 (32,625,000 sent vs 31,402,980 received), well above 0.1% threshold.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Physical/link-layer loss on the final hop between packet broker VF-1 port 1/5 and SIEM eth1: broker egressed 32,625,000 packets but SIEM eth1 captured only 31,402,980 (~1,222,020 packets / 3.75% lost). Most likely cause is faulty/dirty fibre/cable, bad optic/SFP, speed/duplex mismatch, or an unmonitored inline device dropping traffic after the broker.",
+   "impact_on_tool": "SIEM is missing ~3.75% of all forwarded traffic. Even though SIEM tolerates single-direction and truncated payload, this random loss creates blind spots for correlation, alerting and forensics - events and flows are incomplete.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 port 1/5 to SIEM eth1",
+     "packets_sent": 32625000,
+     "packets_received": 31402980,
+     "loss_percent": 3.75
+    },
+    "why": "Loss is isolated to the cable/optic path after the broker egress counters, so fix Layer-1 first: check interface error counters, re-seat/clean/replace cable and SFPs, verify speed/duplex/autoneg on both ends, and bypass any unmonitored device between VF-1 and SIEM before changing broker policy."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2250,
+  "tokens_out": 1992,
+  "cost_usd": 0.01128,
+  "seconds": 7.9,
+  "recorded_at": "2026-10-29"
+ }
+}

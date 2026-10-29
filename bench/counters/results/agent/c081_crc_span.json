@@ -1,0 +1,61 @@
+{
+ "feed": "c081_crc_span",
+ "status": "degraded",
+ "summary": "SIEM feed c081_crc_span is degraded: 57.28% packet loss from SPAN oversubscription (2.34 Gbps mirrored into 1 Gbps destination) plus ingress CRC errors causing corrupted frames.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription and SPAN buffer exhaustion: LEAF-07 Gi1/0/1 mirrors 2.34 Gbps but SPAN destination LEAF-07 Gi1/0/48 is only 1 Gbps. Switch discarded 14,367,840 packets on SPAN destination output (57.28% loss, 25,082,040 should have been copied but only 10,714,260 sent). SPAN cannot handle bursts and drops indiscriminately.",
+   "impact_on_tool": "SIEM receives only ~42.7% of traffic. 57% of flows/events invisible to SIEM - major detection blind spot, missed alerts, incomplete forensics and compliance gaps. Loss is random so critical security events are silently dropped.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "span_destination": "LEAF-07 Gi1/0/48",
+     "mirrored_source": "LEAF-07 Gi1/0/1",
+     "mirrored_rate_gbps": 2.34,
+     "destination_rate_gbps": 1,
+     "packet_broker_action": "insert TAP and use packet broker to filter/load-balance to 1Gbps SIEM or upgrade SIEM port to 10Gbps"
+    },
+    "why": "TAP provides lossless, full-duplex copy without SPAN buffer limits or switch CPU impact. Combined with broker filtering/load-balancing it prevents the 2.34Gbps->1Gbps bottleneck that SPAN cannot solve, restoring complete traffic to SIEM."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "link_errors",
+   "severity": "medium",
+   "root_cause": "Physical layer fault on ingress to visibility fabric: VF-1 port 1 received 3,900 damaged frames with CRC/alignment errors (0.0364% error rate, threshold 0.001%). Indicates faulty cable, optic, or duplex mismatch on link into VF-1.",
+   "impact_on_tool": "Damaged frames are dropped or delivered corrupted to SIEM. Causes incomplete sessions, parser errors, and additional gaps in visibility on top of SPAN loss. SIEM may fail to decode or correlate events from corrupted packets.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "port": "VF-1 1",
+     "metric": 0.000364,
+     "threshold": 1e-05,
+     "damaged_frames": 3900,
+     "checks": [
+      "verify cable and optics",
+      "check duplex/speed negotiation",
+      "check interface counters and replace optic/cable",
+      "inspect patch panel"
+     ]
+    },
+    "why": "CRC/alignment errors originate before the packet broker; fixing L1 eliminates corrupted frames at source and ensures SIEM receives error-free packets for accurate detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2408,
+  "tokens_out": 2658,
+  "cost_usd": 0.01431,
+  "seconds": 11.9,
+  "recorded_at": "2026-10-29"
+ }
+}

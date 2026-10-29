@@ -1,0 +1,38 @@
+{
+ "feed": "c044_link",
+ "status": "degraded",
+ "summary": "Feed c044_link to NDR is degraded: 1.10% packet loss (1,928,460/1,950,000 received) on link LEAF-07 Gi1/0/48 (SPAN destination) -> VF-1 port 3 exceeds 0.1% threshold by 11x. Link error counters healthy, indicating loss on the interconnect (cable/optic/unmonitored device).",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Physical/interconnect loss between LEAF-07 Gi1/0/48 SPAN destination and VF-1 port 3 input: SPAN sent 1,950,000 packets but broker input saw only 1,928,460 (21,540 packets / 1.10% lost). Link error check is healthy, so loss is not reported as FCS/error counters but as missing packets on the wire - typical of faulty optic/cable, dirty fiber, marginal transceiver, or an unmonitored device/patch panel in between.",
+   "impact_on_tool": "NDR requires complete bidirectional traffic with full payload for TCP reassembly and detection. 1.10% random loss breaks flows, causes incomplete sessions, missed signatures/anomalies and false negatives, well above 0.001 threshold for reliable detection.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 port 3",
+     "peer": "LEAF-07 Gi1/0/48",
+     "loss_pct": 1.105,
+     "packets_sent": 1950000,
+     "packets_received": 1928460
+    },
+    "why": "Fix physical path loss first - NDR cannot achieve coverage with 1% missing traffic. Inspect/replace optics and cable between LEAF-07 Gi1/0/48 and VF-1 port 3, check patch panels, clean fiber, verify SPAN destination oversubscription and link speed/duplex, then re-verify packet counts match."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2264,
+  "tokens_out": 1781,
+  "cost_usd": 0.0104,
+  "seconds": 10.9,
+  "recorded_at": "2026-10-29"
+ }
+}

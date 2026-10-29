@@ -1,0 +1,38 @@
+{
+ "feed": "c057_span",
+ "status": "degraded",
+ "summary": "IDS feed c057_span is severely degraded: SPAN destination is oversubscribed (2.13 Gbps mirrored into 1 Gbps port) causing 53.03% packet loss before traffic reaches the IDS.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription at DIST-SW-02: Gi1/0/1 mirrors 22,810,680 packets (2.13 Gbps) into Gi1/0/48 SPAN destination which is only 1 Gbps. Destination sent only 10,714,260 packets and discarded 12,096,420 on output (100% load, bursts higher) = 53.03% loss. SPAN cannot buffer bursts and drops excess.",
+   "impact_on_tool": "IDS (needs both directions and full payload, 1 Gbps port) receives only ~47% of traffic. Majority of flows incomplete, signatures and anomaly detection blind to >50% of attacks, high false-negative risk and broken flow reassembly.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "device": "DIST-SW-02",
+     "mirrored_port": "Gi1/0/1",
+     "span_destination_port": "Gi1/0/48",
+     "proposed_tap_location": "TAP upstream of DIST-SW-02 Gi1/0/1",
+     "broker_handling": "feed TAP to packet broker then filter/load-balance to fit 1 Gbps IDS or upgrade IDS/broker port to 10 Gbps to handle 2.13 Gbps"
+    },
+    "why": "Passive TAP eliminates SPAN copy loss and burst drops. Broker can then aggregate, filter irrelevant traffic, or load-balance across multiple 1 Gbps IDS ports, or justify upgrading IDS ingest to 10 Gbps so 2.13 Gbps fits without 53% loss."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2325,
+  "tokens_out": 2529,
+  "cost_usd": 0.01365,
+  "seconds": 15.7,
+  "recorded_at": "2026-10-29"
+ }
+}

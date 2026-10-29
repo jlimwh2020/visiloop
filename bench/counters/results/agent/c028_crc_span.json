@@ -1,0 +1,55 @@
+{
+ "feed": "c028_crc_span",
+ "status": "degraded",
+ "summary": "IDS feed c028_crc_span is severely degraded: 63.33% SPAN loss from oversubscription (2.73 Gbps into 1 Gbps) plus CRC errors on ingress. IDS is blind to majority of traffic and receives corrupted frames, breaking detection.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "VF-1 port 3 (input) is receiving damaged frames at 0.1394% (14,940 CRC/alignment errors, threshold 0.001%) indicating a Layer-1 fault - faulty cable, optic, or duplex mismatch on the link into the packet broker.",
+   "impact_on_tool": "IDS requires complete, correct payload for signature and anomaly detection. Corrupted frames fail parsing/reassembly and cause missed detections and false negatives; IDS wastes cycles on unusable packets.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 3",
+     "port": "VF-1 port 3",
+     "metric": 0.001394,
+     "threshold": 1e-05
+    },
+    "why": "Physical layer must be clean before any broker fix; replace cable/optic, verify duplex/speed negotiation, and clear counters to confirm zero CRC/alignment errors."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "CORE-SW-01 SPAN is fundamentally oversubscribed: Gi1/0/1 mirrors 29,217,840 packets (2.73 Gbps) into Gi1/0/48 SPAN destination limited to 1 Gbps. Destination discarded 18,503,520 packets (63.33% loss) at 100% average load, bursts higher. SPAN destination cannot buffer or backpressure.",
+   "impact_on_tool": "IDS with 1 Gbps port and needs_both_directions=true / needs_full_payload=true loses 63% of packets. Creates massive blind spot - IDS misses attacks, cannot reconstruct flows, and state tables are incomplete. Loss is random, so detection coverage is non-deterministic.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "span_device": "CORE-SW-01",
+     "mirrored_port": "Gi1/0/1",
+     "span_destination": "Gi1/0/48",
+     "tool_port_speed_gbps": 1,
+     "mirrored_rate_gbps": 2.73
+    },
+    "why": "Replace lossy SPAN with passive TAP for lossless capture, then handle 2.73Gbps > 1Gbps mismatch via packet broker: filter to IDS-relevant traffic, or load_balance across multiple 1G IDS sensors, or upgrade IDS to 10G. TAP eliminates SPAN scheduler drops and preserves both directions."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2415,
+  "tokens_out": 2347,
+  "cost_usd": 0.01299,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-29"
+ }
+}

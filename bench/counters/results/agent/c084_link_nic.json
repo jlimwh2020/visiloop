@@ -1,0 +1,38 @@
+{
+ "feed": "c084_link_nic",
+ "status": "degraded",
+ "summary": "Feed c084_link_nic is degraded: NPB-01 port 5 sent 14,249,940 packets but NDR eth1 received only 14,048,040 (1.42% loss on the wire) plus 86,160 discards at NDR eth1 (0.61% capture loss), 14x over 0.1% budget. Link error counters are healthy, indicating loss is on the physical path/capture pipeline, not FCS errors.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Packets are lost between NPB-01 port 5 and NDR eth1: 1.42% never arrived at the NDR (201,900 packets lost on cable/optic/patch or an unmonitored inline device) and an additional 0.61% (86,160 packets) arrived but were discarded by NDR eth1 because the capture interface/pipeline could not keep up. Link error check is healthy, so not FCS/cabling errors counted by interface.",
+   "impact_on_tool": "NDR misses ~2% of traffic, causing incomplete TCP reassembly, broken flows, missed IDS signatures and reduced detection coverage for lateral movement and exfiltration. Needs both directions and full payload, so any loss directly blinds detection.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "NDR eth1",
+     "upstream_port": "NPB-01 port 5",
+     "sent_packets": 14249940,
+     "received_packets": 14048040,
+     "discarded_at_tool": 86160
+    },
+    "why": "Verify/replace optics, cable and patch between NPB-01 port 5 and NDR eth1, check power levels and any unmonitored tap/inline device. After link is clean, address the 0.61% tool discards by tuning NDR capture (RSS/ring buffers, driver) or adding load_balance/tool_capacity if 10G port is oversubscribed."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2286,
+  "tokens_out": 3091,
+  "cost_usd": 0.01599,
+  "seconds": 13.4,
+  "recorded_at": "2026-10-29"
+ }
+}

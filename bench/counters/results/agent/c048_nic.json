@@ -1,0 +1,42 @@
+{
+ "feed": "c048_nic",
+ "status": "degraded",
+ "summary": "NDR on c048_nic is discarding 4.87% of packets at NDR eth1 (90,960 packets, threshold 0.1%). Link is healthy but tool capture interface cannot keep up, causing significant detection coverage loss.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "NDR eth1 is overrun: the tool's 10Gbps capture interface/NIC cannot keep up with the offered traffic rate, causing kernel/NIC discards after packets are delivered to the tool. Link itself shows no errors, so loss is at the tool ingress, not the network path.",
+   "impact_on_tool": "NDR loses ~4.87% of packets/flows, breaking TCP reassembly, flow correlation and full-payload analysis. Results in missed detections, incomplete metadata and degraded threat coverage despite needing both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "feed": "c048_nic",
+     "target_group": "NDR_cluster",
+     "hash_fields": [
+      "ip_src",
+      "ip_dst",
+      "port_src",
+      "port_dst",
+      "protocol"
+     ]
+    },
+    "why": "Distribute traffic flow-aware across multiple NDR capture interfaces/nodes so no single 10G interface is overrun, eliminating discards while preserving both directions of each flow for the NDR which requires it."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2230,
+  "tokens_out": 2505,
+  "cost_usd": 0.01343,
+  "seconds": 11.0,
+  "recorded_at": "2026-10-29"
+ }
+}

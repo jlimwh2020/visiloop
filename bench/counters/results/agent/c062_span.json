@@ -1,0 +1,37 @@
+{
+ "feed": "c062_span",
+ "status": "degraded",
+ "summary": "Feed c062_span is severely degraded by SPAN oversubscription: 35.3% packet loss (1.55 Gbps mirrored from DC-CORE-1 Gi1/0/1 into 1 Gbps SPAN destination Gi1/0/48). NDR receives incomplete traffic and detection coverage is compromised. Physical link shows no errors.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN destination oversubscription on DC-CORE-1: Gi1/0/1 mirror generates 11,595,000 packets / 1.55 Gbps but SPAN destination Gi1/0/48 is only 1 Gbps. Switch discards 4,095,000 packets on egress (average load 100% of 1 Gbps, bursts higher) = 35.32% loss. SPAN has no buffering/lossless guarantee and drops under load.",
+   "impact_on_tool": "NDR misses ~35% of packets and flows. Bidirectional flow reassembly, signature matching, and anomaly detection fail randomly; attacks and lateral movement are missed, forensics are incomplete, and NDR efficacy is severely reduced despite its 10 Gbps capacity.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "DC-CORE-1 Gi1/0/1",
+     "span_destination_to_replace": "DC-CORE-1 Gi1/0/48",
+     "proposed_tap": "passive TAP",
+     "broker_ingress_speed_gbps": 10
+    },
+    "why": "TAP provides lossless, line-rate copy independent of switch buffers/CPU and preserves both directions. Connect TAP to packet broker at 10G to match NDR's 10G port and eliminate the 1G SPAN bottleneck, restoring complete traffic for detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2321,
+  "tokens_out": 2317,
+  "cost_usd": 0.01275,
+  "seconds": 10.1,
+  "recorded_at": "2026-10-29"
+ }
+}

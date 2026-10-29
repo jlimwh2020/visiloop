@@ -1,0 +1,53 @@
+{
+ "feed": "c087_span_crc",
+ "status": "degraded",
+ "summary": "NDR feed c087_span_crc is severely degraded: 64.5% packet loss from SPAN oversubscription (2.82 Gbps mirrored into 1 Gbps destination) plus 50,640 CRC/alignment errors on BROKER-A ingress. NDR is blind to majority of traffic and receiving corrupted frames.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Physical layer fault on link into BROKER-A port 1 (input): 50,640 damaged frames with CRC/alignment errors (0.4726% error rate, threshold 0.001%) indicates faulty cable, bad optic, or duplex mismatch",
+   "impact_on_tool": "NDR receives corrupted frames that are dropped by NIC/kernel before analysis; causes incomplete flows, broken reassembly, missed detections and wasted 10G tool capacity on unusable packets. Needs full payload and is sensitive to corruption.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "device": "BROKER-A",
+     "port": "1",
+     "direction": "input"
+    },
+    "why": "CRC/alignment errors are Layer-1; must replace cable/optic, clean fiber, check SFP type and force correct duplex/speed on both ends before any broker tuning. Retest error counters to <0.001%."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription and buffer drop at DIST-SW-02: 30,203,520 packets should be mirrored from Gi1/0/1 but SPAN destination Gi1/0/48 (1 Gbps) only sent 10,714,260. 2.82 Gbps offered into 1 Gbps port = 19,489,260 packets discarded on output (64.53% loss, avg 100% utilization, bursts higher)",
+   "impact_on_tool": "NDR missing 64.5% of packets/flows - catastrophic visibility gap. With both directions required, single-direction loss breaks flow reconstruction, IDS signatures and anomaly detection fail, attacker traffic easily missed.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "switch": "DIST-SW-02",
+     "mirrored_port": "Gi1/0/1",
+     "span_destination": "Gi1/0/48",
+     "suggested": "passive TAP + packet broker with 10G capture or higher-capacity SPAN/ERSPAN with load balancing"
+    },
+    "why": "SPAN destination port cannot handle burst/mirrored rate and drops indiscriminately. A passive TAP provides lossless, full-duplex copy at line rate without switch CPU/buffer limits, restoring complete traffic to the 10G NDR."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2417,
+  "tokens_out": 2061,
+  "cost_usd": 0.01178,
+  "seconds": 8.5,
+  "recorded_at": "2026-10-29"
+ }
+}

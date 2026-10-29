@@ -1,0 +1,61 @@
+{
+ "feed": "c019_link_nic",
+ "status": "degraded",
+ "summary": "IDS feed c019_link_nic is degraded: ~6.2% total loss. IDS eth1 discarded 3.87% (153,840 pkts) due to capture overload and an additional 2.34% (95,220 pkts) lost on the wire between NPB-01 port 12 and IDS eth1. IDS requires both directions and full payload and will miss attacks with this loss.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "IDS eth1 capture interface could not keep up and discarded 153,840 packets it received (3.87% loss, threshold 0.1%). NPB-01 port 12 sent 4,068,720 packets but IDS eth1 saw only 3,973,500, confirming tool-side drops due to oversubscription of the 1Gbps IDS port.",
+   "impact_on_tool": "IDS misses ~3.9% of packets/flows plus reassembly gaps; stateful signatures, exploit/C2 detection and file extraction fail, causing false negatives and incomplete alerts. Violates IDS need for both directions and full payload.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "group": "IDS",
+     "src_port": "NPB-01 port 12",
+     "dst_ports": [
+      "IDS eth1"
+     ],
+     "method": "hash_5tuple_bidirectional"
+    },
+    "why": "Distribute traffic across multiple IDS instances/ports or add capacity so per-interface rate stays below 1Gbps and below IDS capture capacity while preserving bidirectional flows required for IDS. If single IDS must remain, apply filter to remove unwanted traffic classes first."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Physical/link loss between NPB-01 port 12 and IDS eth1: 95,220 packets (2.34%) sent by broker never arrived at IDS (4,068,720 sent vs 3,973,500 received), indicating cable, optic, speed/duplex mismatch or unmonitored inline device dropping packets.",
+   "impact_on_tool": "Additional 2.34% pre-tool loss compounds to >6% total loss; IDS sees gaps in TCP streams, misses signatures and cannot reliably detect intrusions.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "src": "NPB-01 port 12",
+     "dst": "IDS eth1",
+     "check": [
+      "counters",
+      "optics",
+      "cable",
+      "speed_duplex",
+      "inline_device"
+     ]
+    },
+    "why": "Eliminate physical-layer loss before broker tuning; faulty link will continue to drop packets even after load-balancing/filtering, and must be fixed to deliver complete traffic to IDS."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2284,
+  "tokens_out": 3258,
+  "cost_usd": 0.0167,
+  "seconds": 13.8,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "feed": "c093_nic_span",
+ "status": "degraded",
+ "summary": "IDS feed c093_nic_span is severely degraded: 2.67 Gbps SPAN source oversubscribes 1 Gbps SPAN destination DIST-SW-02 Gi1/0/48 causing 62.59% pre-tool loss (31,368,720/50,118,720 packets discarded), plus IDS eth1 discards another 3.08% (578,460 packets) due to capture overrun. IDS is blind to majority of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription and best-effort copy: DIST-SW-02 Gi1/0/1 mirrors 2.67 Gbps / 50,118,720 packets but SPAN destination Gi1/0/48 is only 1 Gbps. Switch discards 31,368,720 packets on output (100% avg load, bursts higher) = 62.59% lost before broker/tool. SPAN cannot buffer bursts. Additionally IDS eth1 (1 Gbps per tool profile) cannot keep up and discards 578,460 received packets (3.08% tool-side loss), so even delivered traffic is incomplete.",
+   "impact_on_tool": "IDS misses ~62-65% of packets/flows including both directions needed for stateful detection. Signatures, anomaly detection, and file extraction fail on dropped flows; attacker activity easily evades detection, alerts suppressed, forensics incomplete. Tool requires both directions and full payload but receives truncated, lossy feed.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "switch": "DIST-SW-02",
+     "mirrored_port": "Gi1/0/1",
+     "span_destination": "Gi1/0/48",
+     "tap_type": "passive fiber/copper TAP",
+     "broker_requirement": "connect TAP to packet broker with buffering then filter/load-balance to fit 1Gbps IDS"
+    },
+    "why": "TAP provides lossless, non-impacting copy vs SPAN best-effort which drops under congestion. Replacing SPAN eliminates 62.59% switch loss. Because sustained 2.67 Gbps still exceeds single 1 Gbps IDS (hence 3.08% tool drops), broker must then reduce load via filtering irrelevant traffic, or load_balance across multiple IDS sensors, or upgrade IDS capacity to 10Gbps to handle bursts without loss."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2347,
+  "tokens_out": 3621,
+  "cost_usd": 0.01832,
+  "seconds": 15.3,
+  "recorded_at": "2026-10-29"
+ }
+}

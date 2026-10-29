@@ -1,0 +1,36 @@
+{
+ "feed": "c002_link_span",
+ "status": "degraded",
+ "summary": "SPAN destination oversubscription causing 27.22% loss plus 2.98% inter-device link loss; NDR missing ~29% of packets, severely degrading detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "LEAF-07 Gi1/0/48 SPAN destination port is oversubscribed: 10,305,000 packets (~1.37 Gbps) mirrored from LEAF-07 Gi1/0/1 policed through 1 Gbps SPAN destination, switch discarded 2,805,000 packets on output at 100% average load (bursts higher) = 27.22% loss. Additional 2.98% loss between LEAF-07 Gi1/0/48 (sent 7,500,000) and NPB-01 port 1 (saw 7,276,200) indicates cable/optic or unmonitored device on that patch.",
+   "impact_on_tool": "NDR (requires both directions and full payload) loses ~29% of traffic end-to-end; flows are incomplete, signatures and behavioral analytics will miss intrusions, lateral movement and C2, creating blind spots and false negatives.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "LEAF-07 Gi1/0/1",
+     "tap_type": "passive",
+     "broker_input_gbps": 10
+    },
+    "why": "Passive TAP forwards at line rate with no SPAN CPU/buffer or 1G destination limit, eliminating the 27% oversubscription drops and burst loss while preserving both directions/full payload for NDR. Also remediate the lossy patch LEAF-07 Gi1/0/48 to NPB-01 port 1 (check/replace optic/cable) as part of TAP aggregation."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2388,
+  "tokens_out": 2091,
+  "cost_usd": 0.01187,
+  "seconds": 9.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,61 @@
+{
+ "feed": "c007_nic_crc",
+ "status": "degraded",
+ "summary": "Feed c007_nic_crc is degraded: VF-1 input is corrupting frames (CRC errors) and SIEM eth1 is dropping 1.79% of packets due to capture overrun. Both cause incomplete/incorrect traffic to SIEM and detection gaps.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Layer-1 fault on VF-1 port 1 (input): 28,320 frames arrived with CRC/alignment errors (0.1169% error rate). Senior visibility pattern is a faulty cable/optic, dirty connector, or duplex/speed mismatch corrupting frames before the packet broker can forward them.",
+   "impact_on_tool": "SIEM receives damaged/truncated frames that fail FCS and are unusable for parsing/correlation; causes incomplete events, missed detections, and wasted broker bandwidth on bad frames.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 1",
+     "port": "VF-1 port 1 (input)",
+     "checks": [
+      "inspect/replace cable and optics",
+      "clean connectors",
+      "verify speed/duplex and auto-negotiation matches peer",
+      "check interface error counters before/after"
+     ]
+    },
+    "why": "CRC/alignment errors originate on the ingress link into VF-1, not inside the broker. Fixing L1 restores clean frames to the SIEM feed."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SIEM capture overrun at SIEM eth1: tool discarded 433,920 packets it had already received (1.79% loss, threshold 0.1%). The 1G SIEM interface/capture pipeline cannot keep up with offered load.",
+   "impact_on_tool": "SIEM loses ~1 in 56 packets after delivery, creating blind spots for correlation, alerting, and forensics; even though SIEM tolerates sampled payload, random drops break event completeness.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "SIEM eth1",
+     "loss_pct": 1.79,
+     "options": [
+      "tune SIEM capture (increase ring buffers, RSS queues, driver tuning)",
+      "filter at packet broker to forward only SIEM-relevant traffic",
+      "load_balance across multiple SIEM ingest interfaces or add capacity"
+     ]
+    },
+    "why": "Loss is counted as discards on the tool NIC itself, proving the broker delivered but the tool could not ingest. Reducing offered rate or increasing ingest capacity is required to achieve lossless delivery."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2323,
+  "tokens_out": 1760,
+  "cost_usd": 0.01038,
+  "seconds": 12.7,
+  "recorded_at": "2026-10-29"
+ }
+}

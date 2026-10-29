@@ -1,0 +1,41 @@
+{
+ "feed": "c008_nic",
+ "status": "degraded",
+ "summary": "Feed c008_nic is degraded: APM eth1 is discarding 2.11% of packets (166,500) due to capture overload, despite healthy physical links. Tool is oversubscribed and missing traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "APM eth1 capture interface cannot keep up with ingress rate and is discarding packets after receipt (166,500 packets, 2.11% loss, threshold 0.1%). Link layer is healthy (check_link_errors healthy), so loss is not cabling/FCS but tool-side oversubscription / insufficient capture capacity.",
+   "impact_on_tool": "APM loses ~2.11% of packets randomly, breaking TCP flow reassembly and transaction correlation, skewing latency/throughput metrics, and creating blind spots for performance anomalies and errors.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "interface": "APM eth1",
+     "loss_pct": 2.11,
+     "port_speed_gbps": 10,
+     "options": [
+      "scale APM capture capacity / tune capture pipeline",
+      "load_balance feed across multiple APM nodes",
+      "filter or slice to reduce bps to tool (APM tolerates slicing, needs_full_payload=false)"
+     ]
+    },
+    "why": "Loss occurs inside the tool after receipt, not on the wire. Reducing delivered volume to what the 10G APM can process or increasing its processing capacity will stop discards and restore complete visibility."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2226,
+  "tokens_out": 1710,
+  "cost_usd": 0.01005,
+  "seconds": 10.8,
+  "recorded_at": "2026-10-29"
+ }
+}

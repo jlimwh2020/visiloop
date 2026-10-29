@@ -1,0 +1,36 @@
+{
+ "feed": "c069_nic",
+ "status": "degraded",
+ "summary": "APM feed c069_nic is degraded: APM eth1 discarded 2.41% (189,780 packets) due to capture overload, well above 0.1% threshold. Link is healthy, so loss is at tool ingress.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "APM eth1 capture interface cannot keep up with offered load - kernel/NIC ring buffers overflow and packets are discarded before APM can process them. Link errors are healthy, confirming this is an end-tool capacity bottleneck, not cabling/optics.",
+   "impact_on_tool": "APM loses ~1 in 41 packets, breaking request/response correlation, skewing latency and error-rate calculations, creating incomplete traces and missed performance anomalies.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "location": "APM eth1",
+     "packets_dropped": 189780,
+     "loss_pct": 2.407
+    },
+    "why": "Loss occurs after successful delivery to APM eth1, so packet broker is delivering more than the single 10G APM can ingest. Reduce offered load via load balancing across APM instances, filtering to relevant traffic, or increase capture capacity (RSS queues, buffer sizes, CPU/NIC upgrade) to eliminate discards."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2229,
+  "tokens_out": 2057,
+  "cost_usd": 0.01153,
+  "seconds": 9.5,
+  "recorded_at": "2026-10-29"
+ }
+}

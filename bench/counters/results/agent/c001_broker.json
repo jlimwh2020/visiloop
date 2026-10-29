@@ -1,0 +1,38 @@
+{
+ "feed": "c001_broker",
+ "status": "degraded",
+ "summary": "IDS feed c001_broker is severely degraded: 48.02% packet loss due to egress oversubscription on VF-1 port 5. 1 Gbps IDS port is saturated (100% avg load, bursts higher) and discarded 17,324,940 packets.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Packet broker egress oversubscription/congestion on VF-1 port 5 to IDS. Average load is 100% of 1 Gbps with bursts higher, exceeding the 1 Gbps tool port capacity, causing tail drops in the broker egress queue (17,324,940 discards, 48.02% loss).",
+   "impact_on_tool": "IDS misses ~48% of packets/flows. Stateful TCP reassembly, signature matching and anomaly detection fail on dropped traffic; IDS is blind to nearly half of attacks and cannot maintain flow state, drastically reducing detection coverage despite needing full payload and both directions.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "out_port": "VF-1 5",
+     "current_speed_gbps": 1,
+     "discards": 17324940,
+     "loss_percent": 48.02,
+     "suggestion": "upgrade tool connectivity to 10 Gbps or create load-balancing/LAG group across 2+ IDS instances/ports"
+    },
+    "why": "Distributing offered traffic that exceeds 1 Gbps across multiple tool ports or upgrading to 10 Gbps eliminates egress queue drops and restores complete, correct traffic delivery without filtering payload the IDS requires for detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2233,
+  "tokens_out": 2621,
+  "cost_usd": 0.01393,
+  "seconds": 14.4,
+  "recorded_at": "2026-10-29"
+ }
+}

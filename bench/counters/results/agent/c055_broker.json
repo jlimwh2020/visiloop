@@ -1,0 +1,40 @@
+{
+ "feed": "c055_broker",
+ "status": "degraded",
+ "summary": "Feed c055_broker to APM is degraded: 66.61% packet loss from egress congestion on VF-1 port 1/5. Tool port saturated at 100% of 10 Gbps (bursts higher) discarding 213,782,100 packets, APM missing majority of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "VF-1 egress port 1/5 to APM is oversubscribed. Average load is 100% of the 10 Gbps tool port with bursts above line rate, causing output queue tail drops (213,782,100 discards, 66.61% loss). Aggregate traffic steered to the APM exceeds single 10G port capacity.",
+   "impact_on_tool": "APM loses ~2/3 of packets/flows in both directions. Transaction metrics, latency/error rates and dependency maps are incomplete and inaccurate, bursts missed entirely, severely reducing detection coverage.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "group": "c055_broker-APM",
+     "ports": [
+      "1/5",
+      "1/6"
+     ],
+     "hash": "5-tuple",
+     "slice_alternative_bytes": 512
+    },
+    "why": "Distribute >10G aggregate across multiple 10G APM members (or upgrade tool port to 25/40G) to eliminate egress drops with 5-tuple hashing to keep both directions together. Since APM needs_full_payload=false, slicing to ~512B or filtering irrelevant traffic are lower-cost alternatives to bring load below 10G while preserving headers APM needs."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2242,
+  "tokens_out": 3455,
+  "cost_usd": 0.01749,
+  "seconds": 20.7,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,36 @@
+{
+ "feed": "c021_link",
+ "status": "degraded",
+ "summary": "IDS feed c021_link has 2.92% packet loss on the path between SPAN destination and packet broker input, exceeding 0.1% threshold. IDS will miss attacks due to incomplete traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Physical/link loss between LEAF-07 Gi1/0/48 (SPAN destination) and NPB-01 port 1 (input): SPAN sent 4,907,100 packets but NPB input saw only 4,764,060 (143,040 packets / 2.92% lost). Most likely faulty cable/optic, dirty fiber, speed/duplex mismatch, or an unmonitored inline device dropping packets on that patch.",
+   "impact_on_tool": "IDS requires complete bidirectional traffic with full payload for TCP reassembly and signature matching. 2.92% loss causes broken flows, missed sessions, and IDS evasion - significantly reduced detection coverage.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "from": "LEAF-07 Gi1/0/48",
+     "to": "NPB-01 port 1",
+     "location": "NPB-01 1"
+    },
+    "why": "Loss occurs before the packet broker, so IDS never sees the missing packets. Inspect/replace cable and optics, clean fiber, verify speed/duplex and error counters on both ends, and remove any unmonitored tap/SPAN aggregation device on this link."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2255,
+  "tokens_out": 1549,
+  "cost_usd": 0.0094,
+  "seconds": 6.5,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "feed": "c080_crc_link",
+ "status": "degraded",
+ "summary": "Feed c080_crc_link to APM is degraded: NPB-01 port 1 ingress has high CRC/alignment errors (0.154%, 7,320 damaged frames) and the final link NPB-01 port 5 -> APM eth1 is dropping 1.76% of packets (83,340 lost). Both are physical-layer losses that corrupt APM transaction visibility.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "NPB-01 port 1 (input) is receiving damaged frames with CRC/alignment errors at 0.1542% (7,320 frames, 154x threshold). This is a Layer-1 fault on the link into the packet broker - typically a faulty/dirty cable or optic, bent fiber, or duplex/speed mismatch.",
+   "impact_on_tool": "APM receives corrupted frames that are dropped before analysis; application transactions appear incomplete or reset, latency and error-rate calculations are skewed, and troubleshooting data is unreliable.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "NPB-01 port 1 (input)",
+     "metric": 0.001542,
+     "threshold": 1e-05,
+     "frames_damaged": 7320
+    },
+    "why": "CRC/alignment errors cannot be fixed by broker policy - the physical link must be cleaned, reseated, or replaced and duplex/speed verified on both ends to deliver clean frames to the APM."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "1.76% path loss between NPB-01 port 5 egress (4,740,120 pkts sent) and APM eth1 ingress (4,656,780 pkts seen) - 83,340 packets lost on the wire. Indicates faulty cable/optic/patch panel or an unmonitored inline device between broker and tool.",
+   "impact_on_tool": "APM misses ~1 in 57 packets, creating gaps in TCP flows and application transactions; response-time, throughput and error detection are under-reported and APM will flag false retransmits/timeouts.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "NPB-01 port 5 to APM eth1",
+     "loss_pct": 1.758,
+     "packets_sent": 4740120,
+     "packets_seen": 4656780
+    },
+    "why": "Loss occurs after the packet broker, so broker config will not help - inspect interface error counters on NPB-01 port 5 and APM eth1, replace cable/optic, and verify no oversubscribed or faulty patch between them."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2347,
+  "tokens_out": 1902,
+  "cost_usd": 0.01102,
+  "seconds": 9.9,
+  "recorded_at": "2026-10-29"
+ }
+}

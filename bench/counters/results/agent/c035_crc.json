@@ -1,0 +1,35 @@
+{
+ "feed": "c035_crc",
+ "status": "degraded",
+ "summary": "Feed c035_crc to APM is degraded: VF-1 port 1 input is delivering damaged frames (CRC/alignment errors) above threshold, causing incomplete traffic to APM.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "medium",
+   "root_cause": "VF-1 port 1 (input) received 14,640 damaged frames (CRC/alignment errors, error rate 0.000314 > threshold 1e-05) indicating a faulty cable, optic, or duplex mismatch on the link into the packet broker",
+   "impact_on_tool": "APM will drop corrupted frames and see incomplete transactions/flows, causing gaps in application performance metrics, false retransmission/latency calculations and reduced detection coverage",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 1",
+     "port": "1"
+    },
+    "why": "Clean L1 errors at ingress before packet broker to restore complete, error-free traffic to the APM; inspect/replace cable/optic and verify speed/duplex/autoneg on VF-1 port 1 and its peer"
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2228,
+  "tokens_out": 1695,
+  "cost_usd": 0.00999,
+  "seconds": 8.2,
+  "recorded_at": "2026-10-29"
+ }
+}

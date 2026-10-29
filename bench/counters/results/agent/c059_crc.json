@@ -1,0 +1,36 @@
+{
+ "feed": "c059_crc",
+ "status": "degraded",
+ "summary": "Feed c059_crc to SIEM is degraded due to physical layer errors on ingress: VF-1 port 1 received 1,740 CRC/alignment damaged frames (error rate 0.0218% > 0.001% threshold). No packet loss on path was detected.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "medium",
+   "root_cause": "Faulty cable, optic, or duplex mismatch on the link into VF-1 port 1 (input) causing CRC/alignment errors - 1,740 damaged frames received, error rate 0.000218 exceeds 1e-05 threshold by ~22x",
+   "impact_on_tool": "SIEM receives corrupted/dropped frames; damaged frames are discarded before analysis, causing incomplete flow/log records and gaps in detection coverage even though SIEM does not require full payload or bidirectional traffic",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "location": "VF-1 1",
+     "port": "1",
+     "direction": "input"
+    },
+    "why": "Physical CRC/alignment errors must be fixed at Layer 1 before packet broker processing - inspect/replace cable/optic, verify duplex/speed negotiation, and check optic levels on VF-1 port 1 input"
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2230,
+  "tokens_out": 1332,
+  "cost_usd": 0.00845,
+  "seconds": 7.1,
+  "recorded_at": "2026-10-29"
+ }
+}

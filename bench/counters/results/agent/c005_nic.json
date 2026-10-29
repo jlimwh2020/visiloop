@@ -1,0 +1,36 @@
+{
+ "feed": "c005_nic",
+ "status": "degraded",
+ "summary": "Feed c005_nic is degraded: IDS eth1 is discarding 4.44% of packets (248,280 packets) because its 1G capture interface cannot keep up, causing detection gaps. Physical link is healthy.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Tool-side oversubscription / capture overload at IDS eth1. Link is healthy, but the IDS capture path discarded 4.44% of packets it received, well above 0.1% threshold, indicating offered load exceeds the 1 Gbps tool port / capture pipeline capacity.",
+   "impact_on_tool": "IDS with needs_both_directions=true and needs_full_payload=true will miss ~1 in 22 packets/flows. Results in broken TCP reassembly, missed signatures, and attacker evasion - high risk of false negatives.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "target": "IDS eth1",
+     "port_speed_gbps": 1,
+     "method": "packet-broker load balancing to multiple IDS instances/ports"
+    },
+    "why": "Distribute traffic across multiple 1G tool ports or scale to higher-capacity capture (e.g., 10G) via broker load-balancing so per-interface rate stays below 1Gbps and discards stop. Do not slice payload as IDS requires full payload. Filtering is alternative if load-balancing not possible, but reduces coverage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2218,
+  "tokens_out": 2232,
+  "cost_usd": 0.01226,
+  "seconds": 10.7,
+  "recorded_at": "2026-10-29"
+ }
+}

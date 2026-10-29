@@ -1,0 +1,52 @@
+{
+ "feed": "c063_span_crc",
+ "status": "degraded",
+ "summary": "SIEM feed c063_span_crc is degraded by 2 high-severity faults: 35.36% SPAN packet loss from oversubscription (1.55 Gbps into 1 Gbps) and 47,460 CRC/alignment errors on SIEM eth1. Combined, over one-third of traffic is lost before analysis and remaining frames are corrupted.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Physical layer fault on the link into SIEM eth1 (faulty cable/optic or duplex mismatch) causing 47,460 damaged frames with CRC/alignment errors (0.443% error rate vs 0.001% threshold).",
+   "impact_on_tool": "SIEM NIC discards corrupted frames; events and flows in those frames never reach detection engine, reducing coverage and causing incomplete/incorrect correlation.",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "interface": "SIEM eth1",
+     "location": "SIEM eth1"
+    },
+    "why": "Clean L1 is required before any broker fix matters - replacing cable/optic, fixing duplex/speed and re-testing counters stops CRC drops so SIEM receives usable frames."
+   },
+   "evidence_frames": []
+  },
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription at DIST-SW-02: Gi1/0/1 mirrors 16,575,000 packets (1.55 Gbps) but SPAN destination Gi1/0/48 is only 1 Gbps and discarded 5,860,680 packets on output (35.36% loss, sustained 100% load, bursts higher). SPAN destination cannot buffer oversubscription and tail-drops.",
+   "impact_on_tool": "SIEM misses 35%+ of packets/flows; attacks, C2 and lateral movement in dropped traffic are invisible, creating large blind spot despite SIEM being correctly configured.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "source_port": "DIST-SW-02 Gi1/0/1",
+     "destination_port": "DIST-SW-02 Gi1/0/48",
+     "tool_port_gbps": 1,
+     "mirrored_gbps": 1.55
+    },
+    "why": "TAP does not drop under load like SPAN. Place passive TAP at Gi1/0/1 into packet broker, then filter/aggregate to fit SIEM 1 Gbps capacity or upgrade tool capacity/load-balance - eliminates SPAN-output discards and restores complete feed."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2413,
+  "tokens_out": 3807,
+  "cost_usd": 0.0192,
+  "seconds": 15.4,
+  "recorded_at": "2026-10-29"
+ }
+}

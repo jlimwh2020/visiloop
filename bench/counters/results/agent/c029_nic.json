@@ -1,0 +1,36 @@
+{
+ "feed": "c029_nic",
+ "status": "degraded",
+ "summary": "NDR on c029_nic is discarding 1.31% of packets (31,560 packets) at its capture interface NDR eth1, exceeding 0.1% threshold. Link is healthy, loss is at the tool itself due to capture overload, creating detection gaps.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "NDR eth1 capture interface cannot keep up with offered load - tool discarded 31,560 packets it had already received (1.31% loss). Link error checks are healthy, so loss is not physical layer corruption but tool-side oversubscription/processing bottleneck.",
+   "impact_on_tool": "NDR loses ~1 in 76 packets/flows randomly. With needs_both_directions=true and needs_full_payload=true, missing packets breaks flow reassembly, file extraction, and detection logic, causing missed alerts and incomplete forensic evidence.",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {
+     "location": "NDR eth1",
+     "loss_pct": 1.31,
+     "packets_lost": 31560
+    },
+    "why": "Loss is counted as discards on the NDR's own NIC, not in the network path. Packet broker tuning alone won't fix a tool that is already receiving but dropping. Reduce load to this 10G port (filter, sample, or load-balance across multiple NDR instances) or increase tool capture capacity (tuning, driver/ring buffers, or hardware upgrade) to eliminate the 1.31% blind spot."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2224,
+  "tokens_out": 1788,
+  "cost_usd": 0.01038,
+  "seconds": 8.4,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "feed": "c023_nic_broker",
+ "status": "degraded",
+ "summary": "Feed c023_nic_broker is severely degraded: BROKER-A port 5 to NDR is saturated at 100% of 10 Gbps (bursts higher) discarding 45.81% (90,589,260 pkts) and NDR eth1 is also overrun discarding 1.92% (2,059,140 pkts). NDR is missing ~47% of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "Egress oversubscription at BROKER-A port 5 to NDR: average load at 100% of 10 Gbps with bursts exceeding line rate, causing 90,589,260 output discards (45.81% loss). Downstream NDR eth1 also cannot keep up and discards 2,059,140 received packets (1.92% loss).",
+   "impact_on_tool": "NDR misses nearly half of packets/flows; bidirectional flow reassembly fails, detections and alerts are missed, attacker activity can evade, and forensics/hunting is incomplete. Even packets that egress the broker are subsequently dropped at the tool NIC.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "location": "BROKER-A port 5",
+     "current_speed_gbps": 10,
+     "average_load_percent": 100,
+     "solution": "create load-balance group across 2+ NDR interfaces/nodes with 5-tuple hashing to preserve flow coherence, or upgrade egress to 25/40/100G LAG"
+    },
+    "why": "Distributes sustained >10G plus burst load across multiple capture interfaces, eliminating broker egress tail drops and bringing per-interface rate below NDR capture capacity. Preserves NDR requirements for both directions and full payload, unlike slicing which would break detection."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2271,
+  "tokens_out": 2181,
+  "cost_usd": 0.01211,
+  "seconds": 11.6,
+  "recorded_at": "2026-10-29"
+ }
+}

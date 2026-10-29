@@ -1,0 +1,39 @@
+{
+ "feed": "c032_broker_nic",
+ "status": "degraded",
+ "summary": "Feed c032_broker_nic is degraded: NPB-01 port 12 to IDS is saturated at 100% of 1 Gbps (bursts higher) causing 47.86% loss (9,835,680 discards) at broker plus 0.75% loss (80,280 discards) at IDS eth1. IDS is missing nearly half of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "NPB-01 port 12 (to IDS) is persistently oversubscribed - average load at 100% of 1 Gbps with bursts exceeding line rate. Egress queue tail-drops 9,835,680 packets (47.86% lost). Downstream IDS eth1 capture interface also overrun, dropping an additional 80,280 packets (0.75% lost) because 1G tool port cannot keep up.",
+   "impact_on_tool": "IDS misses ~48% of packets. With needs_both_directions=true and needs_full_payload=true, TCP reassembly, flow state and signature matching break, causing high false-negative rate and blind spots for intrusion detection. Bursty attacks are most likely to be lost.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "npb": "NPB-01",
+     "congested_port": "12",
+     "tool_port": "IDS eth1",
+     "current_capacity_gbps": 1,
+     "mode": "bidirectional 5-tuple hash across IDS cluster",
+     "alternative": "upgrade NPB-01:12 and IDS eth1 to 10G and/or filter to <70% utilization"
+    },
+    "why": "Spreading traffic with flow-aware load balancing (or upgrading link/tool to 10G) removes egress congestion and tool overrun while preserving bidirectional flow affinity required by IDS for stateful detection. Filtering non-essential traffic can also reduce load below 1G if cluster upgrade not possible."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2266,
+  "tokens_out": 3646,
+  "cost_usd": 0.01833,
+  "seconds": 20.3,
+  "recorded_at": "2026-10-29"
+ }
+}

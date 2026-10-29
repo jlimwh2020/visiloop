@@ -1,0 +1,32 @@
+{
+ "feed": "c097_nic",
+ "status": "degraded",
+ "summary": "APM on c097_nic is dropping 1.07% of packets at its capture interface (421,380 discards on APM eth1) because the tool cannot keep up; link is healthy but APM visibility is degraded.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "APM eth1 NIC/capture pipeline is oversubscribed and discarding packets after delivery from packet broker. 1.07% loss (421,380 packets) exceeds 0.1% threshold - this is tool-side overload, not network/path loss.",
+   "impact_on_tool": "APM sees incomplete transactions and flows, misses application latency/errors, inflates retransmission counts and breaks end-to-end timing correlation",
+   "recommended_fix": {
+    "action": "tool_capacity",
+    "params": {},
+    "why": "Drops occur at the APM's own interface after successful delivery, so broker tuning alone won't help. Reduce load per tool (load-balance across APM instances, filter irrelevant traffic, or slice payload - APM needs_full_payload=false) or upgrade APM capture capacity/ring buffers."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2224,
+  "tokens_out": 1926,
+  "cost_usd": 0.01097,
+  "seconds": 9.2,
+  "recorded_at": "2026-10-29"
+ }
+}

@@ -1,0 +1,36 @@
+{
+ "feed": "c100_crc",
+ "status": "degraded",
+ "summary": "Feed c100_crc is degraded: VF-1 port 1 (input) shows 18,480 CRC/alignment errors (0.3495% vs 0.001% threshold) indicating physical layer fault. APM will receive corrupted/incomplete traffic.",
+ "findings": [
+  {
+   "fault": "link_errors",
+   "severity": "high",
+   "root_cause": "Physical layer fault on VF-1 port 1 (input) - 18,480 damaged frames with CRC/alignment errors (0.3495% error rate) caused by faulty cable, optic, or duplex/speed mismatch on the link into the packet broker",
+   "impact_on_tool": "APM receives damaged frames that are dropped or fail parsing, causing incomplete flows/transactions, inaccurate response-time and error metrics, and reduced visibility/coverage",
+   "recommended_fix": {
+    "action": "check_link",
+    "params": {
+     "device": "VF-1",
+     "port": "1",
+     "location": "VF-1 1"
+    },
+    "why": "Reseat/replace cable and optic, clean fiber, verify duplex/speed settings on VF-1 port 1 to eliminate CRC errors before delivery to APM"
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2230,
+  "tokens_out": 1419,
+  "cost_usd": 0.00882,
+  "seconds": 5.8,
+  "recorded_at": "2026-10-29"
+ }
+}

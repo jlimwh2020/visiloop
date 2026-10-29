@@ -1,0 +1,37 @@
+{
+ "feed": "c091_span",
+ "status": "degraded",
+ "summary": "Feed c091_span is degraded: SPAN destination CORE-SW-01 Gi1/0/48 is oversubscribed (1.35 Gbps mirrored into 1 Gbps port) causing 26.04% packet loss (2.64M discards). IDS is missing over a quarter of traffic.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "SPAN oversubscription and buffer exhaustion at CORE-SW-01 Gi1/0/48: SPAN session should copy 10,140,000 packets (1.35 Gbps) from CORE-SW-01 Gi1/0/1 but destination only sent 7,500,000, discarding 2,640,000 packets on output at 100% load (bursts higher). SPAN destination port speed (1 Gbps) is insufficient for mirrored rate.",
+   "impact_on_tool": "IDS misses ~26% of packets/flows. With needs_both_directions=true and needs_full_payload=true, loss creates one-sided flows, broken reassembly, and missed signatures - intrusions can evade detection and alerts will be incomplete/false-negative.",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "CORE-SW-01 Gi1/0/1",
+     "tap_type": "passive TAP",
+     "broker_ingress_gbps": 10,
+     "note": "1.35 Gbps exceeds IDS 1 Gbps port - also plan filtering, load balancing or tool upgrade after TAP insertion"
+    },
+    "why": "SPAN copies in software/buffer and drops when ingress exceeds destination capacity or on bursts. A passive TAP provides lossless line-rate copy independent of switch load, ensuring complete traffic delivery required for IDS detection coverage."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2322,
+  "tokens_out": 2268,
+  "cost_usd": 0.01254,
+  "seconds": 10.2,
+  "recorded_at": "2026-10-29"
+ }
+}

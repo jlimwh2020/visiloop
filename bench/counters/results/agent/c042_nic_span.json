@@ -1,0 +1,38 @@
+{
+ "feed": "c042_nic_span",
+ "status": "degraded",
+ "summary": "SPAN destination oversubscription causing 54.94% loss at switch plus 2.12% drops at SIEM NIC - SIEM receives only ~45% of intended traffic, severely degrading detection coverage.",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "DIST-SW-02 SPAN destination Gi1/0/48 is oversubscribed: 2.22 Gbps mirrored from Gi1/0/1 forced into a 1 Gbps SPAN destination port. Switch egress buffers saturate at 100% load and tail-drop 13,060,680 packets (54.94% loss); bursts above 1 Gbps are lost first as SPAN has no burst buffering. The 10,714,260 packets that do egress still overrun the 1 Gbps SIEM eth1, which discards an additional 227,460 packets (2.12%) on capture.",
+   "impact_on_tool": "SIEM misses ~55% of flows/events before they reach detection - correlation, alerting and forensic coverage has major blind spots. Additional 2.12% NIC drops cause truncated flows and missed events even for traffic that survived SPAN, reducing SIEM efficacy despite its tolerant profile (needs_both_directions=false, needs_full_payload=false).",
+   "recommended_fix": {
+    "action": "replace_span_with_tap",
+    "params": {
+     "location": "DIST-SW-02 Gi1/0/1",
+     "tap_type": "passive TAP",
+     "broker_ingress_gbps": 10,
+     "tool_port_gbps": 1,
+     "filter_to_tool_rate": true
+    },
+    "why": "TAP provides lossless, line-rate copy without SPAN copy-engine and destination-port oversubscription/burst drops. Place TAP at Gi1/0/1 into a packet broker with 10G ingress, then filter/aggregate to rate-shape to the 1G SIEM port to eliminate switch-level discards and reduce tool NIC overrun."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2356,
+  "tokens_out": 2495,
+  "cost_usd": 0.01355,
+  "seconds": 13.7,
+  "recorded_at": "2026-10-29"
+ }
+}

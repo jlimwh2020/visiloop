@@ -1,0 +1,42 @@
+{
+ "feed": "c036_nic_broker",
+ "status": "degraded",
+ "summary": "Feed c036_nic_broker is degraded: BROKER-A port 5 to NDR discarding 56.72% (98,287,500 pkts, avg 100% of 10 Gbps, bursts higher) plus NDR eth1 discarding 4.82% (3,613,320 pkts) - NDR missing majority of traffic due to egress congestion and capture overload",
+ "findings": [
+  {
+   "fault": "path_loss",
+   "severity": "high",
+   "root_cause": "BROKER-A egress port 5 is persistently saturated at 100% of 10 Gbps average (bursts exceed line rate) causing 56.72% output discards, and the NDR 10G capture interface eth1 cannot keep up discarding an additional 4.82%. Classic oversubscription: aggregate feed exceeds single 10G tool port capacity.",
+   "impact_on_tool": "NDR misses >50% of packets/flows before analysis. Breaks both-direction correlation (NDR needs both directions) and full-payload inspection, causing missed detections, incomplete sessions, inaccurate analytics and blind spots.",
+   "recommended_fix": {
+    "action": "load_balance",
+    "params": {
+     "broker": "BROKER-A",
+     "egress_port": 5,
+     "tool": "NDR eth1",
+     "group_ports": [
+      "BROKER-A 5",
+      "BROKER-A 6"
+     ],
+     "hash": "5-tuple",
+     "preserve_bidirectional": true
+    },
+    "why": "Distribute >10G aggregate across 2+ 10G NDR interfaces with 5-tuple hashing preserving flow symmetry to eliminate broker egress drops and keep per-NIC load below capture capacity. Alternative is tool_capacity upgrade to 25/40/100G NICs or adding NDR cluster nodes if single-port capture is required; do not slice as NDR needs full payload."
+   },
+   "evidence_frames": []
+  }
+ ],
+ "_meta": {
+  "model": "muse-spark-1.2",
+  "checks_called": [
+   "link_errors",
+   "path_loss"
+  ],
+  "ungrounded_dropped": [],
+  "tokens_in": 2278,
+  "tokens_out": 2597,
+  "cost_usd": 0.01388,
+  "seconds": 11.3,
+  "recorded_at": "2026-10-29"
+ }
+}
