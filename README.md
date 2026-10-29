@@ -69,26 +69,38 @@ Measured on 13 synthetic test cases: 6 single-fault, 3 mild (below threshold, mu
 Example: a 6.51 Gbps burst against a 1 Gbps IDS port. VisiLoop calculates a 13-port load-balanced tool group
 with symmetric hashing (every port's peak at or below 0.70 Gbps), or one 10 Gbps port as the alternative.
 
-### Benchmark suite: 200 cases (28 Oct 2026)
+### Benchmark suite: 200 cases, nine faults (29 Oct 2026)
 
-A larger, generated suite across IDS, NDR, APM and SIEM tools: healthy feeds, below-threshold noise that must not
-alarm, one to three faults per case, 30 near-threshold cases, and tool-awareness traps (heavy TLS, untagged or
-one-way traffic on a tool that tolerates it). The answer key is computed from the generated packets, independently
-of VisiLoop's checks. Full details: [bench/suite/RESULTS.md](bench/suite/RESULTS.md).
+A generated suite across IDS, NDR, APM and SIEM tools: healthy feeds, below-threshold noise that must not alarm,
+one to three faults per case, 45 near-threshold cases, and tool-awareness traps (heavy TLS, untagged, one-way,
+sliced or jumbo traffic on a tool that tolerates it). The answer key is computed from the generated packets,
+independently of VisiLoop's checks. Full details: [bench/suite/RESULTS.md](bench/suite/RESULTS.md).
 
 | What | Result |
 |---|---|
 | Muse Spark diagnosis | **200/200** cases exactly right: **235/235** faults, **0** false alarms, **0** ungrounded claims |
-| Fix choice | **234/235** sensible |
+| Fix choice | **235/235** sensible |
 | Fault checks | **200/200** cases exactly right |
-| Fixes proven by simulation | **189/189** fixable faults verified fixed, every faulty case healthy afterwards |
-| Cost and speed | **US$2.16** for 200 diagnoses (about US$0.01 each), median **9.6 s** |
+| Fixes proven by simulation | **185/185** fixable faults verified fixed, every faulty case healthy afterwards |
+| Cost and speed | **US$2.23** for 200 diagnoses (about US$0.01 each), median **9.9 s** |
 
-**Muse Spark found a gap in our own checks.** In the first run of the suite (v1), Muse Spark disagreed with the
-answer key on four SIEM cases with one-way traffic. Each time it explained that VisiLoop's SIEM profile does not need
-both directions, so no broker change was needed. It was right: our one-way check ignored the tool profile. We made the
-check tool-aware, added SIEM one-way traps to the suite (v2), and Muse Spark scored 200/200.
-v1 results: [bench/suite/results/RESULTS_v1.md](bench/suite/results/RESULTS_v1.md).
+**How the suite made VisiLoop better.** Each round of testing found something real, and each was fixed:
+
+- **v1: Muse Spark found a gap in our own checks.** It disagreed with the answer key on four SIEM cases with one-way
+  traffic, explaining each time that a SIEM does not need both directions. It was right: the one-way check ignored
+  the tool profile. The check is now tool-aware, and Muse Spark scored 200/200 on v2.
+- **v3: three new faults exposed two old bugs.** Packet slicing made the drop check raise false alarms (it now
+  measures segments by their IP-stated length), and tunnels exposed that the encrypted-traffic check missed
+  client acknowledgements to port 443. Both are fixed.
+- **v3: Muse Spark improved a fix.** For oversize frames on a SIEM it chose "trim frames to fit" over raising the MTU.
+  A SIEM does not need the payload, so that is the better fix; VisiLoop now applies it and verifies it.
+- **v3: clearer evidence, better answers.** On its first v3 run Muse Spark chose 229/235 sensible fixes (224 before
+  "trim to fit" was accepted for SIEM); most misses
+  blamed drops on slicing because our finding said "the feed is sliced". After rewording the finding to state that
+  slicing had been ruled out, the second run chose **235/235**.
+
+Earlier results: [v1](bench/suite/results/RESULTS_v1.md), [v2](bench/suite/results/RESULTS_v2.md),
+[v3 first run](bench/suite/results/RESULTS_v3_first_run.md).
 
 ### Diagram stress test: 36 diagrams, 9 styles (28 Oct 2026)
 
