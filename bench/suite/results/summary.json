@@ -132,9 +132,9 @@
   }
  },
  "loop": {
-  "fixes_verified": 179,
-  "fixable": 179,
-  "advice": 56,
+  "fixes_verified": 185,
+  "fixable": 185,
+  "advice": 50,
   "cases_with_faults": 135,
   "healthy_after": 135,
   "still_broken": {},
@@ -148,7 +148,7 @@
  "agent": {
   "tool_aware": {
    "exact": 200,
-   "fix_sensible": 224,
+   "fix_sensible": 229,
    "fix_total": 235,
    "one_way_optional_cases": [],
    "summaries": {}
@@ -228,24 +228,9 @@
    }
   },
   "failures": [],
-  "fix_sensible": 224,
+  "fix_sensible": 229,
   "fix_total": 235,
   "bad_fixes": [
-   [
-    "s061_single",
-    "oversize",
-    "slice"
-   ],
-   [
-    "s121_double",
-    "oversize",
-    "slice"
-   ],
-   [
-    "s130_double",
-    "oversize",
-    "slice"
-   ],
    [
     "s140_double",
     "packet_drops",
@@ -270,16 +255,6 @@
     "s165_triple",
     "packet_drops",
     "disable_slicing"
-   ],
-   [
-    "s171_triple",
-    "oversize",
-    "slice"
-   ],
-   [
-    "s180_triple",
-    "oversize",
-    "slice"
    ],
    [
     "s181_triple",
@@ -350,6 +325,7 @@
   "tokens_in": 664279,
   "tokens_out": 346315,
   "model": "muse-spark-1.2",
-  "recorded": "2026-10-29"
+  "recorded": "2026-10-29",
+  "run": "first"
  }
 }

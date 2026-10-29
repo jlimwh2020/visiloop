@@ -8,6 +8,7 @@ Usage (from the repo root, with MODEL_API_KEY set):
     python bench/suite/run_suite_agent.py --limit 5        # try 5 cases first
     python bench/suite/run_suite_agent.py                  # the rest (resumes)
     python bench/suite/run_suite_agent.py --max-usd 3 --workers 3
+    python bench/suite/run_suite_agent.py --run b          # a repeat run, kept separately
 """
 import argparse
 import json
@@ -65,6 +66,7 @@ def main():
     ap.add_argument("--limit", type=int, help="run at most this many new cases")
     ap.add_argument("--max-usd", type=float, default=5.0, help="stop before total spend passes this")
     ap.add_argument("--workers", type=int, default=2)
+    ap.add_argument("--run", default="", help="name for a repeat run on the same suite (results/agent-vN-NAME)")
     ap.add_argument("cases", nargs="*")
     a = ap.parse_args()
     if not os.environ.get("MODEL_API_KEY"):
@@ -73,7 +75,7 @@ def main():
     with open(os.path.join(CASES, "manifest.json")) as f:
         manifest = json.load(f)
     cases = manifest["cases"]
-    OUT = OUT or out_dir(manifest)
+    OUT = OUT or (out_dir(manifest) + (f"-{a.run}" if a.run else ""))
     os.makedirs(OUT, exist_ok=True)
     print(f"Suite version {manifest.get('version', 1)}; results go to {OUT}")
     todo = [c for c in cases if (not a.cases or c["name"] in a.cases)

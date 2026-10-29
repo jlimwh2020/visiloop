@@ -3,7 +3,7 @@
 Uses results/checks.json (from run_suite.py) and, if present, results/agent/*.json
 (from run_suite_agent.py). Can be re-run at any time.
 
-Usage (from the repo root):  python bench/suite/make_report.py
+Usage (from the repo root):  python bench/suite/make_report.py [--run NAME]
 """
 import json
 import os
@@ -28,6 +28,14 @@ GOOD_FIXES = {
     "tunnel": {"strip_tunnel"},
     "oversize": {"mtu_advice"},
 }
+
+
+def good_fixes(fault, tool):
+    """Fix actions accepted for a fault on this tool type."""
+    ok = set(GOOD_FIXES[fault])
+    if fault == "oversize" and tool in ("SIEM", "APM"):
+        ok.add("slice")              # these tools do not need the payload: trimming frames to fit is valid
+    return ok
 
 
 def prf(rows):
@@ -61,6 +69,10 @@ def pct(a, b):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--run", default="", help="report a repeat Muse Spark run (results/agent-vN-NAME)")
+    run = ap.parse_args().run
     with open(os.path.join(CASES, "manifest.json")) as f:
         manifest = json.load(f)
     cases = {c["name"]: c for c in manifest["cases"]}
@@ -99,7 +111,7 @@ def main():
 
     # ---- agent
     v = manifest.get("version", 1)
-    agent_dir = os.path.join(RES, "agent" if v == 1 else f"agent-v{v}")
+    agent_dir = os.path.join(RES, ("agent" if v == 1 else f"agent-v{v}") + (f"-{run}" if run else ""))
     agent = {}
     if os.path.isdir(agent_dir):
         for n in order:
@@ -119,7 +131,7 @@ def main():
                 if f["fault"] in cases[n]["faults"]:
                     fix_total += 1
                     action = (f.get("recommended_fix") or {}).get("action")
-                    if action in GOOD_FIXES[f["fault"]]:
+                    if action in good_fixes(f["fault"], cases[n]["tool"]):
                         fix_ok += 1
                     else:
                         bad_fixes.append((n, f["fault"], action))
@@ -135,10 +147,10 @@ def main():
         ta_fix_total = fix_total - sum(1 for n, fault, _ in bad_fixes if fault in optional[n]) \
             - sum(1 for n in an for f in agent[n]["findings"]
                   if f["fault"] in optional[n] and f["fault"] in cases[n]["faults"]
-                  and (f.get("recommended_fix") or {}).get("action") in GOOD_FIXES[f["fault"]])
+                  and (f.get("recommended_fix") or {}).get("action") in good_fixes(f["fault"], cases[n]["tool"]))
         ta_fix_ok -= sum(1 for n in an for f in agent[n]["findings"]
                          if f["fault"] in optional[n] and f["fault"] in cases[n]["faults"]
-                         and (f.get("recommended_fix") or {}).get("action") in GOOD_FIXES[f["fault"]])
+                         and (f.get("recommended_fix") or {}).get("action") in good_fixes(f["fault"], cases[n]["tool"]))
         optional_cases = [n for n in an if optional[n] and "one_way" in cases[n]["faults"]]
         metas = [agent[n]["_meta"] for n in an]
         secs = sorted(m["seconds"] for m in metas)
@@ -159,7 +171,7 @@ def main():
             "cost_usd": round(cost, 4), "cost_per_case": round(cost / len(an), 4),
             "seconds_median": statistics.median(secs), "seconds_p95": secs[int(0.95 * (len(secs) - 1))],
             "tokens_in": sum(m["tokens_in"] for m in metas), "tokens_out": sum(m["tokens_out"] for m in metas),
-            "model": metas[0]["model"], "recorded": max(m.get("recorded_at", "") for m in metas)}
+            "model": metas[0]["model"], "recorded": max(m.get("recorded_at", "") for m in metas), "run": run or "first"}
 
     os.makedirs(RES, exist_ok=True)
     with open(os.path.join(RES, "summary.json"), "w") as f:
@@ -229,7 +241,7 @@ def write_md(s):
                f"**{a['ungrounded_dropped']} ungrounded claims** reached the guard.",
                f"- **Checks exactly right on {pct(c['exact'], s['cases'])} cases.**",
                f"- **{pct(l['fixes_verified'], l['fixable'])} fixable faults verified fixed** in the simulated broker; "
-               f"{l['advice']} decryption items reported as advice.",
+               f"{l['advice']} advice items (decryption point or MTU change on the customer side).",
                f"- **US${a['cost_usd']:.2f} for all {a['cases']} diagnoses** (US${a['cost_per_case']:.4f} each), "
                f"median {a['seconds_median']:.1f} s, 95th percentile {a['seconds_p95']:.1f} s."]
     md += ["", "## 1. Checks (deterministic, free)", "",
@@ -256,7 +268,7 @@ def write_md(s):
 
     if "agent" in s:
         a = s["agent"]
-        md += ["", f"## 3. Muse Spark diagnosis ({a['model']}, recorded {a['recorded']})", "",
+        md += ["", f"## 3. Muse Spark diagnosis ({a['model']}, recorded {a['recorded']}, {a['run']} run)", "",
                f"Exactly right on **{pct(a['exact'], a['cases'])}** cases. "
                f"Tokens: {a['tokens_in']:,} in, {a['tokens_out']:,} out.", "",
                fault_table(a["per_fault"]), "",

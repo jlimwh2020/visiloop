@@ -32,5 +32,8 @@ class Oversize:
             metric=round(share, 4), threshold=THRESHOLD,
             evidence=[f for f, _ in big[:20]],
             detail=(f"{len(big)} of {len(rows)} frames ({share:.1%}) are larger than the {limit}-byte maximum of "
-                    f"this {ctx.profile.tool_type} port (largest {max(n for _, n in big)} bytes); its network card drops them"),
+                    f"this {ctx.profile.tool_type} port (largest {max(n for _, n in big)} bytes); its network card drops them. "
+                    + ("This tool needs the full payload, so trimming frames to fit is not an option."
+                       if ctx.profile.needs_full_payload else
+                       "This tool does not need the payload, so trimming frames to fit on the broker is an option.")),
         )]

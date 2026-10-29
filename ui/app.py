@@ -37,7 +37,7 @@ ACTION_NICE = {
     "replace_span_with_tap": "Replace SPAN with a passive TAP", "load_balance": "Load balance across tool ports",
     "vlan": "Preserve VLAN tags", "decrypt_advice": "Add a decryption point",
     "disable_slicing": "Turn off packet slicing", "strip_tunnel": "Strip tunnel headers",
-    "mtu_advice": "Raise the MTU to 9216",
+    "mtu_advice": "Raise the MTU to 9216", "slice": "Trim frames to fit the tool",
 }
 
 st.set_page_config(page_title="VisiLoop", page_icon="🔁", layout="wide")

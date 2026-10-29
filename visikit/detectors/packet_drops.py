@@ -62,7 +62,8 @@ class PacketDrops:
     def run(self, ctx: FeedContext) -> list[Finding]:
         if has_sliced_frames(ctx.pcap):
             flagged, tcp_total = gap_analysis(ctx.pcap)
-            method = " (sequence analysis by IP length; the feed is sliced)"
+            method = (". Some frames on this feed are sliced, so segments were measured by the length in their IP "
+                      "headers: slicing is ruled out as the cause, and these packets are genuinely missing")
         else:
             tcp_total = len(fields(ctx.pcap, ["frame.number"], "tcp"))
             flagged = [int(r[0]) for r in fields(ctx.pcap, ["frame.number"], FILTER)]
