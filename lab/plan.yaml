@@ -16,7 +16,9 @@ defaults:
   seconds: 60
   traffic: >-
     Standard lab mix for the whole capture: web browsing from the lab client to the lab web server (HTTP and
-    HTTPS), a few DNS lookups, and a file download of about 50 MB.
+    HTTPS), a few DNS lookups, and a file download of about 50 MB rate-limited to 25 MB/s
+    (curl --limit-rate 25M). At full 1G speed the download alone would fill the 1G tool port above VisiLoop's
+    80% burst limit, and every test would also report tool overload (found in the soft lab).
 
 tests:
   - id: L01_baseline
@@ -41,7 +43,9 @@ tests:
     restore: "9300: no monitor session 1. EXA rule 'tool' back to P1 + P2."
 
   - id: L04_span_oversubscribed
-    expect: [packet_drops]
+    # Gi1/0/24 sends at its full 1G into the 1G tool port P5, so VisiLoop also (rightly) reports the tool port
+    # running at line rate. Fixes: a TAP instead of the SPAN, and a faster or load-balanced tool port.
+    expect: [packet_drops, tool_overload]
     seconds: 90
     setup: >-
       9300: monitor session 1 source interface Gi1/0/1 - 2 both; destination Gi1/0/24 (1G).
@@ -52,7 +56,8 @@ tests:
     restore: "9300: no monitor session 1. EXA rule 'tool' back to P1 + P2."
 
   - id: L05_burst
-    expect: [tool_overload]
+    # Two 1G TAP legs into one 1G port overflow it: packets are really lost, so missing data is reported too.
+    expect: [packet_drops, tool_overload]
     setup: >-
       Baseline (or, better, the optical TAP on a 10G link into EXA P7 + P8, rule 'tool' = P7 + P8 -> P5; see
       LAB_SETUP.md). Start lab/lab_monitor.yaml in a second window to watch the EXA P5 counters.
@@ -98,7 +103,8 @@ tests:
       9300: system mtu 9198. Lab client and server NICs: MTU 9000. Baseline EXA rule. If the copper TAP does not pass
       jumbo frames (the capture shows none), use the optical TAP on a fibre link instead (LAB_SETUP.md).
     traffic: >-
-      iperf3 between the two jumbo hosts (iperf3 -c <server> -t 30), the 50 MB download, and the standard web mix.
+      iperf3 between the two jumbo hosts at a moderate rate (iperf3 -c <server> -t 30 -b 200M), and the standard
+      web mix. At full speed iperf3 would also fill the 1G tool port and add a tool-overload finding.
     restore: Lab client and server back to MTU 1500.
 
   - id: L10_encrypted
@@ -111,6 +117,10 @@ tests:
     expect: [one_way, truncated]
     ingress: true
     setup: "L02 setup (RX-only SPAN into P3, rule 'tool' input P3) plus slicing at 128 bytes on P5."
+    traffic: >-
+      The standard mix plus an upload from the client (iperf3 -c <server> -t 30 -b 50M). An RX-only SPAN of the
+      client port sees mostly the small ACKs of downloads; VisiLoop also catches slicing on those few long frames,
+      and the upload makes it certain.
     restore: "9300: no monitor session 1. EXA: slicing off, rule 'tool' back to P1 + P2."
 
   - id: L12_siem_tolerates_slicing

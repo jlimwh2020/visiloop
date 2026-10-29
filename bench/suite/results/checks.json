@@ -1,188 +1,44 @@
 {
- "generated": "2026-10-29 08:13",
+ "generated": "2026-10-29 15:27",
  "results": [
   {
    "name": "s001_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 4.94,
+   "check_seconds": 4.02,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 4.94
+   "seconds": 4.02
   },
   {
    "name": "s002_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 5.41,
+   "check_seconds": 3.56,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 5.41
+   "seconds": 3.56
   },
   {
    "name": "s003_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 4.35,
+   "check_seconds": 3.04,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 4.35
+   "seconds": 3.04
   },
   {
    "name": "s004_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 4.18,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 4.18
-  },
-  {
-   "name": "s005_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 4.08,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 4.08
-  },
-  {
-   "name": "s006_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 5.92,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 5.92
-  },
-  {
-   "name": "s007_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 4.58,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 4.58
-  },
-  {
-   "name": "s008_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 4.69,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 4.69
-  },
-  {
-   "name": "s009_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 4.75,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 4.75
-  },
-  {
-   "name": "s010_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 4.05,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 4.05
-  },
-  {
-   "name": "s011_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.43,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.43
-  },
-  {
-   "name": "s012_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.34,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.34
-  },
-  {
-   "name": "s013_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.25,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.25
-  },
-  {
-   "name": "s014_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.07,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.07
-  },
-  {
-   "name": "s015_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.4,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.4
-  },
-  {
-   "name": "s016_clean",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -194,91 +50,7 @@
    "seconds": 3.58
   },
   {
-   "name": "s017_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.08,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.08
-  },
-  {
-   "name": "s018_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.38,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.38
-  },
-  {
-   "name": "s019_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.64,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.64
-  },
-  {
-   "name": "s020_clean",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.18,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.18
-  },
-  {
-   "name": "s021_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.28,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.28
-  },
-  {
-   "name": "s022_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.75,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.75
-  },
-  {
-   "name": "s023_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.39,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.39
-  },
-  {
-   "name": "s024_mild",
+   "name": "s005_clean",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -290,55 +62,223 @@
    "seconds": 2.56
   },
   {
-   "name": "s025_mild",
+   "name": "s006_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.53,
+   "check_seconds": 4.86,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.53
+   "seconds": 4.86
   },
   {
-   "name": "s026_mild",
+   "name": "s007_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.78,
+   "check_seconds": 3.61,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.78
+   "seconds": 3.61
   },
   {
-   "name": "s027_mild",
+   "name": "s008_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 3.31,
+   "check_seconds": 3.93,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 3.31
+   "seconds": 3.93
   },
   {
-   "name": "s028_mild",
+   "name": "s009_clean",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.64,
+   "check_seconds": 3.45,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.64
+   "seconds": 3.45
   },
   {
-   "name": "s029_mild",
+   "name": "s010_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.61,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.61
+  },
+  {
+   "name": "s011_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.59,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.59
+  },
+  {
+   "name": "s012_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.6,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.6
+  },
+  {
+   "name": "s013_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.6,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.6
+  },
+  {
+   "name": "s014_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.25,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.25
+  },
+  {
+   "name": "s015_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.78,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.78
+  },
+  {
+   "name": "s016_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.26,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.26
+  },
+  {
+   "name": "s017_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.76,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.76
+  },
+  {
+   "name": "s018_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.87,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.87
+  },
+  {
+   "name": "s019_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.23,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.23
+  },
+  {
+   "name": "s020_clean",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.79,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.79
+  },
+  {
+   "name": "s021_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.44,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.44
+  },
+  {
+   "name": "s022_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.01,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.01
+  },
+  {
+   "name": "s023_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.73,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.73
+  },
+  {
+   "name": "s024_mild",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -350,235 +290,67 @@
    "seconds": 2.82
   },
   {
+   "name": "s025_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.05,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.05
+  },
+  {
+   "name": "s026_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.67,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.67
+  },
+  {
+   "name": "s027_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.33,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.33
+  },
+  {
+   "name": "s028_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.07,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.07
+  },
+  {
+   "name": "s029_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.35,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.35
+  },
+  {
    "name": "s030_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.12,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.12
-  },
-  {
-   "name": "s031_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.98,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.99
-  },
-  {
-   "name": "s032_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.92,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.92
-  },
-  {
-   "name": "s033_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.74,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.74
-  },
-  {
-   "name": "s034_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.74,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.74
-  },
-  {
-   "name": "s035_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.81,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.81
-  },
-  {
-   "name": "s036_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.19,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.19
-  },
-  {
-   "name": "s037_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.19,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.19
-  },
-  {
-   "name": "s038_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.69,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.69
-  },
-  {
-   "name": "s039_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.92,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.92
-  },
-  {
-   "name": "s040_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.63,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.63
-  },
-  {
-   "name": "s041_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.27,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.27
-  },
-  {
-   "name": "s042_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.88,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.88
-  },
-  {
-   "name": "s043_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.79,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.79
-  },
-  {
-   "name": "s044_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.42,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.42
-  },
-  {
-   "name": "s045_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.4,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.4
-  },
-  {
-   "name": "s046_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.54,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.54
-  },
-  {
-   "name": "s047_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.0,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.0
-  },
-  {
-   "name": "s048_mild",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 3.51,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 3.51
-  },
-  {
-   "name": "s049_mild",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -590,16 +362,244 @@
    "seconds": 3.41
   },
   {
-   "name": "s050_mild",
+   "name": "s031_mild",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.77,
+   "check_seconds": 3.54,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.77
+   "seconds": 3.54
+  },
+  {
+   "name": "s032_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.45,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.45
+  },
+  {
+   "name": "s033_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.98,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.98
+  },
+  {
+   "name": "s034_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.99,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.99
+  },
+  {
+   "name": "s035_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.35,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.35
+  },
+  {
+   "name": "s036_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 5.64,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 5.64
+  },
+  {
+   "name": "s037_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.96,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.96
+  },
+  {
+   "name": "s038_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.16,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.16
+  },
+  {
+   "name": "s039_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.79,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.79
+  },
+  {
+   "name": "s040_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.5,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.5
+  },
+  {
+   "name": "s041_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.33,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.33
+  },
+  {
+   "name": "s042_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.9,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.9
+  },
+  {
+   "name": "s043_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.4,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.4
+  },
+  {
+   "name": "s044_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.87,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.87
+  },
+  {
+   "name": "s045_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.61,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.61
+  },
+  {
+   "name": "s046_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.49,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.49
+  },
+  {
+   "name": "s047_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.5,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.5
+  },
+  {
+   "name": "s048_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.27,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.27
+  },
+  {
+   "name": "s049_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 4.24,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 4.24
+  },
+  {
+   "name": "s050_mild",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 3.91,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 3.91
   },
   {
    "name": "s051_single",
@@ -612,7 +612,7 @@
    "metrics": {
     "tunnel": 0.6122
    },
-   "check_seconds": 3.19,
+   "check_seconds": 4.81,
    "loop": {
     "fixes": [
      {
@@ -631,7 +631,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.18
+   "seconds": 10.58
   },
   {
    "name": "s052_single",
@@ -642,9 +642,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0764
+    "packet_drops": 0.0884
    },
-   "check_seconds": 2.61,
+   "check_seconds": 2.92,
    "loop": {
     "fixes": [
      {
@@ -663,7 +663,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.22
+   "seconds": 6.24
   },
   {
    "name": "s053_single",
@@ -676,7 +676,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 2.85,
+   "check_seconds": 3.59,
    "loop": {
     "fixes": [
      {
@@ -695,7 +695,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.59
+   "seconds": 7.31
   },
   {
    "name": "s054_single",
@@ -708,7 +708,7 @@
    "metrics": {
     "tool_overload": 1.251
    },
-   "check_seconds": 5.69,
+   "check_seconds": 7.24,
    "loop": {
     "fixes": [
      {
@@ -730,7 +730,7 @@
     "revealed": [],
     "tool_ports_after": 2
    },
-   "seconds": 20.11
+   "seconds": 26.06
   },
   {
    "name": "s055_single",
@@ -743,7 +743,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 2.45,
+   "check_seconds": 2.83,
    "loop": {
     "fixes": [
      {
@@ -762,7 +762,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.91
+   "seconds": 5.64
   },
   {
    "name": "s056_single",
@@ -775,7 +775,7 @@
    "metrics": {
     "truncated": 0.2271
    },
-   "check_seconds": 2.46,
+   "check_seconds": 3.4,
    "loop": {
     "fixes": [
      {
@@ -794,7 +794,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.34
+   "seconds": 6.54
   },
   {
    "name": "s057_single",
@@ -807,7 +807,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 2.73,
+   "check_seconds": 2.76,
    "loop": {
     "fixes": [
      {
@@ -826,7 +826,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.5
+   "seconds": 6.09
   },
   {
    "name": "s058_single",
@@ -837,9 +837,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.023
+    "packet_drops": 0.0261
    },
-   "check_seconds": 2.84,
+   "check_seconds": 2.93,
    "loop": {
     "fixes": [
      {
@@ -858,7 +858,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.76
+   "seconds": 5.96
   },
   {
    "name": "s059_single",
@@ -871,7 +871,7 @@
    "metrics": {
     "tool_overload": 3.156
    },
-   "check_seconds": 5.37,
+   "check_seconds": 5.89,
    "loop": {
     "fixes": [
      {
@@ -896,7 +896,7 @@
     "revealed": [],
     "tool_ports_after": 5
    },
-   "seconds": 21.07
+   "seconds": 26.85
   },
   {
    "name": "s060_single",
@@ -909,7 +909,7 @@
    "metrics": {
     "oversize": 0.0477
    },
-   "check_seconds": 3.88,
+   "check_seconds": 4.92,
    "loop": {
     "fixes": [
      {
@@ -930,7 +930,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.98
+   "seconds": 10.58
   },
   {
    "name": "s061_single",
@@ -943,7 +943,7 @@
    "metrics": {
     "oversize": 0.0385
    },
-   "check_seconds": 3.14,
+   "check_seconds": 2.56,
    "loop": {
     "fixes": [
      {
@@ -962,7 +962,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.27
+   "seconds": 6.0
   },
   {
    "name": "s062_single",
@@ -975,7 +975,7 @@
    "metrics": {
     "duplicates": 0.2891
    },
-   "check_seconds": 3.25,
+   "check_seconds": 3.26,
    "loop": {
     "fixes": [
      {
@@ -994,7 +994,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.91
+   "seconds": 6.51
   },
   {
    "name": "s063_single",
@@ -1007,7 +1007,7 @@
    "metrics": {
     "missing_vlan": 1.0
    },
-   "check_seconds": 2.26,
+   "check_seconds": 3.14,
    "loop": {
     "fixes": [
      {
@@ -1026,7 +1026,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.67
+   "seconds": 5.79
   },
   {
    "name": "s064_single",
@@ -1039,7 +1039,7 @@
    "metrics": {
     "one_way": 0.2181
    },
-   "check_seconds": 2.76,
+   "check_seconds": 3.28,
    "loop": {
     "fixes": [
      {
@@ -1058,7 +1058,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.84
+   "seconds": 7.12
   },
   {
    "name": "s065_single",
@@ -1071,7 +1071,7 @@
    "metrics": {
     "encrypted_share": 0.6889
    },
-   "check_seconds": 3.29,
+   "check_seconds": 3.78,
    "loop": {
     "fixes": [
      {
@@ -1092,7 +1092,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.55
+   "seconds": 7.74
   },
   {
    "name": "s066_single",
@@ -1105,7 +1105,7 @@
    "metrics": {
     "one_way": 0.2059
    },
-   "check_seconds": 3.0,
+   "check_seconds": 3.44,
    "loop": {
     "fixes": [
      {
@@ -1124,7 +1124,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.44
+   "seconds": 7.02
   },
   {
    "name": "s067_single",
@@ -1137,7 +1137,7 @@
    "metrics": {
     "one_way": 0.3626
    },
-   "check_seconds": 3.11,
+   "check_seconds": 3.88,
    "loop": {
     "fixes": [
      {
@@ -1156,7 +1156,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.24
+   "seconds": 7.62
   },
   {
    "name": "s068_single",
@@ -1169,7 +1169,7 @@
    "metrics": {
     "truncated": 0.2785
    },
-   "check_seconds": 2.57,
+   "check_seconds": 3.17,
    "loop": {
     "fixes": [
      {
@@ -1188,7 +1188,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.58
+   "seconds": 6.66
   },
   {
    "name": "s069_single",
@@ -1201,7 +1201,7 @@
    "metrics": {
     "duplicates": 0.19
    },
-   "check_seconds": 2.7,
+   "check_seconds": 2.72,
    "loop": {
     "fixes": [
      {
@@ -1220,7 +1220,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.05
+   "seconds": 5.01
   },
   {
    "name": "s070_single",
@@ -1233,7 +1233,7 @@
    "metrics": {
     "truncated": 0.0831
    },
-   "check_seconds": 2.77,
+   "check_seconds": 3.8,
    "loop": {
     "fixes": [
      {
@@ -1252,7 +1252,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.14
+   "seconds": 7.33
   },
   {
    "name": "s071_single",
@@ -1265,7 +1265,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 2.94,
+   "check_seconds": 3.56,
    "loop": {
     "fixes": [
      {
@@ -1284,7 +1284,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.04
+   "seconds": 7.04
   },
   {
    "name": "s072_single",
@@ -1297,7 +1297,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 2.45,
+   "check_seconds": 2.89,
    "loop": {
     "fixes": [
      {
@@ -1316,7 +1316,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.8
+   "seconds": 5.37
   },
   {
    "name": "s073_single",
@@ -1329,7 +1329,7 @@
    "metrics": {
     "duplicates": 0.0771
    },
-   "check_seconds": 2.5,
+   "check_seconds": 2.46,
    "loop": {
     "fixes": [
      {
@@ -1348,7 +1348,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.96
+   "seconds": 5.09
   },
   {
    "name": "s074_single",
@@ -1361,7 +1361,7 @@
    "metrics": {
     "duplicates": 0.1322
    },
-   "check_seconds": 2.74,
+   "check_seconds": 3.61,
    "loop": {
     "fixes": [
      {
@@ -1380,7 +1380,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.46
+   "seconds": 7.69
   },
   {
    "name": "s075_single",
@@ -1393,7 +1393,7 @@
    "metrics": {
     "tunnel": 0.257
    },
-   "check_seconds": 3.67,
+   "check_seconds": 4.88,
    "loop": {
     "fixes": [
      {
@@ -1412,7 +1412,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.17
+   "seconds": 12.48
   },
   {
    "name": "s076_single",
@@ -1425,7 +1425,7 @@
    "metrics": {
     "one_way": 0.2185
    },
-   "check_seconds": 2.91,
+   "check_seconds": 3.56,
    "loop": {
     "fixes": [
      {
@@ -1444,7 +1444,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.09
+   "seconds": 7.04
   },
   {
    "name": "s077_single",
@@ -1457,7 +1457,7 @@
    "metrics": {
     "duplicates": 0.1785
    },
-   "check_seconds": 3.89,
+   "check_seconds": 4.54,
    "loop": {
     "fixes": [
      {
@@ -1476,7 +1476,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.31
+   "seconds": 8.96
   },
   {
    "name": "s078_single",
@@ -1489,7 +1489,7 @@
    "metrics": {
     "encrypted_share": 0.7448
    },
-   "check_seconds": 2.94,
+   "check_seconds": 3.03,
    "loop": {
     "fixes": [
      {
@@ -1510,7 +1510,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.78
+   "seconds": 6.24
   },
   {
    "name": "s079_single",
@@ -1523,7 +1523,7 @@
    "metrics": {
     "encrypted_share": 0.9854
    },
-   "check_seconds": 2.86,
+   "check_seconds": 3.78,
    "loop": {
     "fixes": [
      {
@@ -1544,7 +1544,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.6
+   "seconds": 7.13
   },
   {
    "name": "s080_single",
@@ -1557,7 +1557,7 @@
    "metrics": {
     "tool_overload": 4.325
    },
-   "check_seconds": 2.44,
+   "check_seconds": 2.6,
    "loop": {
     "fixes": [
      {
@@ -1585,7 +1585,7 @@
     "revealed": [],
     "tool_ports_after": 8
    },
-   "seconds": 12.8
+   "seconds": 12.89
   },
   {
    "name": "s081_single",
@@ -1598,7 +1598,7 @@
    "metrics": {
     "oversize": 0.113
    },
-   "check_seconds": 3.06,
+   "check_seconds": 3.45,
    "loop": {
     "fixes": [
      {
@@ -1619,7 +1619,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.51
+   "seconds": 7.43
   },
   {
    "name": "s082_single",
@@ -1630,9 +1630,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0318
+    "packet_drops": 0.0376
    },
-   "check_seconds": 2.7,
+   "check_seconds": 3.78,
    "loop": {
     "fixes": [
      {
@@ -1651,7 +1651,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.52
+   "seconds": 7.18
   },
   {
    "name": "s083_single",
@@ -1662,9 +1662,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0734
+    "packet_drops": 0.0836
    },
-   "check_seconds": 2.86,
+   "check_seconds": 3.28,
    "loop": {
     "fixes": [
      {
@@ -1683,7 +1683,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.0
+   "seconds": 7.81
   },
   {
    "name": "s084_single",
@@ -1696,7 +1696,7 @@
    "metrics": {
     "tunnel": 0.2314
    },
-   "check_seconds": 3.41,
+   "check_seconds": 4.95,
    "loop": {
     "fixes": [
      {
@@ -1715,7 +1715,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.11
+   "seconds": 13.16
   },
   {
    "name": "s085_single",
@@ -1728,7 +1728,7 @@
    "metrics": {
     "tool_overload": 3.696
    },
-   "check_seconds": 2.51,
+   "check_seconds": 3.46,
    "loop": {
     "fixes": [
      {
@@ -1756,7 +1756,7 @@
     "revealed": [],
     "tool_ports_after": 8
    },
-   "seconds": 14.06
+   "seconds": 15.11
   },
   {
    "name": "s086_single",
@@ -1769,7 +1769,7 @@
    "metrics": {
     "missing_vlan": 0.5
    },
-   "check_seconds": 3.22,
+   "check_seconds": 4.72,
    "loop": {
     "fixes": [
      {
@@ -1788,7 +1788,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.35
+   "seconds": 10.26
   },
   {
    "name": "s087_single",
@@ -1801,7 +1801,7 @@
    "metrics": {
     "tunnel": 0.2071
    },
-   "check_seconds": 2.24,
+   "check_seconds": 3.61,
    "loop": {
     "fixes": [
      {
@@ -1820,7 +1820,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.31
+   "seconds": 8.37
   },
   {
    "name": "s088_single",
@@ -1831,9 +1831,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0295
+    "packet_drops": 0.0254
    },
-   "check_seconds": 2.41,
+   "check_seconds": 3.36,
    "loop": {
     "fixes": [
      {
@@ -1852,7 +1852,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.11
+   "seconds": 7.21
   },
   {
    "name": "s089_single",
@@ -1863,9 +1863,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0673
+    "packet_drops": 0.0732
    },
-   "check_seconds": 3.17,
+   "check_seconds": 4.23,
    "loop": {
     "fixes": [
      {
@@ -1884,7 +1884,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.9
+   "seconds": 8.62
   },
   {
    "name": "s090_single",
@@ -1897,7 +1897,7 @@
    "metrics": {
     "one_way": 0.5227
    },
-   "check_seconds": 2.63,
+   "check_seconds": 3.2,
    "loop": {
     "fixes": [
      {
@@ -1916,7 +1916,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.5
+   "seconds": 7.24
   },
   {
    "name": "s091_single",
@@ -1929,7 +1929,7 @@
    "metrics": {
     "tool_overload": 1.446
    },
-   "check_seconds": 6.27,
+   "check_seconds": 7.43,
    "loop": {
     "fixes": [
      {
@@ -1952,7 +1952,7 @@
     "revealed": [],
     "tool_ports_after": 3
    },
-   "seconds": 21.97
+   "seconds": 29.63
   },
   {
    "name": "s092_single",
@@ -1965,7 +1965,7 @@
    "metrics": {
     "oversize": 0.0417
    },
-   "check_seconds": 3.09,
+   "check_seconds": 4.28,
    "loop": {
     "fixes": [
      {
@@ -1986,7 +1986,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.65
+   "seconds": 8.22
   },
   {
    "name": "s093_single",
@@ -1999,7 +1999,7 @@
    "metrics": {
     "oversize": 0.1021
    },
-   "check_seconds": 2.59,
+   "check_seconds": 3.5,
    "loop": {
     "fixes": [
      {
@@ -2018,7 +2018,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.71
+   "seconds": 9.92
   },
   {
    "name": "s094_single",
@@ -2031,7 +2031,7 @@
    "metrics": {
     "duplicates": 0.186
    },
-   "check_seconds": 2.6,
+   "check_seconds": 3.05,
    "loop": {
     "fixes": [
      {
@@ -2050,7 +2050,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.94
+   "seconds": 6.55
   },
   {
    "name": "s095_single",
@@ -2063,7 +2063,7 @@
    "metrics": {
     "truncated": 0.0949
    },
-   "check_seconds": 2.44,
+   "check_seconds": 3.92,
    "loop": {
     "fixes": [
      {
@@ -2082,7 +2082,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.2
+   "seconds": 7.44
   },
   {
    "name": "s096_single",
@@ -2095,7 +2095,7 @@
    "metrics": {
     "tunnel": 0.1819
    },
-   "check_seconds": 3.52,
+   "check_seconds": 4.1,
    "loop": {
     "fixes": [
      {
@@ -2114,7 +2114,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.58
+   "seconds": 11.38
   },
   {
    "name": "s097_single",
@@ -2127,7 +2127,7 @@
    "metrics": {
     "one_way": 0.204
    },
-   "check_seconds": 3.53,
+   "check_seconds": 4.26,
    "loop": {
     "fixes": [
      {
@@ -2146,7 +2146,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.16
+   "seconds": 9.08
   },
   {
    "name": "s098_single",
@@ -2159,7 +2159,7 @@
    "metrics": {
     "encrypted_share": 0.9231
    },
-   "check_seconds": 3.1,
+   "check_seconds": 3.57,
    "loop": {
     "fixes": [
      {
@@ -2180,7 +2180,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.22
+   "seconds": 7.6
   },
   {
    "name": "s099_single",
@@ -2193,7 +2193,7 @@
    "metrics": {
     "duplicates": 0.0987
    },
-   "check_seconds": 2.84,
+   "check_seconds": 3.8,
    "loop": {
     "fixes": [
      {
@@ -2212,7 +2212,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.55
+   "seconds": 6.93
   },
   {
    "name": "s100_single",
@@ -2225,7 +2225,7 @@
    "metrics": {
     "truncated": 0.1712
    },
-   "check_seconds": 2.77,
+   "check_seconds": 4.29,
    "loop": {
     "fixes": [
      {
@@ -2244,7 +2244,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.24
+   "seconds": 8.28
   },
   {
    "name": "s101_single",
@@ -2257,7 +2257,7 @@
    "metrics": {
     "encrypted_share": 0.707
    },
-   "check_seconds": 3.14,
+   "check_seconds": 3.61,
    "loop": {
     "fixes": [
      {
@@ -2278,7 +2278,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.34
+   "seconds": 7.42
   },
   {
    "name": "s102_single",
@@ -2291,7 +2291,7 @@
    "metrics": {
     "tunnel": 0.5627
    },
-   "check_seconds": 3.23,
+   "check_seconds": 4.08,
    "loop": {
     "fixes": [
      {
@@ -2310,7 +2310,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.26
+   "seconds": 10.2
   },
   {
    "name": "s103_single",
@@ -2323,7 +2323,7 @@
    "metrics": {
     "encrypted_share": 0.986
    },
-   "check_seconds": 3.33,
+   "check_seconds": 4.54,
    "loop": {
     "fixes": [
      {
@@ -2344,7 +2344,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.6
+   "seconds": 8.83
   },
   {
    "name": "s104_single",
@@ -2357,7 +2357,7 @@
    "metrics": {
     "truncated": 0.1777
    },
-   "check_seconds": 2.05,
+   "check_seconds": 3.13,
    "loop": {
     "fixes": [
      {
@@ -2376,7 +2376,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.58
+   "seconds": 6.65
   },
   {
    "name": "s105_single",
@@ -2389,7 +2389,7 @@
    "metrics": {
     "tool_overload": 1.933
    },
-   "check_seconds": 6.19,
+   "check_seconds": 8.1,
    "loop": {
     "fixes": [
      {
@@ -2412,7 +2412,7 @@
     "revealed": [],
     "tool_ports_after": 3
    },
-   "seconds": 21.51
+   "seconds": 36.12
   },
   {
    "name": "s106_single",
@@ -2425,7 +2425,7 @@
    "metrics": {
     "oversize": 0.079
    },
-   "check_seconds": 3.17,
+   "check_seconds": 3.9,
    "loop": {
     "fixes": [
      {
@@ -2446,7 +2446,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.2
+   "seconds": 7.96
   },
   {
    "name": "s107_single",
@@ -2457,9 +2457,9 @@
     "packet_drops"
    ],
    "metrics": {
-    "packet_drops": 0.0163
+    "packet_drops": 0.0227
    },
-   "check_seconds": 2.51,
+   "check_seconds": 3.23,
    "loop": {
     "fixes": [
      {
@@ -2478,7 +2478,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.95
+   "seconds": 6.57
   },
   {
    "name": "s108_single",
@@ -2491,7 +2491,7 @@
    "metrics": {
     "one_way": 0.735
    },
-   "check_seconds": 3.01,
+   "check_seconds": 3.73,
    "loop": {
     "fixes": [
      {
@@ -2510,7 +2510,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.26
+   "seconds": 7.8
   },
   {
    "name": "s109_single",
@@ -2523,7 +2523,7 @@
    "metrics": {
     "tool_overload": 4.353
    },
-   "check_seconds": 2.58,
+   "check_seconds": 3.21,
    "loop": {
     "fixes": [
      {
@@ -2554,7 +2554,7 @@
     "revealed": [],
     "tool_ports_after": 11
    },
-   "seconds": 22.35
+   "seconds": 18.36
   },
   {
    "name": "s110_single",
@@ -2567,7 +2567,7 @@
    "metrics": {
     "encrypted_share": 0.8705
    },
-   "check_seconds": 3.75,
+   "check_seconds": 3.91,
    "loop": {
     "fixes": [
      {
@@ -2588,7 +2588,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.05
+   "seconds": 8.03
   },
   {
    "name": "s111_double",
@@ -2604,7 +2604,7 @@
     "one_way": 0.1765,
     "truncated": 0.1319
    },
-   "check_seconds": 2.13,
+   "check_seconds": 3.07,
    "loop": {
     "fixes": [
      {
@@ -2628,7 +2628,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.8
+   "seconds": 6.07
   },
   {
    "name": "s112_double",
@@ -2644,7 +2644,7 @@
     "oversize": 0.0949,
     "tunnel": 0.707
    },
-   "check_seconds": 3.5,
+   "check_seconds": 4.27,
    "loop": {
     "fixes": [
      {
@@ -2670,7 +2670,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.73
+   "seconds": 10.0
   },
   {
    "name": "s113_double",
@@ -2686,7 +2686,7 @@
     "encrypted_share": 0.7832,
     "truncated": 0.0828
    },
-   "check_seconds": 2.61,
+   "check_seconds": 2.69,
    "loop": {
     "fixes": [
      {
@@ -2712,7 +2712,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.6
+   "seconds": 5.57
   },
   {
    "name": "s114_double",
@@ -2728,7 +2728,7 @@
     "truncated": 0.2893,
     "tunnel": 0.5804
    },
-   "check_seconds": 2.79,
+   "check_seconds": 3.3,
    "loop": {
     "fixes": [
      {
@@ -2752,7 +2752,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.85
+   "seconds": 7.86
   },
   {
    "name": "s115_double",
@@ -2768,7 +2768,7 @@
     "duplicates": 0.096,
     "oversize": 0.1484
    },
-   "check_seconds": 2.82,
+   "check_seconds": 3.21,
    "loop": {
     "fixes": [
      {
@@ -2794,7 +2794,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.46
+   "seconds": 6.34
   },
   {
    "name": "s116_double",
@@ -2807,10 +2807,10 @@
     "tool_overload"
    ],
    "metrics": {
-    "packet_drops": 0.0348,
+    "packet_drops": 0.0271,
     "tool_overload": 3.796
    },
-   "check_seconds": 2.38,
+   "check_seconds": 3.06,
    "loop": {
     "fixes": [
      {
@@ -2844,7 +2844,7 @@
     "revealed": [],
     "tool_ports_after": 9
    },
-   "seconds": 17.07
+   "seconds": 16.03
   },
   {
    "name": "s117_double",
@@ -2860,7 +2860,7 @@
     "duplicates": 0.1128,
     "one_way": 0.5625
    },
-   "check_seconds": 2.56,
+   "check_seconds": 2.98,
    "loop": {
     "fixes": [
      {
@@ -2884,7 +2884,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 4.98
+   "seconds": 7.39
   },
   {
    "name": "s118_double",
@@ -2900,7 +2900,7 @@
     "truncated": 0.2748,
     "tunnel": 0.9721
    },
-   "check_seconds": 4.03,
+   "check_seconds": 5.37,
    "loop": {
     "fixes": [
      {
@@ -2924,7 +2924,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 10.2
+   "seconds": 13.57
   },
   {
    "name": "s119_double",
@@ -2937,10 +2937,10 @@
     "tunnel"
    ],
    "metrics": {
-    "packet_drops": 0.0194,
+    "packet_drops": 0.0228,
     "tunnel": 0.2915
    },
-   "check_seconds": 2.5,
+   "check_seconds": 3.08,
    "loop": {
     "fixes": [
      {
@@ -2964,7 +2964,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.98
+   "seconds": 7.32
   },
   {
    "name": "s120_double",
@@ -2980,7 +2980,7 @@
     "one_way": 0.2177,
     "tool_overload": 1.345
    },
-   "check_seconds": 2.65,
+   "check_seconds": 3.16,
    "loop": {
     "fixes": [
      {
@@ -3008,7 +3008,7 @@
     "revealed": [],
     "tool_ports_after": 3
    },
-   "seconds": 8.81
+   "seconds": 10.43
   },
   {
    "name": "s121_double",
@@ -3024,7 +3024,7 @@
     "oversize": 0.0287,
     "tunnel": 0.7059
    },
-   "check_seconds": 2.7,
+   "check_seconds": 3.05,
    "loop": {
     "fixes": [
      {
@@ -3048,7 +3048,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.28
+   "seconds": 8.54
   },
   {
    "name": "s122_double",
@@ -3064,7 +3064,7 @@
     "encrypted_share": 0.7292,
     "oversize": 0.0435
    },
-   "check_seconds": 2.6,
+   "check_seconds": 5.33,
    "loop": {
     "fixes": [
      {
@@ -3091,7 +3091,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.3
+   "seconds": 10.92
   },
   {
    "name": "s123_double",
@@ -3107,7 +3107,7 @@
     "encrypted_share": 0.9726,
     "tunnel": 1.0
    },
-   "check_seconds": 4.03,
+   "check_seconds": 8.34,
    "loop": {
     "fixes": [
      {
@@ -3133,7 +3133,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.94
+   "seconds": 21.06
   },
   {
    "name": "s124_double",
@@ -3149,7 +3149,7 @@
     "encrypted_share": 0.9922,
     "tool_overload": 2.995
    },
-   "check_seconds": 6.0,
+   "check_seconds": 12.04,
    "loop": {
     "fixes": [
      {
@@ -3181,7 +3181,7 @@
     "revealed": [],
     "tool_ports_after": 5
    },
-   "seconds": 20.36
+   "seconds": 44.36
   },
   {
    "name": "s125_double",
@@ -3197,7 +3197,7 @@
     "duplicates": 0.0839,
     "encrypted_share": 0.9716
    },
-   "check_seconds": 2.96,
+   "check_seconds": 6.08,
    "loop": {
     "fixes": [
      {
@@ -3223,7 +3223,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.59
+   "seconds": 11.32
   },
   {
    "name": "s126_double",
@@ -3237,9 +3237,9 @@
    ],
    "metrics": {
     "duplicates": 0.0927,
-    "packet_drops": 0.0182
+    "packet_drops": 0.0218
    },
-   "check_seconds": 2.56,
+   "check_seconds": 3.43,
    "loop": {
     "fixes": [
      {
@@ -3263,7 +3263,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.12
+   "seconds": 7.64
   },
   {
    "name": "s127_double",
@@ -3279,7 +3279,7 @@
     "oversize": 0.042,
     "tunnel": 0.2863
    },
-   "check_seconds": 3.55,
+   "check_seconds": 6.55,
    "loop": {
     "fixes": [
      {
@@ -3305,7 +3305,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.02
+   "seconds": 17.33
   },
   {
    "name": "s128_double",
@@ -3321,7 +3321,7 @@
     "missing_vlan": 1.0,
     "tool_overload": 2.722
    },
-   "check_seconds": 4.49,
+   "check_seconds": 12.39,
    "loop": {
     "fixes": [
      {
@@ -3350,7 +3350,7 @@
     "revealed": [],
     "tool_ports_after": 4
    },
-   "seconds": 17.76
+   "seconds": 44.02
   },
   {
    "name": "s129_double",
@@ -3366,7 +3366,7 @@
     "encrypted_share": 0.9886,
     "tunnel": 0.6009
    },
-   "check_seconds": 3.01,
+   "check_seconds": 4.09,
    "loop": {
     "fixes": [
      {
@@ -3392,7 +3392,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.44
+   "seconds": 10.61
   },
   {
    "name": "s130_double",
@@ -3408,7 +3408,7 @@
     "oversize": 0.123,
     "tunnel": 0.5216
    },
-   "check_seconds": 3.22,
+   "check_seconds": 3.26,
    "loop": {
     "fixes": [
      {
@@ -3432,7 +3432,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.84
+   "seconds": 11.2
   },
   {
    "name": "s131_double",
@@ -3448,7 +3448,7 @@
     "duplicates": 0.2052,
     "truncated": 0.1396
    },
-   "check_seconds": 3.66,
+   "check_seconds": 4.74,
    "loop": {
     "fixes": [
      {
@@ -3472,7 +3472,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.2
+   "seconds": 7.78
   },
   {
    "name": "s132_double",
@@ -3488,7 +3488,7 @@
     "encrypted_share": 0.985,
     "missing_vlan": 0.5
    },
-   "check_seconds": 3.27,
+   "check_seconds": 3.16,
    "loop": {
     "fixes": [
      {
@@ -3514,7 +3514,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.37
+   "seconds": 6.3
   },
   {
    "name": "s133_double",
@@ -3530,7 +3530,7 @@
     "one_way": 0.1845,
     "tunnel": 0.3843
    },
-   "check_seconds": 2.28,
+   "check_seconds": 2.42,
    "loop": {
     "fixes": [
      {
@@ -3554,7 +3554,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.52
+   "seconds": 5.8
   },
   {
    "name": "s134_double",
@@ -3570,7 +3570,7 @@
     "encrypted_share": 0.8057,
     "tunnel": 0.3056
    },
-   "check_seconds": 2.8,
+   "check_seconds": 2.79,
    "loop": {
     "fixes": [
      {
@@ -3596,7 +3596,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.54
+   "seconds": 6.56
   },
   {
    "name": "s135_double",
@@ -3609,10 +3609,10 @@
     "tunnel"
    ],
    "metrics": {
-    "packet_drops": 0.0331,
+    "packet_drops": 0.0409,
     "tunnel": 0.7671
    },
-   "check_seconds": 3.22,
+   "check_seconds": 3.11,
    "loop": {
     "fixes": [
      {
@@ -3636,7 +3636,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.16
+   "seconds": 10.26
   },
   {
    "name": "s136_double",
@@ -3652,7 +3652,7 @@
     "truncated": 0.1448,
     "tunnel": 0.5865
    },
-   "check_seconds": 3.07,
+   "check_seconds": 5.67,
    "loop": {
     "fixes": [
      {
@@ -3676,7 +3676,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.4
+   "seconds": 17.48
   },
   {
    "name": "s137_double",
@@ -3692,7 +3692,7 @@
     "encrypted_share": 0.7805,
     "one_way": 0.1789
    },
-   "check_seconds": 3.53,
+   "check_seconds": 6.77,
    "loop": {
     "fixes": [
      {
@@ -3718,7 +3718,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.81
+   "seconds": 13.4
   },
   {
    "name": "s138_double",
@@ -3734,7 +3734,7 @@
     "missing_vlan": 0.5,
     "tunnel": 0.6375
    },
-   "check_seconds": 3.03,
+   "check_seconds": 4.45,
    "loop": {
     "fixes": [
      {
@@ -3758,7 +3758,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.23
+   "seconds": 8.87
   },
   {
    "name": "s139_double",
@@ -3774,7 +3774,7 @@
     "one_way": 0.1905,
     "tool_overload": 2.365
    },
-   "check_seconds": 2.92,
+   "check_seconds": 2.75,
    "loop": {
     "fixes": [
      {
@@ -3806,7 +3806,7 @@
     "revealed": [],
     "tool_ports_after": 7
    },
-   "seconds": 15.31
+   "seconds": 17.69
   },
   {
    "name": "s140_double",
@@ -3819,10 +3819,10 @@
     "truncated"
    ],
    "metrics": {
-    "packet_drops": 0.0868,
+    "packet_drops": 0.0766,
     "truncated": 0.124
    },
-   "check_seconds": 2.84,
+   "check_seconds": 3.62,
    "loop": {
     "fixes": [
      {
@@ -3846,7 +3846,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.71
+   "seconds": 6.95
   },
   {
    "name": "s141_double",
@@ -3862,7 +3862,7 @@
     "duplicates": 0.1826,
     "tunnel": 0.7011
    },
-   "check_seconds": 2.8,
+   "check_seconds": 2.97,
    "loop": {
     "fixes": [
      {
@@ -3886,7 +3886,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.05
+   "seconds": 7.02
   },
   {
    "name": "s142_double",
@@ -3902,7 +3902,7 @@
     "duplicates": 0.1161,
     "one_way": 0.5115
    },
-   "check_seconds": 2.93,
+   "check_seconds": 3.63,
    "loop": {
     "fixes": [
      {
@@ -3926,7 +3926,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.08
+   "seconds": 7.5
   },
   {
    "name": "s143_double",
@@ -3942,7 +3942,7 @@
     "one_way": 0.2147,
     "tunnel": 0.5805
    },
-   "check_seconds": 3.73,
+   "check_seconds": 7.43,
    "loop": {
     "fixes": [
      {
@@ -3966,7 +3966,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.4
+   "seconds": 19.91
   },
   {
    "name": "s144_double",
@@ -3982,7 +3982,7 @@
     "oversize": 0.0854,
     "tool_overload": 2.779
    },
-   "check_seconds": 2.84,
+   "check_seconds": 6.39,
    "loop": {
     "fixes": [
      {
@@ -4026,7 +4026,7 @@
     "revealed": [],
     "tool_ports_after": 17
    },
-   "seconds": 54.34
+   "seconds": 42.88
   },
   {
    "name": "s145_double",
@@ -4042,7 +4042,7 @@
     "duplicates": 0.0907,
     "one_way": 0.1859
    },
-   "check_seconds": 3.01,
+   "check_seconds": 3.09,
    "loop": {
     "fixes": [
      {
@@ -4066,7 +4066,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.85
+   "seconds": 6.51
   },
   {
    "name": "s146_double",
@@ -4082,7 +4082,7 @@
     "encrypted_share": 0.8204,
     "oversize": 0.0744
    },
-   "check_seconds": 3.14,
+   "check_seconds": 5.13,
    "loop": {
     "fixes": [
      {
@@ -4109,7 +4109,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.57
+   "seconds": 9.0
   },
   {
    "name": "s147_double",
@@ -4123,9 +4123,9 @@
    ],
    "metrics": {
     "missing_vlan": 0.5,
-    "packet_drops": 0.0604
+    "packet_drops": 0.0694
    },
-   "check_seconds": 3.22,
+   "check_seconds": 2.99,
    "loop": {
     "fixes": [
      {
@@ -4149,7 +4149,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.37
+   "seconds": 6.28
   },
   {
    "name": "s148_double",
@@ -4165,7 +4165,7 @@
     "duplicates": 0.2452,
     "missing_vlan": 1.0
    },
-   "check_seconds": 3.0,
+   "check_seconds": 3.27,
    "loop": {
     "fixes": [
      {
@@ -4189,7 +4189,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.25
+   "seconds": 6.66
   },
   {
    "name": "s149_double",
@@ -4202,10 +4202,10 @@
     "tunnel"
    ],
    "metrics": {
-    "packet_drops": 0.0813,
+    "packet_drops": 0.0942,
     "tunnel": 0.6395
    },
-   "check_seconds": 3.69,
+   "check_seconds": 6.2,
    "loop": {
     "fixes": [
      {
@@ -4229,7 +4229,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.2
+   "seconds": 12.21
   },
   {
    "name": "s150_double",
@@ -4245,7 +4245,7 @@
     "oversize": 0.1448,
     "tool_overload": 3.054
    },
-   "check_seconds": 3.59,
+   "check_seconds": 5.4,
    "loop": {
     "fixes": [
      {
@@ -4289,7 +4289,7 @@
     "revealed": [],
     "tool_ports_after": 17
    },
-   "seconds": 63.63
+   "seconds": 86.49
   },
   {
    "name": "s151_double",
@@ -4302,10 +4302,10 @@
     "tunnel"
    ],
    "metrics": {
-    "packet_drops": 0.0448,
+    "packet_drops": 0.0531,
     "tunnel": 0.9398
    },
-   "check_seconds": 3.82,
+   "check_seconds": 6.91,
    "loop": {
     "fixes": [
      {
@@ -4329,7 +4329,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 9.22
+   "seconds": 22.84
   },
   {
    "name": "s152_double",
@@ -4345,7 +4345,7 @@
     "encrypted_share": 0.7906,
     "oversize": 0.0262
    },
-   "check_seconds": 2.97,
+   "check_seconds": 5.41,
    "loop": {
     "fixes": [
      {
@@ -4372,7 +4372,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.13
+   "seconds": 10.7
   },
   {
    "name": "s153_double",
@@ -4388,7 +4388,7 @@
     "one_way": 0.5176,
     "truncated": 0.1686
    },
-   "check_seconds": 2.63,
+   "check_seconds": 5.59,
    "loop": {
     "fixes": [
      {
@@ -4412,7 +4412,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.86
+   "seconds": 12.73
   },
   {
    "name": "s154_double",
@@ -4426,9 +4426,9 @@
    ],
    "metrics": {
     "oversize": 0.1039,
-    "packet_drops": 0.1009
+    "packet_drops": 0.0933
    },
-   "check_seconds": 2.96,
+   "check_seconds": 5.1,
    "loop": {
     "fixes": [
      {
@@ -4454,7 +4454,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.93
+   "seconds": 11.37
   },
   {
    "name": "s155_double",
@@ -4470,7 +4470,7 @@
     "encrypted_share": 0.8022,
     "truncated": 0.2913
    },
-   "check_seconds": 2.45,
+   "check_seconds": 5.88,
    "loop": {
     "fixes": [
      {
@@ -4496,7 +4496,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.33
+   "seconds": 11.64
   },
   {
    "name": "s156_double",
@@ -4509,10 +4509,10 @@
     "truncated"
    ],
    "metrics": {
-    "packet_drops": 0.1039,
+    "packet_drops": 0.0921,
     "truncated": 0.1482
    },
-   "check_seconds": 2.72,
+   "check_seconds": 10.49,
    "loop": {
     "fixes": [
      {
@@ -4536,7 +4536,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.8
+   "seconds": 19.76
   },
   {
    "name": "s157_double",
@@ -4552,7 +4552,7 @@
     "oversize": 0.0838,
     "tool_overload": 2.559
    },
-   "check_seconds": 2.75,
+   "check_seconds": 4.6,
    "loop": {
     "fixes": [
      {
@@ -4589,7 +4589,7 @@
     "revealed": [],
     "tool_ports_after": 10
    },
-   "seconds": 24.59
+   "seconds": 26.39
   },
   {
    "name": "s158_double",
@@ -4605,7 +4605,7 @@
     "duplicates": 0.1556,
     "truncated": 0.2547
    },
-   "check_seconds": 3.02,
+   "check_seconds": 4.0,
    "loop": {
     "fixes": [
      {
@@ -4629,7 +4629,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.06
+   "seconds": 9.02
   },
   {
    "name": "s159_double",
@@ -4645,7 +4645,7 @@
     "one_way": 0.3456,
     "truncated": 0.1473
    },
-   "check_seconds": 2.31,
+   "check_seconds": 3.98,
    "loop": {
     "fixes": [
      {
@@ -4669,7 +4669,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.39
+   "seconds": 7.11
   },
   {
    "name": "s160_double",
@@ -4685,7 +4685,7 @@
     "duplicates": 0.1262,
     "one_way": 0.194
    },
-   "check_seconds": 2.87,
+   "check_seconds": 3.27,
    "loop": {
     "fixes": [
      {
@@ -4709,7 +4709,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.83
+   "seconds": 7.06
   },
   {
    "name": "s161_triple",
@@ -4728,7 +4728,7 @@
     "encrypted_share": 0.9118,
     "oversize": 0.1076
    },
-   "check_seconds": 3.07,
+   "check_seconds": 4.39,
    "loop": {
     "fixes": [
      {
@@ -4760,7 +4760,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.08
+   "seconds": 7.83
   },
   {
    "name": "s162_triple",
@@ -4779,7 +4779,7 @@
     "oversize": 0.0532,
     "tunnel": 0.277
    },
-   "check_seconds": 3.4,
+   "check_seconds": 3.52,
    "loop": {
     "fixes": [
      {
@@ -4810,7 +4810,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.84
+   "seconds": 8.28
   },
   {
    "name": "s163_triple",
@@ -4826,10 +4826,10 @@
    ],
    "metrics": {
     "encrypted_share": 0.7355,
-    "packet_drops": 0.0541,
+    "packet_drops": 0.0648,
     "tunnel": 0.2909
    },
-   "check_seconds": 3.23,
+   "check_seconds": 3.99,
    "loop": {
     "fixes": [
      {
@@ -4860,7 +4860,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.21
+   "seconds": 9.9
   },
   {
    "name": "s164_triple",
@@ -4879,7 +4879,7 @@
     "tool_overload": 2.172,
     "tunnel": 0.9519
    },
-   "check_seconds": 6.94,
+   "check_seconds": 7.74,
    "loop": {
     "fixes": [
      {
@@ -4913,7 +4913,7 @@
     "revealed": [],
     "tool_ports_after": 4
    },
-   "seconds": 32.63
+   "seconds": 63.09
   },
   {
    "name": "s165_triple",
@@ -4930,9 +4930,9 @@
    "metrics": {
     "encrypted_share": 0.8575,
     "oversize": 0.0221,
-    "packet_drops": 0.0656
+    "packet_drops": 0.0544
    },
-   "check_seconds": 2.78,
+   "check_seconds": 3.66,
    "loop": {
     "fixes": [
      {
@@ -4964,7 +4964,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.91
+   "seconds": 9.73
   },
   {
    "name": "s166_triple",
@@ -4983,7 +4983,7 @@
     "tool_overload": 3.929,
     "tunnel": 0.2118
    },
-   "check_seconds": 3.7,
+   "check_seconds": 6.92,
    "loop": {
     "fixes": [
      {
@@ -5033,7 +5033,7 @@
     "revealed": [],
     "tool_ports_after": 18
    },
-   "seconds": 68.73
+   "seconds": 37.52
   },
   {
    "name": "s167_triple",
@@ -5052,7 +5052,7 @@
     "missing_vlan": 0.5,
     "tunnel": 0.6797
    },
-   "check_seconds": 3.2,
+   "check_seconds": 5.11,
    "loop": {
     "fixes": [
      {
@@ -5083,7 +5083,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.18
+   "seconds": 14.66
   },
   {
    "name": "s168_triple",
@@ -5102,7 +5102,7 @@
     "one_way": 0.4167,
     "tool_overload": 1.572
    },
-   "check_seconds": 3.28,
+   "check_seconds": 6.97,
    "loop": {
     "fixes": [
      {
@@ -5140,7 +5140,7 @@
     "revealed": [],
     "tool_ports_after": 6
    },
-   "seconds": 17.15
+   "seconds": 34.29
   },
   {
    "name": "s169_triple",
@@ -5159,7 +5159,7 @@
     "one_way": 0.3413,
     "truncated": 0.102
    },
-   "check_seconds": 2.95,
+   "check_seconds": 6.45,
    "loop": {
     "fixes": [
      {
@@ -5188,7 +5188,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.19
+   "seconds": 13.27
   },
   {
    "name": "s170_triple",
@@ -5205,9 +5205,9 @@
    "metrics": {
     "duplicates": 0.1239,
     "missing_vlan": 1.0,
-    "packet_drops": 0.0299
+    "packet_drops": 0.0348
    },
-   "check_seconds": 2.93,
+   "check_seconds": 5.78,
    "loop": {
     "fixes": [
      {
@@ -5236,7 +5236,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.53
+   "seconds": 10.86
   },
   {
    "name": "s171_triple",
@@ -5255,7 +5255,7 @@
     "oversize": 0.0556,
     "tool_overload": 3.62
    },
-   "check_seconds": 2.44,
+   "check_seconds": 3.76,
    "loop": {
     "fixes": [
      {
@@ -5304,7 +5304,7 @@
     "revealed": [],
     "tool_ports_after": 19
    },
-   "seconds": 74.55
+   "seconds": 60.94
   },
   {
    "name": "s172_triple",
@@ -5323,7 +5323,7 @@
     "tool_overload": 1.33,
     "tunnel": 0.2788
    },
-   "check_seconds": 5.9,
+   "check_seconds": 6.49,
    "loop": {
     "fixes": [
      {
@@ -5355,7 +5355,7 @@
     "revealed": [],
     "tool_ports_after": 2
    },
-   "seconds": 26.35
+   "seconds": 30.51
   },
   {
    "name": "s173_triple",
@@ -5372,9 +5372,9 @@
    "metrics": {
     "duplicates": 0.2539,
     "missing_vlan": 1.0,
-    "packet_drops": 0.0103
+    "packet_drops": 0.0124
    },
-   "check_seconds": 3.94,
+   "check_seconds": 4.25,
    "loop": {
     "fixes": [
      {
@@ -5403,7 +5403,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.76
+   "seconds": 8.14
   },
   {
    "name": "s174_triple",
@@ -5420,9 +5420,9 @@
    "metrics": {
     "one_way": 0.6754,
     "oversize": 0.0428,
-    "packet_drops": 0.0191
+    "packet_drops": 0.0234
    },
-   "check_seconds": 2.47,
+   "check_seconds": 2.93,
    "loop": {
     "fixes": [
      {
@@ -5453,7 +5453,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.58
+   "seconds": 6.38
   },
   {
    "name": "s175_triple",
@@ -5469,10 +5469,10 @@
    ],
    "metrics": {
     "one_way": 0.2552,
-    "packet_drops": 0.0675,
+    "packet_drops": 0.0594,
     "truncated": 0.1104
    },
-   "check_seconds": 2.68,
+   "check_seconds": 3.2,
    "loop": {
     "fixes": [
      {
@@ -5501,7 +5501,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.67
+   "seconds": 6.35
   },
   {
    "name": "s176_triple",
@@ -5518,9 +5518,9 @@
    "metrics": {
     "missing_vlan": 1.0,
     "one_way": 0.4028,
-    "packet_drops": 0.0224
+    "packet_drops": 0.0264
    },
-   "check_seconds": 3.0,
+   "check_seconds": 3.23,
    "loop": {
     "fixes": [
      {
@@ -5549,7 +5549,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.63
+   "seconds": 7.26
   },
   {
    "name": "s177_triple",
@@ -5568,7 +5568,7 @@
     "tool_overload": 1.338,
     "tunnel": 0.2811
    },
-   "check_seconds": 6.56,
+   "check_seconds": 6.54,
    "loop": {
     "fixes": [
      {
@@ -5602,7 +5602,7 @@
     "revealed": [],
     "tool_ports_after": 2
    },
-   "seconds": 26.7
+   "seconds": 30.77
   },
   {
    "name": "s178_triple",
@@ -5621,7 +5621,7 @@
     "tool_overload": 1.71,
     "truncated": 0.1903
    },
-   "check_seconds": 4.75,
+   "check_seconds": 5.61,
    "loop": {
     "fixes": [
      {
@@ -5658,7 +5658,7 @@
     "revealed": [],
     "tool_ports_after": 5
    },
-   "seconds": 19.67
+   "seconds": 23.79
   },
   {
    "name": "s179_triple",
@@ -5675,9 +5675,9 @@
    "metrics": {
     "encrypted_share": 0.832,
     "missing_vlan": 0.5,
-    "packet_drops": 0.0757
+    "packet_drops": 0.0872
    },
-   "check_seconds": 3.14,
+   "check_seconds": 3.63,
    "loop": {
     "fixes": [
      {
@@ -5708,7 +5708,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.32
+   "seconds": 7.21
   },
   {
    "name": "s180_triple",
@@ -5727,7 +5727,7 @@
     "oversize": 0.1526,
     "tunnel": 0.2826
    },
-   "check_seconds": 2.77,
+   "check_seconds": 3.31,
    "loop": {
     "fixes": [
      {
@@ -5756,7 +5756,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 8.8
+   "seconds": 11.48
   },
   {
    "name": "s181_triple",
@@ -5775,7 +5775,7 @@
     "oversize": 0.1104,
     "tool_overload": 3.422
    },
-   "check_seconds": 2.46,
+   "check_seconds": 2.9,
    "loop": {
     "fixes": [
      {
@@ -5828,7 +5828,7 @@
     "revealed": [],
     "tool_ports_after": 21
    },
-   "seconds": 64.46
+   "seconds": 18.45
   },
   {
    "name": "s182_triple",
@@ -5847,7 +5847,7 @@
     "one_way": 0.5325,
     "tool_overload": 1.534
    },
-   "check_seconds": 4.39,
+   "check_seconds": 4.81,
    "loop": {
     "fixes": [
      {
@@ -5882,7 +5882,7 @@
     "revealed": [],
     "tool_ports_after": 5
    },
-   "seconds": 20.02
+   "seconds": 25.19
   },
   {
    "name": "s183_triple",
@@ -5901,7 +5901,7 @@
     "missing_vlan": 1.0,
     "truncated": 0.086
    },
-   "check_seconds": 2.38,
+   "check_seconds": 2.89,
    "loop": {
     "fixes": [
      {
@@ -5932,7 +5932,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 5.13
+   "seconds": 5.76
   },
   {
    "name": "s184_triple",
@@ -5949,9 +5949,9 @@
    "metrics": {
     "duplicates": 0.1024,
     "oversize": 0.0659,
-    "packet_drops": 0.0264
+    "packet_drops": 0.0299
    },
-   "check_seconds": 3.46,
+   "check_seconds": 4.12,
    "loop": {
     "fixes": [
      {
@@ -5982,7 +5982,7 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 6.79
+   "seconds": 7.99
   },
   {
    "name": "s185_triple",
@@ -5999,9 +5999,9 @@
    "metrics": {
     "encrypted_share": 0.8326,
     "missing_vlan": 0.5,
-    "packet_drops": 0.0731
+    "packet_drops": 0.0883
    },
-   "check_seconds": 3.26,
+   "check_seconds": 3.6,
    "loop": {
     "fixes": [
      {
@@ -6032,154 +6032,46 @@
     "revealed": [],
     "tool_ports_after": 1
    },
-   "seconds": 7.04
+   "seconds": 7.28
   },
   {
    "name": "s186_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 1.84,
+   "check_seconds": 2.04,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 1.84
+   "seconds": 2.04
   },
   {
    "name": "s187_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 2.23,
+   "check_seconds": 2.88,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 2.23
+   "seconds": 2.88
   },
   {
    "name": "s188_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 3.02,
+   "check_seconds": 3.26,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 3.02
+   "seconds": 3.26
   },
   {
    "name": "s189_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.93,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.93
-  },
-  {
-   "name": "s190_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.72,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.72
-  },
-  {
-   "name": "s191_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.09,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.09
-  },
-  {
-   "name": "s192_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.49,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.49
-  },
-  {
-   "name": "s193_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.61,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.61
-  },
-  {
-   "name": "s194_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.35,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.35
-  },
-  {
-   "name": "s195_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.92,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.92
-  },
-  {
-   "name": "s196_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 2.02,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 2.02
-  },
-  {
-   "name": "s197_tool_aware",
-   "expected": [],
-   "found": [],
-   "metrics": {},
-   "check_seconds": 1.72,
-   "loop": {
-    "fixes": [],
-    "result": "healthy (no faults found)"
-   },
-   "seconds": 1.72
-  },
-  {
-   "name": "s198_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -6191,19 +6083,19 @@
    "seconds": 2.29
   },
   {
-   "name": "s199_tool_aware",
+   "name": "s190_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
-   "check_seconds": 3.19,
+   "check_seconds": 2.27,
    "loop": {
     "fixes": [],
     "result": "healthy (no faults found)"
    },
-   "seconds": 3.19
+   "seconds": 2.27
   },
   {
-   "name": "s200_tool_aware",
+   "name": "s191_tool_aware",
    "expected": [],
    "found": [],
    "metrics": {},
@@ -6213,6 +6105,114 @@
     "result": "healthy (no faults found)"
    },
    "seconds": 2.24
+  },
+  {
+   "name": "s192_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.31,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.31
+  },
+  {
+   "name": "s193_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 1.9,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 1.9
+  },
+  {
+   "name": "s194_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.31,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.31
+  },
+  {
+   "name": "s195_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.26,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.26
+  },
+  {
+   "name": "s196_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.21,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.21
+  },
+  {
+   "name": "s197_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.08,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.08
+  },
+  {
+   "name": "s198_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.73,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.73
+  },
+  {
+   "name": "s199_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.15,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.15
+  },
+  {
+   "name": "s200_tool_aware",
+   "expected": [],
+   "found": [],
+   "metrics": {},
+   "check_seconds": 2.5,
+   "loop": {
+    "fixes": [],
+    "result": "healthy (no faults found)"
+   },
+   "seconds": 2.5
   }
  ]
 }

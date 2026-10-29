@@ -1,0 +1,168 @@
+# Soft lab test plan: the real-lab tests (lab/plan.yaml), set up automatically on the virtual lab.
+#
+# Speeds (Mbit/s): client and server access links 25, SPAN destination Gi1/0/24 40, broker tool port P5 150
+# (40 in L05, 400 in L09), P6 1000. Each test's tool profile uses the P5 speed as the tool's port speed.
+#
+# switch: changes to {"span": null, "erspan": null}; broker: changes to the baseline rules below.
+# traffic: list of steps run together: mix | https | iperf (bidir, seconds) | bursts | jumbo.
+
+defaults:
+  tool: IDS
+  vlans: []
+  seconds: 20
+  p5_mbps: 150
+  traffic: [mix]
+
+baseline:
+  switch: {span: null, erspan: null}
+  broker:
+    inputs: {}
+    rules:
+      - {name: tool, inputs: [p1, p2], output: p5}
+      - {name: ingress, inputs: [p1, p2], output: p6}
+
+tests:
+  - id: L01_baseline
+    expect: []
+    ingress: true
+
+  - id: L02_span_rx_only
+    expect: [one_way]
+    ingress: true
+    switch: {span: {sources: [[gi1, rx]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3]}
+
+  - id: L03_overlapping_inputs
+    expect: [duplicates]
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p1, p2, p3], dedup: false}
+
+  - id: L03b_dedup_on
+    note: VisiLoop's fix for L03, deduplication on in the broker, proven on the same setup.
+    expect: []
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p1, p2, p3], dedup: true}
+
+  - id: L04_span_oversubscribed
+    expect: [packet_drops]
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3]}
+    traffic: [mix, {iperf: bidir}]
+
+  - id: L05_burst
+    note: >-
+      Both TAP legs together offer up to 50 Mbit/s to a 40 Mbit/s tool port, so the port overflows and really
+      loses packets, as the real lab's 1G P5 does with two 1G legs.
+    expect: [packet_drops, tool_overload]
+    ingress: true
+    p5_mbps: 40
+    traffic: [mix, bursts]
+
+  - id: L06_vlan_stripped
+    vlans: [10, 20]
+    expect: [missing_vlan]
+    ingress: true
+    inputs: {p1: {vlan: 10}, p2: {vlan: 20}}
+    tool_rule: {strip_vlan: true}
+
+  - id: L07_slicing
+    expect: [truncated]
+    ingress: true
+    tool_rule: {slice: 128}
+
+  - id: L08_tunnel
+    note: ERSPAN adds 50 bytes, so full-size frames arrive as 1564 bytes, over an IDS port's 1518.
+    expect: [oversize, tunnel]
+    switch: {erspan: {sources: [[gi1, both]], id: 10}}
+    tool_rule: {inputs: [p4], strip_erspan: false}
+
+  - id: L08b_tunnel_stripped
+    note: VisiLoop's fix for L08, ERSPAN header stripping on in the broker.
+    expect: []
+    switch: {erspan: {sources: [[gi1, both]], id: 10}}
+    tool_rule: {inputs: [p4], strip_erspan: true}
+
+  - id: L09_jumbo
+    note: P5 at 400 Mbit/s here, so two 9 KB frames in one millisecond are not a burst on this lab's slow port.
+    expect: [oversize]
+    host_mtu: 9000
+    p5_mbps: 400
+    traffic: [mix, jumbo]
+
+  - id: L10_encrypted
+    expect: [encrypted_share]
+    traffic: [https]
+
+  - id: L11_combined
+    expect: [one_way, truncated]
+    ingress: true
+    switch: {span: {sources: [[gi1, rx]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3], slice: 128}
+
+  - id: L12_siem_tolerates_slicing
+    tool: SIEM
+    expect: []
+    tool_rule: {slice: 128}
+
+  - id: L14_double_tapped
+    note: The same traffic seen on two links (TAP on the client link, SPAN of the server port) in one rule.
+    expect: [duplicates]
+    switch: {span: {sources: [[gi2, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p1, p2, p3], dedup: false}
+
+  - id: L14b_dedup_on
+    note: VisiLoop's fix for L14, deduplication on.
+    expect: []
+    switch: {span: {sources: [[gi2, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p1, p2, p3], dedup: true}
+
+# Counter tests: VisiLoop reads the switch and broker over SNMP before and after the traffic and locates the loss.
+# path: span (Gi1/0/1 -> Gi1/0/24 -> P3 -> P5) or tap (TAP -> P1 -> P5).
+counter_tests:
+  - id: C01_healthy
+    path: span
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3]}
+    expect: {}
+
+  - id: C02_span_oversubscribed
+    path: span
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3]}
+    traffic: [mix, {iperf: bidir}]
+    expect: {path_loss: "LAB-SW Gi1/0/24"}
+
+  - id: C03_broker_congestion
+    path: tap
+    p5_mbps: 30
+    traffic: [mix, {iperf: bidir}]
+    expect: {path_loss: "LAB-NPB P5"}
+
+  - id: C04_link_loss
+    path: span
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3]}
+    inputs: {p3: {loss: 0.02}}
+    expect: {path_loss: "LAB-NPB P3"}
+
+  - id: C05_crc_errors
+    path: span
+    switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 40}}
+    tool_rule: {inputs: [p3]}
+    inputs: {p3: {errors: 0.005}}
+    expect: {link_errors: "LAB-NPB P3"}
+
+# Continuous monitoring: VisiLoop's monitor polls the SPAN path every 5 s while faults come and go.
+monitor:
+  interval_seconds: 5
+  phase_seconds: 20
+  phases:
+    - {name: healthy}
+    - {name: link loss into P3, inputs: {p3: {loss: 0.02}}}
+    - {name: healthy}
+    - {name: damaged frames into P3, inputs: {p3: {errors: 0.005}}}
+    - {name: healthy}
+    # The SPAN destination slowed to 10 Mbit/s: mirroring both directions of the link (about 17 Mbit/s on average)
+    # overflows it. Same fault as C02 at a lower frame rate, so the Python daemons keep up for the whole phase.
+    - {name: SPAN overload, switch: {span: {sources: [[gi1, both]], dest_rate_mbps: 10}}}
+    - {name: healthy}

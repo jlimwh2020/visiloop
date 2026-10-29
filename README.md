@@ -184,11 +184,11 @@ Every check is tool-aware: it is judged against what that tool type needs (`visi
 |---|---|---|---|
 | Duplicates | Packets removed by deduplication | over 5% | deduplication |
 | One-way traffic | TCP sessions with only one side seen | over 10%, for tools that need both directions | aggregate both TAP legs |
-| Packet drops | Data the endpoints exchanged but the capture is missing | over 1% of TCP packets | replace the SPAN with a TAP |
+| Packet drops | Data the endpoints exchanged but the capture is missing (not counted: gaps a retransmission fills later, i.e. network loss the feed rightly shows, and an ACK up to 10 ms ahead of its data when a broker merges two TAP legs) | over 1% of TCP packets | replace the SPAN with a TAP |
 | Tool overload | Peak 1 ms burst vs the tool's port speed | over 80% | load-balanced tool group, sized |
 | Encrypted share | TLS/QUIC share of bytes | above the tool's tolerance | decryption point (advice) |
 | Missing VLANs | Required VLANs absent, or untagged traffic | any missing, or over 5% untagged | preserve VLAN tags |
-| Packet slicing | Frames shorter than their IP header states | over 5%, for tools that need the full payload | turn slicing off |
+| Packet slicing | Frames shorter than their IP header states | over 5%, or most of the frames long enough to be cut (a feed of mostly small ACKs hides slicing), for tools that need the full payload | turn slicing off |
 | Tunnel headers | Traffic still inside ERSPAN, GRE or VXLAN | over 10% | strip tunnel headers |
 | Oversize frames | Frames above the tool port's maximum frame size | over 1% | trim to fit (SIEM, APM), or raise the MTU (advice) |
 | Loss along the path | Interface counters at each hop: SPAN source and destination, broker in and out, tool | over 0.1% at one place | depends on where: TAP instead of SPAN, a port matching the tool or a sized tool group, tool capacity, check the link |
@@ -226,6 +226,39 @@ python -m visikit.monitor --config my_monitor.yaml               # real feeds, r
 
 ![Monitor page](docs/monitor.png)
 
+**Soft lab** (`lab/softlab/`): the lab tests with no equipment. A virtual lab built from real Linux network
+interfaces: a lab client and server exchanging real HTTP, HTTPS, DNS and iperf3 traffic, a software switch (TAP
+legs, SPAN, ERSPAN), a software packet broker (rules, slicing, VLAN tagging and stripping, deduplication, ERSPAN
+stripping), a tool port recorded with dumpcap, and live SNMP on both devices. Frames carry broker-style hardware
+timestamps, so the recordings keep real-port timing. One command (`sudo python3 -m lab.softlab.run`, Linux or
+WSL 2) runs everything in about 30 minutes. Results (29 Oct 2026):
+
+| Soft lab | Result |
+|---|---|
+| Capture tests (L01-L12, L14, and the fixes L03b, L08b, L14b proven on the same setup) | **16/16** exactly right |
+| Counter tests over SNMP (healthy, SPAN oversubscription, broker congestion, link loss, damaged frames) | **5/5** located at the right port |
+| Continuous monitoring, polling every 5 s while three faults come and go | each fault raised **once** at the right place and cleared when it ended; **0** false alarms |
+
+Building it found real problems in VisiLoop, now fixed (the 200-case suite and the counter benchmark were re-run
+afterwards: still 200/200 and 100/100):
+- **Slicing hidden by a receive-only SPAN.** The tool saw mostly 66-byte ACKs, so only 0.5% of frames were cut,
+  under the 5% limit, although 100% of the frames long enough to cut were. The check now also judges the frames
+  long enough to be sliced.
+- **Network loss reported as monitoring loss.** A gap in a TCP stream that a retransmission fills later was lost
+  on the network before the TAP: the feed shows what was on the wire. It no longer counts as a visibility fault,
+  and neither does an ACK seen up to 10 ms before its data (normal when a broker merges two TAP legs). An ACK for
+  data the capture never saw still does.
+- **Counter readings taken too far apart.** VisiLoop read the devices one after the other; on a busy link, the
+  time between readings looked like loss. It now reads every device at once (one request per device), records
+  when each answered, and does not call a difference loss when the time between readings could explain it.
+- **One alert per fault type.** When loss moved from one port to another, the monitor stayed silent. Alerts are
+  now per fault and place.
+
+It also corrected the real-lab plan: at full 1G speed, the standard 50 MB download fills a 1G tool port above the
+80% burst limit, so every test would have reported tool overload. The download is now rate-limited, and the
+tests that really fill the tool port expect that finding too. See [lab/softlab/README.md](lab/softlab/README.md)
+and [lab/softlab/RESULTS.md](lab/softlab/RESULTS.md).
+
 **Lab kit** (`lab/`): fifteen tests (one fault each, a fix verified on real equipment, and two multi-link tests), set up on purpose on a Catalyst 9300, a Cubro EXA48800 and Cubro copper, optical and multi-link TAPs (see `lab/LAB_SETUP.md`), with a
 capture script and a scorer, to prove every check on real traffic. Lab traffic only. See [lab/README.md](lab/README.md).
 
@@ -260,6 +293,7 @@ visikit/
   monitor.py   continuous mode: schedule, history, alerts
 bench/         test-case generators and benchmarks (suite/, diagrams/)
 lab/           real-traffic lab kit: plan, capture script, scorer
+  softlab/     the same tests on a virtual lab of real Linux interfaces: switch, broker, SNMP, recordings
 ui/            Streamlit dashboard (app.py) and Monitor page (pages/)
 tests/         fake SNMP agent for testing the reader
 ```

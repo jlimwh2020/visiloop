@@ -1,0 +1,6 @@
+[2026-10-29 16:35:13] DEGRADED softlab-ids: path_loss at LAB-NPB P3 (1.80%): LAB-SW Gi1/0/24 (SPAN destination) sent 8,775 packets but LAB-NPB P3 (SPAN input) saw only 8,617: lost on the link between them (cable, optic or an unmonitored device) (1.80% lost)
+[2026-10-29 16:35:37] RECOVERED softlab-ids: path_loss at LAB-NPB P3 cleared; feed healthy
+[2026-10-29 16:35:55] DEGRADED softlab-ids: link_errors at LAB-NPB P3 (0.20%): LAB-NPB P3 (SPAN input) received 17 damaged frames (CRC/alignment errors): a faulty cable, optic or duplex mismatch on the link into it
+[2026-10-29 16:36:23] RECOVERED softlab-ids: link_errors at LAB-NPB P3 cleared; feed healthy
+[2026-10-29 16:36:41] DEGRADED softlab-ids: path_loss at LAB-SW Gi1/0/24 (21.12%): the SPAN session should copy 8,785 packets from LAB-SW Gi1/0/1 (mirrored) but LAB-SW Gi1/0/24 (SPAN destination) sent only 6,930: 0.01 Gbps mirrored into a 0.01 Gbps destination port (21.12% lost); LAB-SW Gi1/0/24 (SPAN destination) discarded 1,855 packets on output: about 0.01 Gbps offered to a 0.01 Gbps port (average load 71%; bursts are higher) (21.12% lost)
+[2026-10-29 16:37:04] RECOVERED softlab-ids: path_loss at LAB-SW Gi1/0/24 cleared; feed healthy

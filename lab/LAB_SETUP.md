@@ -82,6 +82,9 @@ Two realistic tests it makes possible:
   packet arrives twice: the most common real cause of duplicates, with no SPAN involved. Turning EXA
   deduplication on is VisiLoop's fix.
 
+**Traffic:** rate-limit the standard 50 MB download (`curl --limit-rate 25M ...`). At full 1G speed it fills the
+1G tool port above VisiLoop's 80% burst limit, so every test would also report tool overload.
+
 ## Baseline (start of the session, and between tests)
 
 **EXA48800:**
@@ -117,14 +120,14 @@ Copy the exact interface names into `lab/lab_path.yaml` (the 9300 usually report
 | L01 baseline | none | baseline above | - |
 | L02 RX-only SPAN | tool fed by a SPAN that copies received traffic only | 9300: `monitor session 1 source interface Gi1/0/1 rx` and `monitor session 1 destination interface Gi1/0/24`. EXA rule "tool": input P3 only (instead of P1 + P2); rule "ingress" unchanged | `no monitor session 1`; rule "tool" back to P1 + P2 |
 | L03 duplicates | TAP and SPAN of the same link on one tool port | 9300: `monitor session 1 source interface Gi1/0/1 both`, destination Gi1/0/24. EXA rule "tool": inputs P1 + P2 + P3, **deduplication off** | `no monitor session 1`; rule back to P1 + P2 |
-| L04 SPAN overloaded | more mirrored than a 1G destination can send | 9300: `monitor session 1 source interface Gi1/0/1 - 2 both`, destination Gi1/0/24. EXA rule "tool": input P3. Run iperf3 at about 900 Mbit/s (`iperf3 -c <server> -t 90 -b 900M`): both directions mirrored exceed 1G | `no monitor session 1`; rule back |
-| L05 burst | bursts above the tool port speed | Baseline. Needs more than 1 Gbps on the TAP legs together: run iperf3 in both directions at once (`iperf3 -c <server> -t 60 --bidir`). The EXA's 1G P5 then overflows | stop iperf3 |
+| L04 SPAN overloaded | more mirrored than a 1G destination can send | 9300: `monitor session 1 source interface Gi1/0/1 - 2 both`, destination Gi1/0/24. EXA rule "tool": input P3. Run iperf3 at about 900 Mbit/s (`iperf3 -c <server> -t 90 -b 900M`): both directions mirrored exceed 1G. Expect missing data and tool overload (Gi1/0/24 fills the 1G tool port) | `no monitor session 1`; rule back |
+| L05 burst | bursts above the tool port speed | Baseline. Needs more than 1 Gbps on the TAP legs together: run iperf3 in both directions at once (`iperf3 -c <server> -t 60 --bidir`). The EXA's 1G P5 then overflows: expect tool overload and missing data | stop iperf3 |
 | L06 VLAN stripped | tags removed before the tool | EXA: tag traffic arriving on P1 with VLAN 10 and on P2 with VLAN 20 (per-port VLAN tagging), then **VLAN stripping on** for output P5. Plan VLANs: 10, 20 | stripping off; tagging off |
 | L07 slicing | packets cut to 128 bytes | EXA rule "tool": **slicing 128 bytes** on P5 | slicing off |
 | L08 tunnel | ERSPAN delivered still wrapped | 9300 ERSPAN source (below) to the EXA's tunnel endpoint on P4. EXA: terminate the ERSPAN session on P4, **header stripping off**, output P5; rule "tool" input P4 only | `no monitor session 2`; rule back |
-| L09 jumbo | frames above 1518 bytes | 9300: `system mtu 9198`. MTU 9000 on the lab client and server NICs. Baseline rule. Then `iperf3 -c <server> -t 30` | hosts back to MTU 1500 (switch MTU can stay) |
+| L09 jumbo | frames above 1518 bytes | 9300: `system mtu 9198`. MTU 9000 on the lab client and server NICs. Baseline rule. Then `iperf3 -c <server> -t 30 -b 200M` (full speed would also fill the tool port) | hosts back to MTU 1500 (switch MTU can stay) |
 | L10 encrypted | HTTPS only | baseline; HTTPS downloads only | - |
-| L11 combined | RX-only SPAN and slicing | L02 setup plus slicing 128 bytes on P5 | undo both |
+| L11 combined | RX-only SPAN and slicing | L02 setup plus slicing 128 bytes on P5; add an upload (`iperf3 -c <server> -t 30 -b 50M`) | undo both |
 | L12 SIEM tolerates slicing | slicing, judged as a SIEM | L07 setup | slicing off |
 
 **ERSPAN source on the 9300 (L08):**

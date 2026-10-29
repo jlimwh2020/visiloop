@@ -11,3 +11,6 @@ lab/lab_path.yaml
 lab/lab_monitor.yaml
 lab/lab_monitor.db
 lab/lab_alerts.log
+lab/softlab/state/
+lab/softlab/captures/
+lab/softlab/results/monitor.db

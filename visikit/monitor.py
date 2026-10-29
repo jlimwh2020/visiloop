@@ -183,24 +183,30 @@ def run(config_path, cycles=None, fast=False, database=None):
                 continue
             ctx = FeedContext(feed.name, pcap, feed.profile, counters=pc)
             findings = check_all(ctx)
-            now = {f.fault: f for f in findings}
+            # one open problem per fault and place: loss moving from one port to another is a new alert
+            now = {(f.fault, f.location or ""): f for f in findings}
             ts = clock if fast else time.time()
             offered, delivered = traffic(pc) if pc else (0, 0)
             db.execute("INSERT INTO cycles VALUES (?,?,?,?,?,?,?)", (ts, feed.name, int(not findings),
-                       ",".join(sorted(now)), offered, delivered, "counters" + ("+capture" if pcap else "")))
+                       ",".join(sorted({f.fault for f in findings})), offered, delivered,
+                       "counters" + ("+capture" if pcap else "")))
             for f in findings:
                 db.execute("INSERT INTO findings VALUES (?,?,?,?,?,?,?)",
                            (ts, feed.name, f.fault, f.metric, f.severity, f.location, f.detail))
-            for fault in sorted(set(now) - set(feed.active)):
-                f = now[fault]
+            for key in sorted(set(now) - set(feed.active)):
+                f = now[key]
+                fault = f.fault
                 msg = f"{fault} at {f.location or 'the tool port'} ({f.metric:.2%}): {f.detail}"
                 if cfg.get("explain"):
                     note = explain(ctx)
                     msg += f" | Muse Spark: {note}" if note else ""
                 alerter.send(feed.name, "DEGRADED", fault, msg, ts)
                 db.execute("INSERT INTO alerts VALUES (?,?,?,?,?)", (ts, feed.name, "DEGRADED", fault, msg))
-            for fault in sorted(set(feed.active) - set(now)):
-                msg = f"{fault} cleared; {'feed healthy' if not now else 'still open: ' + ', '.join(sorted(now))}"
+            for key in sorted(set(feed.active) - set(now)):
+                fault, where = key
+                still = sorted(f"{k[0]} at {k[1]}" if k[1] else k[0] for k in now)
+                msg = (f"{fault}{' at ' + where if where else ''} cleared; "
+                       f"{'feed healthy' if not now else 'still open: ' + ', '.join(still)}")
                 alerter.send(feed.name, "RECOVERED", fault, msg, ts)
                 db.execute("INSERT INTO alerts VALUES (?,?,?,?,?)", (ts, feed.name, "RECOVERED", fault, msg))
             feed.active = now

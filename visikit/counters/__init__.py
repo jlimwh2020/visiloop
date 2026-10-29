@@ -41,6 +41,7 @@ class Snapshot:
     out_discards: int = 0
     in_errors: int = 0
     speed_gbps: float = 0.0
+    at: float = 0.0                  # when this reading was taken (epoch seconds), if known
 
 
 @dataclass
@@ -55,12 +56,26 @@ class PathCounters:
         a, b = self.before.get(hop.name), self.after.get(hop.name)
         if a is None or b is None:
             return None
-        d = Snapshot(**{k: getattr(b, k) - getattr(a, k) for k in vars(a) if k != "speed_gbps"})
+        d = Snapshot(**{k: getattr(b, k) - getattr(a, k) for k in vars(a) if k not in ("speed_gbps", "at")})
         d.speed_gbps = hop.speed_gbps or b.speed_gbps
         return d
 
     def gbps(self, octets):
         return octets * 8 / self.seconds / 1e9 if self.seconds else 0.0
+
+
+def skew_allowance(pc, up, down, count):
+    """Packets that the time between two hops' readings could account for.
+
+    Devices are read one after the other, so two hops' counting windows are shifted by the time between
+    their readings: at the start and at the end. Traffic in those unshared edges is counted by one hop and
+    not the other, so a difference up to count x (start shift + end shift) / window is not evidence of loss.
+    Zero when the readings carry no times (simulated counters)."""
+    a1, a2, b1, b2 = pc.before.get(up.name), pc.after.get(up.name), pc.before.get(down.name), pc.after.get(down.name)
+    if not all(x is not None and x.at for x in (a1, a2, b1, b2)):
+        return 0.0
+    window = a2.at - a1.at
+    return count * (abs(a1.at - b1.at) + abs(a2.at - b2.at)) / window if window > 0 else 0.0
 
 
 def analyse(pc: PathCounters, loss_threshold=0.001, util_threshold=0.8):
@@ -69,9 +84,10 @@ def analyse(pc: PathCounters, loss_threshold=0.001, util_threshold=0.8):
     hops = [h for h in pc.hops if h.role != "tap"]
     d = {h.name: pc.delta(h) for h in hops}
 
-    def add(kind, hop, lost, of, detail, **extra):
+    def add(kind, hop, lost, of, detail, allowance=0.0, **extra):
         share = lost / of if of else 0.0
-        if lost > 0 and share > loss_threshold:
+        # a difference between two hops counts as loss only beyond what their reading times can explain
+        if lost > 0 and share > loss_threshold and (lost - allowance) / of > loss_threshold:
             issues.append({"kind": kind, "hop": hop.name, "role": hop.role, "device": hop.device, "port": hop.port,
                            "lost": int(lost), "of": int(of), "share": round(share, 5), "detail": detail, **extra})
 
@@ -90,7 +106,7 @@ def analyse(pc: PathCounters, loss_threshold=0.001, util_threshold=0.8):
                 add("span_oversubscribed", nxt, lost, offered,
                     f"the SPAN session should copy {offered:,} packets from {h.name} but {nxt.name} sent only "
                     f"{y.out_pkts:,}: {dest_gbps:.2f} Gbps mirrored into a {nxt.speed_gbps or y.speed_gbps:g} Gbps "
-                    "destination port", offered_gbps=round(dest_gbps, 3))
+                    "destination port", allowance=skew_allowance(pc, h, nxt, offered), offered_gbps=round(dest_gbps, 3))
             continue
         # drops counted by the device itself
         if h.role in ("span_dest", "broker_out"):
@@ -116,6 +132,7 @@ def analyse(pc: PathCounters, loss_threshold=0.001, util_threshold=0.8):
         if y is not None and h.role in ("span_dest", "broker_out") and nxt.role in ("broker_in", "tool_in"):
             add("link_loss", nxt, x.out_pkts - y.in_pkts - y.in_discards - y.in_errors, x.out_pkts,
                 f"{h.name} sent {x.out_pkts:,} packets but {nxt.name} saw only {y.in_pkts + y.in_discards + y.in_errors:,}: "
-                "lost on the link between them (cable, optic or an unmonitored device)")
+                "lost on the link between them (cable, optic or an unmonitored device)",
+                allowance=skew_allowance(pc, h, nxt, x.out_pkts))
     issues.sort(key=lambda i: -i["share"])
     return issues

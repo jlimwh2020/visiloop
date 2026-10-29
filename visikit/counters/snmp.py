@@ -17,6 +17,7 @@ Usage:
     python -m visikit.counters --path demo/counters/snmp_example.yaml --seconds 60
 """
 import asyncio
+import time
 
 from visikit.counters import PathCounters, Snapshot
 
@@ -84,31 +85,50 @@ class SnmpSource:
         self._index = {}
 
     async def _read_all(self):
+        """Read every hop: one SNMP request per device for all of its interfaces, all devices at once, so the
+        readings along a path are taken as close together in time as possible (see counters.skew_allowance)."""
         from pysnmp.hlapi.v3arch.asyncio import SnmpEngine, UdpTransportTarget
         engine = SnmpEngine()
-        out = {}
+        devices = {}
         for h in self.hops:
             src = h.source or {}
-            if not src.get("host"):
-                continue                                  # passive TAPs and hops without counters
-            target = await UdpTransportTarget.create((src["host"], int(src.get("port", 161))),
-                                                     timeout=self.timeout, retries=self.retries)
-            community = src.get("community", "public")
-            key = (src["host"], src.get("if_name"), src.get("if_index"))
-            if key not in self._index:
-                self._index[key] = int(src["if_index"]) if src.get("if_index") else \
-                    await _if_index(engine, target, community, src["if_name"])
-            i = self._index[key]
-            names = list(OIDS)
-            vals = dict(zip(names, await _get(engine, target, community, [f"{OIDS[n]}.{i}" for n in names])))
-            out[h.name] = Snapshot(
-                in_pkts=vals["in_ucast"] + vals["in_mcast"] + vals["in_bcast"],
-                out_pkts=vals["out_ucast"] + vals["out_mcast"] + vals["out_bcast"],
-                in_octets=vals["in_octets"], out_octets=vals["out_octets"],
-                in_discards=vals["in_discards"], out_discards=vals["out_discards"], in_errors=vals["in_errors"],
-                speed_gbps=vals["high_speed"] / 1000)
+            if src.get("host"):                           # passive TAPs and hops without counters are skipped
+                key = (src["host"], int(src.get("port", 161)), src.get("community", "public"))
+                devices.setdefault(key, []).append(h)
+
+        # First connect to every device and find its interface numbers; then send all the counter requests at
+        # once. A device samples its counters as it answers, and the answer arrives within milliseconds, so the
+        # time it arrives is when the counters were read.
+        ready = []
+        for (host, port, community), hops in devices.items():
+            target = await UdpTransportTarget.create((host, port), timeout=self.timeout, retries=self.retries)
+            idx = []
+            for h in hops:
+                ik = (host, h.source.get("if_name"), h.source.get("if_index"))
+                if ik not in self._index:
+                    self._index[ik] = int(h.source["if_index"]) if h.source.get("if_index") else \
+                        await _if_index(engine, target, community, h.source["if_name"])
+                idx.append(self._index[ik])
+            ready.append((target, community, hops, idx))
+        names = list(OIDS)
+
+        async def read_device(target, community, hops, idx):
+            vals = await _get(engine, target, community, [f"{OIDS[n]}.{i}" for i in idx for n in names])
+            at = time.time()
+            out = {}
+            for k, h in enumerate(hops):
+                v = dict(zip(names, vals[k * len(names):(k + 1) * len(names)]))
+                out[h.name] = Snapshot(
+                    in_pkts=v["in_ucast"] + v["in_mcast"] + v["in_bcast"],
+                    out_pkts=v["out_ucast"] + v["out_mcast"] + v["out_bcast"],
+                    in_octets=v["in_octets"], out_octets=v["out_octets"],
+                    in_discards=v["in_discards"], out_discards=v["out_discards"], in_errors=v["in_errors"],
+                    speed_gbps=v["high_speed"] / 1000, at=at)
+            return out
+
+        results = await asyncio.gather(*(read_device(*r) for r in ready))
         engine.close_dispatcher()
-        return out
+        return {name: snap for r in results for name, snap in r.items()}
 
     def snapshot(self):
         return asyncio.run(self._read_all())

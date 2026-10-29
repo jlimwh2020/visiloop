@@ -1,0 +1,1132 @@
+{
+ "generated": "2026-10-29 16:50",
+ "captures": [
+  {
+   "test": "L01_baseline",
+   "tool": "IDS",
+   "expect": [],
+   "found": [],
+   "pass": true,
+   "findings": [],
+   "laptop_drops": 0,
+   "packets": 41966,
+   "note": ""
+  },
+  {
+   "test": "L02_span_rx_only",
+   "tool": "IDS",
+   "expect": [
+    "one_way"
+   ],
+   "found": [
+    "one_way"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "one_way",
+     "feed": "L02_span_rx_only",
+     "severity": "high",
+     "metric": 1.0,
+     "threshold": 0.1,
+     "evidence": [
+      3,
+      409,
+      416,
+      599,
+      1393,
+      1400,
+      1511,
+      1802,
+      1809,
+      2035,
+      2460,
+      2467,
+      2582,
+      2879,
+      2887,
+      3001,
+      3288,
+      3295,
+      3488,
+      3825
+     ],
+     "detail": "84 of 84 TCP sessions show only one direction (100.0%)",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 16782,
+   "note": "",
+   "fixes": [
+    {
+     "action": "aggregate",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy",
+   "verified_on_real_traffic": true
+  },
+  {
+   "test": "L03_overlapping_inputs",
+   "tool": "IDS",
+   "expect": [
+    "duplicates"
+   ],
+   "found": [
+    "duplicates"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "duplicates",
+     "feed": "L03_overlapping_inputs",
+     "severity": "high",
+     "metric": 0.5,
+     "threshold": 0.05,
+     "evidence": [],
+     "detail": "41763 of 83526 packets are duplicates (50.0%)",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 83526,
+   "note": "",
+   "fixes": [
+    {
+     "action": "dedup",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy",
+   "verified_on_real_traffic": false
+  },
+  {
+   "test": "L03b_dedup_on",
+   "tool": "IDS",
+   "expect": [],
+   "found": [],
+   "pass": true,
+   "findings": [],
+   "laptop_drops": 0,
+   "packets": 41783,
+   "note": "VisiLoop's fix for L03, deduplication on in the broker, proven on the same setup."
+  },
+  {
+   "test": "L04_span_oversubscribed",
+   "tool": "IDS",
+   "expect": [
+    "packet_drops"
+   ],
+   "found": [
+    "packet_drops"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "packet_drops",
+     "feed": "L04_span_oversubscribed",
+     "severity": "high",
+     "metric": 0.226,
+     "threshold": 0.01,
+     "evidence": [
+      1712,
+      1772,
+      1776,
+      1780,
+      1784,
+      1788,
+      1791,
+      1796,
+      1799,
+      1804,
+      1815,
+      1818,
+      1821,
+      1826,
+      1831,
+      1833,
+      1836,
+      1838,
+      1841,
+      1845
+     ],
+     "detail": "23691 of 104848 TCP packets show evidence of missing data (22.6%). Not counted: 4 gaps that retransmissions filled later (packets lost on the network before the monitoring point, which the feed rightly shows)",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 104884,
+   "note": "",
+   "fixes": [
+    {
+     "action": "replace_span_with_tap",
+     "status": "advice (cannot be verified offline)",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy except advice items",
+   "verified_on_real_traffic": false
+  },
+  {
+   "test": "L05_burst",
+   "tool": "IDS",
+   "expect": [
+    "packet_drops",
+    "tool_overload"
+   ],
+   "found": [
+    "packet_drops",
+    "tool_overload"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "packet_drops",
+     "feed": "L05_burst",
+     "severity": "high",
+     "metric": 0.1007,
+     "threshold": 0.01,
+     "evidence": [
+      5516,
+      5527,
+      5534,
+      5537,
+      5547,
+      5548,
+      5551,
+      5556,
+      5559,
+      5561,
+      5563,
+      5564,
+      5565,
+      5571,
+      5576,
+      5585,
+      5588,
+      5590,
+      5592,
+      5597
+     ],
+     "detail": "7086 of 70373 TCP packets show evidence of missing data (10.1%). Not counted: 89 gaps that retransmissions filled later (packets lost on the network before the monitoring point, which the feed rightly shows)",
+     "explanation": "",
+     "location": ""
+    },
+    {
+     "fault": "tool_overload",
+     "feed": "L05_burst",
+     "severity": "high",
+     "metric": 1.299,
+     "threshold": 0.8,
+     "evidence": [
+      31,
+      35,
+      38,
+      41,
+      45,
+      48,
+      51,
+      70,
+      79,
+      82,
+      86,
+      89,
+      92,
+      95,
+      99,
+      102,
+      105,
+      109,
+      112,
+      115
+     ],
+     "detail": "Peak 0.05 Gbps in a 1 ms burst vs a 0.04 Gbps IDS port (130% of capacity, 9112 overloaded intervals)",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 70457,
+   "note": "Both TAP legs together offer up to 50 Mbit/s to a 40 Mbit/s tool port, so the port overflows and really loses packets, as the real lab's 1G P5 does with two 1G legs.",
+   "fixes": [
+    {
+     "action": "replace_span_with_tap",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    },
+    {
+     "action": "load_balance",
+     "status": "not fixed",
+     "round": 1,
+     "note": "One flow alone bursts to 0.049 Gbps, 121% of a 0.04 Gbps port. Flow hashing keeps a flow on one port, so load balancing cannot fix this: use a faster tool port (one 0.12 Gbps tool port)."
+    }
+   ],
+   "result": "still broken",
+   "verified_on_real_traffic": true
+  },
+  {
+   "test": "L06_vlan_stripped",
+   "tool": "IDS",
+   "expect": [
+    "missing_vlan"
+   ],
+   "found": [
+    "missing_vlan"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "missing_vlan",
+     "feed": "L06_vlan_stripped",
+     "severity": "high",
+     "metric": 1.0,
+     "threshold": 0.0,
+     "evidence": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+     ],
+     "detail": "required VLAN(s) 10, 20 not seen; 100% of packets untagged",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 41848,
+   "note": "",
+   "fixes": [
+    {
+     "action": "vlan",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy",
+   "verified_on_real_traffic": true
+  },
+  {
+   "test": "L07_slicing",
+   "tool": "IDS",
+   "expect": [
+    "truncated"
+   ],
+   "found": [
+    "truncated"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "truncated",
+     "feed": "L07_slicing",
+     "severity": "high",
+     "metric": 0.6053,
+     "threshold": 0.05,
+     "evidence": [
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46
+     ],
+     "detail": "24379 of 40276 frames are cut short (60.5%), most to 128 bytes; this IDS needs the full payload",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 40276,
+   "note": "",
+   "fixes": [
+    {
+     "action": "disable_slicing",
+     "status": "verified fixed",
+     "round": 1,
+     "note": "if bandwidth is the reason for slicing, load balance or filter instead"
+    }
+   ],
+   "result": "healthy",
+   "verified_on_real_traffic": true
+  },
+  {
+   "test": "L08_tunnel",
+   "tool": "IDS",
+   "expect": [
+    "oversize",
+    "tunnel"
+   ],
+   "found": [
+    "oversize",
+    "tunnel"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "oversize",
+     "feed": "L08_tunnel",
+     "severity": "high",
+     "metric": 0.5949,
+     "threshold": 0.01,
+     "evidence": [
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46,
+      48,
+      50
+     ],
+     "detail": "25427 of 42743 frames (59.5%) are larger than the 1518-byte maximum of this IDS port (largest 1564 bytes); its network card drops them. This tool needs the full payload, so trimming frames to fit is not an option.",
+     "explanation": "",
+     "location": ""
+    },
+    {
+     "fault": "tunnel",
+     "feed": "L08_tunnel",
+     "severity": "high",
+     "metric": 1.0,
+     "threshold": 0.1,
+     "evidence": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+     ],
+     "detail": "42743 of 42743 frames (100.0%) arrive inside a tunnel (ERSPAN 42743)",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 42743,
+   "note": "ERSPAN adds 50 bytes, so full-size frames arrive as 1564 bytes, over an IDS port's 1518.",
+   "fixes": [
+    {
+     "action": "strip_tunnel",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    },
+    {
+     "action": "mtu_advice",
+     "status": "advice (cannot be verified offline)",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy except advice items",
+   "verified_on_real_traffic": false
+  },
+  {
+   "test": "L08b_tunnel_stripped",
+   "tool": "IDS",
+   "expect": [],
+   "found": [],
+   "pass": true,
+   "findings": [],
+   "laptop_drops": 0,
+   "packets": 42025,
+   "note": "VisiLoop's fix for L08, ERSPAN header stripping on in the broker."
+  },
+  {
+   "test": "L09_jumbo",
+   "tool": "IDS",
+   "expect": [
+    "oversize"
+   ],
+   "found": [
+    "oversize"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "oversize",
+     "feed": "L09_jumbo",
+     "severity": "high",
+     "metric": 0.518,
+     "threshold": 0.01,
+     "evidence": [
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46,
+      48,
+      50,
+      52,
+      54,
+      56,
+      58,
+      59
+     ],
+     "detail": "6364 of 12285 frames (51.8%) are larger than the 1518-byte maximum of this IDS port (largest 9014 bytes); its network card drops them. This tool needs the full payload, so trimming frames to fit is not an option.",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 12285,
+   "note": "P5 at 400 Mbit/s here, so two 9 KB frames in one millisecond are not a burst on this lab's slow port.",
+   "fixes": [
+    {
+     "action": "mtu_advice",
+     "status": "advice (cannot be verified offline)",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy except advice items",
+   "verified_on_real_traffic": false
+  },
+  {
+   "test": "L10_encrypted",
+   "tool": "IDS",
+   "expect": [
+    "encrypted_share"
+   ],
+   "found": [
+    "encrypted_share"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "encrypted_share",
+     "feed": "L10_encrypted",
+     "severity": "high",
+     "metric": 0.9993,
+     "threshold": 0.6,
+     "evidence": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+     ],
+     "detail": "100% of bytes are encrypted; this IDS tolerates about 60%",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 25941,
+   "note": "",
+   "fixes": [
+    {
+     "action": "decrypt_advice",
+     "status": "advice (cannot be verified offline)",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy except advice items",
+   "verified_on_real_traffic": false
+  },
+  {
+   "test": "L11_combined",
+   "tool": "IDS",
+   "expect": [
+    "one_way",
+    "truncated"
+   ],
+   "found": [
+    "one_way",
+    "truncated"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "one_way",
+     "feed": "L11_combined",
+     "severity": "high",
+     "metric": 1.0,
+     "threshold": 0.1,
+     "evidence": [
+      3,
+      504,
+      511,
+      624,
+      1138,
+      1145,
+      1334,
+      1667,
+      1674,
+      1867,
+      2363,
+      2370,
+      2484,
+      2775,
+      2782,
+      2901,
+      3336,
+      3343,
+      3444,
+      3751
+     ],
+     "detail": "81 of 81 TCP sessions show only one direction (100.0%)",
+     "explanation": "",
+     "location": ""
+    },
+    {
+     "fault": "truncated",
+     "feed": "L11_combined",
+     "severity": "high",
+     "metric": 0.0084,
+     "threshold": 0.05,
+     "evidence": [
+      5,
+      506,
+      513,
+      515,
+      516,
+      626,
+      1140,
+      1147,
+      1149,
+      1150,
+      1336,
+      1669,
+      1676,
+      1678,
+      1679,
+      1869,
+      2365,
+      2372,
+      2374,
+      2375
+     ],
+     "detail": "135 of 16003 frames are cut short (0.8%), most to 128 bytes; this IDS needs the full payload; 100% of the 135 frames longer than 128 bytes were cut",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 16003,
+   "note": "",
+   "fixes": [
+    {
+     "action": "aggregate",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    },
+    {
+     "action": "disable_slicing",
+     "status": "verified fixed",
+     "round": 1,
+     "note": "if bandwidth is the reason for slicing, load balance or filter instead"
+    }
+   ],
+   "result": "healthy",
+   "verified_on_real_traffic": true
+  },
+  {
+   "test": "L12_siem_tolerates_slicing",
+   "tool": "SIEM",
+   "expect": [],
+   "found": [],
+   "pass": true,
+   "findings": [],
+   "laptop_drops": 0,
+   "packets": 40741,
+   "note": ""
+  },
+  {
+   "test": "L14_double_tapped",
+   "tool": "IDS",
+   "expect": [
+    "duplicates"
+   ],
+   "found": [
+    "duplicates"
+   ],
+   "pass": true,
+   "findings": [
+    {
+     "fault": "duplicates",
+     "feed": "L14_double_tapped",
+     "severity": "high",
+     "metric": 0.5,
+     "threshold": 0.05,
+     "evidence": [],
+     "detail": "41654 of 83308 packets are duplicates (50.0%)",
+     "explanation": "",
+     "location": ""
+    }
+   ],
+   "laptop_drops": 0,
+   "packets": 83308,
+   "note": "The same traffic seen on two links (TAP on the client link, SPAN of the server port) in one rule.",
+   "fixes": [
+    {
+     "action": "dedup",
+     "status": "verified fixed",
+     "round": 1,
+     "note": ""
+    }
+   ],
+   "result": "healthy",
+   "verified_on_real_traffic": false
+  },
+  {
+   "test": "L14b_dedup_on",
+   "tool": "IDS",
+   "expect": [],
+   "found": [],
+   "pass": true,
+   "findings": [],
+   "laptop_drops": 0,
+   "packets": 42036,
+   "note": "VisiLoop's fix for L14, deduplication on."
+  }
+ ],
+ "counters": [
+  {
+   "test": "C01_healthy",
+   "path": "span",
+   "expect": {},
+   "found": {},
+   "pass": true,
+   "details": {},
+   "fixes": [],
+   "hops": {
+    "LAB-SW Gi1/0/1 (mirrored)": {
+     "in_pkts": 15965,
+     "out_pkts": 25341,
+     "in_octets": 1124274,
+     "out_octets": 37612178,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-SW Gi1/0/24 (SPAN destination)": {
+     "in_pkts": 0,
+     "out_pkts": 41306,
+     "in_octets": 0,
+     "out_octets": 38736452,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.04,
+     "at": 0.0
+    },
+    "LAB-NPB P3 (SPAN input)": {
+     "in_pkts": 41306,
+     "out_pkts": 0,
+     "in_octets": 38736452,
+     "out_octets": 0,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-NPB P5 (to the tool)": {
+     "in_pkts": 0,
+     "out_pkts": 41306,
+     "in_octets": 0,
+     "out_octets": 38736452,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.15,
+     "at": 0.0
+    }
+   }
+  },
+  {
+   "test": "C02_span_oversubscribed",
+   "path": "span",
+   "expect": {
+    "path_loss": "LAB-SW Gi1/0/24"
+   },
+   "found": {
+    "path_loss": "LAB-SW Gi1/0/24"
+   },
+   "pass": true,
+   "details": {
+    "path_loss": "the SPAN session should copy 118,275 packets from LAB-SW Gi1/0/1 (mirrored) but LAB-SW Gi1/0/24 (SPAN destination) sent only 105,255: 0.05 Gbps mirrored into a 0.04 Gbps destination port (11.01% lost); LAB-SW Gi1/0/24 (SPAN destination) discarded 13,020 packets on output: about 0.04 Gbps offered to a 0.04 Gbps port (average load 98%; bursts are higher) (11.01% lost)"
+   },
+   "fixes": [
+    {
+     "fault": "path_loss",
+     "action": "replace_span_with_tap",
+     "status": "advice (confirm by reading the counters after the change)"
+    }
+   ],
+   "hops": {
+    "LAB-SW Gi1/0/1 (mirrored)": {
+     "in_pkts": 58647,
+     "out_pkts": 59628,
+     "in_octets": 57966023,
+     "out_octets": 62093016,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-SW Gi1/0/24 (SPAN destination)": {
+     "in_pkts": 0,
+     "out_pkts": 105255,
+     "in_octets": 0,
+     "out_octets": 101213091,
+     "in_discards": 0,
+     "out_discards": 13020,
+     "in_errors": 0,
+     "speed_gbps": 0.04,
+     "at": 0.0
+    },
+    "LAB-NPB P3 (SPAN input)": {
+     "in_pkts": 105255,
+     "out_pkts": 0,
+     "in_octets": 101213091,
+     "out_octets": 0,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-NPB P5 (to the tool)": {
+     "in_pkts": 0,
+     "out_pkts": 105255,
+     "in_octets": 0,
+     "out_octets": 101213091,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.15,
+     "at": 0.0
+    }
+   }
+  },
+  {
+   "test": "C03_broker_congestion",
+   "path": "tap",
+   "expect": {
+    "path_loss": "LAB-NPB P5"
+   },
+   "found": {
+    "path_loss": "LAB-NPB P5"
+   },
+   "pass": true,
+   "details": {
+    "path_loss": "LAB-NPB P5 (to the tool) discarded 27,481 packets on output: about 0.04 Gbps offered to a 0.03 Gbps port (average load 99%; bursts are higher) (23.94% lost)"
+   },
+   "fixes": [
+    {
+     "fault": "path_loss",
+     "action": "load_balance",
+     "status": "advice (confirm by reading the counters after the change)"
+    }
+   ],
+   "hops": {
+    "LAB-NPB P1 (TAP A)": {
+     "in_pkts": 56217,
+     "out_pkts": 0,
+     "in_octets": 54841971,
+     "out_octets": 0,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-NPB P2 (TAP B)": {
+     "in_pkts": 58575,
+     "out_pkts": 0,
+     "in_octets": 62053351,
+     "out_octets": 0,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-NPB P5 (to the tool)": {
+     "in_pkts": 0,
+     "out_pkts": 87311,
+     "in_octets": 0,
+     "out_octets": 76219341,
+     "in_discards": 0,
+     "out_discards": 27481,
+     "in_errors": 0,
+     "speed_gbps": 0.03,
+     "at": 0.0
+    }
+   }
+  },
+  {
+   "test": "C04_link_loss",
+   "path": "span",
+   "expect": {
+    "path_loss": "LAB-NPB P3"
+   },
+   "found": {
+    "path_loss": "LAB-NPB P3"
+   },
+   "pass": true,
+   "details": {
+    "path_loss": "LAB-SW Gi1/0/24 (SPAN destination) sent 42,450 packets but LAB-NPB P3 (SPAN input) saw only 41,570: lost on the link between them (cable, optic or an unmonitored device) (2.07% lost)"
+   },
+   "fixes": [
+    {
+     "fault": "path_loss",
+     "action": "check_link",
+     "status": "advice (confirm by reading the counters after the change)"
+    }
+   ],
+   "hops": {
+    "LAB-SW Gi1/0/1 (mirrored)": {
+     "in_pkts": 16624,
+     "out_pkts": 25826,
+     "in_octets": 1177161,
+     "out_octets": 38343929,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-SW Gi1/0/24 (SPAN destination)": {
+     "in_pkts": 0,
+     "out_pkts": 42450,
+     "in_octets": 0,
+     "out_octets": 39521090,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.04,
+     "at": 0.0
+    },
+    "LAB-NPB P3 (SPAN input)": {
+     "in_pkts": 41570,
+     "out_pkts": 0,
+     "in_octets": 38674824,
+     "out_octets": 0,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-NPB P5 (to the tool)": {
+     "in_pkts": 0,
+     "out_pkts": 41570,
+     "in_octets": 0,
+     "out_octets": 38674824,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.15,
+     "at": 0.0
+    }
+   }
+  },
+  {
+   "test": "C05_crc_errors",
+   "path": "span",
+   "expect": {
+    "link_errors": "LAB-NPB P3"
+   },
+   "found": {
+    "link_errors": "LAB-NPB P3"
+   },
+   "pass": true,
+   "details": {
+    "link_errors": "LAB-NPB P3 (SPAN input) received 202 damaged frames (CRC/alignment errors): a faulty cable, optic or duplex mismatch on the link into it"
+   },
+   "fixes": [
+    {
+     "fault": "link_errors",
+     "action": "check_link",
+     "status": "advice (confirm by reading the counters after the change)"
+    }
+   ],
+   "hops": {
+    "LAB-SW Gi1/0/1 (mirrored)": {
+     "in_pkts": 16201,
+     "out_pkts": 24900,
+     "in_octets": 1150716,
+     "out_octets": 36980456,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-SW Gi1/0/24 (SPAN destination)": {
+     "in_pkts": 0,
+     "out_pkts": 41101,
+     "in_octets": 0,
+     "out_octets": 38131172,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.04,
+     "at": 0.0
+    },
+    "LAB-NPB P3 (SPAN input)": {
+     "in_pkts": 40899,
+     "out_pkts": 0,
+     "in_octets": 37949470,
+     "out_octets": 0,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 202,
+     "speed_gbps": 0.1,
+     "at": 0.0
+    },
+    "LAB-NPB P5 (to the tool)": {
+     "in_pkts": 0,
+     "out_pkts": 40899,
+     "in_octets": 0,
+     "out_octets": 37949470,
+     "in_discards": 0,
+     "out_discards": 0,
+     "in_errors": 0,
+     "speed_gbps": 0.15,
+     "at": 0.0
+    }
+   }
+  }
+ ],
+ "monitor": {
+  "timeline": [
+   [
+    2,
+    "healthy"
+   ],
+   [
+    23,
+    "link loss into P3"
+   ],
+   [
+    46,
+    "healthy"
+   ],
+   [
+    68,
+    "damaged frames into P3"
+   ],
+   [
+    90,
+    "healthy"
+   ],
+   [
+    112,
+    "SPAN overload"
+   ],
+   [
+    134,
+    "healthy"
+   ]
+  ],
+  "alerts": [
+   "[2026-10-29 16:35:13] DEGRADED softlab-ids: path_loss at LAB-NPB P3 (1.80%): LAB-SW Gi1/0/24 (SPAN destination) sent 8,775 packets but LAB-NPB P3 (SPAN input) saw only 8,617: lost on the link between them (cable, optic or an unmonitored device) (1.80% lost)",
+   "[2026-10-29 16:35:37] RECOVERED softlab-ids: path_loss at LAB-NPB P3 cleared; feed healthy",
+   "[2026-10-29 16:35:55] DEGRADED softlab-ids: link_errors at LAB-NPB P3 (0.20%): LAB-NPB P3 (SPAN input) received 17 damaged frames (CRC/alignment errors): a faulty cable, optic or duplex mismatch on the link into it",
+   "[2026-10-29 16:36:23] RECOVERED softlab-ids: link_errors at LAB-NPB P3 cleared; feed healthy",
+   "[2026-10-29 16:36:41] DEGRADED softlab-ids: path_loss at LAB-SW Gi1/0/24 (21.12%): the SPAN session should copy 8,785 packets from LAB-SW Gi1/0/1 (mirrored) but LAB-SW Gi1/0/24 (SPAN destination) sent only 6,930: 0.01 Gbps mirrored into a 0.01 Gbps destination port (21.12% lost); LAB-SW Gi1/0/24 (SPAN destination) discarded 1,855 packets on output: about 0.01 Gbps offered to a 0.01 Gbps port (average load 71%; bursts are higher) (21.12% lost)",
+   "[2026-10-29 16:37:04] RECOVERED softlab-ids: path_loss at LAB-SW Gi1/0/24 cleared; feed healthy"
+  ],
+  "cycles": 29,
+  "interval": 5
+ }
+}
